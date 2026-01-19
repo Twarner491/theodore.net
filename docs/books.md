@@ -105,6 +105,18 @@ search:
             </a>
           </div>
 
+          <div class="book-item article" data-type="article" data-title="Eating Disorders and Mimetic Desire" data-date="2026-01-18" data-favorite="false" data-reading="false">
+            <a href="https://www.uibk.ac.at/theol/cover/contagion/contagion3/contagion03_girard.pdf" target="_blank">
+              <div class="book-cover-wrapper">
+                <img class="book-cover" src="/assets/images/books/articles/meme.png" alt="Eating Disorders and Mimetic Desire">
+                <span class="favorite-indicator"></span>
+              </div>
+              <p class="book-title">Eating Disorders and Mimetic Desire</p>
+              <p class="book-author">René Girard</p>
+              <p class="book-date">January 2026</p>
+            </a>
+          </div>
+
           <div class="book-item article" data-type="article" data-title="Biases, Weights" data-date="2026-01-06" data-favorite="false" data-reading="false">
             <a href="https://eumycetes.substack.com/p/biases-weights" target="_blank">
               <div class="book-cover-wrapper">
@@ -123,7 +135,7 @@ search:
                 <img class="book-cover" src="/assets/images/books/articles/blue.png" alt="why we're blind to the color blue">
                 <span class="favorite-indicator"></span>
               </div>
-              <p class="book-title">why we're blind to the color blue</p>
+              <p class="book-title">Why We're Blind to the Color Blue</p>
               <p class="book-author">Caleb Kruse</p>
               <p class="book-date">January 2026</p>
             </a>
