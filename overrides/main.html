@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
+  
+  <!-- Preload header avatars for instant theme switching -->
+  <link rel="preload" href="{{ 'assets/images/index/avatardark.svg' | url }}" as="image" type="image/svg+xml">
+  <link rel="preload" href="{{ 'assets/images/index/avatarlight.svg' | url }}" as="image" type="image/svg+xml">
 {% endblock %}
 
 {% block announce %}{% endblock %}
