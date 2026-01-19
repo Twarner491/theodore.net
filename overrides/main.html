@@ -3,6 +3,13 @@
 {% block extrahead %}
   <link rel="alternate" type="application/rss+xml" title="Teddy Warner - RSS Feed" href="https://theodore.net/feed.xml">
   
+  <!-- Critical CSS to prevent flash of unstyled header -->
+  <style>
+    .md-header { background: transparent !important; box-shadow: none !important; }
+    .md-header[data-md-state=shadow] { box-shadow: none !important; }
+    .md-tabs { display: none !important; }
+  </style>
+  
   <!-- Preconnect hints for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

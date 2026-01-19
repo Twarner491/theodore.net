@@ -22,10 +22,10 @@ from datetime import datetime, date
 def on_page_markdown(markdown: str, page, config, files):
     """Process dates from frontmatter and add formatted versions to page meta."""
     
-    # Only process pages in Projects or writings folders
+    # Only process pages in projects or writings folders
     # Normalize path separators for cross-platform compatibility
-    src_path = page.file.src_path.replace("\\", "/")
-    if not (src_path.startswith("Projects/") or src_path.startswith("writings/")):
+    src_path = page.file.src_path.replace("\\", "/").lower()
+    if not (src_path.startswith("projects/") or src_path.startswith("writings/")):
         return markdown
     
     # Initialize page.meta if needed
