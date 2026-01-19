@@ -72,6 +72,13 @@
 
     
     
+  <!-- Critical CSS to prevent flash of unstyled header -->
+  <style>
+    .md-header { background: transparent !important; box-shadow: none !important; }
+    .md-header[data-md-state=shadow] { box-shadow: none !important; }
+    .md-tabs { display: none !important; }
+  </style>
+
   <!-- Primary Meta Tags -->
   <meta name="title" content="Adaptable Aquaponics - Teddy Warner">
   <meta name="description" content="A Theoretical Confrontation to Contemporary Farming Challenges.">
@@ -103,6 +110,10 @@
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
   
+  <!-- Preload header avatars for instant theme switching -->
+  <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
+  <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
+  
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
@@ -125,8 +136,8 @@
     "publisher": {
       "@id": "https://theodore.net/#person"
     },
-    "datePublished": "2025-01-01T00:00:00Z",
-    "dateModified": "2025-01-01T00:00:00Z",
+    "datePublished": "2022-06-01T00:00:00Z",
+    "dateModified": "2022-06-01T00:00:00Z",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://theodore.netprojects/AdaptableAquaponics/"
@@ -726,7 +737,7 @@
         <span class="abt" id="name"> Teddy Warner</span>
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
-        
+        <span class="year">| Jun 2022 </span>
         | <span class="readTime"><i class="far fa-clock"></i> 18-23 minutes</span>
       </span>
     </span>

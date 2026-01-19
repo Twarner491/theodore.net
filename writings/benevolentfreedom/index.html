@@ -72,6 +72,13 @@
 
     
     
+  <!-- Critical CSS to prevent flash of unstyled header -->
+  <style>
+    .md-header { background: transparent !important; box-shadow: none !important; }
+    .md-header[data-md-state=shadow] { box-shadow: none !important; }
+    .md-tabs { display: none !important; }
+  </style>
+
   <!-- Primary Meta Tags -->
   <meta name="title" content="A Case for the Philosopher King(s) - Teddy Warner">
   <meta name="description" content="Where do we draw the line with virtue based voter constraints?">
@@ -102,6 +109,10 @@
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
+  
+  <!-- Preload header avatars for instant theme switching -->
+  <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
+  <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
   
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">

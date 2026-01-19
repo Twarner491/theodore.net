@@ -72,6 +72,13 @@
 
     
     
+  <!-- Critical CSS to prevent flash of unstyled header -->
+  <style>
+    .md-header { background: transparent !important; box-shadow: none !important; }
+    .md-header[data-md-state=shadow] { box-shadow: none !important; }
+    .md-tabs { display: none !important; }
+  </style>
+
   <!-- Primary Meta Tags -->
   <meta name="title" content="Parametric Bottle Cap Generator - Teddy Warner">
   <meta name="description" content="Lost a lid or just want a more functional cap? Generate and print your own, compatible with any existing threads!">
@@ -103,6 +110,10 @@
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
   
+  <!-- Preload header avatars for instant theme switching -->
+  <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
+  <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
+  
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
@@ -125,8 +136,8 @@
     "publisher": {
       "@id": "https://theodore.net/#person"
     },
-    "datePublished": "2025-01-01T00:00:00Z",
-    "dateModified": "2025-01-01T00:00:00Z",
+    "datePublished": "2021-11-01T00:00:00Z",
+    "dateModified": "2021-11-01T00:00:00Z",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://theodore.netprojects/ParametricGenerator/"
@@ -654,7 +665,7 @@
         <span class="abt" id="name"> Teddy Warner</span>
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
-        
+        <span class="year">| Nov 2021 </span>
         | <span class="readTime"><i class="far fa-clock"></i> 6-7 minutes</span>
       </span>
     </span>

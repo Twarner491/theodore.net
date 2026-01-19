@@ -70,6 +70,13 @@
 
     
     
+  <!-- Critical CSS to prevent flash of unstyled header -->
+  <style>
+    .md-header { background: transparent !important; box-shadow: none !important; }
+    .md-header[data-md-state=shadow] { box-shadow: none !important; }
+    .md-tabs { display: none !important; }
+  </style>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>

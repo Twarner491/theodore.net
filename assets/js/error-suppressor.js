@@ -30,6 +30,36 @@ const SUPPRESS_ALL_ERRORS = true;  // Set to false to see all errors for debuggi
 
 if (SUPPRESS_ALL_ERRORS) {
   
+  // Polyfill for SVGImageElement.href to prevent "has only a getter" errors
+  // This fixes conflicts with MkDocs Material instant navigation and Cloudflare email-decode
+  (function() {
+    try {
+      const imgProto = SVGImageElement.prototype;
+      const hrefDesc = Object.getOwnPropertyDescriptor(imgProto, 'href');
+      if (hrefDesc && !hrefDesc.set) {
+        // Create a writable wrapper that stores values in a WeakMap
+        const hrefStorage = new WeakMap();
+        Object.defineProperty(imgProto, 'href', {
+          get: function() {
+            return hrefStorage.has(this) ? hrefStorage.get(this) : hrefDesc.get.call(this);
+          },
+          set: function(val) {
+            hrefStorage.set(this, val);
+            // Also try to set the attribute if possible
+            try {
+              if (typeof val === 'string') {
+                this.setAttribute('href', val);
+              } else if (val && val.baseVal !== undefined) {
+                this.setAttribute('href', val.baseVal);
+              }
+            } catch (e) { /* ignore */ }
+          },
+          configurable: true
+        });
+      }
+    } catch (e) { /* ignore if SVGImageElement doesn't exist */ }
+  })();
+
   // Override getElementById FIRST before anything else can call it
   (function() {
     const originalGetElementById = Document.prototype.getElementById;
