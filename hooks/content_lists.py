@@ -191,7 +191,9 @@ def _get_projects(docs_dir):
         return _projects_cache
     
     # Scan local projects
+    print(f"content_lists: _get_projects called with docs_dir={docs_dir}")
     projects = _scan_folder(docs_dir, "projects")
+    print(f"content_lists: _scan_folder returned {len(projects)} local projects")
     
     # Add external projects from config
     config = _get_config(docs_dir)
@@ -284,6 +286,10 @@ def _generate_writings_list(writings, count=None, include_mobileyear=True):
 
 def _generate_projects_full_list(projects):
     """Generate HTML for full projects list (proj.md style with thumbnails)."""
+    print(f"content_lists: Generating full list for {len(projects)} projects")
+    for p in projects:
+        print(f"content_lists:   - {p.get('title', 'NO TITLE')} (external: {p.get('external', False)})")
+    
     html_parts = []
     
     for item in projects:
