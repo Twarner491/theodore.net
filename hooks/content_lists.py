@@ -282,6 +282,59 @@ def _generate_projects_full_list(projects):
     return '\n'.join(html_parts)
 
 
+def _generate_polargraph_gallery(docs_dir):
+    """Generate HTML for the polargraph plots gallery by scanning the plots folder."""
+    plots_folder = Path(docs_dir) / "assets" / "images" / "Polargraph" / "plots"
+    
+    if not plots_folder.exists():
+        return ""
+    
+    # Get all image files
+    image_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.JPG', '.JPEG', '.PNG'}
+    images = []
+    
+    for img_file in plots_folder.iterdir():
+        if img_file.is_file() and img_file.suffix in image_extensions:
+            images.append(img_file)
+    
+    # Sort alphabetically by filename
+    images.sort(key=lambda x: x.stem.lower())
+    
+    if not images:
+        return ""
+    
+    html_parts = []
+    
+    for img in images:
+        # Generate label from filename (e.g., "crown.JPG" -> "Crown")
+        label = img.stem.replace('_', ' ').replace('-', ' ').title()
+        
+        # Relative path from the markdown file to the image
+        img_path = f"../../assets/images/Polargraph/plots/{img.name}"
+        frame_path = "../../assets/images/Polargraph/baroqueFrame.png"
+        
+        html_parts.append(f'''    <div class="plot-item">
+      <div class="plot-frame">
+        <div class="plot-content">
+          <img src="{img_path}" alt="{label}">
+        </div>
+        <div class="plot-frame-overlay">
+          <img src="{frame_path}" alt="Frame">
+        </div>
+      </div>
+      <span class="plot-label">{label}</span>
+    </div>''')
+    
+    # Wrap in carousel container
+    gallery_html = '''<div class="plot-carousel-container">
+  <div class="plot-carousel">
+''' + '\n'.join(html_parts) + '''
+  </div>
+</div>'''
+    
+    return gallery_html
+
+
 def on_page_markdown(markdown: str, page, config, files):
     """Replace content tokens with generated HTML."""
     src_path = page.file.src_path
@@ -291,6 +344,12 @@ def on_page_markdown(markdown: str, page, config, files):
     # Use regex to match copyright year pattern - match any chars between Copyright and the year
     markdown = re.sub(r'(Copyright\s*.{0,10}?)20\d{2}', rf'\g<1>{current_year}', markdown)
     markdown = markdown.replace('<!-- COPYRIGHT_YEAR -->', current_year)
+    
+    # Handle Polargraph gallery token (for projects/Polargraph.md)
+    if '<!-- POLARGRAPH_GALLERY -->' in markdown:
+        docs_dir = config['docs_dir']
+        gallery_html = _generate_polargraph_gallery(docs_dir)
+        markdown = markdown.replace('<!-- POLARGRAPH_GALLERY -->', gallery_html)
     
     # Only process content list tokens for specific pages
     if src_path not in ['index.md', 'projects.md', 'writings.md', 'books.md']:
