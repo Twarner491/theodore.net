@@ -94,22 +94,31 @@ def _format_date(dt, fmt="%b %Y"):
 def _scan_folder(docs_dir, folder_name):
     """Scan a folder and extract metadata from all markdown files."""
     items = []
-    folder_path = Path(docs_dir) / folder_name
+    folder_path = None
+    actual_folder_name = folder_name  # Track actual case for URL generation
     
-    # Debug: Print folder scanning info
-    print(f"content_lists: Scanning folder '{folder_path}' (exists: {folder_path.exists()})")
-    
-    if not folder_path.exists():
+    # Try exact match first
+    exact_path = Path(docs_dir) / folder_name
+    if exact_path.exists() and exact_path.is_dir():
+        folder_path = exact_path
+        actual_folder_name = folder_name
+        print(f"content_lists: Found exact folder '{folder_path}'")
+    else:
         # Try case-insensitive fallback for Linux compatibility
         parent = Path(docs_dir)
-        for child in parent.iterdir():
-            if child.is_dir() and child.name.lower() == folder_name.lower():
-                folder_path = child
-                print(f"content_lists: Found case-variant folder '{folder_path}'")
-                break
-        else:
-            print(f"content_lists: Folder not found, returning empty list")
-            return items
+        try:
+            for child in parent.iterdir():
+                if child.is_dir() and child.name.lower() == folder_name.lower():
+                    folder_path = child
+                    actual_folder_name = child.name  # Use actual folder name for URLs
+                    print(f"content_lists: Found case-variant folder '{folder_path}' (actual name: {actual_folder_name})")
+                    break
+        except Exception as e:
+            print(f"content_lists: Error scanning parent directory: {e}")
+    
+    if folder_path is None:
+        print(f"content_lists: Folder '{folder_name}' not found in {docs_dir}, returning empty list")
+        return items
     
     md_files = list(folder_path.glob("*.md"))
     print(f"content_lists: Found {len(md_files)} .md files in {folder_path}")
@@ -153,9 +162,9 @@ def _scan_folder(docs_dir, folder_name):
             # Get readtime (for writings)
             readtime = frontmatter.get('readtime', '')
             
-            # Build URL from file path
+            # Build URL from file path - use actual folder name for correct case on Linux
             file_stem = md_file.stem
-            url = f"/{folder_name}/{file_stem}/"
+            url = f"/{actual_folder_name}/{file_stem}/"
             
             items.append({
                 'title': title,

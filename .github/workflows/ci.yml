@@ -30,11 +30,20 @@ jobs:
           pip install -r .github/requirements.txt
           pip install pillow cairosvg
       
+      - name: Debug folder structure
+        run: |
+          echo "=== Listing docs folder ==="
+          ls -la docs/
+          echo "=== Listing docs/projects folder ==="
+          ls -la docs/projects/ || echo "projects folder not found"
+          echo "=== Listing docs/writings folder ==="
+          ls -la docs/writings/ || echo "writings folder not found"
+      
       - name: Build and deploy
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          mkdocs gh-deploy --force
+          mkdocs gh-deploy --force --verbose
       
       - name: Purge Cloudflare Cache
         run: |
