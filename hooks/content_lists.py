@@ -411,12 +411,15 @@ def on_page_markdown(markdown: str, page, config, files):
     elif src_path == 'projects.md':
         print(f"content_lists: Processing projects.md, checking for PROJECTS_FULL_LIST token")
         print(f"content_lists: Token present: {'<!-- PROJECTS_FULL_LIST -->' in markdown}")
+        print(f"content_lists: Original markdown length: {len(markdown)} chars")
+        print(f"content_lists: First 200 chars: {repr(markdown[:200])}")
         if '<!-- PROJECTS_FULL_LIST -->' in markdown:
             projects = _get_projects(docs_dir)
             list_html = _generate_projects_full_list(projects)
             print(f"content_lists: Generated list_html length: {len(list_html)} chars")
             markdown = markdown.replace('<!-- PROJECTS_FULL_LIST -->', list_html)
             print(f"content_lists: After replacement, markdown length: {len(markdown)} chars")
+            print(f"content_lists: Replacement contains 'writparent': {'writparent' in markdown}")
     
     elif src_path == 'writings.md':
         if '<!-- WRITINGS_FULL_LIST -->' in markdown:
