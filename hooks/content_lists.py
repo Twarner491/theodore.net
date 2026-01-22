@@ -96,10 +96,25 @@ def _scan_folder(docs_dir, folder_name):
     items = []
     folder_path = Path(docs_dir) / folder_name
     
-    if not folder_path.exists():
-        return items
+    # Debug: Print folder scanning info
+    print(f"content_lists: Scanning folder '{folder_path}' (exists: {folder_path.exists()})")
     
-    for md_file in folder_path.glob("*.md"):
+    if not folder_path.exists():
+        # Try case-insensitive fallback for Linux compatibility
+        parent = Path(docs_dir)
+        for child in parent.iterdir():
+            if child.is_dir() and child.name.lower() == folder_name.lower():
+                folder_path = child
+                print(f"content_lists: Found case-variant folder '{folder_path}'")
+                break
+        else:
+            print(f"content_lists: Folder not found, returning empty list")
+            return items
+    
+    md_files = list(folder_path.glob("*.md"))
+    print(f"content_lists: Found {len(md_files)} .md files in {folder_path}")
+    
+    for md_file in md_files:
         try:
             with open(md_file, 'r', encoding='utf-8') as f:
                 content = f.read()

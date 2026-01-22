@@ -1,5 +1,5 @@
 # External projects that don't have their own markdown files
-# These will be merged with auto-discovered projects from /Projects folder
+# These will be merged with auto-discovered projects from /projects folder
 
 external_projects:
   - title: onethreenine.net
