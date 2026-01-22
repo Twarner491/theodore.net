@@ -13,8 +13,8 @@
     <language>en</language>
 
     
-    <pubDate>Thu, 22 Jan 2026 21:59:24 -0000</pubDate>
-    <lastBuildDate>Thu, 22 Jan 2026 21:59:24 -0000</lastBuildDate>
+    <pubDate>Thu, 22 Jan 2026 23:12:25 -0000</pubDate>
+    <lastBuildDate>Thu, 22 Jan 2026 23:12:25 -0000</lastBuildDate>
     <ttl>1440</ttl>
 
     
@@ -147,6 +147,23 @@
       <source url="https://theodore.net/feed.xml">Teddy Warner</source>
       
       <guid isPermaLink="true">https://theodore.net/writings/seoulwallsunrise/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Quote Receipts</title>
+      
+      
+      
+      
+        
+      
+      <description>Did I really say that? Why yes, you did.</description>
+      <link>https://theodore.net/projects/Quotes/</link>
+      <pubDate>Mon, 01 Sep 2025 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/Quotes/</guid>
       
     </item>
     
@@ -287,6 +304,74 @@
     </item>
     
     <item>
+      <title>Learned Spectrum</title>
+      
+      
+      
+      
+        
+      
+      <description>Towards temporal understanding in AI through fMRI learning stage classification.</description>
+      <link>https://theodore.net/projects/LearnedSpectrum/</link>
+      <pubDate>Wed, 01 May 2024 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/LearnedSpectrum/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Von Niemann Probe</title>
+      
+      
+      
+      
+        
+      
+      <description>An AVR-based Bluetooth telegraphing shoe insole that lets you play chess in the way Hans Niemann has been accused!</description>
+      <link>https://theodore.net/projects/VonNiemannProbe/</link>
+      <pubDate>Fri, 15 Dec 2023 00:00:00 -0500</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/VonNiemannProbe/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Pizza-Pizza CNC Machine</title>
+      
+      
+      
+      
+        
+      
+      <description>A Pizza-Preparing, Tool-Changing, 3-Axis, 3D-printed CNC Machine!</description>
+      <link>https://theodore.net/projects/PizzaPizza/</link>
+      <pubDate>Tue, 20 Dec 2022 00:00:00 -0500</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/PizzaPizza/</guid>
+      
+    </item>
+    
+    <item>
+      <title>CNC Milling Workflows</title>
+      
+      
+      
+      
+        
+      
+      <description>A relatively comprehensive guide for CNC milling.</description>
+      <link>https://theodore.net/projects/MillingWorflow/</link>
+      <pubDate>Thu, 01 Dec 2022 00:00:00 -0500</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/MillingWorflow/</guid>
+      
+    </item>
+    
+    <item>
       <title>The Fallacy of Justice</title>
       
       
@@ -304,6 +389,23 @@
     </item>
     
     <item>
+      <title>Adaptable Aquaponics</title>
+      
+      
+      
+      
+        
+      
+      <description>A Theoretical Confrontation to Contemporary Farming Challenges.</description>
+      <link>https://theodore.net/projects/AdaptableAquaponics/</link>
+      <pubDate>Wed, 01 Jun 2022 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/AdaptableAquaponics/</guid>
+      
+    </item>
+    
+    <item>
       <title>Torpediniformes</title>
       
       
@@ -317,6 +419,142 @@
       <source url="https://theodore.net/feed.xml">Teddy Warner</source>
       
       <guid isPermaLink="true">https://theodore.net/writings/torpediniformes/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Parametric Bottle Cap Generator</title>
+      
+      
+      
+      
+        
+      
+      <description>Lost a lid or just want a more functional cap? Generate and print your own, compatible with any existing threads!</description>
+      <link>https://theodore.net/projects/ParametricGenerator/</link>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/ParametricGenerator/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Octoprint Setup</title>
+      
+      
+      
+      
+        
+      
+      <description>A complete Octoprint setup documentation.</description>
+      <link>https://theodore.net/projects/Octoprint/</link>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/Octoprint/</guid>
+      
+    </item>
+    
+    <item>
+      <title>UPDI Serial Programming</title>
+      
+      
+      
+      
+        
+      
+      <description>Enabling your IDE for serial UPDI programming via a portable python implementation and designated hardware.</description>
+      <link>https://theodore.net/projects/SerialUPDI/</link>
+      <pubDate>Sun, 15 Aug 2021 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/SerialUPDI/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Project Portfolio Site</title>
+      
+      
+      
+      
+        
+      
+      <description>Static site generation with Mkdocs, and hosting via GitHub Pages.</description>
+      <link>https://theodore.net/projects/ProjectPortfolioSite/</link>
+      <pubDate>Thu, 01 Jul 2021 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/ProjectPortfolioSite/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Assistive Aquaponics Fish Tank</title>
+      
+      
+      
+      
+        
+      
+      <description>Expanding the accessibility of successful &amp; thriving aquaponics ecosystems.</description>
+      <link>https://theodore.net/projects/AssistiveAquaponics/</link>
+      <pubDate>Tue, 01 Jun 2021 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/AssistiveAquaponics/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Klipper Enabled Ender 3</title>
+      
+      
+      
+      
+        
+      
+      <description>As the name suggests, an Ender 3 with Klipper firmware.</description>
+      <link>https://theodore.net/projects/KlipperEnder3/</link>
+      <pubDate>Sat, 01 May 2021 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/KlipperEnder3/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Cable Managed Corner Desk</title>
+      
+      
+      
+      
+        
+      
+      <description>A clean modern corner desk.</description>
+      <link>https://theodore.net/projects/CornerDesk/</link>
+      <pubDate>Sun, 15 Mar 2020 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/CornerDesk/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Lithophane Experiments</title>
+      
+      
+      
+      
+        
+      
+      <description>A gallery of lithophanes.</description>
+      <link>https://theodore.net/projects/LithophaneExperiments/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 -0500</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/LithophaneExperiments/</guid>
       
     </item>
     
