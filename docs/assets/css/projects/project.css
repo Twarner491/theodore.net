@@ -778,6 +778,32 @@
   opacity: 0.9;
 }
 
+/* Prevent iframe focus/animations from scrolling page */
+.plotter-iframe,
+iframe[sandbox] {
+  contain: paint;
+}
+
+/* Wrapper to fully isolate iframe scroll behavior */
+.iframe-container {
+  position: relative;
+  overflow: clip;
+  contain: strict;
+  isolation: isolate;
+  overscroll-behavior: contain;
+}
+
+.iframe-container iframe {
+  display: block;
+  overscroll-behavior: contain;
+}
+
+/* Prevent any scroll anchoring from iframes */
+.iframe-container,
+.iframe-container iframe {
+  overflow-anchor: none;
+}
+
 /* Giscus container */
 .giscus {
   margin-top: 1em;
