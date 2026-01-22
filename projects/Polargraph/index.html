@@ -1,0 +1,1669 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Have a hard time deciding what to hang on your walls? Boy, do I have the solution for you.">
+      
+      
+        <meta name="author" content="Teddy Warner">
+      
+      
+        <link rel="canonical" href="https://theodore.net/projects/Polargraph/">
+      
+      
+      
+      
+        
+      
+      
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
+      
+      <link rel="icon" href="../../assets/images/favicon.gif">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Generative Pen-trained Transformer - Teddy Warner</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,700,700i%7CUbuntu+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-DRNQ5C2ZP2"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-DRNQ5C2ZP2",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-DRNQ5C2ZP2",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  <!-- Critical CSS to prevent flash of unstyled header -->
+  <style>
+    .md-header { background: transparent !important; box-shadow: none !important; }
+    .md-header[data-md-state=shadow] { box-shadow: none !important; }
+    .md-tabs { display: none !important; }
+  </style>
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Generative Pen-trained Transformer - Teddy Warner">
+  <meta name="description" content="Have a hard time deciding what to hang on your walls? Boy, do I have the solution for you.">
+  <meta name="keywords" content="polargraph, pen plotter, generative art, GPT, CNC, drawing machine, wall art, sonakinatography, text to gcode, machine learning, raspberry pi">
+  <meta name="author" content="Teddy Warner">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://theodore.netprojects/Polargraph/">
+  <meta property="og:title" content="Generative Pen-trained Transformer - Teddy Warner">
+  <meta property="og:description" content="Have a hard time deciding what to hang on your walls? Boy, do I have the solution for you.">
+  <meta property="og:image" content="https://theodore.net/assets/images/Polargraph/thumb.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://theodore.netprojects/Polargraph/">
+  <meta property="twitter:title" content="Generative Pen-trained Transformer - Teddy Warner">
+  <meta property="twitter:description" content="Have a hard time deciding what to hang on your walls? Boy, do I have the solution for you.">
+  <meta property="twitter:image" content="https://theodore.net/assets/images/Polargraph/thumb.png">
+
+  <!-- Preconnect hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
+  <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
+  <link rel="preconnect" href="https://api.github.com">
+  
+  <!-- Preload header avatars for instant theme switching -->
+  <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
+  <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  
+  <!-- Page Styles -->
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Generative Pen-trained Transformer",
+    "description": "Have a hard time deciding what to hang on your walls? Boy, do I have the solution for you.",
+    "image": "https://theodore.net/assets/images/Polargraph/thumb.png",
+    "author": {
+      "@id": "https://theodore.net/#person"
+    },
+    "publisher": {
+      "@id": "https://theodore.net/#person"
+    },
+    "datePublished": "2026-02-01T00:00:00Z",
+    "dateModified": "2026-02-01T00:00:00Z",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://theodore.netprojects/Polargraph/"
+    }
+  }
+  </script>
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#wall-mounted-polargraph" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+<header class="md-header" data-md-component="header">
+  <nav
+    class="md-header__inner md-grid"
+    aria-label="header.title"
+  >
+
+  <a
+  href="https://teddywarner.com"
+  title="Teddy Warner"
+  class="md-header__rectangle"
+  aria-label="Teddy Warner"
+  data-md-component="logo"
+  >
+  <img class="logo" src="/assets/images/index/avatardark.svg" alt="Teddy Warner" fetchpriority="high"/>
+  </a>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title"></div>
+
+    <!-- Color palette -->
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media=""
+            data-md-color-scheme="default"
+            data-md-color-accent="black"
+            
+              aria-label="Switch to dark mode"
+            
+            type="radio"
+            name="__palette"
+            id="__palette_1"
+          />
+          
+            <label
+              class="md-header__button md-icon"
+              onclick="colortheme()"
+              title="Switch to dark mode"
+              for="__palette_2"
+              hidden
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+            </label>
+          
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media=""
+            data-md-color-scheme="slate"
+            data-md-color-accent="white"
+            
+              aria-label="Switch to light mode"
+            
+            type="radio"
+            name="__palette"
+            id="__palette_2"
+          />
+          
+            <label
+              class="md-header__button md-icon"
+              onclick="colortheme()"
+              title="Switch to light mode"
+              for="__palette_1"
+              hidden
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+
+    <!-- Site language selector -->
+    
+
+    <!-- Button to open search modal -->
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+
+      <!-- Search interface -->
+      <!-- Search interface -->
+<div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+
+      <!-- Search input -->
+      <input
+        type="text"
+        class="md-search__input"
+        name="query"
+        aria-label="Search"
+        placeholder="Search"
+        autocapitalize="off"
+        autocorrect="off"
+        autocomplete="off"
+        spellcheck="false"
+        data-md-component="search-query"
+        required
+      />
+
+      <!-- Button to open search -->
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+
+      <!-- Search options -->
+      <nav
+        class="md-search__options"
+        aria-label="Search"
+      >
+
+        <!-- Button to share search -->
+        
+          <a
+            href="javascript:void(0)"
+            class="md-search__icon md-icon"
+            title="Share"
+            aria-label="Share"
+            data-clipboard
+            data-clipboard-text=""
+            data-md-component="search-share"
+            tabindex="-1"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+
+        <!-- Button to reset search -->
+        <button
+          type="reset"
+          class="md-search__icon md-icon"
+          title="Clear"
+          aria-label="Clear"
+          tabindex="-1"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+
+      <!-- Search suggestions -->
+      
+        <div
+          class="md-search__suggest"
+          data-md-component="search-suggest"
+        ></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+
+        <!-- Search results -->
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    <label class="md-header__button md-icon" id="parent" onclick="togglemenu()">
+     <span class="menu">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+     </span>
+     <span class="close">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+     </span>
+    </label>
+
+  </nav>
+</header>
+
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://teddywarner.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Projects
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../writings/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Writings
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+
+<!-- Main navigation -->
+<nav
+  class="md-nav md-nav--primary md-nav--lifted"
+  aria-label="nav.title"
+  data-md-level="0"
+>
+
+  <!-- Site title -->
+  <label class="md-nav__title" for="__drawer">
+    <a
+      href="../.."
+      title="Teddy Warner"
+      class="md-header__rectangle"
+      aria-label="Teddy Warner"
+      data-md-component="logo"
+    >
+      <img src="../../assets/images/TeddyWarner.svg" alt="home"/>
+    </a>
+  </label>
+
+  <!-- Repository information -->
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Twarner491/theodore.net" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Twarner491/theodore.net
+  </div>
+</a>
+    </div>
+  
+
+  <!-- Render item list -->
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+
+
+    
+      
+      
+      
+
+
+
+
+    
+      
+      
+      
+
+
+
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#wall-mounted-polargraph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wall-mounted Polargraph
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wall-mounted Polargraph">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gondla-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gondla Assembly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#machine-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Machine Assembly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wireing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wireing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#firmware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firmware
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BOM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotter-dot-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plotter [dot] Local
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Plotter [dot] Local">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sonakinatography" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sonakinatography
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dcode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dcode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPenT
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gallery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gallery
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+  <!-- Navigation Menu -->
+  <nav class="main-navigation">
+    <ul>
+      <li><a class="home" href="https://teddywarner.com"><span class="navnum">01</span> Home</a></li>
+      <li><a class="proj" href="/projects"><span class="navnum">02</span> Projects</a></li>
+      <li><a class="writ" href="/writings"><span class="navnum">03</span> Writing</a></li>
+    </ul>
+  </nav>
+  
+  <div class="blur-overlay"></div>
+
+  <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous"></script>
+  <script src="https://theodore.net/assets/js/header.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeHeader();
+    });
+    
+    // Load stylesheets embedded in content after instant navigation
+    (function() {
+      const loadedStylesheets = new Set();
+      document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+        loadedStylesheets.add(link.href);
+      });
+
+      function loadContentStylesheets() {
+        const content = document.querySelector('.md-content');
+        if (!content) return;
+        
+        content.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+          const href = link.href;
+          if (!loadedStylesheets.has(href)) {
+            loadedStylesheets.add(href);
+            const newLink = document.createElement('link');
+            newLink.rel = 'stylesheet';
+            newLink.href = href;
+            document.head.appendChild(newLink);
+          }
+        });
+      }
+
+      loadContentStylesheets();
+
+      if (typeof document$ !== 'undefined') {
+        document$.subscribe(function() {
+          loadContentStylesheets();
+        });
+      }
+    })();
+  </script>
+
+  <!-- Return to feed link -->
+  
+  <div class="return2feed"><a href="https://theodore.net/projects"><i class="fa-solid fa-arrow-left-long"></i> Projects Feed</a></div>
+  
+
+  <!-- Article Header with Author Info and Share Buttons -->
+  <h1 class="article-title">Generative Pen-trained Transformer</h1>
+  
+  <div class="article-meta" style="margin-top: -0.8em;">
+    <span class="abtlinks">
+      <a href="https://x.com/WarnerTeddy">
+        <img src="https://avatars.githubusercontent.com/u/48384497" alt="Teddy Warner's GitHub profile picture" class="profilepic">
+        <span class="abt" id="name"> Teddy Warner</span>
+      </a>
+      <span class="abt" style="font-weight: 300; padding-left: 6px;">
+        <span class="year">| Feb 2026 </span>
+        | <span class="readTime"><i class="far fa-clock"></i> 25–31 mins</span>
+      </span>
+    </span>
+    <span class="share" style="color: inherit;">
+      <a class="fb" title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://theodore.netprojects/Polargraph/"><i class="fa-brands fa-facebook"></i></a>
+      <a class="twitter" title="Share on Twitter" href="https://twitter.com/intent/tweet?url=https://theodore.netprojects/Polargraph/&text=Generative%20Pen-trained%20Transformer"><i class="fa-brands fa-x-twitter"></i></a>
+      <a class="pin" title="Share on Pinterest" href="https://pinterest.com/pin/create/button/?url=https://theodore.netprojects/Polargraph/&media=https://theodore.net/assets/images/Polargraph/thumb.png&description=Have%20a%20hard%20time%20deciding%20what%20to%20hang%20on%20your%20walls%3F%20Boy%2C%20do%20I%20have%20the%20solution%20for%20you."><i class="fa-brands fa-pinterest"></i></a>
+      <a class="ln" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url=https://theodore.netprojects/Polargraph/"><i class="fab fa-linkedin"></i></a>
+      <a class="email" title="Share via Email" href="mailto:?subject=Generative%20Pen-trained%20Transformer&body=https://theodore.netprojects/Polargraph/"><i class="fa-solid fa-paper-plane"></i></a>
+    </span>
+  </div>
+
+  <hr class="article-divider">
+
+  <!-- Page Content -->
+  <p><link rel="stylesheet" href="/assets/css/projects/polargraph.css">
+<link rel="stylesheet" href="/assets/css/projects/vnp.css"></p>
+<script src="/assets/js/polargraph.js" defer></script>
+<script src="/assets/js/mathjax.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+<center>
+  <div style="position:relative;padding-bottom:56.25%;">
+    <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/8UEqEzWdhAY" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</center>
+
+<p>A few years ago, back when GPT-3.5 was first released, and I still spent most of my days sitting in a highschool classroom, I had a project idea. Perhaps one of my best named project ideas to date: The <em>Generative Pen-trained Transformer</em> or GPenT for short.</p>
+<p>GPenT was awesome, I was going to build out a color-changing pen plotter with some funky coreXY-esque kinematic, and alongside it try my hand at writing one of those <a href="https://www.blobmaker.app/">SVG Blob Generators</a> to generate a bunch of shapes to draw. These &lsquo;blob&rsquo; generators are simple enough, usually they take in some input variables from a user in the form of sliders, and output a downloadable SVG, yet I wanted to try my hand at something new. Instead of a UX with sliders, I would pass in a raw string of numbers into this generator, numbers generated by GPT-3.5. </p>
+<p>It&rsquo;s funny to look back at my intuition here, to use an LLM to generate a string of numbers, to generate SVG blobs, to feed to a pen plotter, and to call the whole thing the Generative Pen-trained Transformer? Being the hardware engineer I always have been, I didn&rsquo;t have any ML, or honestly, even much python expierence to fall back on. And for my first ever flirt with artifical intellegence, this felt like a pretty solid project. So, I got at it, starting to chip away at the kinematic and machine design, before quickly getting blindsided by the chess cheating scandal of the century, and with it, a <a href="https://theodore.net/projects/VonNiemannProbe/">newer, shiner project</a>. As most of my wonderfuly named project ideas (I&rsquo;m slightly biased here), GPenT was back on the shelf.</p>
+<details class="failure" open="open">
+<summary><em>Failed</em> first attempt at GPenT</summary>
+<p>Below are the half-compeated remains of GPenT v1. Rest in piece(s).</p>
+<p><center>
+ <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b602811b69ff174e571ad2a?mode=embed" width="100%" height="480" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</center></p>
+</details>
+<p>A lot has changed since my highschool days, for starters, we have GPT-5.2 now! and with it <a href="https://x.com/GeoffLewisOrg/status/1945864963374887401">a</a> <a href="https://x.com/snwy_me/status/1948909735048273946">whole</a> <a href="https://x.com/deedydas/status/1962195333494313414">bunch</a> <a href="https://x.com/davidmbudden/status/2006140494410309933">of</a> gpt induced psychosis. Also, I have my own place in San Francsico! If you&rsquo;ve seen any of my other <a href="https://onethreenine.net/about">recent</a> <a href="https://theodore.net/projects/Quotes/">projects</a>, you know I&rsquo;ve been on a kick to trick this place out, and while I&rsquo;ve been making progress on the silly, whimsical projects front, the aparmtnet walls have remained shockingly bare. So I figure its time to dust off the old Generative Pen-trained Transformer, see this, beautifuly-named, project through, and with it finally get some awesome art for my apartment.</p>
+<h3 id="wall-mounted-polargraph">Wall-mounted Polargraph<a class="headerlink" href="#wall-mounted-polargraph" title="Permanent link">&para;</a></h3>
+<p>What is a polargraph? and why is it wall mounted? Well, a polargraph is a verticly-mounted drawing machine, and I figure what better than art on your wall if not an epic machine that makes art on your wall!</p>
+<p>The opperating principle of the polargraph is simple enough. Take some rectangular work area with a motor in each of the top corners, string a belt over each of those motors, append a counter weight on one side of each belt, and attach the otherside of both belts to a single gondla. This gondla will thus be moved when either motor rotates.</p>
+<div class="polargraph-diagram">
+<svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+    <rect class="pg-frame" x="100" y="120" width="800" height="500" fill="none" stroke-width="1.5"/>
+    <line class="pg-bar" x1="100" y1="120" x2="900" y2="120" stroke-width="1.5"/>
+    <g id="leftMotor">
+        <circle class="pg-motor-outer" cx="100" cy="120" r="22" fill="none" stroke-width="1.5"/>
+        <circle class="pg-motor-outer" cx="100" cy="120" r="15" fill="none" stroke-width="1.5"/>
+        <circle class="pg-motor-center" cx="100" cy="120" r="8"/>
+    </g>
+    <g id="rightMotor">
+        <circle class="pg-motor-outer" cx="900" cy="120" r="22" fill="none" stroke-width="1.5"/>
+        <circle class="pg-motor-outer" cx="900" cy="120" r="15" fill="none" stroke-width="1.5"/>
+        <circle class="pg-motor-center" cx="900" cy="120" r="8"/>
+    </g>
+    <line id="leftCounterLine" class="pg-counter-line" x1="80" y1="120" x2="80" y2="400" stroke-width="1" opacity="0.4"/>
+    <rect id="leftCounterweight" class="pg-counterweight" x="73" y="400" width="14" height="26" rx="2" stroke-width="1"/>
+    <line id="rightCounterLine" class="pg-counter-line" x1="920" y1="120" x2="920" y2="400" stroke-width="1" opacity="0.4"/>
+    <rect id="rightCounterweight" class="pg-counterweight" x="913" y="400" width="14" height="26" rx="2" stroke-width="1"/>
+    <line id="leftBelt" class="pg-belt" x1="100" y1="120" x2="300" y2="350" stroke-width="1" opacity="0.5"/>
+    <line id="rightBelt" class="pg-belt" x1="900" y1="120" x2="300" y2="350" stroke-width="1" opacity="0.5"/>
+    <g id="gondola">
+        <rect class="pg-gondola-body" x="-28" y="-20" width="56" height="40" rx="4" stroke-width="1.5"/>
+        <circle class="pg-attachment" cx="-22" cy="-15" r="3"/>
+        <circle class="pg-attachment" cx="22" cy="-15" r="3"/>
+        <rect class="pg-pen-holder" x="-8" y="20" width="16" height="35" rx="2" stroke-width="1.2"/>
+        <path class="pg-pen-tip" d="M -6,55 L 0,63 L 6,55 Z" stroke-width="1"/>
+    </g>
+</svg>
+</div>
+
+<p>Plus, I already had a Fusion 360 folder for this project, so starting on the kinematic and machine design couldn&rsquo;t have been easier. There are a bunch of easy <a href="https://www.instructables.com/Polargraph-Drawbot/">DIY</a> <a href="https://www.thingiverse.com/thing:798076">polargraphs</a> out there on the internet that I referenced througout this design process, notably the <a href="http://www.makelangelo.com/">Makelangelo</a>, whose software and firmware we&rsquo;ll refernce later in this piece.</p>
+<p>Given I intend to hang this polargraph above the couch in my living room, I&rsquo;m taking pains to make sure it looks pretty. </p>
+<figure>
+<p><img alt="" src="../../assets/images/Polargraph/wall.jpg" width="80%" />
+<br>
+<em>Where I intend to hang the polargraph in my living room.</em></p>
+</figure>
+<p>The machine will be built within a large wooden frame, which mounts flush to the wall via a french cleat system. ALl electronics and motors will sit behind this frame, between the back of the workplane and the wall, as to remain hidden out of sight. Both stepper motor axels will protroude through the workplane and will be covered by pieces which also hold endstop switches to enable homing. Counterweights, as well as the center gondla will be weight with titanium round-stock, for high density within little area. The gondla itself will be attached to the belts via swivel arms on thin 6806-2RS bearings, to allow for a smooth, constantly upright motion. The gondla is to remain flush against the workplane at all times, so a small servo within it will actuate a pen up and down into/away from the paper. These pens should be easy enough to hotswap, because we want some different colors, of course.</p>
+<p>and boom! Easy enough, right? Here it is in all its glory:</p>
+<center>
+<iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b60281169260fadfa84fc45?mode=embed" width="98%" height="520" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</center>
+
+<p>&hellip; and with the design out of the way, its time to make this thing real!</p>
+<h4 id="gondla-assembly">Gondla Assembly<a class="headerlink" href="#gondla-assembly" title="Permanent link">&para;</a></h4>
+<p>The gondla is the real heart of this beast, so well take on it&rsquo;s assembly first. Our gondla here is a modified version of a Makelangelo gondla remix I found on <a href="https://www.printables.com/model/116596-makelangelo-5-wall-hanging-plotter-gondola-with-ge">printables</a>.</p>
+<p>ASSEMBLY VIDEO</p>
+<h4 id="machine-assembly">Machine Assembly<a class="headerlink" href="#machine-assembly" title="Permanent link">&para;</a></h4>
+<p>With the gondla out of the way we can continue into the rest of machine assembly, starting with the machine&rsquo;s wooden frame. I toyed with scrapping this frame entirly a few times, and was particularly compelled by a suggestion from my roomate to reface the wall with whiteboard wall paper and scale up the polargraph to cover the entire space. Nonethless, I progressed with this wooden frame for now (as ashtetically I like it, and it makes electronic containment straighforward), yet you can essentially mount your polargraph gondla to any verticl plane, and alter the marker it uses with very minimal modification.</p>
+<p>I spent the better half of a morning on a plywood run with my buddy <a target="_blank" href="https://aidanjs.com/">Aidan</a>, and hauling all the lumber needed for the machine up to my walk-up unit:</p>
+<figure>
+<p><img alt="" src="../../assets/images/Polargraph/wood.JPG" width="80%" /></p>
+</figure>
+<p>&hellip; which was certainly a good workout. I figured that processing all this lumber in my apartment would take quite a while solo and I was on a bit of a time crunch finishing this build, so I ordered a bunch of pizzas and had a few friends over to help out!</p>
+<figure>
+<p><img alt="" src="../../assets/images/Polargraph/pizza.JPG" width="80%" /></p>
+</figure>
+<p>We hacked together this frame with some 1x3&rdquo; boards and a full (4x8&rsquo;) sheet of 1/4&rdquo; maple ply. I started by cutting the 4x8&rsquo; plywood sheet down to 48x60&rdquo; to match the specs of the Fusion file, and immedietly realized that all the dimetions I chose for the wooden frame of this machine were somewhat abarary and kind of a pain to process actual stock wood into. I only say this in hinesight, and frankly reccomend reconsidering your machine dimetions if you&rsquo;re building this for yourself. </p>
+<p>I wanted to frame this sheet of plywood in with some miter-style boarder. I tried pulling this stunt off with a japannese handsaw and failed my angels misribly, so I wound up buying a cheap miter saw to finish the job. My buddy <a target="_blank" href="http://fabacademy.org/2021/labs/charlotte/students/graham-smith">Graham</a> and I took out a 1/4&rdquo; deep dado on the back inside edge of all four plywood boards that make up this miter-frame, so that our 48x60&rdquo; plywood backing can sit flush within it.</p>
+<figure>
+<p><img alt="" src="../../assets/images/Polargraph/friends.jpeg" width="80%" /></p>
+</figure>
+<p>Then I cut two more sets of identical miter frame boards to stack to continue our wooden frame behind the plywood sheet. This is where we&rsquo;ll be positioning all of the machine&rsquo;s electronics to remain out of view while mounted against the wall. </p>
+<p>And while I took the leap and bought a few proper tools for this build, this was built on the floor of my apartment afterall (I still need to find a good woodshop in San Francisco - ping me if you know a place!), and as such I had no lack of weird gaps to woodfill.</p>
+<figure>
+<p><img align="left" alt="" src="../../assets/images/Polargraph/clamps.JPG" width="59%" />
+<img align="right" alt="" src="../../assets/images/Polargraph/woodFillTopside.JPG" width="36%" /></p>
+</figure>
+<p>I made some <a href="https://github.com/Twarner491/polargraph/blob/main/hardware/StepperJig.pdf">printable jigs</a> based on my Fusion file to help place and mount the steppers on the machines plywood backing. I just mounted these in the top corners of the wooden frame with some blue tape and drilled the mounting holes out.</p>
+<figure>
+<p><img align="left" alt="" src="../../assets/images/Polargraph/stepperJigs.JPG" width="41%" />
+<img align="right" alt="" src="../../assets/images/Polargraph/stepperHole.JPG" width="55%" /></p>
+</figure>
+<p>Then came sanding, more wood filling, and more sanding to wrap up the bulk of this project&rsquo;s woodworking before moving onto the electronics!</p>
+<h4 id="wireing">Wireing<a class="headerlink" href="#wireing" title="Permanent link">&para;</a></h4>
+<p>The electronics behind a pen plotter are really really straightforward: 2 steppers, a single servo, two endstops, not much else. I based GPenT&rsquo;s electronic design around a cloned Arduino Mega 2560 and a RAMPS 1.4 shield that I had laying around, but you could build this out with really any old mainboard you have laying around with minimal modification. A compleate interactive diagram of GPenT&rsquo;s electronics can be found below. </p>
+<p>To start, mount the RAMPS 1.4 shield autom the Arduino Mega, and then stack on the two A4988 stepper drivers, on the X and Y driver slots respectivly (note that these drivers arn&rsquo;t show in the diagram below for legibility perpouses, but I included one in a higher slot for polarity reference). Polarity matters here! Be sure you match the roentation of the single driver shows in the diagram below with both your two drivers.</p>
+<center>
+  <div class="iframe-container" style="position: relative; width: 100%; padding-top: calc(max(56.25%, 400px));">
+    <iframe data-src="https://app.cirkitdesigner.com/project/385dd315-bab3-483c-8288-664c570e5344?view=interactive_preview" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" sandbox="allow-scripts allow-same-origin" tabindex="-1"></iframe>
+  </div>
+</center>
+
+<p>Then I attached a timing pulley to each of our two steppers &hellip;</p>
+<figure>
+<p><img alt="" src="../../assets/images/Polargraph/timingPully.JPG" width="98%" /></p>
+</figure>
+<p>and wired both motors to the corresponding X and Y motor headers on the RAMPS shield, before mounting both steppers to our wooden backing.</p>
+<p>Next up, the endstops. I wired our two endstops on <code>X-MIN</code> and <code>Y-MIN</code> on the RAMPS shield and used a bit of hotglue to mount them inplace on our motor covor brackets. <em>See both these mounted switches, as wella s our moutned steppers below</em>.</p>
+<figure>
+<p><img align="left" alt="" src="../../assets/images/Polargraph/mountedStep.JPG" width="44%" />
+<img align="right" alt="" src="../../assets/images/Polargraph/mountedSwitch.JPG" width="52%" /></p>
+</figure>
+<p>Now, these motor covor brackets need to sit on the front side of our machine, so to pass the cables for the switch and servo through to the front, I drilled a small hole close to the mounted stepper &hellip;</p>
+<figure>
+<p><img alt="" src="../../assets/images/Polargraph/holeforswitch.JPG" width="80%" /></p>
+</figure>
+<p>before passing the cables through those holes and hot gluing the motor cover in place. The gondla servo is wired to <code>SERVO0</code> on the RAMPS shield and its cables are passed from the front to the back alongside the endstop cables under the right motor cover.</p>
+<p>To position the motor covers proerply I mounted endcaps atop both stepper motor axis (see mounting on the right below). On the back of the machine I mounted our <a href="https://www.thingiverse.com/thing:2762130/files">Arduino + RAMPS shield</a>, our <a href="https://www.printables.com/model/779342-raspberry-pi-5-case-incl-slim-and-m2-hat-version">Raspberry PI</a>, the PSU, and the <a href="https://www.printables.com/model/123626-box-enclosure-for-buck-boost-dc-converter-board">buck boost converter</a> with a bit of hotglue, before routing all of the wires with, you guessed it, even more hot glue.</p>
+<figure>
+<p><img align="left" alt="" src="../../assets/images/Polargraph/finalWires.JPG" width="47.5%" />
+<img align="right" alt="" src="../../assets/images/Polargraph/beltLegnth.JPEG" width="44%" /></p>
+</figure>
+<p>The power for the whole machine is passed through a C14 rocker socket which i have inlayed in the side of GPenT&rsquo;s wodden frame (with some drilled holes and some chisseling). This is wired directly to our PSU which is attached to the pwoer sockets on the RAMPS shield, as well as to a buck boost converter where its stepped down to 5V and routed to our raspberry pi. Finally the raspberry pi is connected to the Arduino mega via a USB cable.</p>
+<figure>
+<p><img align="left" alt="" src="../../assets/images/Polargraph/C14wire.JPG" width="44%" />
+<img align="right" alt="" src="../../assets/images/Polargraph/mountedC14.JPG" width="52%" /></p>
+</figure>
+<p>Wireing done! Onto firmware.</p>
+<h4 id="firmware">Firmware<a class="headerlink" href="#firmware" title="Permanent link">&para;</a></h4>
+<p>The firmware behind pen plotters are about as easy as it gets (given that easy enough wiring from above). I&rsquo;m using <a href="https://marlinfw.org/">Marlin</a> as a base, and starting with the same config as the <a href="https://github.com/Twarner491/Makelangelo-firmware">Makelangelo firmware</a> for compatibility out of the bok with the Makelangelo software, more on that later. </p>
+<p>To start I modified the stock Marlin firmware to target an Arduino Mega 2560 with a RAMPS 1.4 shield to match our machine, set our two NEMA 17 stepper motors on the X and Y driver slots (left and right belts respectivly), set our pen-lifting servo on <code>SERVO0</code> (pin 11), and the two endstops on <code>X-MIN</code> and <code>Y-MIN</code>. All extra pizzaz like LCD screens, SD cards, heated beds, etc, etc I disabled to streamline the builds. See these configuration changes for yourself in <a href="https://github.com/Twarner491/Makelangelo-firmware/blob/master/src/local_config.h"><code>src/local_config.h</code></a> and the PlatformIO build environment in <a href="https://github.com/Twarner491/Makelangelo-firmware/blob/master/platformio.ini#L194-L216"><code>platformio.ini</code></a>.</p>
+<p>To build and upload this firmware for yourself, you&rsquo;ll need to install the PlatformIO Core and clone my firmware repository</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Twarner491/Makelangelo-firmware.git
+</code></pre></div>
+<p>Then connect your Arduino Mega to your computer via USB. When connecting any machines to your computer, be weary the machine&rsquo;s PSU is on and powered in before connecting the machine via USB. If you don&rsquo;t do this, you run this risk of powering your steppers through your mainboard/laptop USB power, frying your mainboard and USB port in the process!</p>
+<p>Note the COM port of your Arduino (e.g., <code>COM3</code> on Windows, <code>/dev/ttyUSB0</code> on Linux). Then open a terminal in the <a href="https://github.com/Twarner491/Makelangelo-firmware.git"><code>Makelangelo-firmware</code></a> directory and run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>custom-polargraph<span class="w"> </span>--target<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>YOUR_COM_PORT
+</code></pre></div>
+<p>Replacing <code>YOUR_COM_PORT</code> with your actual port. The firmware will compile and flash automatically.</p>
+<p>Then, with the Arduino still connected, run the included <a href="https://github.com/Twarner491/Makelangelo-firmware/blob/master/test_hardware.py">test script</a> with:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>pyserial
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>test_hardware.py
+</code></pre></div>
+<p>This will verify your servo moves between pen-up (90°) and pen-down (40°) positions, and that both stepper motors respond to movement commands in both directions. If eveverything moves as expected here, congrats! You&rsquo;re done with the phsyical build :)</p>
+<center>
+  <div style="position:relative;padding-bottom:56.25%;">
+    <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/ZFyQTihnSG4" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</center>
+
+<p>If you&rsquo;re building a machine of your own, you can set/refine your dimetions easily with this little <a href="https://github.com/Twarner491/polargraph/blob/main/tools/calibrate.py"><code>calibrate.py</code></a> script I wrote (this is also in the /settings tab on <a href="#plotter-dot-local">plotter dot local</a>, more on that UI later). I found even while building my machine to scale set in CAD, my actual machine dimetions were ever so slightly off, which can have notable impact on the polar grid. Easy fix, properly calibrate your machine!</p>
+<hr />
+<p>To mount the whole thing to the wall I used this cheap, 30 in. 300lb. <a href="https://www.homedepot.com/p/OOK-30-in-300-lbs-Picture-and-Mirror-French-Cleat-Hanging-System-534269/302022526">french cleat</a> from Home Depot. I screwed the top cleat to the top board of GPenT&rsquo;s wooden frame, and then mounted the bottom cleat to my wall. Pardon my lack of ladder, lol.</p>
+<figure>
+<p><img alt="" src="../../assets/images/Polargraph/funnyMounting.JPEG" width="80%" /></p>
+</figure>
+<p>&hellip; and here&rsquo;s the mounted machine, in all its glory!</p>
+<figure>
+<p><img alt="" src="../../assets/images/Polargraph/mountedPoalrgraph.JPG" width="80%" /></p>
+</figure>
+<h4 id="bom">BOM<a class="headerlink" href="#bom" title="Permanent link">&para;</a></h4>
+<p>The full project repo is at <a href="https://github.com/Twarner491/polargraph">github.com/Twarner491/polargraph</a>. Here&rsquo;s all you need:</p>
+<table>
+<thead>
+<tr>
+<th>Qty</th>
+<th>Description</th>
+<th>Price</th>
+<th>Link</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Raspberry Pi 5</td>
+<td>$89.94</td>
+<td><a href="https://a.co/d/dyTlgbf">Link</a></td>
+<td>8GB</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Raspberry Pi 5 Active Cooler</td>
+<td>$9.90</td>
+<td><a href="https://a.co/d/6Sutyoc">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Micro SD Card</td>
+<td>$16.68</td>
+<td><a href="https://a.co/d/08aiL8c">Link</a></td>
+<td>≥32GB</td>
+</tr>
+<tr>
+<td>1</td>
+<td>RAMPS 1.4 Shield</td>
+<td>$9.39</td>
+<td><a href="https://a.co/d/3rHvSAe">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>A4988 Stepper Drivers</td>
+<td>$9.98</td>
+<td><a href="https://a.co/d/6jOYF00">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Nema 17 Pancake Stepper</td>
+<td>$21.00</td>
+<td><a href="https://a.co/d/hQhMUgQ">Link</a></td>
+<td>42mm x 23mm</td>
+</tr>
+<tr>
+<td>1</td>
+<td>MG90S Micro Servo</td>
+<td>$9.99</td>
+<td><a href="https://a.co/d/3pr14TO">Link</a></td>
+<td>9G</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Stepper Motor Cables</td>
+<td>$10.99</td>
+<td><a href="https://a.co/d/flOQFlG">Link</a></td>
+<td>2M length</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GT2 Timing Belt</td>
+<td>$19.98</td>
+<td><a href="https://a.co/d/0sSRB86">Link</a></td>
+<td>6mm width, 5M length</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GT2 Timing Belt Pulley</td>
+<td>$6.99</td>
+<td><a href="https://a.co/d/f0aVCd0">Link</a></td>
+<td>16 Teeth, 5mm bore</td>
+</tr>
+<tr>
+<td>2</td>
+<td>6806-2RS Ball Bearings</td>
+<td>$30.00</td>
+<td><a href="https://a.co/d/bBzQpT1">Link</a></td>
+<td>30mm x 42mm x 7mm</td>
+</tr>
+<tr>
+<td>1</td>
+<td>12V Power Supply</td>
+<td>$35.00</td>
+<td><a href="https://a.co/d/4VRNVeE">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>DC/DC Buck Boost</td>
+<td>$9.99</td>
+<td><a href="https://a.co/d/4VjRFCV">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>C14 AC Inlet</td>
+<td>$9.04</td>
+<td><a href="https://a.co/d/cOKApD8">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>AC Power Cord</td>
+<td>$9.39</td>
+<td><a href="https://a.co/d/cSoMPGb">Link</a></td>
+<td>Down angle</td>
+</tr>
+<tr>
+<td>-</td>
+<td>14 Gauge Wire</td>
+<td>$13.99</td>
+<td><a href="https://a.co/d/foroDOo">Link</a></td>
+<td>A couple feet</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Limit Switch</td>
+<td>$5.99</td>
+<td><a href="https://a.co/d/g3yMx06">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Tungsten Weights</td>
+<td>$89.97</td>
+<td><a href="https://a.co/d/cDbMPfC">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>1/4&rdquo; Maple Plywood</td>
+<td>$37.71</td>
+<td><a href="https://www.lowes.com/pd/Top-Choice-SkyPly-1-4-in-HPVA-Maple-Plywood-Application-as-4-x-8/1000083311">Link</a></td>
+<td>4&rsquo;x8&rsquo; sheet</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1&rdquo;x3&rdquo; Spruce Pine Boards</td>
+<td>$27.92</td>
+<td><a href="https://www.lowes.com/pd/1-in-x-3-in-x-8-ft-Spruce-Pine-Fir-Furring-Strip/5014776481">Link</a></td>
+<td>8&rsquo; length</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Wood PLA</td>
+<td>$25.99</td>
+<td><a href="https://a.co/d/3KssEbi">Link</a></td>
+<td>1.75mm, 1 spool</td>
+</tr>
+<tr>
+<td>1</td>
+<td>A0 Paper Roll</td>
+<td>$29.86</td>
+<td><a href="https://a.co/d/975QRh0">Link</a></td>
+<td>36&rdquo; x 1200&rdquo;</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SAKURA Pigma Micron 05 Pens</td>
+<td>$20.97</td>
+<td><a href="https://a.co/d/biEOxVS">Link</a></td>
+<td>Multicolor pack</td>
+</tr>
+<tr>
+<td>1</td>
+<td>French Cleat</td>
+<td>$31.00</td>
+<td><a href="https://www.homedepot.com/p/OOK-30-in-300-lbs-Picture-and-Mirror-French-Cleat-Hanging-System-534269/302022526">Link</a></td>
+<td>30 in. 300 lbs.</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Felt Pads</td>
+<td>$9.97</td>
+<td><a href="https://www.homedepot.com/p/Everbilt-Assorted-Beige-Self-Adhesive-Round-Furniture-Sliders-Furniture-Pads-for-Hard-Floors-Surface-Bumpers-Value-Pack-108-Pc-49032/206855255">Link</a></td>
+<td>Assorted Pack</td>
+</tr>
+<tr>
+<td>-</td>
+<td>M2 and M3 Hardware</td>
+<td>-</td>
+<td>-</td>
+<td>Misc nuts and bolts</td>
+</tr>
+<tr>
+<td>-</td>
+<td>Jumper Wires</td>
+<td>-</td>
+<td>-</td>
+<td>Misc</td>
+</tr>
+</tbody>
+</table>
+<p><em>Total: ~$595.82</em></p>
+<h3 id="plotter-dot-local">Plotter [dot] Local<a class="headerlink" href="#plotter-dot-local" title="Permanent link">&para;</a></h3>
+<p>I hinted earlier at the real reason we&rsquo;re sticking around this Makelanglo firmware so much: the <a href="https://github.com/Twarner491/Makelangelo-software">Makelangelo software</a>. This this is great, it bakes a full CNC controll UI with a bunch of fun turtle scripts to generate little patterns for the plotter to draw. I figure this is a great base to build on, especially all these little turtle scripts, but I like all of my projects to be entirly stand alone, meaning we&rsquo;re gonna need a web server and we&rsquo;ve got some work ahead of us.</p>
+<p>&hellip;</p>
+<p>Just kidding, I wrote it already! I&rsquo;m hosting a publically accessible version of the site at <a href="https://plotter.onethreenine.net/">plotter.onethreenine.net</a>, which you can use to create and export plotter compatable gcode/SVG files for yourself! Try it out below:</p>
+<center>
+  <div class="iframe-container" style="height: 700px;">
+    <iframe
+      class="plotter-iframe"
+      data-src="https://plotter.onethreenine.net/"
+      frameborder="0"
+      width="100%"
+      height="700"
+      sandbox="allow-scripts allow-same-origin allow-forms"
+      tabindex="-1"
+    ></iframe>
+  </div>
+</center>
+
+<p>If you&rsquo;ve been following along and building a machine of your own, we&rsquo;ll want to get this UI up and running on your machines Raspberry Pi. To start, get a fresh copy of  Raspberry Pi OS Lite (64-bit) onto an SD card and update the WiFi credentials. Then lets SSH in and get to work:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># SSH into your Pi</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ssh<span class="w"> </span>pi@raspberrypi.local<span class="w">  </span><span class="c1"># Default password is usually &#39;raspberry&#39;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Update system</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>upgrade<span class="w"> </span>-y
+</code></pre></div>
+<p>I like custom hostnames, as I&rsquo;ve got way to many RPI&rsquo;s on my network. We&rsquo;ll set the hostname to &lsquo;plotter&rsquo; - this allows users to navigate to <code>plotter.local</code> to access the web interface.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Set hostname</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>hostnamectl<span class="w"> </span>set-hostname<span class="w"> </span>plotter
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Update hosts file</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/hosts
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Change the line: 127.0.1.1 raspberrypi</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># To: 127.0.1.1 plotter</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1"># Save: Ctrl+O, Enter, Ctrl+X</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="c1"># Reboot to apply</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>sudo<span class="w"> </span>reboot
+</code></pre></div>
+<p>After reboot, reconnect with:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ssh<span class="w"> </span>pi@plotter.local
+</code></pre></div>
+<p>Then install dependencies:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Install system packages</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip<span class="w"> </span>python3-venv<span class="w"> </span>avahi-daemon<span class="w"> </span>git
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Enable and start mDNS service</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>avahi-daemon
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>avahi-daemon
+</code></pre></div>
+<p>Now we&rsquo;ll clone the project repository. The full source lives at <a href="https://github.com/Twarner491/polargraph">github.com/Twarner491/polargraph</a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Twarner491/polargraph.git<span class="w"> </span>~/polargraph
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nb">cd</span><span class="w"> </span>~/polargraph
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Create virtual environment</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="nb">source</span><span class="w"> </span>venv/bin/activate
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># Install Python dependencies</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div>
+<p>To get our RPI app up and running with the plotter, we need to set USB permissions for the serial connection.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>system-config/99-polargraph.rules<span class="w"> </span>/etc/udev/rules.d/
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>udevadm<span class="w"> </span>control<span class="w"> </span>--reload-rules
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>sudo<span class="w"> </span>udevadm<span class="w"> </span>trigger
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># Add user to dialout group for serial access</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>sudo<span class="w"> </span>usermod<span class="w"> </span>-a<span class="w"> </span>-G<span class="w"> </span>dialout<span class="w"> </span>pi
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1"># Reboot for permissions to take effect</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>sudo<span class="w"> </span>reboot
+</code></pre></div>
+<p>As a final step, we&rsquo;ll set up this Flask server to auto-run upon boot.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>~/polargraph/system-config/polargraph.service<span class="w"> </span>/etc/systemd/system/
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>polargraph.service
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># Check status</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>polargraph.service
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1"># Test reboot</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>sudo<span class="w"> </span>reboot
+</code></pre></div>
+<p>After reboot, http://plotter.local should be live automatically!</p>
+<center>
+  <div style="position:relative;padding-bottom:56.25%;">
+    <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/8UEqEzWdhAY" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</center>
+
+<p>If you saw my <a href="https://theodore.net/projects/Quotes">Quote Receipt</a> project, you&rsquo;ll know I like to route all of my locally hosted projects through a Home Assistant Yellow in my apartment, so they&rsquo;re accessible from anywhere in the world. This is totally optional, but if you happen to have a home assistant setup of your own, you can port plotter.local to a public facing domain of your choosing:</p>
+<details class="example" open="open">
+<summary>Home Assistant Integration (Optional)</summary>
+<p>Our setup here is about the same as our <a href="https://theodore.net/projects/Quotes">Quote Receipt</a> setup: a webhook automation in Home Assistant receives commands from the frontend, publishes them to an MQTT topic, and an MQTT subscriber script on the Pi listens for messages and triggers the plotter. This allows the frontend to be hosted publicly (via <code>plotter.onethreenine.net</code>) while the plotter itself remains on the local network, bridged through Home Assistant.</p>
+<p><strong>Home Assistant Automation</strong></p>
+<p>Add to <code>automations.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polargraph</span><span class="nv"> </span><span class="s">Command&quot;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">trigger</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webhook</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">webhook_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">polargraph_command</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="nt">allowed_methods</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">POST</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="nt">local_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nt">action</span><span class="p">:</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mqtt.publish</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="nt">data</span><span class="p">:</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">      </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;home/polargraph/command&quot;</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">      </span><span class="nt">payload_template</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">trigger.json</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">tojson</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</code></pre></div>
+<p><strong>Enable CORS</strong></p>
+<p>Add to <code>configuration.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">http</span><span class="p">:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">cors_allowed_origins</span><span class="p">:</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://plotter.onethreenine.net</span>
+</code></pre></div>
+<p><strong>Pi MQTT Setup</strong></p>
+<p>Edit <a href="https://github.com/Twarner491/polargraph/blob/main/src/mqtt_subscriber.py"><code>src/mqtt_subscriber.py</code></a> with your MQTT broker IP:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">MQTT_BROKER</span> <span class="o">=</span> <span class="s2">&quot;192.168.1.XXX&quot;</span>  <span class="c1"># Your Home Assistant IP</span>
+</code></pre></div>
+<p>Then enable the MQTT service:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>system-config/polargraph-mqtt.service<span class="w"> </span>/etc/systemd/system/
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>polargraph-mqtt.service
+</code></pre></div>
+<p><strong>Frontend Configuration</strong></p>
+<p>Edit <code>build_static.py</code> and set your webhook URL:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">HA_WEBHOOK_URL</span> <span class="o">=</span> <span class="s2">&quot;https://your-ha-instance.duckdns.org/api/webhook/polargraph_command&quot;</span>
+</code></pre></div>
+</details>
+<h4 id="sonakinatography">Sonakinatography<a class="headerlink" href="#sonakinatography" title="Permanent link">&para;</a></h4>
+<p>I&rsquo;ve always really enjoyed pen plotter art, or frankly, any thin line drawings. One of my favorite twitter accounts is <a href="https://x.com/adamfuhrer?lang=en">@adamfuhrer</a>, who fills my timeline with a ton of asthetic plots/sketches. One of his recent tweets really caught my eye, highlighting the works of Channa Horwitz:</p>
+<center>
+  <br>
+  <div class="tweet-container">
+    <div class="tweet-item single">
+      <span class="lighttweet"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">channa horwitz <a href="https://t.co/WhdBnXdFH6">pic.twitter.com/WhdBnXdFH6</a></p>&mdash; Adam Fuhrer (@adamfuhrer) <a href="https://twitter.com/adamfuhrer/status/2000714242945622078?ref_src=twsrc%5Etfw">December 15, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></span>
+      <span class="darktweet"><blockquote id='tweet' class="twitter-tweet" data-theme="dark"><blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">channa horwitz <a href="https://t.co/WhdBnXdFH6">pic.twitter.com/WhdBnXdFH6</a></p>&mdash; Adam Fuhrer (@adamfuhrer) <a href="https://twitter.com/adamfuhrer/status/2000714242945622078?ref_src=twsrc%5Etfw">December 15, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></span>
+    </div>
+  </div>
+  <br>
+</center>
+
+<p>Horwitz invented a complete visual notion system constrained to 1/8&rdquo; graph paper several decades ago (1968), which she coined: Sonakinatography. All of here works were done entirly by hand which is absoutly bonkers, as they&rsquo;re so meticulous they look computer generated. While I&rsquo;m not quite confiden I hold a steady enough hand to pratice these plots true to her method, I now happen to own a wonderful, wall-mounted polargraph!</p>
+<p>In sonakinatography, there are 8 entites, each given a corresponding number. Each entity occupies a certain number of grid squares on 1/8&rdquo; graph paper, corresponding to the number of &ldquo;beats&rdquo; present within that entity. In this sense, duration of an entity (or beat count) is equivalant to its visual magnitude. While you can use this method to vizualize a whole bunch of data and a whole bunch of itnresting fashions, I&rsquo;m going to constrain our entity type for now into poems and phrases (as beat count feels particurlary opbious here). We&rsquo;ll map each work in a poem/phrase to an entity (1-8) based on its syllable count.</p>
+<div class="arithmatex">\[\text{word} \xrightarrow{\text{syllable count}} \text{entity } n \in \{1,2,3,4,5,6,7,8\}\]</div>
+<p>A one syllable word becomes entity #1 (and occupies 1 beat), a two syllable word becomes entity #2 (and occupies 2 beats), and so on. The poem/phrase reads left to right across the 8 column grid, with each word placed sequentially. The vertical axis here shows termporal progression through the poem/phrase, and the resulting pattern visualizes the poem/phrase&rsquo;s rhythmic structure as a landscape of rising and falling durations.</p>
+<p>Try some of this pome/phrase constrained sonakinatography out for yourself:</p>
+<div class="sonakinatography-demo">
+  <div class="sono-input-section">
+    <div class="sono-examples">
+      <button class="sono-example-btn" data-example="pangram">Pangram</button>
+      <button class="sono-example-btn" data-example="frost">Frost</button>
+      <button class="sono-example-btn" data-example="shakespeare">Shakespeare</button>
+      <button class="sono-example-btn" data-example="dickinson">Dickinson</button>
+      <button class="sono-example-btn" data-example="haiku">Haiku</button>
+    </div>
+    <textarea class="sono-textarea" placeholder="Enter a poem, phrase, or any text to visualize as Sonakinatography... (Ctrl+Enter to generate)"></textarea>
+  </div>
+
+  <div class="sono-controls">
+    <label for="sono-algorithm">Algorithm</label>
+    <select id="sono-algorithm">
+      <option value="letter">Letter Position (A→1, B→2...)</option>
+      <option value="syllable">Syllable Count</option>
+    </select>
+    <button class="sono-generate-btn">Generate</button>
+  </div>
+
+  <div class="sono-visualization">
+    <div class="sono-canvas-container">
+      <div class="sono-empty-state">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"/>
+          <rect x="35" y="10" width="20" height="40" fill="none" stroke="currentColor" stroke-width="2"/>
+          <rect x="60" y="10" width="20" height="30" fill="none" stroke="currentColor" stroke-width="2"/>
+          <rect x="10" y="35" width="20" height="10" fill="none" stroke="currentColor" stroke-width="2"/>
+          <rect x="60" y="45" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <p>Select an example or enter text above</p>
+      </div>
+      <div class="sono-svg-container"></div>
+      <p class="sono-note">* Visualization rotated 90° from Horwitz's vertical format for space efficiency</p>
+    </div>
+  </div>
+</div>
+
+<h4 id="dcode">dcode<a class="headerlink" href="#dcode" title="Permanent link">&para;</a></h4>
+<p>All these turtle scripts and sonakinatography algorithims are cool, but this is the Generative Pen-trained Transformer after all! I certainly can&rsquo;t call this project compelate without some ML shennigans.</p>
+<p>I&rsquo;ve had this network I&rsquo;ve been wanting to train for a while and finally found a good excuce in this project: <a href="https://github.com/Twarner491/dcode"><code>dcode</code></a>, text to gcode difusion. I took a simple enoguh approach here: take Stable Diffusion&rsquo;s visual understanding and then redirect it. Instead of decoding latents into pixels via Stable Difusion&rsquo;s VAE, I&rsquo;m attempting to decode them to gcode via a transformer. The whole end to end process flushes out to Text prompt → CLIP → UNet diffusion → latent → gcode decoder → plotter-ready commands.</p>
+<p>I started by building out a dataset of image-gcode pairs by by running art images from the an dataset of images of pieces of art I found on <a href="https://www.kaggle.com/datasets/thedownhill/art-images-drawings-painting-sculpture-engraving">Kaggle</a> through five vectorization algorithms, each captioned with BLIP. </p>
+<p>My first training attempt I trained this decoder on whatever latents the difussion process produced which in hinesight was a bit silly, as these latest are noisly by design, and as such there was no stable signal for the decorder to learn from and the model collased. I pvoited to using VAE econded image latence, which deterministically map each image to some fixed latent, giving me the consisrtency I needed for my decoder training targets. </p>
+<p>This seemingly worked structrually, and my next attempt at the network learned gcode syntax, but output the same coordinate over and over again. My best guess was that this decoder was too small, so the final piece of this puzzle was scale &hellip; I wish. I scaled up my network to a 200M parameter transformer decoder with a CNN based latent projector, and ran 20 epochs across 8x H100s and saw a loss drop from 3.7 to 0.17! However, semantic understanding remains incredibly limited. The model learned gcode strcture but not meaningful content - here&rsquo;s its attempt at &ldquo;a sketch of a horse&rdquo; for isntance, lol.</p>
+<figure style="opacity:90%;">
+<p><img alt="dcode attempt at a horse" src="../../assets/images/Polargraph/horseLight.png#only-light" width="70%" />
+ <img alt="dcode attempt at a horse" src="../../assets/images/Polargraph/horseDark.png#only-dark" width="70%" /></p>
+</figure>
+<p>The fundimental chalange here is that the latent space learned by Stable Diffusion&rsquo;s VAE is optomize, of course, for pixel reconstruction, not gcode path planning. A true dcode, text to gcode model likely needs to be trained end-to-end with gcode as the target modality. I would realy really like to get one of these working sometime soon, but for now, my compute budget is depleted (those H100&rsquo;s are expensive man!)</p>
+<p>Nonethless, the network in its current state is available on <a href="https://huggingface.co/twarner/dcode-sd-gcode">HuggingFace</a> as well as baked into the plotter [dot] local interface so you can <a href="https://huggingface.co/spaces/twarner/dcode">try it out</a> for yourself!</p>
+<div class="admonition quote">
+<p><center>
+    <div class="iframe-container" style="height: 725px;">
+      <iframe data-src="https://twarner-dcode.hf.space" frameborder="0" width="100%" height="725" sandbox="allow-scripts allow-same-origin allow-forms" tabindex="-1"></iframe>
+    </div>
+  </center></p>
+</div>
+<h4 id="gpent">GPenT<a class="headerlink" href="#gpent" title="Permanent link">&para;</a></h4>
+<p>The final generator in plotter [dot] local brings us back to the orgins of this project: it&rsquo;s time to implement the Generated Pen-trained Transformer itself. I figure its best to return back to my inital intuition: &ldquo;to use an LLM to generate a string of numbers, to generate SVG blobs, to feed to a pen plotter, and to call the whole thing the Generative Pen-trained Transformer&rdquo;. Except now theres no need to limit ourselves to SVG blobs, we have a bunch of generators to work with!</p>
+<p>I built out a super simple Gemini instance to handel this. I pass in some keyword (a &ldquo;whisper&rdquo; of inspiration if you will) into the Gemini API, as well as a randomized list of generators and color options in a structured prompt that gives Gemini control over the pen plotter. The model then resonds with JSON commands specifying which genreators to run, with what parameters and transformations, and in which colors. All of this is passed into plotter [dot] local, and is plotted in the workplane.</p>
+<div class="gpent-prompt-demo">
+  <div class="prompt-container">
+    <pre class="prompt-text"><code>You control a pen plotter. Canvas: 841mm x 1189mm.
+
+Whispers: "<span class="prompt-var" data-var="whisper">ocean waves</span>"
+
+GENERATORS:
+  <span class="prompt-var" data-var="gen1">9: Flow Field - options: lines (50-1000), length (10-200), scale (0.001-0.1)</span>
+  <span class="prompt-var" data-var="gen2">1: Spiral - options: turns (1-50), spacing (1-20)</span>
+  <span class="prompt-var" data-var="gen3">22: Kaleidoscope - options: symmetry (4-16), pattern (curves/lines/spirals/petals/geometric), complexity (5-20)</span>
+  ... (25 generators, order randomized)
+
+COLORS:
+  <span class="prompt-var" data-var="color1">3: Blue</span>
+  <span class="prompt-var" data-var="color2">2: Black</span>
+  <span class="prompt-var" data-var="color3">4: Green</span>
+  ... (9 colors, order randomized)
+
+TRANSFORMS: scale (10-300%), rotation (0-360), offset_x (-400 to 400mm), offset_y (-550 to 550mm)
+
+Respond with JSON array. Say FINISHED when done.
+[
+  {"thought": "...", "generator": &lt;num&gt;, "options": {}, "color": &lt;num&gt;, "scale": 100, "rotation": 0, "offset_x": 0, "offset_y": 0},
+  ...
+]</code></pre>
+  </div>
+</div>
+
+<p>I&rsquo;m shuffling generator and color orderings for each request to prevent Gemini from favoring early listed options. My inital tests show this is quite effective at getting more varid results. See the fully Gemini worker source at <a href="https://github.com/Twarner491/polargraph/blob/main/workers/gpent-worker.js"><code>workers/gpent-worker.js</code></a> - this is about as minimal as it gets, it was my goal to give Gemini as &lsquo;unbiased&rsquo; of a prompt as possible, yet I bet you could get some really intresting results with a bit more time spent prompting.</p>
+<h3 id="gallery">Gallery<a class="headerlink" href="#gallery" title="Permanent link">&para;</a></h3>
+<p>I am so stoked with how this project came together, and it feels really good to have dusted off an old project from the shelf and to have seen it through. My apartment walls are a little less bare now, I&rsquo;ve captured some of my favorite plots, check them out: </p>
+<div class="plot-carousel-container">
+  <div class="plot-carousel">
+    <div class="plot-item">
+      <div class="plot-frame">
+        <div class="plot-content">
+          <img src="../../assets/images/Polargraph/plots/crown.JPG" alt="Crown">
+        </div>
+        <div class="plot-frame-overlay">
+          <img src="../../assets/images/Polargraph/baroqueFrame.png" alt="Frame">
+        </div>
+      </div>
+      <span class="plot-label">Crown</span>
+    </div>
+    <div class="plot-item">
+      <div class="plot-frame">
+        <div class="plot-content">
+          <img src="../../assets/images/Polargraph/plots/horse.JPG" alt="Horse">
+        </div>
+        <div class="plot-frame-overlay">
+          <img src="../../assets/images/Polargraph/baroqueFrame.png" alt="Frame">
+        </div>
+      </div>
+      <span class="plot-label">Horse</span>
+    </div>
+    <div class="plot-item">
+      <div class="plot-frame">
+        <div class="plot-content">
+          <img src="../../assets/images/Polargraph/plots/scrap.JPG" alt="Scrap">
+        </div>
+        <div class="plot-frame-overlay">
+          <img src="../../assets/images/Polargraph/baroqueFrame.png" alt="Frame">
+        </div>
+      </div>
+      <span class="plot-label">Scrap</span>
+    </div>
+    <div class="plot-item">
+      <div class="plot-frame">
+        <div class="plot-content">
+          <img src="../../assets/images/Polargraph/plots/spiralHead.JPG" alt="Spiralhead">
+        </div>
+        <div class="plot-frame-overlay">
+          <img src="../../assets/images/Polargraph/baroqueFrame.png" alt="Frame">
+        </div>
+      </div>
+      <span class="plot-label">Spiralhead</span>
+    </div>
+    <div class="plot-item">
+      <div class="plot-frame">
+        <div class="plot-content">
+          <img src="../../assets/images/Polargraph/plots/squareHead.JPG" alt="Squarehead">
+        </div>
+        <div class="plot-frame-overlay">
+          <img src="../../assets/images/Polargraph/baroqueFrame.png" alt="Frame">
+        </div>
+      </div>
+      <span class="plot-label">Squarehead</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+    const gondola = document.getElementById('gondola');
+    const leftBelt = document.getElementById('leftBelt');
+    const rightBelt = document.getElementById('rightBelt');
+    const leftCounterweight = document.getElementById('leftCounterweight');
+    const rightCounterweight = document.getElementById('rightCounterweight');
+    const leftCounterLine = document.getElementById('leftCounterLine');
+    const rightCounterLine = document.getElementById('rightCounterLine');
+
+    const leftMotorX = 100, leftMotorY = 120;
+    const rightMotorX = 900, rightMotorY = 120;
+
+    const waypoints = [
+        {x: 300, y: 350}, {x: 500, y: 250}, {x: 700, y: 350},
+        {x: 700, y: 500}, {x: 300, y: 500}, {x: 400, y: 400}
+    ];
+
+    let currentWaypoint = 0, progress = 0;
+    const speed = 0.004;
+
+    function lerp(start, end, t) { return start + (end - start) * t; }
+    function easeInOutCubic(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
+
+    function updateAnimation() {
+        const current = waypoints[currentWaypoint];
+        const next = waypoints[(currentWaypoint + 1) % waypoints.length];
+        const easedProgress = easeInOutCubic(progress);
+
+        const gondolaX = lerp(current.x, next.x, easedProgress);
+        const gondolaY = lerp(current.y, next.y, easedProgress);
+
+        gondola.setAttribute('transform', `translate(${gondolaX}, ${gondolaY})`);
+
+        const leftAttachX = gondolaX - 22, leftAttachY = gondolaY - 15;
+        const rightAttachX = gondolaX + 22, rightAttachY = gondolaY - 15;
+
+        leftBelt.setAttribute('x2', leftAttachX);
+        leftBelt.setAttribute('y2', leftAttachY);
+        rightBelt.setAttribute('x2', rightAttachX);
+        rightBelt.setAttribute('y2', rightAttachY);
+
+        const leftBeltLength = Math.sqrt(Math.pow(leftAttachX - leftMotorX, 2) + Math.pow(leftAttachY - leftMotorY, 2));
+        const rightBeltLength = Math.sqrt(Math.pow(rightAttachX - rightMotorX, 2) + Math.pow(rightAttachY - rightMotorY, 2));
+
+        const totalBeltLength = 800;
+        const leftCounterY = 120 + (totalBeltLength - leftBeltLength);
+        const rightCounterY = 120 + (totalBeltLength - rightBeltLength);
+
+        leftCounterweight.setAttribute('y', leftCounterY);
+        rightCounterweight.setAttribute('y', rightCounterY);
+        leftCounterLine.setAttribute('y2', leftCounterY);
+        rightCounterLine.setAttribute('y2', rightCounterY);
+
+        progress += speed;
+        if (progress >= 1) {
+            progress = 0;
+            currentWaypoint = (currentWaypoint + 1) % waypoints.length;
+        }
+        requestAnimationFrame(updateAnimation);
+    }
+
+    updateAnimation();
+})();
+
+// Defer iframe loading until visible - prevent focus/scroll stealing
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const iframe = entry.target;
+        const src = iframe.dataset.src;
+        if (src && !iframe.src) {
+          // Save scroll position
+          const scrollY = window.scrollY;
+
+          // Make iframe non-interactive during load
+          iframe.style.pointerEvents = 'none';
+
+          // Set src
+          iframe.src = src;
+
+          // Immediately restore scroll if it changed (happens synchronously sometimes)
+          if (window.scrollY !== scrollY) {
+            window.scrollTo(0, scrollY);
+          }
+
+          // Also check on next frame in case it's async
+          requestAnimationFrame(() => {
+            if (window.scrollY !== scrollY) {
+              window.scrollTo(0, scrollY);
+            }
+            // Re-enable interaction
+            iframe.style.pointerEvents = '';
+          });
+        }
+        observer.unobserve(iframe);
+      }
+    });
+  }, { rootMargin: '300px' }); // Load earlier so it's ready before user sees it
+
+  document.querySelectorAll('iframe[data-src]').forEach(iframe => {
+    observer.observe(iframe);
+  });
+})();
+</script>
+
+  <!-- Email Subscription -->
+  <section class="subscribe-section">
+    <div class="subscribe-inner">
+      <p>Enter your email to receive the occasional update.</p>
+      <form 
+        class="subscribe-form"
+        action="https://buttondown.com/api/emails/embed-subscribe/teddywarner"
+        method="post"
+        target="popupwindow"
+        onsubmit="window.open('https://buttondown.com/teddywarner', 'popupwindow')"
+      >
+        <input 
+          type="email" 
+          name="email" 
+          id="bd-email"
+          placeholder="your@email.com" 
+          required
+          autocomplete="email"
+        />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Giscus Comments -->
+  <h2 id="__comments">Comments</h2>
+  <script src="https://giscus.app/client.js"
+  data-cfasync="false"
+  data-repo="Twarner491/theodore.net"
+  data-repo-id="MDEwOlJlcG9zaXRvcnkzNzgyODU0MTk="
+  data-category="General"
+  data-category-id="DIC_kwDOFowta84CA5IA"
+  data-mapping="title"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme="light"
+  data-lang="en"
+  crossorigin="anonymous"
+  async>
+</script>
+
+  <!-- Reload on palette change -->
+  <script>
+    var palette = __md_get("__palette")
+    if (palette && typeof palette.color === "object")
+      if (palette.color.scheme === "slate") {
+        var giscus = document.querySelector("script[src*=giscus]")
+        giscus.setAttribute("data-theme", "transparent_dark") 
+      }
+
+    /* Register event handlers after documented loaded */
+    document.addEventListener("DOMContentLoaded", function() {
+      var ref = document.querySelector("[data-md-component=palette]")
+      ref.addEventListener("change", function() {
+        var palette = __md_get("__palette")
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light"
+
+          /* Instruct Giscus to change theme */
+          var frame = document.querySelector(".giscus-frame")
+          frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme } } },
+            "https://giscus.app"
+          )
+        }
+      })
+    })
+  </script>
+
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+<section class="footer">
+  <div class="socials">
+    <div class="socialpar">
+      <a target="_blank" href="https://github.com/Twarner491">
+        <i class="fa-brands fa-github"></i>
+      </a>
+    </div>
+    <div class="socialpar">
+      <a target="_blank" href="https://x.com/WarnerTeddy">
+        <i class="fa-brands fa-x-twitter"></i>
+      </a>
+    </div>
+    <div class="socialpar">
+      <a target="_blank" href="mailto:teddy@warner.net">
+        <i class="fa-solid fa-paper-plane"></i>
+      </a>
+    </div>
+  </div>
+    <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
+      <p class="copyright">Copyright © 2026 Teddy Warner</p>
+    </a>
+</section>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/index.js"></script>
+      
+    
+  </body>
+</html>

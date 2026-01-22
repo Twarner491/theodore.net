@@ -1,0 +1,557 @@
+.polargraph-diagram {
+  width: 100%;
+  max-width: 550px;
+  margin: 1rem auto;
+}
+.polargraph-diagram svg {
+  width: 100%;
+  height: auto;
+}
+.pg-frame { stroke: var(--md-default-fg-color); stroke-opacity: 0.4; }
+.pg-bar { stroke: var(--md-default-fg-color); }
+.pg-motor-outer { stroke: var(--md-default-fg-color); }
+.pg-motor-center { fill: var(--md-default-fg-color); }
+.pg-counter-line { stroke: var(--md-default-fg-color); }
+.pg-counterweight { fill: var(--md-default-bg-color); stroke: var(--md-default-fg-color); }
+.pg-belt { stroke: var(--md-default-fg-color); }
+.pg-gondola-body { fill: var(--md-default-bg-color); stroke: var(--md-default-fg-color); }
+.pg-attachment { fill: var(--md-default-fg-color); }
+.pg-pen-holder { fill: var(--md-default-bg-color); stroke: var(--md-default-fg-color); }
+.pg-pen-tip { fill: var(--md-default-fg-color); stroke: var(--md-default-fg-color); }
+
+.plot-carousel-container {
+  width: 100%;
+  overflow: visible;
+  position: relative;
+  margin: 3rem 0;
+  padding: 2rem 0;
+  background: rgba(var(--md-default-fg-color--rgb), 0.01);
+}
+
+.plot-carousel {
+  display: flex;
+  gap: 2.5rem;
+  padding: 0 2rem;
+  overflow-x: scroll;
+  overflow-y: visible;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  flex-wrap: nowrap;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.plot-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.plot-carousel.dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.plot-item {
+  flex: 0 0 auto;
+  width: 280px;
+  height: 340px;
+  position: relative;
+  scroll-snap-align: center;
+  user-select: none;
+  transition: transform 0.2s ease-out;
+  transform-origin: center;
+}
+
+/* Random rotations for organic feel */
+.plot-item:nth-child(1) { transform: rotate(-1.2deg); }
+.plot-item:nth-child(2) { transform: rotate(0.8deg); }
+.plot-item:nth-child(3) { transform: rotate(-0.6deg); }
+.plot-item:nth-child(4) { transform: rotate(1.4deg); }
+.plot-item:nth-child(5) { transform: rotate(-0.9deg); }
+.plot-item:nth-child(6) { transform: rotate(0.5deg); }
+.plot-item:nth-child(7) { transform: rotate(-1.1deg); }
+.plot-item:nth-child(8) { transform: rotate(0.7deg); }
+
+.plot-item:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+/* The frame container */
+.plot-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* The artwork/plot content sits behind the frame */
+.plot-content {
+  position: absolute;
+  top: 14%;
+  left: 12%;
+  width: 76%;
+  height: 72%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f3ee;
+}
+
+[data-md-color-scheme="slate"] .plot-content {
+  background: #1a1a1c;
+}
+
+/* Placeholder styles for when no actual plot image exists */
+.plot-content.placeholder {
+  background: linear-gradient(135deg, #f8f6f1 0%, #e8e4db 100%);
+}
+
+[data-md-color-scheme="slate"] .plot-content.placeholder {
+  background: linear-gradient(135deg, #1a1a1c 0%, #252528 100%);
+}
+
+/* SVG placeholder styling */
+.plot-content svg {
+  width: 85%;
+  height: 85%;
+  opacity: 0.6;
+}
+
+.plot-content svg path,
+.plot-content svg line,
+.plot-content svg circle,
+.plot-content svg polyline {
+  stroke: #2a2a2a;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+[data-md-color-scheme="slate"] .plot-content svg path,
+[data-md-color-scheme="slate"] .plot-content svg line,
+[data-md-color-scheme="slate"] .plot-content svg circle,
+[data-md-color-scheme="slate"] .plot-content svg polyline {
+  stroke: #d0d0d0;
+}
+
+/* The actual plot image when available */
+.plot-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* The baroque frame overlay */
+.plot-frame-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.plot-frame-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+}
+
+/* Plot label */
+.plot-label {
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--md-default-fg-color--light);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.plot-item:hover .plot-label {
+  opacity: 1;
+}
+
+/* Scroll physics effects */
+.plot-item.scroll-physics {
+  transition: transform 0.3s ease-out;
+}
+
+.plot-item.scroll-left {
+  transform: rotate(-0.5deg) translateX(-2px);
+}
+
+.plot-item.scroll-right {
+  transform: rotate(0.5deg) translateX(2px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .plot-item {
+    width: 220px;
+    height: 270px;
+  }
+  
+  .plot-carousel {
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .plot-carousel-container {
+    margin: 2rem 0;
+    padding: 1rem 0;
+  }
+  
+  .plot-label {
+    font-size: 0.75rem;
+    bottom: -24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .plot-item {
+    width: 180px;
+    height: 220px;
+  }
+  
+  .plot-carousel {
+    gap: 1rem;
+  }
+}
+
+/* Sonakinatography Demo Styles */
+.sonakinatography-demo {
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.sono-input-section {
+  margin-bottom: 1.5rem;
+}
+
+.sono-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sono-example-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  font-family: 'Crimson Pro', serif;
+  background: transparent;
+  border: 1px solid var(--md-default-fg-color);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.sono-example-btn:hover {
+  opacity: 0.85;
+}
+
+.sono-example-btn.active {
+  opacity: 1;
+  background: rgba(var(--md-default-fg-color--rgb), 0.08);
+}
+
+.sono-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.75rem 1rem;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  background: transparent;
+  border: 1px solid var(--md-default-fg-color);
+  color: var(--md-default-fg-color);
+  resize: vertical;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, min-height 0.3s ease;
+}
+
+.sono-textarea:focus {
+  outline: none;
+  opacity: 1;
+}
+
+.sono-textarea::placeholder {
+  color: var(--md-default-fg-color);
+  opacity: 0.4;
+}
+
+.sono-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.sono-controls label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+.sono-controls select {
+  padding: 0.4rem 2rem 0.4rem 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  background: transparent;
+  border: 1px solid var(--md-default-fg-color);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.sono-controls select:hover,
+.sono-controls select:focus {
+  opacity: 1;
+  outline: none;
+}
+
+[data-md-color-scheme="slate"] .sono-controls select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23aaa' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+}
+
+.sono-generate-btn {
+  padding: 0.4rem 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--md-default-fg-color);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.sono-generate-btn:hover {
+  opacity: 1;
+}
+
+.sono-visualization {
+  position: relative;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.sono-canvas-container {
+  width: 100%;
+  min-height: 100px;
+}
+
+.sono-svg-container {
+  width: 100%;
+}
+
+.sono-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* SVG fills and strokes are handled via inline styles in JavaScript
+   to properly detect and react to theme changes */
+
+.sono-canvas {
+  display: block;
+  max-width: 100%;
+}
+
+.sono-note {
+  font-size: 0.6rem;
+  font-style: italic;
+  opacity: 0.5;
+  margin: 0.75rem 0 0 0;
+  padding: 0;
+}
+
+.sono-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  opacity: 0.4;
+  text-align: center;
+  padding: 2rem;
+}
+
+.sono-empty-state svg {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.sono-empty-state p {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+
+/* Responsive */
+@media (max-width: 600px) {
+  .sono-controls {
+    flex-wrap: wrap;
+  }
+  
+  .sono-controls label {
+    width: 100%;
+    margin-bottom: -0.5rem;
+  }
+  
+  .sono-controls select {
+    flex: 1;
+  }
+}
+
+/* GPenT Prompt Demo */
+.gpent-prompt-demo {
+  width: 100%;
+  max-width: 1000px;
+  margin: 1.5rem auto;
+}
+
+.prompt-container {
+  position: relative;
+  background: transparent;
+  border: 1px solid rgba(var(--md-default-fg-color--rgb), 0.15);
+  border-radius: 4px;
+  height: 420px;
+  overflow: hidden;
+}
+
+.prompt-text {
+  margin: 0;
+  padding: 0.4rem 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: var(--md-default-fg-color);
+  opacity: 0.85;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Large desktop - auto height */
+@media (min-width: 1200px) {
+  .prompt-container {
+    height: auto;
+    overflow: visible;
+  }
+  
+  .prompt-text {
+    height: auto;
+    overflow-y: visible;
+  }
+}
+
+.prompt-text code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Variable elements that cycle */
+.prompt-var {
+  position: relative;
+  display: inline;
+  color: #3a3a3a;
+  font-weight: 600;
+  transition: opacity 0.1s ease;
+}
+
+[data-md-color-scheme="slate"] .prompt-var {
+  color: #c8c8c8;
+}
+
+/* Cipher scramble effect */
+.prompt-var.scrambling {
+  opacity: 0.7;
+}
+
+.prompt-var.scrambling::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #3a3a3a;
+  animation: scramble-underline 0.15s ease infinite;
+}
+
+[data-md-color-scheme="slate"] .prompt-var.scrambling::after {
+  background: #c8c8c8;
+}
+
+@keyframes scramble-underline {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.prompt-note {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  opacity: 0.5;
+  margin: 0.75rem 0 0 0;
+  text-align: center;
+}
+
+/* Dark mode adjustments */
+[data-md-color-scheme="slate"] .prompt-container {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .prompt-text {
+    font-size: 0.65rem;
+    padding: 0.3rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .prompt-container {
+    height: 520px;
+  }
+  
+  .prompt-text {
+    font-size: 0.58rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
