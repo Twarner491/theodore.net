@@ -382,6 +382,7 @@ def on_page_markdown(markdown: str, page, config, files):
         markdown = markdown.replace('<!-- POLARGRAPH_GALLERY -->', gallery_html)
     
     # Only process content list tokens for specific pages
+    print(f"content_lists: on_page_markdown called for src_path='{src_path}'")
     if src_path not in ['index.md', 'projects.md', 'writings.md', 'books.md']:
         return markdown
     
