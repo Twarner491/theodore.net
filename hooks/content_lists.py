@@ -102,7 +102,6 @@ def _scan_folder(docs_dir, folder_name):
     if exact_path.exists() and exact_path.is_dir():
         folder_path = exact_path
         actual_folder_name = folder_name
-        print(f"content_lists: Found exact folder '{folder_path}'")
     else:
         # Try case-insensitive fallback for Linux compatibility
         parent = Path(docs_dir)
@@ -111,17 +110,14 @@ def _scan_folder(docs_dir, folder_name):
                 if child.is_dir() and child.name.lower() == folder_name.lower():
                     folder_path = child
                     actual_folder_name = child.name  # Use actual folder name for URLs
-                    print(f"content_lists: Found case-variant folder '{folder_path}' (actual name: {actual_folder_name})")
                     break
-        except Exception as e:
-            print(f"content_lists: Error scanning parent directory: {e}")
-    
+        except Exception:
+            pass
+
     if folder_path is None:
-        print(f"content_lists: Folder '{folder_name}' not found in {docs_dir}, returning empty list")
         return items
-    
+
     md_files = list(folder_path.glob("*.md"))
-    print(f"content_lists: Found {len(md_files)} .md files in {folder_path}")
     
     for md_file in md_files:
         try:
@@ -189,11 +185,9 @@ def _get_projects(docs_dir):
     global _projects_cache
     if _projects_cache is not None:
         return _projects_cache
-    
+
     # Scan local projects
-    print(f"content_lists: _get_projects called with docs_dir={docs_dir}")
     projects = _scan_folder(docs_dir, "projects")
-    print(f"content_lists: _scan_folder returned {len(projects)} local projects")
     
     # Add external projects from config
     config = _get_config(docs_dir)
@@ -286,10 +280,6 @@ def _generate_writings_list(writings, count=None, include_mobileyear=True):
 
 def _generate_projects_full_list(projects):
     """Generate HTML for full projects list (proj.md style with thumbnails)."""
-    print(f"content_lists: Generating full list for {len(projects)} projects")
-    for p in projects:
-        print(f"content_lists:   - {p.get('title', 'NO TITLE')} (external: {p.get('external', False)})")
-    
     html_parts = []
     
     for item in projects:
@@ -382,7 +372,6 @@ def on_page_markdown(markdown: str, page, config, files):
         markdown = markdown.replace('<!-- POLARGRAPH_GALLERY -->', gallery_html)
     
     # Only process content list tokens for specific pages
-    print(f"content_lists: on_page_markdown called for src_path='{src_path}'")
     if src_path not in ['index.md', 'projects.md', 'writings.md', 'books.md']:
         return markdown
     
@@ -409,17 +398,10 @@ def on_page_markdown(markdown: str, page, config, files):
             markdown = markdown.replace('<!-- WRITINGS_LIST_3 -->', list_html)
     
     elif src_path == 'projects.md':
-        print(f"content_lists: Processing projects.md, checking for PROJECTS_FULL_LIST token")
-        print(f"content_lists: Token present: {'<!-- PROJECTS_FULL_LIST -->' in markdown}")
-        print(f"content_lists: Original markdown length: {len(markdown)} chars")
-        print(f"content_lists: First 200 chars: {repr(markdown[:200])}")
         if '<!-- PROJECTS_FULL_LIST -->' in markdown:
             projects = _get_projects(docs_dir)
             list_html = _generate_projects_full_list(projects)
-            print(f"content_lists: Generated list_html length: {len(list_html)} chars")
             markdown = markdown.replace('<!-- PROJECTS_FULL_LIST -->', list_html)
-            print(f"content_lists: After replacement, markdown length: {len(markdown)} chars")
-            print(f"content_lists: Replacement contains 'writparent': {'writparent' in markdown}")
     
     elif src_path == 'writings.md':
         if '<!-- WRITINGS_FULL_LIST -->' in markdown:
