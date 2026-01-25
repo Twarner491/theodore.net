@@ -105,6 +105,18 @@ search:
             </a>
           </div>
 
+          <div class="book-item article" data-type="article" data-title="Industrial Society and Its Future" data-date="2026-01-24" data-favorite="false" data-reading="false">
+            <a href="https://web.cs.ucdavis.edu/~rogaway/classes/188/materials/Industrial%20Society%20and%20Its%20Future.pdf" target="_blank">
+              <div class="book-cover-wrapper">
+                <img class="book-cover" src="/assets/images/books/articles/tk.png" alt="Industrial Society and Its Future">
+                <span class="favorite-indicator"></span>
+              </div>
+              <p class="book-title">Industrial Society and Its Future</p>
+              <p class="book-author">Theodore Kaczynski</p>
+              <p class="book-date">January 2026</p>
+            </a>
+          </div>
+
           <div class="book-item article" data-type="article" data-title="Eating Disorders and Mimetic Desire" data-date="2026-01-18" data-favorite="false" data-reading="false">
             <a href="https://www.uibk.ac.at/theol/cover/contagion/contagion3/contagion03_girard.pdf" target="_blank">
               <div class="book-cover-wrapper">
