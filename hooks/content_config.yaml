@@ -2,6 +2,13 @@
 # These will be merged with auto-discovered projects from /projects folder
 
 external_projects:
+  - title: anamnesis.fm
+    description: A time traveling radio.
+    url: https://anamnesis.fm/about
+    thumbnail: https://github.com/Twarner491/anamnesis.fm/blob/main/public/favicon.gif?raw=true
+    date: 2026-01-25
+    external: true
+
   - title: onethreenine.net
     description: A web accessible corkboard for my apartment.
     url: https://onethreenine.net/about
