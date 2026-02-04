@@ -23,8 +23,8 @@
   width: 100%;
   overflow: visible;
   position: relative;
-  margin: 3rem 0;
-  padding: 2rem 0;
+  margin: 1rem 0 2rem 0;
+  padding: 1rem 0;
   background: rgba(var(--md-default-fg-color--rgb), 0.01);
 }
 
@@ -445,7 +445,8 @@
   background: transparent;
   border: 1px solid rgba(var(--md-default-fg-color--rgb), 0.15);
   border-radius: 4px;
-  height: 420px;
+  /* Fixed height to prevent layout shift - sized for longest possible content */
+  height: 560px;
   overflow: hidden;
 }
 
@@ -461,20 +462,12 @@
   word-wrap: break-word;
   word-break: break-word;
   box-sizing: border-box;
-  height: 100%;
-  overflow-y: auto;
 }
 
-/* Large desktop - auto height */
+/* Large desktop */
 @media (min-width: 1200px) {
   .prompt-container {
-    height: auto;
-    overflow: visible;
-  }
-  
-  .prompt-text {
-    height: auto;
-    overflow-y: visible;
+    height: 580px;
   }
 }
 
@@ -539,6 +532,10 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .prompt-container {
+    height: 620px;
+  }
+
   .prompt-text {
     font-size: 0.65rem;
     padding: 0.3rem 1rem;
@@ -547,9 +544,9 @@
 
 @media (max-width: 480px) {
   .prompt-container {
-    height: 520px;
+    height: 660px;
   }
-  
+
   .prompt-text {
     font-size: 0.58rem;
     padding: 0.5rem 0.75rem;

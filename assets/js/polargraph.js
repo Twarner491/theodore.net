@@ -511,24 +511,35 @@ class GPenTPromptDemo {
       ],
       gen1: [
         '9: Flow Field - options: lines (50-1000), length (10-200), scale (0.001-0.1)',
-        '12: Slime Mold - options: agents (100-10000), iterations (50-1000), sensor_angle (10-90)',
-        '22: Kaleidoscope - options: symmetry (4-16), pattern (curves/lines/spirals), complexity (5-20)',
+        '12: Slime Mold - options: agents (100-10000), iterations (50-1000), sensor_angle (10-90), sensor_distance (3-30)',
+        '22: Kaleidoscope - options: symmetry (4-16), pattern (curves/lines/spirals/petals/geometric), complexity (5-20)',
         '7: Fractal Tree - options: depth (1-12), trunk_length (20-200), angle (10-45), ratio (0.5-0.9)',
-        '16: Glow (Multi-Color) - options: color_profile (rainbow/warm/cool), particles (100-2000)'
+        '16: Glow (Multi-Color) - options: color_profile (rainbow/warm/cool/monochrome/primary/pastel), particles (100-2000), iterations (50-500)',
+        '13: Geodata Weaving - options: latitude (-90 to 90), longitude (-180 to 180), threads (16-128), shafts (2-8)',
+        '19: Zen Pots (Multi-Color) - options: pot_count (3-20), pot_color (terracotta/earth/slate/clay/ceramic), flower_style (branches/minimal/full/mixed/none)',
+        '26: Fish Draw - options: fish_name (string, leave empty for random Latin name), seed (-1 for random)',
+        '24: Interlockings (Multi-Color) - options: num_layers (4-12), lines_per_layer (20-60), line_spacing (3-10mm)'
       ],
       gen2: [
         '1: Spiral - options: turns (1-50), spacing (1-20)',
         '2: Spirograph - options: R (10-300), r (5-150), d (5-200), revolutions (1-100)',
         '6: Hilbert Curve - options: order (1-7), size (100-800)',
         '5: Dragon Curve - options: iterations (1-16), size (1-10)',
-        '18: Game of Life - options: cell_size (5-30mm), generations (10-200)'
+        '18: Game of Life - options: cell_size (5-30mm), generations (10-200), initial_density (0.2-0.6)',
+        '4: Maze - options: rows (5-50), cols (5-50), cell_size (5-40)',
+        '8: Hexagon Grid - options: size (5-50), rows (3-30), cols (3-30)',
+        '20: Bezier Curves - options: curve_count (5-50), curve_spread (20-200), curve_style (flowing/random/parallel/radial/wave)',
+        '25: Sudoku Cartography - options: initial_clues (15-25), curve_tension (30-100), draw_grid (true/false)'
       ],
       gen3: [
-        '22: Kaleidoscope - options: symmetry (4-16), pattern (curves/lines/spirals), complexity (5-20)',
         '3: Lissajous - options: a (1-20), b (1-20), delta (0-180), size (50-500)',
-        '19: Zen Pots - options: pot_count (3-20), pot_color (terracotta/earth/slate)',
-        '21: Perlin Noise Dots - options: grid_spacing (5-30mm), shape (circle/square/diamond)',
-        '14: Poetry Clouds - options: text_size (3-20mm), cloud_threshold (0.3-0.7)'
+        '21: Perlin Noise Dots - options: grid_spacing (5-30mm), noise_scale_x (0.005-0.05), shape (circle/square/diamond/cross/line)',
+        '14: Poetry Clouds - options: text_size (3-20mm), cloud_threshold (0.3-0.7), noise_scale (0.005-0.05), seed (-1 for random)',
+        '15: Geometric Pattern - options: columns (2-8), rows (2-10), seed (-1 for random)',
+        '17: Random Poetry - options: word_source (dickinson/shakespeare/poe/whitman/romantic/nature/cosmic/gothic/zen), word_count (5-50)',
+        '23: Colorful Dots (CMYK) - options: color_mode (cmyk/rgb/primary/warm/cool), grid_spacing (10-30mm), max_dot_size (8-20mm)',
+        '10: Border - options: margin (0-50)',
+        '11: Text - options: text (string), size (10-200)'
       ],
       color1: [
         '3: Blue',
