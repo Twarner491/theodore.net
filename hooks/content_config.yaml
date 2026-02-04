@@ -5,7 +5,7 @@ external_projects:
   - title: anamnesis.fm
     description: A time traveling radio.
     url: https://anamnesis.fm/about
-    thumbnail: https://github.com/Twarner491/anamnesis.fm/blob/main/public/favicon.gif?raw=true
+    thumbnail: /assets/images/radio/anamnesis.png
     date: 2026-01-25
     external: true
 

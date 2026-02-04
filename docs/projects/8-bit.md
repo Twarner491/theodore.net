@@ -1,29 +1,28 @@
 ---
-title: 8-bit Breadboard Computer
-description: A dive into computer logic, and processor workings.
-date: 2022-01-01
+title: 8-bit Breadboard Computer  
+description: A dive into computer logic, and processor workings.  
+date: 2022-01-01  
 draft: true
-keywords: 8-bit computer, Breadboard computer, Computer logic, Digital electronics, Ben Eater, Logic gates, Computer architecture, Digital circuits, Hardware engineering, Electronics projects, DIY computer, Processor design, Digital logic, Computer engineering, Hardware development
-thumbnail: /assets/images/thumb.png
-hide:
-  - navigation
-  - tags
+keywords: 8-bit computer, Breadboard computer, Computer logic, Digital electronics, Ben Eater, Logic gates, Computer architecture, Digital circuits, Hardware engineering, Electronics projects, DIY computer, Processor design, Digital logic, Computer engineering, Hardware development  
+thumbnail: /assets/images/thumb.png  
+hide:  
+  - navigation  
+  - tags  
 template: comments.html
----
 
-![Progress](https://img.shields.io/badge/progress-pending%20completion-yellow?style=flat-square "Project progress indicator")
+Progress
 
-I've used microcontrollers in most of my past projects. IC data sheets are super helpful in board design with their pinouts, but I've noticed much of the contents have been pretty foreign to me. Every once in a while, the youtube algorithm recommended one of [Ben Eater's](https://eater.net) computer concept videos to me, which provide a great explanation of the simplistic logic and proofs in computers. I ended up watching his entire [8-bit Breadboard Computer](https://eater.net/8bit) series (embedded below) over the fall of 2021, to try to get a bit of a better idea of the workings of a microcontroller. The computer is an "as simple as possible"[^1] take on an 8-bit computer, using only simple logic to create an 8-bit computer on breadboards. The computer is built-in sectioned modules and then interfaced together, making each section a bit easier to swallow.
+I've used microcontrollers in most of my past projects. IC data sheets are super helpful in board design with their pinouts, but I've noticed much of the contents have been pretty foreign to me. Every once in a while, the youtube algorithm recommended one of [Ben Eater's](https://eater.net) computer concept videos to me, which provide a great explanation of the simplistic logic and proofs in computers. I ended up watching his entire [8-bit Breadboard Computer](https://eater.net/8bit) series (embedded below) over the fall of 2021, to try to get a bit of a better idea of the workings of a microcontroller. The computer is an "as simple as possible"[^1](https://eater.net/8bit) take on an 8-bit computer, using only simple logic to create an 8-bit computer on breadboards. The computer is built-in sectioned modules and then interfaced together, making each section a bit easier to swallow.
 
 !!! abstract "Documentation Style"
 
-    This page is a bit different than my other project pages, as it is a build log for my take on this [8-bit Breadboard Computer](https://eater.net/8bit). Instead of outlining project development (as Mr. Eaters' videos do an amazing job with that), this page will be a collection of media behind each of my computer modules, as well as some final programs ran on the computer.
+```
+This page is a bit different than my other project pages, as it is a build log for my take on this [8-bit Breadboard Computer](https://eater.net/8bit). Instead of outlining project development (as Mr. Eaters' videos do an amazing job with that), this page will be a collection of media behind each of my computer modules, as well as some final programs ran on the computer.
+```
 
-<center>
-<iframe loading=lazy width="100%" height="450" src="https://www.youtube.com/embed/videoseries?list=PLowKtXNTBypGqImE405J2565dvjafglHU" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-</center>
 
-<figure markdown="1">
+
+
 
 ## Bill of Materials
 
@@ -45,7 +44,8 @@ I've used microcontrollers in most of my past projects. IC data sheets are super
 |5   |74LS04 (Hex inverter)                                                                                                                                                                 ||$0.87 |[link](https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.productlist.0.0.3a184f8baiaLU3&algo_pvid=07ae07c6-5f66-4969-989e-1b63359f0b36&algo_exp_id=07ae07c6-5f66-4969-989e-1b63359f0b36-0&pdp_ext_f=%7B%22sku_id%22%3A%2212000024102730486%22%7D)                                                                                                                                |
 |3   |74LS08 (Quad AND gate)                                                                                                                                                                ||$0.72 |[link](https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.cart.0.0.faec3c00RQNoMs&mp=1)                                                                                                                                                                                                                                                                                           |
 |1   |74LS32 (Quad OR gate)                                                                                                                                                                 ||$0.89 |[link](https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.cart.0.0.faec3c00RQNoMs&mp=1)                                                                                                                                                                                                                                                                                           |
-|1   |74LS107 (Dual JK flip-flop)<br>Note: The videos use the 74LS76 which is extremely difficult to find. The 74LS107 is functionally equivalent but be careful: it has a different pinout.||$1.58 |[link](https://www.aliexpress.com/item/32837207073.html?spm=a2g0o.productlist.0.0.207015cbIMimMw&algo_pvid=c81f15db-70af-4c8a-b7f0-f3ad2aefd724&algo_exp_id=c81f15db-70af-4c8a-b7f0-f3ad2aefd724-0&pdp_ext_f=%7B%22sku_id%22%3A%2212000021439605652%22%7D)                                                                                                                                     |
+|1   |74LS107 (Dual JK flip-flop)  
+Note: The videos use the 74LS76 which is extremely difficult to find. The 74LS107 is functionally equivalent but be careful: it has a different pinout.||$1.58 |[link](https://www.aliexpress.com/item/32837207073.html?spm=a2g0o.productlist.0.0.207015cbIMimMw&algo_pvid=c81f15db-70af-4c8a-b7f0-f3ad2aefd724&algo_exp_id=c81f15db-70af-4c8a-b7f0-f3ad2aefd724-0&pdp_ext_f=%7B%22sku_id%22%3A%2212000021439605652%22%7D)                                                                                                                                     |
 |2   |74LS86 (Quad XOR gate)                                                                                                                                                                ||$1.11 |[link](https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.cart.0.0.faec3c00RQNoMs&mp=1)                                                                                                                                                                                                                                                                                           |
 |1   |74LS138 (3-to-8 line decoder)                                                                                                                                                         ||$0.80 |[link](https://www.aliexpress.com/item/1005003102981081.html?spm=a2g0o.productlist.0.0.7d5673d7KhGF0Y&algo_pvid=c8b19dec-d621-4c22-9ff8-5dee7269a3cb&algo_exp_id=c8b19dec-d621-4c22-9ff8-5dee7269a3cb-0&pdp_ext_f=%7B%22sku_id%22%3A%2212000024100200959%22%7D)                                                                                                                                |
 |1   |74LS139 (Dual 2-line to 4-line decoder)                                                                                                                                               ||$1.55 |[link](https://www.aliexpress.com/item/32835244421.html?spm=a2g0o.productlist.0.0.3122402fsGGTYE&algo_pvid=3748f071-9375-479f-b6c5-85001b10ac54&algo_exp_id=3748f071-9375-479f-b6c5-85001b10ac54-0&pdp_ext_f=%7B%22sku_id%22%3A%2265146220182%22%7D)                                                                                                                                           |
@@ -69,124 +69,80 @@ I've used microcontrollers in most of my past projects. IC data sheets are super
 |1   |22 AWG Solid Tinned-Copper Hook-Up Wire                                                                                                                                               ||$29.95|[link](https://www.adafruit.com/product/3174?gclid=Cj0KCQjww4OMBhCUARIsAILndv4TcRmMF-8TiYvh74DqYKzl6-iRXDQZRWgg_geBEG7LG3p2uWDhGiQaAlhYEALw_wcB)                                                                                                                                                                                                                                               |
 
 --- Total Cost - **$228.66** ---
-</figure>
+
+
 
 ## Clock Module
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1-FyllkfmhpjOUVsky30Y7QNn7lpM8d4w/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<figure markdown="1">
-![](../assets/images/8-bitComputer/setastable.jpg){ width="80%" alt="Setup of astable  circuit"}
-</figure>
 
-<iframe loading=lazy width="100%" height="450" src="https://www.youtube.com/embed/HKCb6LxuJ04" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+![](../assets/images/8-bitComputer/setastable.jpg){ width="80%" alt="Setup of astable circuit"}
 
-<figure markdown="1">
+
+
 ![](../assets/images/8-bitComputer/555wave.jpg){ width="100%" alt="Oscilloscope display showing clock vs capacitor waveforms"}
-  <figcaption>Clock vs Capacitor</figcaption>
-</figure>
 
-<figure markdown="1">
+Clock vs Capacitor
+
 ![](../assets/images/8-bitComputer/variableastable.jpg){ width="80%" alt="Variable astable multivibrator circuit setup"}
-</figure>
 
-<iframe loading=lazy width="100%" height="450" src="https://www.youtube.com/embed/gXsm1pPk73Y" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-<figure markdown="1">
+
 ![](../assets/images/8-bitComputer/monostable.jpg){ width="80%" alt="Monostable multivibrator circuit setup"}
-</figure>
 
-<iframe loading=lazy width="100%" height="450" src="https://www.youtube.com/embed/oZreQbS1mkw" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1Oac8LGzgeLtf9SuPbXrGJICCNPeRC6Yi/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1v-PXHRJIt_JFhhysesvn4DHJBXGagMT8/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1-R9MkHobL7_UnY4A5ClBVB-B3Wk5GqkO/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<figure markdown="1">
+
+
+
+
 ![](../assets/images/8-bitComputer/clockmodule.jpg){ width="100%" alt="Completed clock module assembly"}
-</figure>
 
-<iframe loading=lazy width="100%" height="450" src="https://www.youtube.com/embed/Hz7vxBx9ODE" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 
 ## Registers
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1uJpgZQP0e2EXK5hfRB6coKhc2ShjMrcj/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1n3osGqqPa9fuIrJvKPaofTcG2bQKnvha/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<figure markdown="1">
+
+
 ![](../assets/images/8-bitComputer/8-BitRegister.jpg){ width="100%" alt="8-bit register module assembly"}
-</figure>
 
-<iframe loading=lazy width="100%" height="450" src="https://www.youtube.com/embed/2IVVtewC8cs" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-<iframe loading=lazy width="100%" height="450" src="https://www.youtube.com/embed/qDIzbADgvDE" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
 
 ## Arithmetic Logic Unit (ALU)
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1fDhpvg5gEuUKsYtYsU6lxuNsiWBIBEjm/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1Oe01zt6FAccC8DMF8wXAVJUvqXoZCyE6/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1KcwJAkapqJXq_c77yfLfU5jG_NE3ln8Y/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
+
+
+
 
 ## Random Access Memory Module (RAM)
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1Zz5f_ewaGAkknyZdfxSy3q6TZO5UZlBy/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/15Va5pgG0nNBNrbOHh1z8KNSZW08ksQ_h/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1sCDVjSXc1LlmeylG8YtIt1QfR0yr3EoV/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
+
+
+
 
 ## Program Counter
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1rPiMCjodmKJnFNQy5eRH-btih6BPmHsX/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
+
 
 ## Output Register
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1A3FqvTOU6llJ6SaJntDV3CHkvV7lSEYa/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1taC9UxK-zJkyK4z_zXrvudsRHVezncjc/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/17Ukjvyc5lZlTp-99clvhrcItOpABu2YB/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
 
-<center>
-<iframe loading=lazy src="https://drive.google.com/file/d/1MbF2w-6krd2oQ-XTgWfJeP68hqdEirVI/preview" width="100%" height="480" allow="autoplay"></iframe>
-</center>
+
+
+
+
 
 ## Module Meshing
 
@@ -194,42 +150,36 @@ I've used microcontrollers in most of my past projects. IC data sheets are super
 
 ### Fibonacci Sequence
 
-<center>
-<iframe loading=lazy width="100%" height="500" src="https://www.youtube.com/embed/1Jj-sJ78O6M" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-</center>
 
-<figure markdown="1">
+
 ![](../assets/images/8-bitComputer/Fibonaccisequencespiral.png){ width="60%" alt="Visual representation of Fibonacci sequence spiral"}
-</figure>
 
-<figure markdown="1">
 ![](../assets/images/8-bitComputer/FibonacciEquasion.png){ width="80%" alt="Mathematical equation for Fibonacci sequence"}
-</figure>
 
-<figure markdown="1">
 **First 12 Numberes in the Fibonacci Sequence**
 
-| n  | Fibonacci Number |
-|----|------------------|
-| 0  | 0                |
-| 1  | 1                |
-| 2  | 1                |
-| 3  | 2                |
-| 4  | 3                |
-| 5  | 5                |
-| 6  | 8                |
-| 7  | 13               |
-| 8  | 21               |
-| 9  | 34               |
-| 10 | 55               |
-| 11 | 89               |
-</figure>
 
-[^1]: https://eater.net/8bit
+| n   | Fibonacci Number |
+| --- | ---------------- |
+| 0   | 0                |
+| 1   | 1                |
+| 2   | 1                |
+| 3   | 2                |
+| 4   | 3                |
+| 5   | 5                |
+| 6   | 8                |
+| 7   | 13               |
+| 8   | 21               |
+| 9   | 34               |
+| 10  | 55               |
+| 11  | 89               |
+
+
+
 
 *[FDM]: Fused Deposition Modeling
 *[CNC]: Computerized Numerical Control
-*[MPCNC]: Mostly Printed Computerized Numerical Control - https://docs.v1engineering.com/mpcnc/intro/
+*[MPCNC]: Mostly Printed Computerized Numerical Control - [https://docs.v1engineering.com/mpcnc/intro/](https://docs.v1engineering.com/mpcnc/intro/)
 *[SSH]: Secure Shell
 *[GPIO]: General-Purpose Input/Output
 *[USB]: Universal Serial Bus
