@@ -13,8 +13,8 @@
     <language>en</language>
 
     
-    <pubDate>Fri, 06 Feb 2026 04:19:13 -0000</pubDate>
-    <lastBuildDate>Fri, 06 Feb 2026 04:19:13 -0000</lastBuildDate>
+    <pubDate>Fri, 06 Feb 2026 17:02:53 -0000</pubDate>
+    <lastBuildDate>Fri, 06 Feb 2026 17:02:53 -0000</lastBuildDate>
     <ttl>1440</ttl>
 
     
@@ -45,48 +45,6 @@
       <source url="https://theodore.net/feed.xml">Teddy Warner</source>
       
       <guid isPermaLink="true">https://theodore.net/projects/Polargraph/</guid>
-      
-    </item>
-    
-    <item>
-      <title>8 bit</title>
-      
-      
-      
-      
-        
-      
-      <description>&lt;hr&gt;
-&lt;p&gt;title: 8-bit Breadboard Computer&lt;br&gt;
-description: A dive into computer logic, and processor workings.&lt;br&gt;
-date: 2022-01-01&lt;br&gt;
-draft: true
-keywords: 8-bit computer, Breadboard computer, Computer logi...&lt;/p&gt;</description>
-      <link>https://theodore.net/projects/8-bit/</link>
-      <pubDate>Sat, 17 Jan 2026 05:02:34 -0500</pubDate>
-      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
-      
-      <guid isPermaLink="true">https://theodore.net/projects/8-bit/</guid>
-      
-    </item>
-    
-    <item>
-      <title>AdaptableAquaponics</title>
-      
-      
-      
-      
-        
-      
-      <description>&lt;hr&gt;
-&lt;h2&gt;title: Adaptable Aquaponics&lt;/h2&gt;
-&lt;p&gt;description: A Theoretical Confrontation to Contemporary Farming Challenges.&lt;br&gt;
-keywords: Aquaponics, Sustainable farming, Urban agriculture, Food production, M...&lt;/p&gt;</description>
-      <link>https://theodore.net/projects/AdaptableAquaponics/</link>
-      <pubDate>Sat, 17 Jan 2026 05:02:34 -0500</pubDate>
-      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
-      
-      <guid isPermaLink="true">https://theodore.net/projects/AdaptableAquaponics/</guid>
       
     </item>
     
@@ -444,6 +402,23 @@ keywords: Aquaponics, Sustainable farming, Urban agriculture, Food production, M
       <source url="https://theodore.net/feed.xml">Teddy Warner</source>
       
       <guid isPermaLink="true">https://theodore.net/writings/foj/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Adaptable Aquaponics</title>
+      
+      
+      
+      
+        
+      
+      <description>A Theoretical Confrontation to Contemporary Farming Challenges.</description>
+      <link>https://theodore.net/projects/AdaptableAquaponics/</link>
+      <pubDate>Wed, 01 Jun 2022 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/projects/AdaptableAquaponics/</guid>
       
     </item>
     
