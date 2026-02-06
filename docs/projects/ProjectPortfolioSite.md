@@ -654,10 +654,10 @@ git push # (3)
 **500 Commits :smiley:** - 11/20/2025!
 ![](../assets/images/PortfolioSite/500commit.png){width="100%"}
 
+*as of 1/16/2026, teddywarner.org is now theodore.net!!!*
+
 **600 Commits :mirror_ball:** - 2/05/2026!
 ![](../assets/images/PortfolioSite/600commit.png){width="100%"}
-
-*as of 1/16/2026, teddywarner.org is now theodore.net!!!*
 
 [^1]: https://squidfunk.github.io/mkdocs-material/reference/lists/#configuration 
 [^2]: https://squidfunk.github.io/mkdocs-material/reference/lists/#configuration 
