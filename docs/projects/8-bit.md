@@ -1,14 +1,15 @@
 ---
-title: 8-bit Breadboard Computer  
-description: A dive into computer logic, and processor workings.  
-date: 2022-01-01  
+title: 8-bit Breadboard Computer
+description: A dive into computer logic, and processor workings.
+date: 2022-01-01
 draft: true
-keywords: 8-bit computer, Breadboard computer, Computer logic, Digital electronics, Ben Eater, Logic gates, Computer architecture, Digital circuits, Hardware engineering, Electronics projects, DIY computer, Processor design, Digital logic, Computer engineering, Hardware development  
-thumbnail: /assets/images/thumb.png  
-hide:  
-  - navigation  
-  - tags  
+keywords: 8-bit computer, Breadboard computer, Computer logic, Digital electronics, Ben Eater, Logic gates, Computer architecture, Digital circuits, Hardware engineering, Electronics projects, DIY computer, Processor design, Digital logic, Computer engineering, Hardware development
+thumbnail: /assets/images/thumb.png
+hide:
+  - navigation
+  - tags
 template: comments.html
+---
 
 Progress
 

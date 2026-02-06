@@ -1,15 +1,15 @@
 ---
-
-## title: Adaptable Aquaponics  
-description: A Theoretical Confrontation to Contemporary Farming Challenges.  
-keywords: Aquaponics, Sustainable farming, Urban agriculture, Food production, Modular farming, Hydroponics, Fish farming, Sustainable agriculture, Agricultural innovation, Food security, Vertical farming, Solar powered farming, Resource efficiency, Water conservation, Community farming  
-thumbnail: /assets/images/AdaptableAquaponics/hero.png  
-readtime: "18-23 minutes"  
-date: 2022-06-01   
-hide:  
-  - navigation  
-  - tags  
+title: Adaptable Aquaponics
+description: A Theoretical Confrontation to Contemporary Farming Challenges.
+keywords: Aquaponics, Sustainable farming, Urban agriculture, Food production, Modular farming, Hydroponics, Fish farming, Sustainable agriculture, Agricultural innovation, Food security, Vertical farming, Solar powered farming, Resource efficiency, Water conservation, Community farming
+thumbnail: /assets/images/AdaptableAquaponics/hero.png
+readtime: "18-23 minutes"
+date: 2022-06-01
+hide:
+  - navigation
+  - tags
 template: comments.html
+---
 
 
 
