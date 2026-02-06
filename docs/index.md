@@ -141,11 +141,11 @@ search:
                             <rect x="141.5" y="143.5" width="223" height="48" rx="24" stroke="var(--md-default-fg-color--lighter)" />
                             <text x="253" y="175" fill="var(--md-default-fg-color--light)" text-anchor="middle" font-family="Crimson Pro" font-size="23" font-style="normal" font-weight="300" line-height="109.588%">Some stuff I've done</text>
                         </g>
-                        <a href="https://theodore.net/projects/AssistiveAquaponics/" aria-label="Assistive Aquaponics Project">
+                        <a href="https://theodore.net/projects/Polargraph/" aria-label="Generative Pen-trained Transformer">
                             <g id="image-card-1" class="project">
                                 <rect x="1057" y="299" width="240" height="405" rx="120" fill="var(--md-default-fg-color--lightest)" />
                                 <rect x="1057.5" y="299.5" width="239" height="404" rx="119.5" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
-                                <image x="1065" y="307" width="225" height="389" href="assets/images/index/aaft.png" clip-path="url(#clipImage1)" preserveAspectRatio="xMidYMid slice" alt="Assistive Aquaponics project image" loading="eager" />
+                                <image id="polargraph-img" x="1065" y="307" width="225" height="389" href="assets/images/index/polargraph.png" clip-path="url(#clipImage1)" preserveAspectRatio="xMidYMid slice" alt="Polargraph project image" loading="eager" />
                                 <rect x="1065.5" y="307.5" width="224" height="388" rx="112" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                             </g>
                         </a>
@@ -278,6 +278,7 @@ search:
     // Theme switching for tone image
     document.addEventListener("DOMContentLoaded", function() {
       const toneImage = document.querySelector('.project .toneimg');
+      const polargraphImage = document.getElementById('polargraph-img');
       const root = document.documentElement;
       function colortheme() {
           const selectedOption = document.querySelector('input[name="__palette"]:checked');
@@ -290,6 +291,9 @@ search:
           }
           if (toneImage) {
             toneImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', toneUrl);
+          }
+          if (polargraphImage) {
+            polargraphImage.setAttribute('href', currentTheme === 'slate' ? 'assets/images/index/polargraphDark.png' : 'assets/images/index/polargraph.png');
           }
       }
       function saveTheme() {
