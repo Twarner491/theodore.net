@@ -679,7 +679,7 @@ I am so stoked with how this project came together, and it feels really good to 
     <div class="plot-item">
       <div class="plot-frame">
         <div class="plot-content">
-          <img src="/assets/images/Polargraph/plots/spiralHead.JPG" alt="">
+          <img src="/assets/images/Polargraph/plots/fish.jpg" alt="">
         </div>
         <div class="plot-frame-overlay">
           <img src="/assets/images/Polargraph/baroqueFrame.png" alt="">
@@ -699,7 +699,7 @@ I am so stoked with how this project came together, and it feels really good to 
     <div class="plot-item">
       <div class="plot-frame">
         <div class="plot-content">
-          <img src="/assets/images/Polargraph/plots/crown.JPG" alt="">
+          <img src="/assets/images/Polargraph/plots/zurich.JPG" alt="">
         </div>
         <div class="plot-frame-overlay">
           <img src="/assets/images/Polargraph/baroqueFrame.png" alt="">
@@ -710,6 +710,26 @@ I am so stoked with how this project came together, and it feels really good to 
       <div class="plot-frame">
         <div class="plot-content">
           <img src="/assets/images/Polargraph/plots/horse.JPG" alt="">
+        </div>
+        <div class="plot-frame-overlay">
+          <img src="/assets/images/Polargraph/baroqueFrame.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="plot-item">
+      <div class="plot-frame">
+        <div class="plot-content">
+          <img src="/assets/images/Polargraph/plots/spiralHead.JPG" alt="">
+        </div>
+        <div class="plot-frame-overlay">
+          <img src="/assets/images/Polargraph/baroqueFrame.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="plot-item">
+      <div class="plot-frame">
+        <div class="plot-content">
+          <img src="/assets/images/Polargraph/plots/crown.JPG" alt="">
         </div>
         <div class="plot-frame-overlay">
           <img src="/assets/images/Polargraph/baroqueFrame.png" alt="">
