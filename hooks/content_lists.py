@@ -282,16 +282,66 @@ def _generate_projects_full_list(projects):
     return '\n'.join(html_parts)
 
 
+def _generate_polargraph_gallery(docs_dir):
+    """Generate HTML for the polargraph plot gallery carousel.
+
+    Auto-populates from all image files in docs/assets/images/Polargraph/plots/.
+    Sorts by file modification time (newest first).
+    """
+    plots_dir = Path(docs_dir) / "assets" / "images" / "Polargraph" / "plots"
+    if not plots_dir.exists():
+        return ""
+
+    image_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
+    plot_files = [
+        f for f in plots_dir.iterdir()
+        if f.is_file() and f.suffix.lower() in image_extensions
+    ]
+
+    # Sort by modification time, newest first
+    plot_files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
+
+    items = []
+    for plot in plot_files:
+        img_path = f"/assets/images/Polargraph/plots/{plot.name}"
+        items.append(
+            f'    <div class="plot-item">\n'
+            f'      <div class="plot-frame">\n'
+            f'        <div class="plot-content">\n'
+            f'          <img src="{img_path}" alt="">\n'
+            f'        </div>\n'
+            f'        <div class="plot-frame-overlay">\n'
+            f'          <img src="/assets/images/Polargraph/baroqueFrame.png" alt="">\n'
+            f'        </div>\n'
+            f'      </div>\n'
+            f'    </div>'
+        )
+
+    return (
+        '<div class="plot-carousel-container">\n'
+        '  <div class="plot-carousel">\n'
+        + '\n'.join(items) + '\n'
+        '  </div>\n'
+        '</div>'
+    )
+
+
 def on_page_markdown(markdown: str, page, config, files):
     """Replace content tokens with generated HTML."""
     src_path = page.file.src_path
-    
+
     # Replace copyright year with current year (for all pages)
     current_year = datetime.now().strftime('%Y')
     # Use regex to match copyright year pattern - match any chars between Copyright and the year
     markdown = re.sub(r'(Copyright\s*.{0,10}?)20\d{2}', rf'\g<1>{current_year}', markdown)
     markdown = markdown.replace('<!-- COPYRIGHT_YEAR -->', current_year)
-    
+
+    # Polargraph gallery (auto-populated from plots directory)
+    if '<!-- POLARGRAPH_GALLERY -->' in markdown:
+        docs_dir = config['docs_dir']
+        gallery_html = _generate_polargraph_gallery(docs_dir)
+        markdown = markdown.replace('<!-- POLARGRAPH_GALLERY -->', gallery_html)
+
     # Only process content list tokens for specific pages
     if src_path not in ['index.md', 'projects.md', 'writings.md', 'books.md']:
         return markdown
