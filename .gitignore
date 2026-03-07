@@ -7,3 +7,6 @@ __pycache__
 
 # Build output
 site/
+
+# Environment variables
+.env

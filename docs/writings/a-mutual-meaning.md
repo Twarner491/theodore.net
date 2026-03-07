@@ -3,6 +3,7 @@ title: A Mutual Meaning
 description: Discovering Eastern philosophy.
 keywords: Eastern philosophy, Buddhism, Hinduism, The Upanishads, The Other Shore, Thich Nhat Hanh, Meaning of life, Interbeing, Meditation, Nietzsche, Philosophical writing
 thumbnail: /assets/images/index/orange.png
+draft: true
 readtime: "7-11 mins"
 date: 2024-10-01
 hide:

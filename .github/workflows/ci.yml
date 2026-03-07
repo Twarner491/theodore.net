@@ -1,6 +1,7 @@
 name: Publish Docs
 env:
   GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
+  DRAFT_PASSWORD: ${{ secrets.DRAFT_PASSWORD }}
 on:
   push:
     branches:

@@ -4,6 +4,7 @@ description: A Platonic Dialogue
 keywords: philosophy, Platonic dialogue, justice, Socrates, George Orwell, 1984, political philosophy, power dynamics, class exploitation, social hierarchy, ethics, virtue, philosophy essay, classical Athens, philosophical discourse
 thumbnail: /assets/images/foj/thumb.png
 readtime: "8–10 mins"
+draft: true
 date: 2022-12-01
 hide:
   - navigation

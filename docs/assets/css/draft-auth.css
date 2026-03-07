@@ -1,0 +1,176 @@
+/* Draft page authentication overlay */
+
+body.draft-locked {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* Blur individual content elements and sidebar, not the overlay or nav */
+body.draft-locked .md-content__inner > *:not(#draftOverlay):not(.main-navigation):not(.blur-overlay):not(script) {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.35s ease;
+}
+
+body.draft-locked .md-sidebar {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.35s ease;
+}
+
+.draft-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.35s ease;
+}
+
+.draft-prompt {
+  pointer-events: auto;
+}
+
+.draft-overlay--hidden {
+  opacity: 0;
+  pointer-events: none !important;
+}
+
+.draft-overlay--hidden .draft-prompt {
+  pointer-events: none;
+}
+
+/* Prompt card */
+.draft-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.4rem 2rem 1.2rem;
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  max-width: 300px;
+  width: 88%;
+}
+
+[data-md-color-scheme="slate"] .draft-prompt {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+.draft-label {
+  margin: 0;
+  font-family: "Crimson Pro", serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--md-default-fg-color);
+  opacity: 0.75;
+}
+
+.draft-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.draft-form:focus-within {
+  border-color: var(--md-default-fg-color--lighter);
+}
+
+.draft-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.45rem 0.7rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.draft-form input::placeholder {
+  color: var(--md-default-fg-color--lighter);
+  font-style: italic;
+  font-size: 0.65rem;
+}
+
+.draft-form button {
+  padding: 0.45rem 0.7rem;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--md-default-fg-color--lightest);
+  cursor: pointer;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--md-default-fg-color);
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.draft-form button:hover {
+  opacity: 0.8;
+}
+
+.draft-error {
+  margin: 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  color: var(--md-default-fg-color);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  height: 0.9em;
+}
+
+.draft-error--visible {
+  opacity: 0.45;
+}
+
+/* Return to feed link — centered below form */
+.draft-return {
+  color: var(--md-default-fg-color);
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: -0.01em;
+  font-size: 0.65em;
+  opacity: 0.5;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.draft-return:hover {
+  opacity: 0.3;
+}
+
+.draft-return i {
+  margin-right: 0.25em;
+}
+
+@media (max-width: 695px) {
+  .draft-prompt {
+    padding: 1.2rem 1.4rem 1rem;
+    max-width: 260px;
+  }
+
+  .draft-label {
+    font-size: 0.95rem;
+  }
+
+  .draft-return {
+    font-size: 0.6em;
+  }
+}

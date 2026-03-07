@@ -3,6 +3,7 @@ title: Abstracting Death
 description: Death as infinite abstraction.
 keywords: death, philosophy, abstraction, mortality, existence, life experience, Western philosophy, Eastern philosophy, linear time, cyclical time, consciousness, metaphysics, life and death, philosophical essay
 thumbnail: /assets/images/abstractingdeath/ad.png
+draft: true
 readtime: "2–3 mins"
 date: 2025-10-01
 hide:

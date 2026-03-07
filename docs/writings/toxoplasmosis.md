@@ -1,9 +1,9 @@
 ---
 title: My Favorite Brain Parasite
-description: ACHANGE
+description: CHANGE
 keywords: INSERT
 readtime: 5-7 mins
-date: 2025-12-28
+date: 2026-03-02
 draft: true
 hide:
 - navigation

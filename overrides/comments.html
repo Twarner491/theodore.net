@@ -62,6 +62,9 @@
   <!-- Page Styles -->
   <link rel="stylesheet" href="{{ config.site_url }}assets/css/projects/project.css">
   <link rel="stylesheet" href="{{ config.site_url }}assets/css/header.css">
+  {% if page.meta and page.meta.draft and config.extra.draft_password_hash %}
+  <link rel="stylesheet" href="{{ config.site_url }}assets/css/draft-auth.css">
+  {% endif %}
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -249,6 +252,25 @@
     })();
   </script>
 
+  {% if page.meta and page.meta.draft and config.extra.draft_password_hash %}
+  <!-- Draft authentication overlay -->
+  <div class="draft-overlay" id="draftOverlay" data-hash="{{ config.extra.draft_password_hash }}">
+    <div class="draft-prompt">
+      <p class="draft-label">This piece is a draft.</p>
+      <form class="draft-form" id="draftForm">
+        <input type="password" id="draftPassword" placeholder="password" autocomplete="off" autofocus>
+        <button type="submit" aria-label="Enter">Enter</button>
+      </form>
+      <p class="draft-error" id="draftError"></p>
+      {% if page_type == "writings" %}
+      <a class="draft-return" href="/writings"><i class="fa-solid fa-arrow-left-long"></i> Writing Feed</a>
+      {% else %}
+      <a class="draft-return" href="/projects"><i class="fa-solid fa-arrow-left-long"></i> Projects Feed</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
   <!-- Return to feed link -->
   {% if page_type == "writings" %}
   <div class="return2feed"><a href="https://theodore.net/writings"><i class="fa-solid fa-arrow-left-long"></i> Writing Feed</a></div>
@@ -326,6 +348,10 @@
   crossorigin="anonymous"
   async>
 </script>
+
+  {% if page.meta and page.meta.draft and config.extra.draft_password_hash %}
+  <script src="{{ config.site_url }}assets/js/draft-auth.js"></script>
+  {% endif %}
 
   <!-- Reload on palette change -->
   <script>

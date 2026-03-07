@@ -87,6 +87,7 @@ plugins:
       length: 100
 
 hooks:
+  - hooks/draft_auth.py
   - hooks/rss_dates.py
   - hooks/content_lists.py
   - hooks/case_redirects.py
