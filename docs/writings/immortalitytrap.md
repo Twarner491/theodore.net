@@ -11,9 +11,6 @@ hide:
 template: comments.html
 ---
 
-<script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
 This morning a friend sent me an intresting read: [The Decline of Deviance](https://www.experimental-history.com/p/the-decline-of-deviance?utm_campaign=post&utm_medium=web) an aggregate of data showing a massive collapse in risk-taking behavior over the past few decade. Teen alcohol use down 50%. Sexual activity down 40%. Fighting down 35%. Geographic mobility collapsed from 20% of Americans moving annually to 10%. Even our aesthetics became safer, British Museums analyzed photos of their artifacts over time and found a steady shift toward black, gray, and white, away from bold colors. Seemingly, we’ve entered an “epidemic of the mundane”.[^8]
 
 <figure markdown="1">

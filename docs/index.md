@@ -40,21 +40,17 @@ search:
   <meta property="twitter:image" content="https://theodore.net/assets/images/thumb.png">
 
   <!-- Preconnect to external domains for performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://kit.fontawesome.com">
   <link rel="preconnect" href="https://ka-f.fontawesome.com">
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://m.media-amazon.com">
-  
+
   <!-- Preload LCP image for faster render -->
   <link rel="preload" as="image" href="/assets/images/index/flowers.jpg">
-  
-  <!-- Fonts and styles -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous" defer></script>
   
   <link rel="stylesheet" href="/assets/css/index.css">

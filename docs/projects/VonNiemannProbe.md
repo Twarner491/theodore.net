@@ -12,8 +12,6 @@ hide:
 template: comments.html
 ---
 
-<link rel="stylesheet" href="/assets/css/projects/vnp.css">
-
 <center>
   <div style="position:relative;padding-bottom:56.25%;">
     <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/ygy8M-QhbSo" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>

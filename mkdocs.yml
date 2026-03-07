@@ -39,9 +39,6 @@ theme:
   font:
     text: Fira Sans
     code: Ubuntu Mono
-  
-  # Add font-display configuration
-  font_display: swap
 
   logo: assets/images/TeddyWarner.svg
 
@@ -91,6 +88,7 @@ hooks:
   - hooks/rss_dates.py
   - hooks/content_lists.py
   - hooks/case_redirects.py
+  - hooks/tufte_elements.py
 
 watch:
   - docs
@@ -111,8 +109,6 @@ markdown_extensions:
   - smarty
   - admonition
   - attr_list
-  - codehilite:
-      guess_lang: false
   - toc:
       permalink: true
   - meta
@@ -139,6 +135,7 @@ markdown_extensions:
       generic: true
 
 extra_css:
+  - assets/css/tufte.css
   - assets/css/extra.css
 
 extra:

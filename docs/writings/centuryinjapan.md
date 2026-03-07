@@ -11,10 +11,6 @@ hide:
 template: comments.html
 ---
 
-<link rel="stylesheet" href="../../assets/css/projects/vnp.css">
-<link rel="stylesheet" href="../../assets/css/carousel.css">
-
-<script src="../../assets/js/carousel.js"></script>
 <style>
   /* Ensure carousel container has min-height before images load */
   #japan-carousel {

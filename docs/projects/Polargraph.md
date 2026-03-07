@@ -12,10 +12,7 @@ template: comments.html
 ---
 
 <link rel="stylesheet" href="/assets/css/projects/polargraph.css">
-<link rel="stylesheet" href="/assets/css/projects/vnp.css">
 <script src="/assets/js/polargraph.js" defer></script>
-<script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
 A few years ago, back when GPT-3.5 was first released, and I still spent most of my days sitting in a high school classroom, I had a project idea. Perhaps one of my best named project ideas to date: The *Generative Pen-trained Transformer* or GPenT for short.
 

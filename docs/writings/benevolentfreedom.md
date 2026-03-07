@@ -11,9 +11,6 @@ hide:
 template: comments.html
 ---
 
-<script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
 In his 2009 essay: *[The Education of a Libertarian](https://www.cato-unbound.org/2009/04/13/peter-thiel/education-libertarian/)*, Peter Thiel argues freedom and democracy are mutually exclusive.
 > "I no longer believe that freedom and democracy are compatible."[^1]
 

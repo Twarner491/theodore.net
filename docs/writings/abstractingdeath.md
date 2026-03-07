@@ -12,9 +12,6 @@ hide:
 template: comments.html
 ---
 
-<script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
 Death is an infinite abstraction.
 
 Experience grows proportionally to life span. Every second, every day, every year provides more content for us to abstract upon.

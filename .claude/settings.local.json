@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(DRAFT_PASSWORD=test mkdocs build:*)"
+      "Bash(DRAFT_PASSWORD=test mkdocs build:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(wc:*)",
+      "Bash(curl:*)",
+      "Bash(rm:*)",
+      "Bash(python:*)",
+      "WebFetch(domain:squidfunk.github.io)",
+      "Bash(pip show:*)"
     ]
   }
 }

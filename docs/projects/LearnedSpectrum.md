@@ -11,9 +11,6 @@ hide:
 template: comments.html
 ---
 
-<script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
 *Towards temporal understanding in AI through fMRI learning stage classification.*
 
 Learned Spectrum was the first research step I took when starting my venture, [Intempus](https://intempus.org). The full preprint may be accessed [here](../assets/misc/Learned_Spectrum.pdf).

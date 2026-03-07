@@ -11,9 +11,6 @@ hide:
 template: comments.html
 ---
 
-<link rel="stylesheet" href="../../assets/css/carousel.css">
-<script src="../../assets/js/carousel.js"></script>
-
 Today I turned twenty. Kind of crazy (or at least feels more substantial than the past few years).
 
 Three years ago, I had a long think about what I wanted to do with myself, with my future. I was sitting in my high school's woodshop after school and had a few hours to kill while watching a CNC machine hum. I loved engineering (and still do). Yet, I couldn't help but feel as I progressed nearer and nearer to university, the parts of engineering I loved most (tangible building, making, experimenting) would fade away in favor of a more meticulous, tedious commitment to theory.
@@ -47,7 +44,7 @@ I now run [Intempus](https://intempus.org) full-time, and get to profoundly impa
 
 My final few teenage years have been an absolute blur of wonderful things. I've captured some favorites below:
 
-<div id="photo-carousel"></div>
+{.carousel}assets/images/20/favs{/.carousel}
 
 ---
 

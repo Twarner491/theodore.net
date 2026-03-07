@@ -3,9 +3,21 @@
     --md-footer-bg-color--dark: hsla(228, 8%, 7%, 0.58);
     --md-footer-bg-color: hsla(220, 7%, 7%, 1);
     --md-code-bg-color: hsla(228, 7%, 12%, 1);
+    --md-code-hl-number-color: var(--md-code-fg-color);
+    --md-code-hl-special-color: var(--md-code-fg-color);
+    --md-code-hl-function-color: var(--md-code-fg-color);
+    --md-code-hl-constant-color: var(--md-code-fg-color);
+    --md-code-hl-keyword-color: var(--md-code-fg-color);
+    --md-code-hl-string-color: var(--md-code-fg-color);
+    --md-code-hl-name-color: var(--md-code-fg-color);
+    --md-code-hl-operator-color: var(--md-code-fg-color);
+    --md-code-hl-punctuation-color: var(--md-code-fg-color);
+    --md-code-hl-comment-color: var(--md-default-fg-color--light);
+    --md-code-hl-generic-color: var(--md-code-fg-color);
+    --md-code-hl-variable-color: var(--md-code-fg-color);
 }
 
-/* Font display optimization for all fonts */
+/* Font display optimization for theme/icon fonts */
 @font-face {
   font-family: 'Fira Sans';
   font-display: swap;
@@ -13,16 +25,6 @@
 
 @font-face {
   font-family: 'Ubuntu Mono';
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Crimson Pro';
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'JetBrains Mono';
   font-display: swap;
 }
 

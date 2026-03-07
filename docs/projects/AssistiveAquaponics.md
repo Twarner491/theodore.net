@@ -11,9 +11,6 @@ hide:
 template: comments.html
 ---
 
-<script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
 <center>
 
 <iframe width="100%" height="550" src="https://www.youtube.com/embed/YuM9sASTiBI" title="Assistive Aquaponics Fish Tank Project Video" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>

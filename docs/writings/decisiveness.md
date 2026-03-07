@@ -11,8 +11,6 @@ hide:
 template: comments.html
 ---
 
-<link rel="stylesheet" href="../../assets/css/projects/vnp.css">
-
 *Ex nihilo nihil fit*. Nothing comes out of nothing.
 
 !!! quote "Buridan's Ass"
