@@ -121,6 +121,9 @@
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  
+  <link rel="stylesheet" href="https://theodore.net/assets/css/draft-auth.css">
+  
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -716,6 +719,23 @@
     })();
   </script>
 
+  
+  <!-- Draft authentication overlay -->
+  <div class="draft-overlay" id="draftOverlay" data-hash="a3b31ff261f661e921ff2685c25257d9bafd9ed4477780f5058dee7516a245f2">
+    <div class="draft-prompt">
+      <p class="draft-label">This piece is a draft.</p>
+      <form class="draft-form" id="draftForm">
+        <input type="password" id="draftPassword" placeholder="password" autocomplete="off" autofocus>
+        <button type="submit" aria-label="Enter">Enter</button>
+      </form>
+      <p class="draft-error" id="draftError"></p>
+      
+      <a class="draft-return" href="/projects"><i class="fa-solid fa-arrow-left-long"></i> Projects Feed</a>
+      
+    </div>
+  </div>
+  
+
   <!-- Return to feed link -->
   
   <div class="return2feed"><a href="https://theodore.net/projects"><i class="fa-solid fa-arrow-left-long"></i> Projects Feed</a></div>
@@ -1162,6 +1182,10 @@
   crossorigin="anonymous"
   async>
 </script>
+
+  
+  <script src="https://theodore.net/assets/js/draft-auth.js"></script>
+  
 
   <!-- Reload on palette change -->
   <script>

@@ -13,8 +13,8 @@
     <language>en</language>
 
     
-    <pubDate>Sat, 14 Feb 2026 01:05:27 -0000</pubDate>
-    <lastBuildDate>Sat, 14 Feb 2026 01:05:27 -0000</lastBuildDate>
+    <pubDate>Sat, 07 Mar 2026 00:56:59 -0000</pubDate>
+    <lastBuildDate>Sat, 07 Mar 2026 00:56:59 -0000</lastBuildDate>
     <ttl>1440</ttl>
 
     
@@ -100,23 +100,6 @@
     </item>
     
     <item>
-      <title>Abstracting Death</title>
-      
-      
-      
-      
-        
-      
-      <description>Death as infinite abstraction.</description>
-      <link>https://theodore.net/writings/abstractingdeath/</link>
-      <pubDate>Wed, 01 Oct 2025 00:00:00 -0400</pubDate>
-      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
-      
-      <guid isPermaLink="true">https://theodore.net/writings/abstractingdeath/</guid>
-      
-    </item>
-    
-    <item>
       <title>A Case for the Philosopher King(s)</title>
       
       
@@ -130,23 +113,6 @@
       <source url="https://theodore.net/feed.xml">Teddy Warner</source>
       
       <guid isPermaLink="true">https://theodore.net/writings/benevolentfreedom/</guid>
-      
-    </item>
-    
-    <item>
-      <title>A Pink Hat</title>
-      
-      
-      
-      
-        
-      
-      <description>A welcoming thing.</description>
-      <link>https://theodore.net/writings/pinkhat/</link>
-      <pubDate>Wed, 01 Oct 2025 00:00:00 -0400</pubDate>
-      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
-      
-      <guid isPermaLink="true">https://theodore.net/writings/pinkhat/</guid>
       
     </item>
     
@@ -287,23 +253,6 @@
     </item>
     
     <item>
-      <title>A Mutual Meaning</title>
-      
-      
-      
-      
-        
-      
-      <description>Discovering Eastern philosophy.</description>
-      <link>https://theodore.net/writings/a-mutual-meaning/</link>
-      <pubDate>Tue, 01 Oct 2024 00:00:00 -0400</pubDate>
-      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
-      
-      <guid isPermaLink="true">https://theodore.net/writings/a-mutual-meaning/</guid>
-      
-    </item>
-    
-    <item>
       <title>Learning to Juggle</title>
       
       
@@ -385,23 +334,6 @@
       <source url="https://theodore.net/feed.xml">Teddy Warner</source>
       
       <guid isPermaLink="true">https://theodore.net/projects/MillingWorflow/</guid>
-      
-    </item>
-    
-    <item>
-      <title>The Fallacy of Justice</title>
-      
-      
-      
-      
-        
-      
-      <description>A Platonic Dialogue</description>
-      <link>https://theodore.net/writings/foj/</link>
-      <pubDate>Thu, 01 Dec 2022 00:00:00 -0500</pubDate>
-      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
-      
-      <guid isPermaLink="true">https://theodore.net/writings/foj/</guid>
       
     </item>
     
