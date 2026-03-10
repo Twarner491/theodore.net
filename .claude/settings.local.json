@@ -8,7 +8,12 @@
       "Bash(rm:*)",
       "Bash(python:*)",
       "WebFetch(domain:squidfunk.github.io)",
-      "Bash(pip show:*)"
+      "Bash(pip show:*)",
+      "Bash(grep:*)",
+      "Bash(for f in docs/projects/AssistiveAquaponics.md docs/projects/Polargraph.md docs/projects/Quotes.md)",
+      "Bash(do echo \"=== $f ===\")",
+      "Read(//c/Users/twarn/Repositories/Project-Documentation-Site/**)",
+      "Bash(done)"
     ]
   }
 }

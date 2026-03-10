@@ -105,11 +105,9 @@ Rather, we must simply believe.
 
 I propose one may think of the dynamics of faith and science as a trenched battlefield from the top down (this is more of a visual metaphor, not meant to imply a necessary conflict between faith and science). Both faith and science have many entrenched positions: Science predicts natural phenomena, explains our perceptions, and maps measurable cause-and-effect relationships, while Faith provides existential meaning, moral frameworks, and addresses questions of ultimate purpose and transcendence.
 
-<figure markdown="1" style="opacity:95%;">
-
- ![](../assets/images/Godfather/lightTrench.png#only-light){width="40%" alt="Diagram showing faith/science battlefield"}
- ![](../assets/images/Godfather/darkTrench.png#only-dark){width="40%" alt="Diagram showing faith/science battlefield"}
-
+<figure style="opacity:95%;">
+<img src="../assets/images/Godfather/lightTrench.png" alt="Diagram showing faith/science battlefield" class="only-light" width="40%">
+<img src="../assets/images/Godfather/darkTrench.png" alt="Diagram showing faith/science battlefield" class="only-dark" width="40%">
 </figure>
 
 These two fronts can (theoretically) exist in beautiful harmony. The space between them - a no man's land of sorts - remains particularly interesting. It is this no man's land that becomes an origin of doubt for many. If there's a true unknown, one not understood through faith nor science, it seems natural for the human mind to imagine how we could discover and justify that thing rationally (which is, in fact, the essence of science).

@@ -3,7 +3,6 @@ title: Project Portfolio Site
 description: Static site generation with Mkdocs, and hosting via GitHub Pages.
 keywords: MkDocs, Static site generator, GitHub Pages, Documentation site, Web development, Material theme, Python, Markdown, Site customization, Portfolio website, Technical documentation
 thumbnail: /assets/images/PortfolioSite/portfolioSiteHero.png
-readtime: "6-7 minutes"
 date: 2021-07-01
 date_modified: 2024-06-06
 hide:
@@ -12,15 +11,15 @@ hide:
 template: comments.html
 ---
 
-**The behind the scenes of the site you are on right now :)**
+*The behind the scenes of the site you are on right now :)*
 
-This site relies on [MKdocs](https://www.mkdocs.org/), a static site generator is written in python to create the content of the site, as well as the [MKdocs Material Theme](https://squidfunk.github.io/mkdocs-material/) for customization. I used this same static site generator to create my [Fab Academy Documentation Site](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/), however, that site runs strictly on the [MKdocs Material Theme](https://squidfunk.github.io/mkdocs-material/) without custom alterations. This site relies on the same structure as the prior [Fab Academy Documentation Site](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/) but includes experiments with entirely custom components, and an altered [MKdocs Material Theme](https://squidfunk.github.io/mkdocs-material/). In addition to all that, it's also built and hosted through my personal [GitHub Pages](https://pages.github.com/) repo, under my personal domain. 
+{.newthought}This site{/.newthought} relies on [MKdocs](https://www.mkdocs.org/), a static site generator is written in python to create the content of the site, as well as the [MKdocs Material Theme](https://squidfunk.github.io/mkdocs-material/) for customization. I used this same static site generator to create my [Fab Academy Documentation Site](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/), however, that site runs strictly on the [MKdocs Material Theme](https://squidfunk.github.io/mkdocs-material/) without custom alterations. This site relies on the same structure as the prior [Fab Academy Documentation Site](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/) but includes experiments with entirely custom components, and an altered [MKdocs Material Theme](https://squidfunk.github.io/mkdocs-material/). In addition to all that, it's also built and hosted through my personal [GitHub Pages](https://pages.github.com/) repo, under my personal domain. 
 
 ## Repo Setup and Cloning
 
 To start the site I created a new [GitHub Pages](https://pages.github.com/) repo on my [GitHub](https://github.com/Twarner491) and cloned in some of my site files from my prior [Fab Academy Documentation Site](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/) (the cloned files were just so site setup files, as well as a bit of content on my Fab Academy final project to be displayed on this site). I then pulled this repo to my local system folder with the command
 
-``` yaml linenums="1"
+``` yaml 
 git clone REPO-HERE # (1)
 ```
 
@@ -62,12 +61,12 @@ Once copied to the clipboard, you can paste the newly generated SSH key in your 
 
 !!! abstract "Requirements"
 
-     - Latest Version of [Python](https://www.python.org/downloads/) :warning: **Be Sure Your Python Installation is Installed to PATH in the setup wizard**
+     - Latest Version of [Python](https://www.python.org/downloads/) *Be Sure Your Python Installation is Installed to PATH in the setup wizard*
      - Latest Version of [Git](https://git-scm.com/downloads)
 
 Open your cloned GitHub Pages repo in your code editor of choice, my personal favorite source-code editor is [Visual Studio Code](https://code.visualstudio.com/), so naturally, I used it. In a new terminal in the clone site folder, run the command
 
-``` linenums="1"
+``` 
 pip install mkdocs-material
 ```
 This will install all dependencies needed to run a static site with [MKdocs](https://www.mkdocs.org/), as well as the [MKdocs Material Theme](https://squidfunk.github.io/mkdocs-material/).
@@ -76,7 +75,7 @@ This will install all dependencies needed to run a static site with [MKdocs](htt
 
     The *MKdocs Material* theme is paired with the *mkdocs-git-revision-date-localized-plugin* by default in your Fab Academy student repo. This plugin enables displaying the date of the last git modification of a page at the bottom of each page. To build your static site, this plugin must be installed in your local site folder with the line below ...
 
-    ``` yaml linenums="1"
+    ``` yaml 
     pip3 install mkdocs-git-revision-date-localized-plugin
     ```
 
@@ -90,7 +89,7 @@ This will install all dependencies needed to run a static site with [MKdocs](htt
 
 Following this setup, I build my static site locally with the command in my site folders terminal
 
-``` linenums="1"
+``` 
 mkdocs serve
 ```
 
@@ -112,7 +111,7 @@ At the root of your repository, create a new GitHub Actions
 workflow, e.g. `.github/workflows/ci.yml`, and copy and paste the following
 contents:
 
-``` yaml linenums="1"
+``` yaml 
 name: ci # (1)
 on:
   push:
@@ -153,7 +152,7 @@ The basic setup and customization of your static site are covered wonderfully on
 
     When working with other developers in a Git Repo, the Git Pull command is necessary to keep your local branch up to date with others' work. Running the line ...
 
-    ``` yaml linenums="1"
+    ``` yaml 
     git pull
     ```
 
@@ -163,7 +162,7 @@ After working on *teddywarner.org* for a couple of months, I began to develop a 
 
 <figure markdown="1">
 
-[:fontawesome-brands-github: Project Page Template](https://github.com/Twarner491/Project-Documentation-Site/blob/main/docs/Projects/PROJECT-TEMPLATE.md?plain=1){ .md-button .md-button--primary}
+[:fontawesome-brands-github: Project Page Template](https://github.com/Twarner491/Project-Documentation-Site/blob/main/docs/Projects/PROJECT-TEMPLATE.md?plain=1){ .md-button .md-button--outlined}
 
 </figure>
 
@@ -171,7 +170,7 @@ Here I've also compiled a bit of a mkdocs markdown cheat sheet with 10 sections 
 
 <figure markdown="1">
 
-[:fontawesome-brands-github: Project Portfolio Site Source Code](https://github.com/Twarner491/Project-Documentation-Site/blob/main/docs/Projects/ProjectPortfolioSite.md?plain=1){ .md-button .md-button--primary}
+[:fontawesome-brands-github: Project Portfolio Site Source Code](https://github.com/Twarner491/Project-Documentation-Site/blob/main/docs/Projects/ProjectPortfolioSite.md?plain=1){ .md-button .md-button--outlined}
 
 </figure>
 
@@ -182,7 +181,7 @@ markdown_extensions:
   - meta
 ```
 
-```yaml linenums="1"
+```yaml 
 ---
 title: PROJECT-TITLE
 description: Nullam urna elit, malesuada eget finibus ut, ac tortor.
@@ -273,7 +272,7 @@ markdown_extensions:
   - attr_list
 ```
 
-  ``` markdown linenums="1"
+  ``` markdown 
   [Solid Button :fontawesome-solid-download:](URL){ .md-button .md-button--primary}
   [Outline Button](URL){ .md-button}
   ```
@@ -297,9 +296,9 @@ markdown_extensions:
 
 === "Unordered List"
 
-    "Unordered lists can be written by prefixing a line with a `-`, `*` or `+` list marker, all of which can be used interchangeably. Furthermore, all flavors of lists can be nested inside each other:" [^1]
+    "Unordered lists can be written by prefixing a line with a `-`, `*` or `+` list marker, all of which can be used interchangeably. Furthermore, all flavors of lists can be nested inside each other:"{.sidenote}[https://squidfunk.github.io/mkdocs-material/reference/lists/#configuration](https://squidfunk.github.io/mkdocs-material/reference/lists/#configuration){/.sidenote}
 
-    ``` markdown linenums="1"
+    ``` markdown 
     - Duis mollis est eget nibh volutpat, fermentum aliquet dui mollis.
         * Nullam dignissim ultrices urna non auctor.
     - Nam vulputate tincidunt fringilla.
@@ -321,9 +320,9 @@ markdown_extensions:
 
 === "Ordered List"
 
-    "Ordered lists must start with a number immediately followed by a dot. The numbers do not need to be consecutive and can be all set to `1.`, as they will be re-numbered when rendered:" [^2]
+    "Ordered lists must start with a number immediately followed by a dot. The numbers do not need to be consecutive and can be all set to `1.`, as they will be re-numbered when rendered:"{.sidenote}[https://squidfunk.github.io/mkdocs-material/reference/lists/#configuration](https://squidfunk.github.io/mkdocs-material/reference/lists/#configuration){/.sidenote}
 
-    ``` markdown linenums="1"
+    ``` markdown 
       1.  Vivamus id mi enim. Integer id turpis sapien. Ut condimentum lobortis
           sagittis. Aliquam purus tellus, faucibus eget urna at, iaculis venenatis
           nulla. Vivamus a pharetra leo.
@@ -359,7 +358,7 @@ markdown_extensions:
 
 === "Task List"
 
-    ``` markdown linenums="1"
+    ``` markdown 
     - [x] Lorem ipsum dolor sit amet, consectetur adipiscing elit
     - [ ] Vestibulum convallis sit amet nisi a tincidunt
         * [x] In hac habitasse platea dictumst
@@ -379,7 +378,7 @@ markdown_extensions:
 
 === "Definition List"
 
-    ``` markdown linenums="1"
+    ``` markdown 
     `Lorem ipsum dolor sit amet`
 
     :   Sed sagittis eleifend rutrum. Donec vitae suscipit est. Nullam tempus
@@ -436,7 +435,7 @@ theme:
  
 === "YAML"
 
-    ``` yaml linenums="1" title="YAML EXAMPLE"
+    ``` yaml  title="YAML EXAMPLE"
     theme:
       features:
         - content.code.annotate # (1)
@@ -447,7 +446,7 @@ theme:
 
 === "C++"
 
-    ``` c++ linenums="1" title="C++ EXAMPLE"
+    ``` c++  title="C++ EXAMPLE"
     void setup() {
       pinMode(0, OUTPUT);
     }
@@ -462,7 +461,7 @@ theme:
 
 === "Python"
 
-    ``` py linenums="1" title="PYTHON EXAMPLE"
+    ``` py  title="PYTHON EXAMPLE"
     import tensorflow as tf
     ```
 
@@ -474,13 +473,13 @@ markdown_extensions:
   - footnotes
 ```
 
-``` markdown linenums="1"
+``` markdown 
 Here's a sentence with a footnote. [^3]
 
 [^3]: This is the footnote. 
 ```
 
-Here's a sentence with a footnote. [^3]
+Here's a sentence with a footnote.{.sidenote}This is the footnote.{/.sidenote}
 
 ---
 ### 8. Formatted Tables
@@ -491,7 +490,7 @@ markdown_extensions:
 
 ```
 
-``` markdown linenums="1"
+``` markdown 
 | Method      | Description                          |
 | ----------- | ------------------------------------ |
 | `GET`       | :material-check:     Fetch resource  |
@@ -603,7 +602,7 @@ markdown_extensions:
 
 <figure markdown="1">
 
-[Icon & Emoji Search Engine :fontawesome-solid-earth-americas:](https://squidfunk.github.io/mkdocs-material/reference/icons-emojis/#search){ .md-button .md-button--primary}
+[Icon & Emoji Search Engine :fontawesome-solid-earth-americas:](https://squidfunk.github.io/mkdocs-material/reference/icons-emojis/#search){ .md-button .md-button--outlined}
 
 </figure>
 
@@ -640,80 +639,45 @@ git push # (3)
     You now have built your very own static site with [MKdocs](https://www.mkdocs.org/) and its [Material Theme](https://squidfunk.github.io/mkdocs-material/).
 
 **Wooo :partying_face: :partying_face:** as of 12/01/2021, *teddywarner.org* is now **100 Commits** old!!
-![](../assets/images/PortfolioSite/100commit.jpg){width="100%"}
+<figure markdown="1">
+
+![](../assets/images/PortfolioSite/100commit.jpg){ width="100%" }
+
+</figure>
 
 **200 Commits :raised_hands:** - 05/02/2022!
-![](../assets/images/PortfolioSite/200commit.jpg){width="100%"}
+<figure markdown="1">
+
+![](../assets/images/PortfolioSite/200commit.jpg){ width="100%" }
+
+</figure>
 
 **... and 300 Commits! :exploding_head:** - 06/28/2023!
-![](../assets/images/PortfolioSite/300commit.png){width="100%"}
+<figure markdown="1">
+
+![](../assets/images/PortfolioSite/300commit.png){ width="100%" }
+
+</figure>
 
 **400 Commits :interrobang:** - 09/18/2024!
-![](../assets/images/PortfolioSite/400commit.png){width="100%"}
+<figure markdown="1">
+
+![](../assets/images/PortfolioSite/400commit.png){ width="100%" }
+
+</figure>
 
 **500 Commits :smiley:** - 11/20/2025!
-![](../assets/images/PortfolioSite/500commit.png){width="100%"}
+<figure markdown="1">
+
+![](../assets/images/PortfolioSite/500commit.png){ width="100%" }
+
+</figure>
 
 *as of 1/16/2026, teddywarner.org is now theodore.net!!!*
 
 **600 Commits :mirror_ball:** - 2/05/2026!
-![](../assets/images/PortfolioSite/600commit.png){width="100%"}
+<figure markdown="1">
 
-[^1]: https://squidfunk.github.io/mkdocs-material/reference/lists/#configuration 
-[^2]: https://squidfunk.github.io/mkdocs-material/reference/lists/#configuration 
-[^3]: This is the footnote. 
+![](../assets/images/PortfolioSite/600commit.png){ width="100%" }
 
-*[FDM]: Fused Deposition Modeling
-*[CNC]: Computerized Numerical Control
-*[MPCNC]: Mostly Printed Computerized Numerical Control - https://docs.v1engineering.com/mpcnc/intro/
-*[SSH]: Secure Shell
-*[GPIO]: General-Purpose Input/Output
-*[USB]: Universal Serial Bus
-*[ETA]: Estimated Time of Arrival
-*[ISO]: International Organization for Standardization
-*[UPDI]: Unified Program and Debug Interface
-*[AVR]: A Family of microcontrollers developed since 1996 by Atmel
-*[JTAG]: Joint Test Action Group
-*[IDE]: Integrated Development Environment
-*[Rx]: Receiving Signal
-*[Tx]: Transmitting Signal
-*[VCC]: Voltage Common Collector (+)
-*[GND]: Ground / Common Drain (-)
-*[IC]: Integrated Circuit
-*[LED]: Light-Emitting Diode
-*[Cap]: Capacitor
-*[SPST]: Single Pole Single Throw Switch
-*[SPDT]: Single Pole Double Throw Switch
-*[DPST]: Double Pole Single Throw Switch
-*[DPDT]: Double Pole Double Throw Switch
-*[EEPROM]: Electrically Erasable Programmable Read-Only Memory
-*[PCB]: Printed Circuit Board
-*[PWM]: Pulse Width Modulation
-*[SPI]: Serial Peripheral Interface
-*[I2C]: Inter-Integrated Circuit
-*[UART]: Universal Asynchronous Receiver/Transmitter
-*[ADC]: Analog-to-Digital Converter
-*[DAC]: Digital-to-Analog Converter
-*[MCU]: Microcontroller Unit
-*[FPGA]: Field-Programmable Gate Array
-*[SLA]: Stereolithography
-*[DLP]: Digital Light Processing 
-*[SLS]: Selective Laser Sintering
-*[PLA]: Polylactic Acid 
-*[ABS]: Acrylonitrile Butadiene Styrene 
-*[PETG]: Polyethylene Terephthalate Glycol 
-*[CAD]: Computer-Aided Design
-*[CAM]: Computer-Aided Manufacturing
-*[G-code]: A language for controlling CNC machines
-*[PID]: Proportional-Integral-Derivative (control loop feedback mechanism)
-*[MOSFET]: Metal-Oxide-Semiconductor Field-Effect Transistor
-*[BJT]: Bipolar Junction Transistor
-*[SMD]: Surface-Mount Device
-*[THT]: Through-Hole Technology
-*[DIP]: Dual In-line Package
-*[ESC]: Electronic Speed Controller
-*[BEC]: Battery Eliminator Circuit
-*[LiPo]: Lithium Polymer 
-*[NiMH]: Nickel-Metal Hydride 
-*[EMI]: Electromagnetic Interference
-*[ESD]: Electrostatic Discharge
+</figure>

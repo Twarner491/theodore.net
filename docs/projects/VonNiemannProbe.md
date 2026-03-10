@@ -3,7 +3,6 @@ title: Von Niemann Probe
 description: An AVR-based Bluetooth telegraphing shoe insole that lets you play chess in the way Hans Niemann has been accused!
 keywords: Chess cheating, Hans Niemann, Bluetooth telegraph, AVR microcontroller, Shoe insole, Parametric design, PCB design, Morse code, Chess scandal, Magnus Carlsen, Electronics project
 thumbnail: /assets/images/VonNiemannProbe/thumb.jpg
-readtime: "46–58 minutes"
 date: 2023-12-15
 date_modified: 2024-06-09
 hide:
@@ -12,16 +11,16 @@ hide:
 template: comments.html
 ---
 
-<center>
-  <div style="position:relative;padding-bottom:56.25%;">
-    <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/ygy8M-QhbSo" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  </div>
+<link rel="stylesheet" href="/assets/css/projects/vnp-chess.css">
+<script src="/assets/js/vnp-chess.js" defer></script>
 
-</center>
+<div class="embed-frame"><div class="embed-inner">
+    <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/ygy8M-QhbSo" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 <figure markdown="1">
 
-**An AVR-based Bluetooth telegraphing shoe insole that lets you play chess in the way Hans Niemann has been accused!**
+*An AVR-based Bluetooth telegraphing shoe insole that lets you play chess in the way Hans Niemann has been accused!*
 
 </figure>
 
@@ -29,7 +28,7 @@ template: comments.html
     ![PCBWay](../assets/images/VonNiemannProbe/PCBWay.png){: align=right width="45%" alt="PCBWay logo"}
     <span style="font-size:1.15em; width:55%;">**The development of the Von Niemann Probe was made possible by [PCBWay](https://www.pcbway.com/), who provided the fabrication of the probe's main board and nylon insole.** Be sure to check out [PCBWay.com](https://www.pcbway.com/) for all your PCB prototyping, assembly, design, CNC, and 3D printing needs! Thank you to the wonderful folks at [PCBWay](https://www.pcbway.com/) for sponsoring this project!</span>
     
-On September 4, 2022, 19-year-old rising chess superstar, Grandmaster Hans Moke Niemann, shocked the chess world when he ended the 8-time World Champion, and arguably the greatest player in world history, Magnus Carlsen's unprecedented 53-game win streak at the Sinquefield Cup in St. Louis, Missouri. Niemann added insult to injury by accomplishing this as the lowest-ranked player in the tournament while playing with the black pieces, which possess a slight, but crucially important, disadvantage at the highest levels of competition. 
+{.newthought}On September 4, 2022{/.newthought}, 19-year-old rising chess superstar, Grandmaster Hans Moke Niemann, shocked the chess world when he ended the 8-time World Champion, and arguably the greatest player in world history, Magnus Carlsen's unprecedented 53-game win streak at the Sinquefield Cup in St. Louis, Missouri. Niemann added insult to injury by accomplishing this as the lowest-ranked player in the tournament while playing with the black pieces, which possess a slight, but crucially important, disadvantage at the highest levels of competition. 
 
 Soon after his loss, Carlsen withdrew from the Sinquefield Cup without explanation, a bizarre occurrence due to the remaining six rounds in the tournament. While chess enthusiasts on the internet grappled with possible reasons for Carlsen's withdrawal, Carlsen posted the tweet below, depicting Portuguese football manager José Mourinho saying "If I speak I am in big trouble", a brief innuendo to the accusations to come.
 
@@ -57,9 +56,9 @@ Carlsen's message drove many chess fans around the globe quickly began to lob ac
   <br>
 </center>
 
-These direct allegations from [Chess.com](https://www.chess.com/home) spurred further allegations against Niemann, as well as his confession to cheating on two separate occasions, both in online games, once at age 12 and another at 16. Yet, Niemann denied ever cheating over the board, even offering to "strip fully naked"[^16] or "to play in a closed box with zero electronic transmission"[^16] to prove his innocence. 
+These direct allegations from [Chess.com](https://www.chess.com/home) spurred further allegations against Niemann, as well as his confession to cheating on two separate occasions, both in online games, once at age 12 and another at 16. Yet, Niemann denied ever cheating over the board, even offering to "strip fully naked"{.sidenote}[Niemann Interview](https://www.youtube.com/watch?v=CJZuT-_kij0&t=593s){/.sidenote} or "to play in a closed box with zero electronic transmission"{.sidenote}[Niemann Interview](https://www.youtube.com/watch?v=CJZuT-_kij0&t=593s){/.sidenote} to prove his innocence. 
 
-To only further the drama, on Monday, September 26, 2022, the pair were re-matched in an online tournament in which Carlsen resigned after playing a single move. Later that night, Carlsen released his open accusations against Niemann claiming he believes that "Niemann has cheated more — and more recently — than he has publicly admitted."[^18] Carlsen claims he derived his initial suspicions form Niemann's rapid rise through the chess ranks. For reference, Niemann surged from being approximately 800 in the world, to within the top 50 over the 20 months leading up to the Sinquefield Cup. GM Hikaru Nakamura describes this rise as "unprecedented"[^14] and [Chess.com](https://www.chess.com/home) claims that Niemann is the "fastest rising top player ... in modern recorded history"[^13], yet others find it comparable to top junior ranked players. Carlsen outline in his formal accusation (found in the tweet below) that Niemann "wasn't tense or even fully concentrating"[^18] while outplaying him using the black pieces "in a way I think only a handful of players can do"[^18] during the tournament.
+To only further the drama, on Monday, September 26, 2022, the pair were re-matched in an online tournament in which Carlsen resigned after playing a single move. Later that night, Carlsen released his open accusations against Niemann claiming he believes that "Niemann has cheated more — and more recently — than he has publicly admitted."{.sidenote}[Carlsen's Statement](https://twitter.com/MagnusCarlsen/status/1574482694406565888?s=20){/.sidenote} Carlsen claims he derived his initial suspicions form Niemann's rapid rise through the chess ranks. For reference, Niemann surged from being approximately 800 in the world, to within the top 50 over the 20 months leading up to the Sinquefield Cup. GM Hikaru Nakamura describes this rise as "unprecedented"{.sidenote}[BBC: Chess Cheating Controversy](https://www.bbc.com/news/world-63010107){/.sidenote} and [Chess.com](https://www.chess.com/home) claims that Niemann is the "fastest rising top player ... in modern recorded history"{.sidenote}[Chess.com Niemann Report](https://www.chess.com/blog/CHESScom/hans-niemann-report){/.sidenote}, yet others find it comparable to top junior ranked players. Carlsen outline in his formal accusation (found in the tweet below) that Niemann "wasn't tense or even fully concentrating"{.sidenote}[Carlsen's Statement](https://twitter.com/MagnusCarlsen/status/1574482694406565888?s=20){/.sidenote} while outplaying him using the black pieces "in a way I think only a handful of players can do"{.sidenote}[Carlsen's Statement](https://twitter.com/MagnusCarlsen/status/1574482694406565888?s=20){/.sidenote} during the tournament.
 
 <center>
   <br>
@@ -72,27 +71,29 @@ To only further the drama, on Monday, September 26, 2022, the pair were re-match
   <br>
 </center>
 
-The implications of such an unprecedented accusation against a player at the GM (Grandmaster) level are highly slanderous. Grandmaster Nigel Short notes that cheating at this level of chess is exceptionally rare, as any proven allegations would end a player's career. GM Short told the BBC "I think in the absence of any evidence, statement or anything, then this is a very unfortunate way to go about things. It's death by innuendo."[^14] Furthering GM Short's skepticism, Professor Kenneth Regan, widely considered to be the world's leading expert on chess cheating, took it upon himself to analyze Niemann's games and found no evidence of cheating. 
+The implications of such an unprecedented accusation against a player at the GM (Grandmaster) level are highly slanderous. Grandmaster Nigel Short notes that cheating at this level of chess is exceptionally rare, as any proven allegations would end a player's career. GM Short told the BBC "I think in the absence of any evidence, statement or anything, then this is a very unfortunate way to go about things. It's death by innuendo."{.sidenote}[BBC: Chess Cheating Controversy](https://www.bbc.com/news/world-63010107){/.sidenote} Furthering GM Short's skepticism, Professor Kenneth Regan, widely considered to be the world's leading expert on chess cheating, took it upon himself to analyze Niemann's games and found no evidence of cheating. 
 
-Naturally, Niemann isn't taking kindly to these slanderous accusations, and has filed a federal lawsuit accusing Carlsen of "maliciously colluding with others to defame [him] and ruin his career."[^1] Niemann is after at least *$100 Million* in damages from defendants Carlsen, his company Play Magnus Group, the online platform Chess.com and its leader, Danny Rensch, as well as grandmaster Hikaru Nakamura. The court filing, found below, accuses GM Nakamura and Chess.com of bolstering Carlsen's "egregious" claims through their platforms.
+Naturally, Niemann isn't taking kindly to these slanderous accusations, and has filed a federal lawsuit accusing Carlsen of "maliciously colluding with others to defame [him] and ruin his career."{.sidenote}[npr.org: hans-niemann-sues-magnus-carls](https://www.npr.org/2022/10/21/1130442319/hans-niemann-sues-magnus-carlsen-for-100-million-accusing-him-of-defamation){/.sidenote} Niemann is after at least *$100 Million* in damages from defendants Carlsen, his company Play Magnus Group, the online platform Chess.com and its leader, Danny Rensch, as well as grandmaster Hikaru Nakamura. The court filing, found below, accuses GM Nakamura and Chess.com of bolstering Carlsen's "egregious" claims through their platforms.
 
-Niemann's counterattack hasn't ended in his pursuit of reparations, Niemann claims Carlsen couldn't handle losing to him, implying through his court filing that Carlsen's actions further support his notorious "inability to cope with defeat."[^20] The court filing states that Carlsen's actions were taken in an attempt to solidify his status as "king of chess"[^20] so he could complete his company's buyout by Chess.com - a *$82.9 million* acquisition.[^21] 
+Niemann's counterattack hasn't ended in his pursuit of reparations, Niemann claims Carlsen couldn't handle losing to him, implying through his court filing that Carlsen's actions further support his notorious "inability to cope with defeat."{.sidenote}[storage.courtlistener.com: gov.uscourts.moed.198608.1.0.p](https://storage.courtlistener.com/recap/gov.uscourts.moed.198608/gov.uscourts.moed.198608.1.0.pdf){/.sidenote} The court filing states that Carlsen's actions were taken in an attempt to solidify his status as "king of chess"{.sidenote}[storage.courtlistener.com: gov.uscourts.moed.198608.1.0.p](https://storage.courtlistener.com/recap/gov.uscourts.moed.198608/gov.uscourts.moed.198608.1.0.pdf){/.sidenote} so he could complete his company's buyout by Chess.com - a *$82.9 million* acquisition.{.sidenote}[frontofficesports.com](https://frontofficesports.com/top-chess-player-platform-join-forces-in-82-9m-deal/){/.sidenote} 
 
-Niemann's victory over the world champion, "should have propelled Niemann's career to the next level and allowed him to continue realizing his enormous potential as the next great American chess player."[^20] Yet, "Unbeknownst to Niemann at the time, Defendants would do whatever it took to ensure that this would never happen."[^20]
+Niemann's victory over the world champion, "should have propelled Niemann's career to the next level and allowed him to continue realizing his enormous potential as the next great American chess player."{.sidenote}[storage.courtlistener.com: gov.uscourts.moed.198608.1.0.p](https://storage.courtlistener.com/recap/gov.uscourts.moed.198608/gov.uscourts.moed.198608.1.0.pdf){/.sidenote} Yet, "Unbeknownst to Niemann at the time, Defendants would do whatever it took to ensure that this would never happen."{.sidenote}[storage.courtlistener.com: gov.uscourts.moed.198608.1.0.p](https://storage.courtlistener.com/recap/gov.uscourts.moed.198608/gov.uscourts.moed.198608.1.0.pdf){/.sidenote}
 
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe src="https://drive.google.com/file/d/1Gtqr3ASuJxgTa3li6C0mxTj4dTvbuYLU/preview" width="100%" height="600" allow="autoplay"></iframe>
+</div></div>
 </center>
 
-It's worth mentioning again that Niemann has publically admitted to cheating with aid from electronic devices in online matches, once at age 12 and again at age 16. Niemann referred to one of these instances as "an absolutely ridiculous mistake"[^22], while maintaining that he had never cheated in a tournament with prize money. 
+It's worth mentioning again that Niemann has publically admitted to cheating with aid from electronic devices in online matches, once at age 12 and again at age 16. Niemann referred to one of these instances as "an absolutely ridiculous mistake"{.sidenote}[washingtonpost.com: chess-com-investigation-cheati](https://www.washingtonpost.com/sports/2022/10/05/chess-com-investigation-cheating-hans-niemann-magnus-carlsen/){/.sidenote}, while maintaining that he had never cheated in a tournament with prize money. 
 
-A couple of weeks after their initial accusations, [Chess.com](https://www.chess.com/home) released a formal, 72-page report (found below) outlining an investigation into Niemann's play, and alleging that **Niemann has likely cheated with electronic aid in more than 100 games, and as recently as 2020**, including in matches where money was on the line. The magnitude of Niemann's alleged cheating scandal, as presented in [Chess.com](https://www.chess.com/home)'s report, proves to be much larger and longer-lasting than Niemann publically admitted. [Chess.com](https://www.chess.com/home)'s investigation relied on a variety of analytical tools to compare the moves of Niemann to those recommended by chess engines, and noted "many remarkable signals and unusual patterns in Hans' path as a player.”[^13] The site claims that "while [they] don't doubt that Hans is a talented player, we note that his results are statistically extraordinary"[^13], and their investigation into Niemann's gameplay has uncovered "blatant cheating".[^13] **The report states that Niemann privately confessed to these allegations and that his Chess.com account was subsequently closed in 2020.**
+A couple of weeks after their initial accusations, [Chess.com](https://www.chess.com/home) released a formal, 72-page report (found below) outlining an investigation into Niemann's play, and alleging that **Niemann has likely cheated with electronic aid in more than 100 games, and as recently as 2020**, including in matches where money was on the line. The magnitude of Niemann's alleged cheating scandal, as presented in [Chess.com](https://www.chess.com/home)'s report, proves to be much larger and longer-lasting than Niemann publically admitted. [Chess.com](https://www.chess.com/home)'s investigation relied on a variety of analytical tools to compare the moves of Niemann to those recommended by chess engines, and noted "many remarkable signals and unusual patterns in Hans' path as a player.”{.sidenote}[Chess.com Niemann Report](https://www.chess.com/blog/CHESScom/hans-niemann-report){/.sidenote} The site claims that "while [they] don't doubt that Hans is a talented player, we note that his results are statistically extraordinary"{.sidenote}[Chess.com Niemann Report](https://www.chess.com/blog/CHESScom/hans-niemann-report){/.sidenote}, and their investigation into Niemann's gameplay has uncovered "blatant cheating".{.sidenote}[Chess.com Niemann Report](https://www.chess.com/blog/CHESScom/hans-niemann-report){/.sidenote} **The report states that Niemann privately confessed to these allegations and that his Chess.com account was subsequently closed in 2020.**
 
-In a private letter to Niemann, Chess.com's Chief Chess Officer, Danny Rechsch writes "We are prepared to present strong statistical evidence that confirms each of those cases above, as well as clear 'toggling' vs 'non-toggling' evidence, where you perform much better while toggling to a different screen during your moves".[^13] While the report outlines that [Chess.com](https://www.chess.com/home) has historically treated bans as a private matter, the ongoing accusations and Niemann's ban from the site's Global Championship spurred the platform to provide the investigation that provided justification for their decisions. 
+In a private letter to Niemann, Chess.com's Chief Chess Officer, Danny Rechsch writes "We are prepared to present strong statistical evidence that confirms each of those cases above, as well as clear 'toggling' vs 'non-toggling' evidence, where you perform much better while toggling to a different screen during your moves".{.sidenote}[Chess.com Niemann Report](https://www.chess.com/blog/CHESScom/hans-niemann-report){/.sidenote} While the report outlines that [Chess.com](https://www.chess.com/home) has historically treated bans as a private matter, the ongoing accusations and Niemann's ban from the site's Global Championship spurred the platform to provide the investigation that provided justification for their decisions. 
 
-<center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe src="https://drive.google.com/file/d/11IokKgTVSXdpYEzAuyViIleSZ_2wl0ag/preview" width="100%" height="600" allow="autoplay"></iframe>
-</center>     
+</div></div>
 
 While this evidence against Niemann appears to be overwhelming, it's important to remember that the Sinquefield Cup is an over-the-board tournament. Cheating online and over the board are two entirely separate entities, no amount of online cheating in the world provides sufficient reason to accuse Hans of over-the-board cheating, as the act itself is a different task that would require extreme preparation to achieve. Thus, in face of a lack of evidence to support over-the-board cheating allegations against Niemann, the Von Niemann Probe was born. In an attempt to further the investigation into this scandal, we developed an AVR-based Bluetooth telegraphing shoe insole to test the feasibility of creating and using an over-the-board chess cheating aid.
 
@@ -105,7 +106,7 @@ While this evidence against Niemann appears to be overwhelming, it's important t
 
 <figure markdown="1">
 
-  [Von Niemann Probe Repository :fontawesome-brands-github:](https://github.com/Twarner491/VonNiemannProbe){: align=right .md-button .md-button--primary }
+  [Von Niemann Probe Repository :fontawesome-brands-github:](https://github.com/Twarner491/VonNiemannProbe){: align=right .md-button .md-button--outlined }
 
 </figure>
 
@@ -119,7 +120,7 @@ The schematic includes headers for an HC-06, with serial connections to the ATTi
 
 <figure markdown="1">
 
-![](../assets/images/VonNiemannProbe/VNPSchematic.jpg){width="100%"}
+![](../assets/images/VonNiemannProbe/VNPSchematic.jpg){ width="100%" }
 
 </figure>
 
@@ -127,12 +128,14 @@ With this schematic done, I moved on to generating my final board file. The PCB 
 
 <figure markdown="1">
 
-![](../assets/images/VonNiemannProbe/VNPBoard.jpg){width="100%"}
+![](../assets/images/VonNiemannProbe/VNPBoard.jpg){ width="100%" }
 
 </figure>
 
 <center>
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a4da13aa451c73b438?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 </center>
 
 ### Parametric Shoe Insole
@@ -141,7 +144,7 @@ To prove the feasibility of the accusations placed against Hans Niemann, the Von
 
 <figure markdown="1">
 
-![](../assets/images/VonNiemannProbe/footdi.png){width="80%" alt="Diagram of foot dimensions for insole design"}
+![](../assets/images/VonNiemannProbe/footdi.png){ width="80%" }
 
 | US Size | UK Size | European Size | Japanese Size | Length *(S~L~)* | Width *(S~MW~)* |
 |---------|---------|---------------|---------------|--------|--------|
@@ -165,7 +168,7 @@ To prove the feasibility of the accusations placed against Hans Niemann, the Von
 | 14.5    | 14      | 47/48         |               | 31cm   | 11.6cm |
 | 15      | 14.5    | 48            |               | 31.4cm | 11.7cm |
 
-![](../assets/images/VonNiemannProbe/footgraph.png){width="80%"}
+![](../assets/images/VonNiemannProbe/footgraph.png){ width="80%" }
 
 </figure>
 
@@ -173,29 +176,29 @@ A custom insole will be generated after updating the model with your foot Length
 
 <figure markdown="1">
 
-![](../assets/images/VonNiemannProbe/FusionParameters.png){width="100%"}
+![](../assets/images/VonNiemannProbe/FusionParameters.png){ width="100%" }
 
 </figure>
 
 After establishing the model's parameters and extruding a basic shape, I drafted the insole's outer edge to allow the insole to fit the angled inner walls of shoes, before using Fusion 360's *Surface* workspace to ad a 3D profile to the top of the insole.
 
-<figure markdown="1">
-
-![](../assets/images/VonNiemannProbe/extrudeFusion.png){width="47.35%" align="left"}
-![](../assets/images/VonNiemannProbe/formedFusion.png){width="48%" align="right"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/VonNiemannProbe/extrudeFusion.png" alt="">
+<img src="../../assets/images/VonNiemannProbe/formedFusion.png" alt="">
+</div>
 
 The insole consists of two main parts, the body which is the bulk of the insole itself, and the lid, which screws to the bottom of the body, covering the electronics compartment. The body of the insole consists of mounting points for the main PCB, as well as a 1000mah LiPo battery, a USB-C LiPo charging board, a power switch, and a 3.3v to 5v boost converter. The lid not only hides the VNP's electronics system from sight but also redistributes the load placed upon the insole when a user is standing on it.  
 
 <figure markdown="1">
 
-![](../assets/images/VonNiemannProbe/electronicsVNP.png){width="100%"}
+![](../assets/images/VonNiemannProbe/electronicsVNP.png){ width="100%" }
 
 </figure>
 
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a4e77414dd384645c8?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 </center>
 
@@ -386,6 +389,21 @@ The above function takes a move played by Stockfish and converts it to a format 
 
 At this point the move "e2e4" would look like *"..... .. ..... ...."* meaning it is ready to be pulsed to the wearer of the device once it is sent to and received by the insole.
 
+Try it for yourself — move pieces on the board below and see each move translated to standard chess notation and morse code in real time.
+
+<div class="vnp-chess-widget">
+  <div class="vnp-board-wrapper">
+    <div class="vnp-board"></div>
+  </div>
+  <div class="vnp-moves-panel">
+    <div class="vnp-moves-header">
+      <span class="vnp-moves-title">Moves → Morse</span>
+      <button class="vnp-reset-btn">Reset</button>
+    </div>
+    <div class="vnp-moves-list"></div>
+  </div>
+</div>
+
 ### Sending Moves Via Bluetooth
 
 The job of the Python program each move ends with the sending of the optimal move to the user of the insole. This is accomplished by connecting the machine that the program is running on to the HC-05 or HC-06 Bluetooth module located in the device and sending the moves via a COM port.
@@ -427,7 +445,7 @@ At this point, the work of the Python function is complete. A player move has be
 
 <div style="height:660px; overflow:scroll;">
 
-  ``` py linenums="1" title="Bluetooth Interfacing Chess Engine"
+  ``` py title="Bluetooth Interfacing Chess Engine"
       #(c) Teddy Warner & Jack Hollingsworth - 2022
 
       #This work may be reproduced, modified, distributed, performed, and displayed
@@ -613,7 +631,7 @@ At this point, the work of the Python function is complete. A player move has be
 
     <div style="height:660px; overflow:scroll;">
 
-      ``` py linenums="1" title="Chess Engine"
+      ``` py  title="Chess Engine"
       #(c) Teddy Warner & Jack Hollingsworth - 2022
 
       #This work may be reproduced, modified, distributed, performed, and displayed
@@ -832,7 +850,7 @@ The local char, receive, is set to each byte contained in the move, in the order
 
 <div style="height:660px; overflow:scroll;">
 
-  ``` c++ linenums="1" title="Telegraph Reciving"
+  ``` c++  title="Telegraph Reciving"
       //(c) Teddy Warner & Jack Hollingsworth - 2022
 
       //This work may be reproduced, modified, distributed, performed, and displayed
@@ -893,152 +911,48 @@ The local char, receive, is set to each byte contained in the move, in the order
 I began the fabrication of the Von Niemann Probe through some prototype PCB milling on the [Bantam Tools Desktop CNC Milling Machine](https://store.bantamtools.com/products/bantam-tools-desktop-cnc-milling-machine) ...
 
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe width="100%" height="650" src="https://www.youtube.com/embed/V-S8DX_Sjtc" title="Von Niemann Probe Prototype Milling" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 </center>
 
 Leveraging these machines would allow me to test early designs before ordering final boards from PCBWay, allowing me to ensure their functionality early on in the design process. This process also makes it considerably easier to make changes, as I can test multiple iterations within several hours of each other, including the time to solder each board!
 
+{.marginnote}Von Niemann Probe Mainboard{/.marginnote}
+
 <figure markdown="1">
 
-![](../assets/images/VonNiemannProbe/mainboard.png){width="100%"}
-  <figcaption>Von Niemann Probe Mainboard</figcaption>
+![](../assets/images/VonNiemannProbe/mainboard.png){ width="100%" }
 
 </figure>
 
 Next up, 3D Printing ... and a lot of it. All prototype prints for the Von Niemann Probe were done on a [Prusa I3 MK3S+](https://www.prusa3d.com/category/original-prusa-i3-mk3s/) equipped with an 0.4mm [E3D Nozzle X](https://e3d-online.com/blogs/news/nozzle-x-the-one-nozzle-to-rule-them-all) from White PETG.
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="48%" height="650" src="https://www.youtube.com/embed/zLLnN3N27Xs" title="Von Niemann Probe CAD!" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe><iframe width="48%" height="650" src="https://www.youtube.com/embed/XEVX8DvXH7A" title="Von Niemann Probe Motor Bracket!" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe><iframe width="48%" height="650" src="https://www.youtube.com/embed/R1te_hj5dec" title="Von Niemann Probe Prototype Insole Printing" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe><iframe width="48%" height="650" src="https://www.youtube.com/embed/Y08WkrvqDDM" title="Von Niemann Probe Insole Printing!" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 Similar to the PCB prototyping, I fabricated several prints while iterating on the insole's CAD, before ordering the final iteration from PCBWay. Each print required over 14 hours of print time and numerous hours to complete the necessary changes to the design. 
 
+{.marginnote}All Iterations of the Von Niemann Probe Insole{/.marginnote}
+
 <figure markdown="1">
 
-![](../assets/images/VonNiemannProbe/allprints.jpg){width="100%"}
-  <figcaption>All Iterations of the Von Niemann Probe Insole</figcaption>
+![](../assets/images/VonNiemannProbe/allprints.jpg){ width="100%" }
 
 </figure>
 
 After finally arriving at a version of the insole that I was satisfied with, I was ready to assemble the device ...
 
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe width="100%" height="650" src="https://www.youtube.com/embed/BDq32QYUcXc" title="Von Niemann Probe Prototype Assembly" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 </center>
 
 Leaving me with the final product below! :smile:
 
-<figure markdown="1">
-
-![](../assets/images/VonNiemannProbe/FinalElectronics.jpg){width="47%" align="left"}
-![](../assets/images/VonNiemannProbe/bottomview.jpg){width="48%" align="right"}
-
-</figure>
-
-[^1]:https://www.npr.org/2022/10/21/1130442319/hans-niemann-sues-magnus-carlsen-for-100-million-accusing-him-of-defamation
-[^2]:https://youtu.be/eg5G1A_mTFg
-[^3]:https://twitter.com/hansmokeniemann
-[^4]:https://futurism.com/von-neumann-probe
-[^5]:https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny212-412-DataSheet-DS40001911B.pdf
-[^6]:https://components101.com/sites/default/files/component_datasheet/HC06%20Bluetooth%20Module%20Datasheet.pdf
-[^7]:https://components101.com/wireless/hc-06-bluetooth-module-pinout-datasheet
-[^8]:http://www.sizecharter.com/clothing-fit-and-measurement/understanding-shoe-sizing
-[^9]:https://www.researchgate.net/figure/The-Mean-of-Absolute-in-mm-and-Relative-in-FL-Foot-Dimensions-for-Both-Genders-a_tbl2_327021689
-[^10]:https://www.researchgate.net/figure/Measurements-of-the-foot-and-the-inner-shoe-dimensions-a-Foot-Length-FL-and-Foot_fig5_280976288
-[^11]:https://www.protalus.com/blogs/news/how-to-measure-feet
-[^12]:https://www.magnuscarlsen.com/en
-[^13]:https://twitter.com/MagnusCarlsen
-[^13]:https://www.chess.com/blog/CHESScom/hans-niemann-report
-[^14]:https://www.bbc.com/news/world-63010107
-[^15]:https://www.bbc.com/news/world-63043023
-[^16]:https://www.youtube.com/watch?v=CJZuT-_kij0&t=593s
-[^17]:https://cse.buffalo.edu/~regan/chess/fidelity/data/Niemann/
-[^18]:https://twitter.com/MagnusCarlsen/status/1574482694406565888?s=20
-[^19]:https://www.wsj.com/articles/chess-cheating-hans-niemann-report-magnus-carlsen-11664911524
-[^20]:https://storage.courtlistener.com/recap/gov.uscourts.moed.198608/gov.uscourts.moed.198608.1.0.pdf
-[^21]:https://frontofficesports.com/top-chess-player-platform-join-forces-in-82-9m-deal/
-[^22]:https://www.washingtonpost.com/sports/2022/10/05/chess-com-investigation-cheating-hans-niemann-magnus-carlsen/
-[^23]:https://www.youtube.com/watch?v=5uDM3fPeNFM&t=224s 
-[^24]:https://www.youtube.com/watch?v=QNuu8KTUEwU&t=390s 
-[^25]:https://www.reddit.com/r/chess/comments/x6ixud/during_magnus_carlsens_current_unbroken_streak_as/ 
-[^26]:https://pawnalyze.com/chess-drama/2022/09/05/Analyzing-Allegations-Niemann-Cheating-Scandal.html 
-[^27]:https://www.chess.com/news/view/hans-niemann-us-junior-championship-annie-wang 
-[^28]:https://www.mid-day.com/sports/other-sports/article/world-champion-magnus-carlsen-quits-game-amid-cheating-allegations-23246759 
-[^29]:https://www.fide.com/news/1968 
-[^30]:https://www.youtube.com/watch?v=TkUkvLqHfZM 
-[^31]:https://www.youtube.com/watch?v=9wtvXoXh0VU 
-[^32]:https://www.chess.com/events/2022-sinquefield-cup/03/Carlsen_Magnus-Niemann_Hans_Moke 
-[^33]:https://www.youtube.com/watch?v=CJZuT-_kij0 
-[^34]:https://www.youtube.com/watch?v=VptbNKbHQiM&t=5s 
-[^35]:https://www.youtube.com/watch?v=O6ML2b7IdD4&t=2s 
-[^36]:https://www.youtube.com/watch?v=qjtbXxA8Fcc 
-[^37]:https://www.youtube.com/watch?v=uCzwLk6fXXs 
-[^38]:https://www.youtube.com/watch?v=LkXDhw-TuGw 
-[^39]:https://www.nationalworld.com/news/offbeat/how-do-you-cheat-at-chess-cheating-player-hans-niemann-scandal-play-online-board-3870066 
-[^40]:https://www.nytimes.com/2022/12/04/business/chess-cheating-scandal-magnus-carlsen-hans-niemann.html 
-[^41]:https://www.wsj.com/articles/chess-cheating-magnus-carlsen-hans-niemann-11663751262?mod=article_inline 
-[^42]:https://www.buzzfeednews.com/article/kelseyweekman/chess-cheating-anal-beads-conspiracy-hans-niemann 
-[^43]:https://www.youtube.com/watch?v=lpfWGyvO80o 
-[^44]:https://www.youtube.com/watch?v=GLwyhmmEoAQ 
-[^45]:https://www.youtube.com/watch?v=umaHIQJY6Tw
-[^46]:https://www.youtube.com/watch?v=aDUmS_MJceU
-[^47]:https://www.republicworld.com/world-news/rest-of-the-world-news/elon-musk-claims-niemann-may-have-used-anal-beads-to-beat-carlsen-in-chess-championship-articleshow.html 
-[^48]:https://www.newsweek.com/hans-niemann-magnus-carlsen-chess-sex-toy-scandal-1749903 
-[^49]:https://www.youtube.com/watch?v=HdHWAuQRG7E 
-[^50]:https://www.youtube.com/watch?v=J4_e12Md4Fg 
-[^51]:https://www.youtube.com/watch?v=XjupJslRj5E
-[^52]:https://twitter.com/nigelshortchess/status/1573434084239593481  
-[^53]:https://twitter.com/hansmokeniemann/status/1583164606029365248  
-
-*[FDM]: Fused Deposition Modeling
-*[CNC]: Computerized Numerical Control
-*[MPCNC]: Mostly Printed Computerized Numerical Control - https://docs.v1engineering.com/mpcnc/intro/
-*[SSH]: Secure Shell
-*[GPIO]: General-Purpose Input/Output
-*[USB]: Universal Serial Bus
-*[ETA]: Estimated Time of Arrival
-*[ISO]: International Organization for Standardization
-*[UPDI]: Unified Program and Debug Interface
-*[AVR]: A Family of microcontrollers developed since 1996 by Atmel
-*[JTAG]: Joint Test Action Group
-*[IDE]: Integrated Development Environment
-*[Rx]: Receiving Signal
-*[Tx]: Transmitting Signal
-*[VCC]: Voltage Common Collector (+)
-*[GND]: Ground / Common Drain (-)
-*[IC]: Integrated Circuit
-*[LED]: Light-Emitting Diode
-*[Cap]: Capacitor
-*[SPST]: Single Pole Single Throw Switch
-*[SPDT]: Single Pole Double Throw Switch
-*[DPST]: Double Pole Single Throw Switch
-*[DPDT]: Double Pole Double Throw Switch
-*[EEPROM]: Electrically Erasable Programmable Read-Only Memory
-*[PCB]: Printed Circuit Board
-*[PWM]: Pulse Width Modulation
-*[SPI]: Serial Peripheral Interface
-*[I2C]: Inter-Integrated Circuit
-*[UART]: Universal Asynchronous Receiver/Transmitter
-*[ADC]: Analog-to-Digital Converter
-*[DAC]: Digital-to-Analog Converter
-*[MCU]: Microcontroller Unit
-*[FPGA]: Field-Programmable Gate Array
-*[SLA]: Stereolithography
-*[DLP]: Digital Light Processing 
-*[SLS]: Selective Laser Sintering
-*[PLA]: Polylactic Acid 
-*[ABS]: Acrylonitrile Butadiene Styrene 
-*[PETG]: Polyethylene Terephthalate Glycol 
-*[CAD]: Computer-Aided Design
-*[CAM]: Computer-Aided Manufacturing
-*[G-code]: A language for controlling CNC machines
-*[PID]: Proportional-Integral-Derivative (control loop feedback mechanism)
-*[MOSFET]: Metal-Oxide-Semiconductor Field-Effect Transistor
-*[BJT]: Bipolar Junction Transistor
-*[SMD]: Surface-Mount Device
-*[THT]: Through-Hole Technology
-*[DIP]: Dual In-line Package
-*[ESC]: Electronic Speed Controller
-*[BEC]: Battery Eliminator Circuit
-*[LiPo]: Lithium Polymer 
-*[NiMH]: Nickel-Metal Hydride 
-*[EMI]: Electromagnetic Interference
-*[ESD]: Electrostatic Discharge
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/VonNiemannProbe/FinalElectronics.jpg" alt="">
+<img src="../../assets/images/VonNiemannProbe/bottomview.jpg" alt="">
+</div>

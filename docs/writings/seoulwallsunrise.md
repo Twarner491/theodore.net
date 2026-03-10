@@ -30,8 +30,6 @@ I think not (or at least this would come as a significant surprise). The questio
 I had a moment of clarity after finishing this piece. I wrote this while sitting atop the Seoul Wall and was certainly favoring my blissfully ignorant thoughts rather than my beautiful surroundings. Clearly, I enter this 'flow state' on occasion, and most notably, this seems to be only possible when I'm not trying to. So take this all with a grain of salt.
 
 
-<figure markdown="1" style="opacity:90%;">
-
- ![](../assets/images/Japan/favs/000061380017_17.jpg){width="70%" alt="A Seoul Wall Sunrise"}
-
+<figure style="opacity:90%;">
+<img src="../assets/images/Japan/favs/000061380017_17.jpg" alt="A Seoul Wall Sunrise" width="70%">
 </figure>

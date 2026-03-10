@@ -152,8 +152,7 @@
   font-size: 0.75em;
   line-height: 1.4;
   position: relative;
-  color: var(--md-default-fg-color);
-  opacity: 0.75;
+  color: var(--md-default-fg-color--light);
 }
 
 .md-typeset .sidenote::before {
@@ -174,8 +173,23 @@
   font-size: 0.75em;
   line-height: 1.4;
   position: relative;
-  color: var(--md-default-fg-color);
-  opacity: 0.75;
+  color: var(--md-default-fg-color--light);
+}
+
+/* Links inside sidenotes and margin notes — visible and clickable */
+.md-typeset .sidenote a,
+.md-typeset .marginnote a {
+  color: var(--md-default-fg-color--light);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+  text-decoration-thickness: 0.05em;
+  text-decoration-color: var(--md-default-fg-color--lighter);
+  word-break: break-all;
+}
+
+.md-typeset .sidenote a:hover,
+.md-typeset .marginnote a:hover {
+  text-decoration-color: var(--md-default-fg-color);
 }
 
 input.margin-toggle {
@@ -218,7 +232,7 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
     margin-bottom: 0.5rem;
     padding: 0.5em 0;
     font-size: 0.85em;
-    opacity: 0.65;
+    color: var(--md-default-fg-color--light);
   }
 
   label.margin-toggle:not(.sidenote-number) {
@@ -278,8 +292,7 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
   width: 22%;
   font-size: 0.75em;
   line-height: 1.4;
-  color: var(--md-default-fg-color);
-  opacity: 0.75;
+  color: var(--md-default-fg-color--light);
 }
 
 @media (max-width: 1100px) {
@@ -291,15 +304,14 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
     margin-bottom: 0.5rem;
     padding: 0.5em 0;
     font-size: 0.85em;
-    opacity: 0.65;
+    color: var(--md-default-fg-color--light);
   }
 
   /* Show toggle icon for fullwidth-caption on narrow screens */
   input.margin-toggle ~ label.margin-toggle:has(~ .fullwidth-caption) {
     display: inline;
     cursor: pointer;
-    color: var(--md-default-fg-color);
-    opacity: 0.5;
+    color: var(--md-default-fg-color--light);
   }
 
   input.margin-toggle:checked ~ .fullwidth-caption {
@@ -319,13 +331,80 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
   font-size: 0.75em;
   line-height: 1.4;
   position: relative;
-  color: var(--md-default-fg-color);
-  opacity: 0.75;
+  color: var(--md-default-fg-color--light);
 }
 
 .md-typeset .marginfigure img {
   width: 100%;
   margin-bottom: 0.3em;
+  cursor: zoom-in;
+}
+
+/* ===== Margin figure lightbox ===== */
+.marginfigure-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsla(0, 0%, 0%, 0.0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+              background 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+              backdrop-filter 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  cursor: zoom-out;
+}
+
+.marginfigure-lightbox.active {
+  opacity: 1;
+  background: hsla(0, 0%, 0%, 0.15);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+}
+
+.marginfigure-lightbox-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 85vw;
+  max-height: 90vh;
+  transform: scale(0.92);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+              opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.marginfigure-lightbox.active .marginfigure-lightbox-inner {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.marginfigure-lightbox img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px hsla(0, 0%, 0%, 0.25);
+  cursor: zoom-out;
+}
+
+.marginfigure-lightbox-caption {
+  margin: 0.75em 0 0;
+  font-family: 'ET Book', 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--md-default-fg-color);
+  opacity: 0.7;
+  text-align: center;
+  max-width: 500px;
+}
+
+@media (max-width: 1100px) {
+  .md-typeset .marginfigure img {
+    cursor: default;
+  }
 }
 
 .md-typeset .marginfigure .caption {
@@ -334,6 +413,9 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
 
 
 /* ===== Figure grids ===== */
+/* Flex-based: JS reads each image's aspect ratio after load and sets
+   flex-grow proportionally, so images in a row share the same height
+   while adjusting widths based on aspect ratio. */
 .md-typeset .figure-grid {
   display: flex;
   gap: 0.5em;
@@ -350,12 +432,24 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
   min-width: 0;
 }
 
-/* 2x2 must wrap into rows — uses max-width to force 2 per row */
+/* Fallback: if markdown wraps images in <p>, make <p> invisible to flex */
+.md-typeset .figure-grid > p {
+  margin: 0;
+  display: contents;
+}
+
+/* 2x1 and 3x1: single-row flex (default behavior) — no overrides needed */
+
+/* 2x2: flex-wrap, JS sets widths per row pair for height-matching */
 .md-typeset .figure-grid.grid-2x2 {
+  display: flex;
   flex-wrap: wrap;
 }
-.md-typeset .figure-grid.grid-2x2 > img {
-  max-width: calc(50% - 0.25em);
+
+/* 2-over-1: flex-wrap, JS sets widths; last image spans full width */
+.md-typeset .figure-grid.grid-2over1 {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 /* Grid captions */
@@ -371,8 +465,14 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
     flex-direction: column;
   }
   .md-typeset .figure-grid.grid-2x2 {
-    flex-direction: row;
-    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
+  }
+  .md-typeset .figure-grid.grid-2over1 {
+    grid-template-columns: 1fr;
+  }
+  .md-typeset .figure-grid.grid-2over1 img:last-of-type,
+  .md-typeset .figure-grid.grid-2over1 > p:last-of-type {
+    grid-column: auto;
   }
 }
 
@@ -622,6 +722,13 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
 
 .md-typeset .bom-table .bom-collapse-toggle:checked ~ .bom-toggle-label .bom-label-expand {
   display: none;
+}
+
+.md-typeset .bom-table tbody tr:last-child.bom-total td {
+  border-top: 2px solid var(--md-default-fg-color--lighter);
+  border-bottom: none;
+  font-weight: 600;
+  padding-top: 0.6em;
 }
 
 /* ===== Content tabs: monochromatic ===== */
@@ -930,6 +1037,11 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
   width: 100%;
 }
 
+/* Non-video embeds: use CSS variable for explicit height */
+.md-typeset .embed-frame[style*="--embed-height"] > iframe {
+  height: var(--embed-height, 500px);
+}
+
 /* Responsive 16:9 wrapper inside the frame */
 .md-typeset .embed-frame .embed-inner {
   position: relative;
@@ -945,4 +1057,283 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+/* ===== Print styles ===== */
+@media print {
+  @page {
+    size: letter;
+    margin: 0.75in 0.75in 0.75in 1in;
+  }
+
+  /* Hide site chrome — only UI elements, not content */
+  .md-header,
+  .md-tabs,
+  .md-sidebar,
+  .md-footer,
+  .main-navigation,
+  .blur-overlay,
+  .return2feed,
+  .article-meta .share,
+  .article-meta .profilepic,
+  .article-meta .readTime,
+  .subscribe-section,
+  .giscus,
+  .giscus-frame,
+  #__comments,
+  .md-dialog,
+  .md-top,
+  .md-source,
+  .carousel-btn,
+  .tweet-container,
+  .md-button,
+  .footer,
+  .draft-overlay {
+    display: none !important;
+  }
+
+  /* Hide margin toggle inputs/labels — notes are always visible in print.
+     Keep .sidenote-number labels visible so counters increment properly. */
+  input.margin-toggle {
+    display: none !important;
+  }
+  label.margin-toggle:not(.sidenote-number) {
+    display: none !important;
+  }
+
+  /* Layout: constrain main column to ~65% to leave room for margin notes */
+  .md-content {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .md-content__inner {
+    max-width: 65% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .md-grid {
+    max-width: 100% !important;
+  }
+
+  .md-main__inner {
+    margin-top: 0 !important;
+  }
+
+  /* Typography for print — slightly larger base */
+  .md-typeset {
+    font-size: 12pt !important;
+    line-height: 1.55 !important;
+    color: #000 !important;
+  }
+
+  .md-typeset h1 { font-size: 26pt !important; }
+  .md-typeset h2 { font-size: 20pt !important; }
+  .md-typeset h3 { font-size: 16.5pt !important; }
+  .md-typeset h4 { font-size: 14pt !important; }
+
+  /* Article title — prominent, pushed down slightly */
+  .article-title {
+    font-size: 28pt !important;
+    line-height: 1.15 !important;
+    margin-top: 0.75in !important;
+    margin-bottom: 0.15em !important;
+  }
+
+  /* Article meta — just author name + date, no popup/readtime */
+  .article-meta {
+    margin-top: 0 !important;
+    margin-bottom: 0.3em !important;
+    padding-bottom: 0.5em !important;
+    font-size: 9.5pt !important;
+  }
+
+  /* Hide the "| " separator before readtime (now hidden) */
+  .article-meta .abt[style] {
+    font-size: 9.5pt !important;
+  }
+
+  .article-divider {
+    margin-top: 0.5em !important;
+    margin-bottom: 1.5em !important;
+  }
+
+  /* Sidenotes & margin notes — positioned in the right margin */
+  .md-typeset .sidenote,
+  .md-typeset .marginnote {
+    display: block !important;
+    float: right !important;
+    clear: right !important;
+    width: 45% !important;
+    margin-right: -52% !important;
+    margin-top: 0.3rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 8.5pt !important;
+    line-height: 1.35 !important;
+    color: #444 !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+
+  /* Sidenote number in print */
+  .md-typeset .sidenote::before {
+    font-size: 0.75em !important;
+  }
+
+  /* Margin figures */
+  .md-typeset .marginfigure {
+    display: block !important;
+    float: right !important;
+    clear: right !important;
+    width: 45% !important;
+    margin-right: -52% !important;
+    margin-top: 0.3rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 8.5pt !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+
+  /* Fullwidth captions in margin */
+  .md-typeset .fullwidth-caption {
+    display: block !important;
+    position: static !important;
+    float: right !important;
+    clear: right !important;
+    width: 45% !important;
+    margin-right: -52% !important;
+    font-size: 8.5pt !important;
+    color: #444 !important;
+    opacity: 1 !important;
+  }
+
+  /* Fullwidth: constrain to main column for print */
+  .md-typeset figure.fullwidth {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Images: prevent overflow, avoid page breaks */
+  .md-typeset img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Figure grids */
+  .md-typeset .figure-grid {
+    page-break-inside: avoid;
+  }
+
+  /* Embed frames: show frame but hide interactive content */
+  .md-typeset .embed-frame {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1em;
+    text-align: center;
+    background: #f9f9f9 !important;
+    page-break-inside: avoid;
+  }
+
+  .md-typeset .embed-frame iframe {
+    display: none !important;
+  }
+
+  .md-typeset .embed-frame .embed-inner {
+    padding-bottom: 0 !important;
+  }
+
+  .md-typeset .embed-frame::after {
+    content: "[Interactive embed — view online]";
+    font-size: 9pt;
+    color: #888;
+    font-style: italic;
+  }
+
+  /* Code blocks */
+  .md-typeset pre {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+    font-size: 8.5pt !important;
+  }
+
+  .md-typeset code {
+    font-size: 8.5pt !important;
+  }
+
+  /* Links: show URL after text */
+  .md-typeset a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 7pt;
+    opacity: 0.5;
+    word-break: break-all;
+  }
+
+  /* Don't show URL for image links, footnotes, internal refs */
+  .md-typeset a:has(img)::after,
+  .md-typeset .footnote-ref::after,
+  .md-typeset .footnote-backref::after,
+  .md-typeset .headerlink::after,
+  .md-typeset .sidenote a::after,
+  .md-typeset .marginnote a::after {
+    content: none !important;
+  }
+
+  /* Headings: avoid orphaned headings */
+  .md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4 {
+    page-break-after: avoid;
+  }
+
+  /* Epigraphs */
+  .md-typeset .epigraph {
+    page-break-inside: avoid;
+  }
+
+  /* Admonitions */
+  .md-typeset .admonition,
+  .md-typeset details {
+    page-break-inside: avoid;
+    border: 1px solid #ccc !important;
+  }
+
+  /* Collapsible details: always open for print */
+  .md-typeset details {
+    open: true;
+  }
+  .md-typeset details > summary::after {
+    display: none !important;
+  }
+
+  /* BOM table: fully expanded */
+  .md-typeset .bom-table .bom-table-inner {
+    max-height: none !important;
+  }
+  .md-typeset .bom-table .bom-fade,
+  .md-typeset .bom-table .bom-toggle-label {
+    display: none !important;
+  }
+
+  /* Remove backgrounds for ink saving */
+  .md-typeset .admonition,
+  .md-typeset details,
+  .md-typeset code,
+  .md-typeset pre {
+    background: #f8f8f8 !important;
+  }
+
+  /* HR */
+  .md-typeset hr {
+    border-top-color: #ccc !important;
+  }
+
+  /* Carousel: show first image only */
+  .md-typeset .carousel-wrapper {
+    page-break-inside: avoid;
+  }
+  .md-typeset .carousel-slide:not(.active) {
+    display: none !important;
+  }
 }

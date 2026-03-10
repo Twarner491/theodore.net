@@ -3,7 +3,6 @@ title: Cable Managed Corner Desk
 description: A clean modern corner desk.
 keywords: Cable management, Corner desk, DIY desk, Fusion 360, CAD design, Home office setup, Pandemic project, Woodworking, Desk construction, Modern furniture, Workspace organization
 thumbnail: /assets/images/CornerDesk/finishedwoodassembly.jpg
-readtime: "6-8 minutes"
 date: 2020-03-15
 hide:
   - navigation
@@ -11,22 +10,26 @@ hide:
 template: comments.html
 ---
 
-This start of the Pandemic project stemmed from my freshman year engineering capstone project. At the start of 8th grade I had an issue, I was a couple of months into learning Fusion360 and I decided to upgrade my setup from an old janky pc to a brand new laptop and some 20-inch monitors to go along with it, which was great and all but gave me a whole tone of issues to sort out. I had this great desk in the corner of my room, that my great grandfather built and that had been passed down to me, however, there was one huge flaw using that desk with my brand new setup and that was cable management. Below are some plans draw out for the desk.
+{.newthought}This start{/.newthought} of the Pandemic project stemmed from my freshman year engineering capstone project. At the start of 8th grade I had an issue, I was a couple of months into learning Fusion360 and I decided to upgrade my setup from an old janky pc to a brand new laptop and some 20-inch monitors to go along with it, which was great and all but gave me a whole tone of issues to sort out. I had this great desk in the corner of my room, that my great grandfather built and that had been passed down to me, however, there was one huge flaw using that desk with my brand new setup and that was cable management. Below are some plans draw out for the desk.
 
-<figure markdown="1">
-
-![](../assets/images/CornerDesk/desknotes1.jpg){width="55%" alt="Initial design sketches and measurements for corner desk" align="left"}
-![](../assets/images/CornerDesk/desknotes2.jpg){width="41.5%" alt="Additional design notes and calculations for desk" align="right"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/CornerDesk/desknotes1.jpg" alt="Initial design sketches and measurements for corner desk">
+<img src="../../assets/images/CornerDesk/desknotes2.jpg" alt="Additional design notes and calculations for desk">
+</div>
 
 ## CAD
 
 So I set off in Fusion to design a desk that fit all of my needs. My goals were to have a desk measured to fit perfectly in the corner of my room, with plenty of legroom so I would never hit my knees on it, and the best cable management imaginable. And after a couple of different iterations, I came up with this Model.
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a4da78a9b17ff5a725?mode=embed" width="100%" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
+
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a4b7c004627795f9d8?mode=embed" width="100%" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
+
 
 ## Lowes Trip and New Tool
 
@@ -34,7 +37,7 @@ However shortly after finishing up the CAD aspect of this project, Covid-19 caus
 
 <figure markdown="1">
 
-![](../assets/images/CornerDesk/kregjig.jpg){width="100%" alt="Kreg Jig setup for pocket hole joinery"}
+![Kreg Jig setup for pocket hole joinery](../assets/images/CornerDesk/kregjig.jpg){ width="100%" }
 
 </figure>
 
@@ -42,28 +45,31 @@ However shortly after finishing up the CAD aspect of this project, Covid-19 caus
 
 A couple of days after getting the wood, I finally started assembling the desk, starting by laying down the frame, making sure the front 2x4 was flat and the back was upright (to give more leg space) and I was pretty excited to get the whole thing together. Maybe a little too excited because even though you can't tell from the pictures above, I built the whole desk wrong, putting the corner on the wrong side. This was a huge setback to fix as it meant that I would have to take the entire desk apart, use wood filler on all of the newly exposed holes, and build it back up the right way. I was even considering just leave the desk as is, and rearrange my room to match the flaw, however, I wanted my desk to be perfect and that meant fixing it according to my CAD model. So I did the laborious tasks listed above and finished the frame of the desk the right way late that night. The next day I was ready to do some more on of the desk, so I decided to start throwing together the top. I spent that whole day sawing, planning, and sanding the cedar before I put the top together using the Kreg-Jig the next morning. And this time I didn't make a single mistake, and I'm really happy with the result.
 
-<figure markdown="1">
-
-![](../assets/images/CornerDesk/framelayout.jpg){width="100%" alt="Initial layout of desk frame components"}
-
-![](../assets/images/CornerDesk/baseframe.jpg){width="100%" alt="Assembled base frame of the desk"}
-
-![](../assets/images/CornerDesk/finishedwoodassembly.jpg){width="100%" alt="Completed wood assembly before finishing"}
-
-</figure>
+<div class="figure-grid grid-3x1">
+<img src="../../assets/images/CornerDesk/framelayout.jpg" alt="Initial layout of desk frame components">
+<img src="../../assets/images/CornerDesk/baseframe.jpg" alt="Assembled base frame of the desk">
+<img src="../../assets/images/CornerDesk/finishedwoodassembly.jpg" alt="Completed wood assembly before finishing">
+</div>
 
 ## Painting and Staining
 
 I spent the next two days painting the frame with three coats of white paint and staining the cedar with Provincial. 
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="450" src="https://www.youtube.com/embed/Ur2js0Qi-xc" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
+
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="450" src="https://www.youtube.com/embed/ipKd49bhELs" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
+
+
+{.marginnote}Stained Desktop{/.marginnote}
 
 <figure markdown="1">
 
-![](../assets/images/CornerDesk/stainedtop.jpg){width="100%" alt="Cedar desktop after staining with Provincial finish"}
-  <figcaption>Stained Desktop</figcaption>
+![Cedar desktop after staining with Provincial finish](../assets/images/CornerDesk/stainedtop.jpg){ width="100%" }
 
 </figure>
 
@@ -73,7 +79,7 @@ As I said earlier the choice of wood for the surface of the desk took some thoug
 
 <figure markdown="1">
 
-![](../assets/images/CornerDesk/laptoparm.jpg){width="100%" alt="Installed laptop mounting arm with cable management"}
+![Installed laptop mounting arm with cable management](../assets/images/CornerDesk/laptoparm.jpg){ width="100%" }
 
 </figure>
 
@@ -83,7 +89,7 @@ This is a huge part of the project as it's one of the reasons I decided to even 
 
 <figure markdown="1">
 
-![](../assets/images/CornerDesk/cableclips.jpg){width="100%" alt="3D printed cable management clips on desk back"}
+![3D printed cable management clips on desk back](../assets/images/CornerDesk/cableclips.jpg){ width="100%" }
 
 </figure>
 
@@ -91,64 +97,10 @@ This is a huge part of the project as it's one of the reasons I decided to even 
 
 I love how my desk came out, It solves all of my annoying cable issues and fits perfectly in the right corner of my room. Eventually, I'm planning on wall mounting my monitors to give me even more desk space, however, the little corner piece gives me a perfect location to use a pen and some paper and write things out. Putting the desk in its place, I realized that there was way too much space above it and after some browsing, I found some shelves on amazon that use the same stain and match perfectly, so I ordered and installed those over the desk. This project we surprisingly smoothly in the face of the current Pandemic, and even with my building setbacks came out well.
 
+{.marginnote}Final Desk Beauty Shot{/.marginnote}
+
 <figure markdown="1">
 
-![](../assets/images/CornerDesk/deskbeautyshot.jpg){width="100%" alt="Final beauty shot of completed corner desk installation"}
-  <figcaption>Final Desk Beauty Shot</figcaption>
+![Final beauty shot of completed corner desk installation](../assets/images/CornerDesk/deskbeautyshot.jpg){ width="100%" }
 
 </figure>
-
-*[FDM]: Fused Deposition Modeling
-*[CNC]: Computerized Numerical Control
-*[MPCNC]: Mostly Printed Computerized Numerical Control - https://docs.v1engineering.com/mpcnc/intro/
-*[SSH]: Secure Shell
-*[GPIO]: General-Purpose Input/Output
-*[USB]: Universal Serial Bus
-*[ETA]: Estimated Time of Arrival
-*[ISO]: International Organization for Standardization
-*[UPDI]: Unified Program and Debug Interface
-*[AVR]: A Family of microcontrollers developed since 1996 by Atmel
-*[JTAG]: Joint Test Action Group
-*[IDE]: Integrated Development Environment
-*[Rx]: Receiving Signal
-*[Tx]: Transmitting Signal
-*[VCC]: Voltage Common Collector (+)
-*[GND]: Ground / Common Drain (-)
-*[IC]: Integrated Circuit
-*[LED]: Light-Emitting Diode
-*[Cap]: Capacitor
-*[SPST]: Single Pole Single Throw Switch
-*[SPDT]: Single Pole Double Throw Switch
-*[DPST]: Double Pole Single Throw Switch
-*[DPDT]: Double Pole Double Throw Switch
-*[EEPROM]: Electrically Erasable Programmable Read-Only Memory
-*[PCB]: Printed Circuit Board
-*[PWM]: Pulse Width Modulation
-*[SPI]: Serial Peripheral Interface
-*[I2C]: Inter-Integrated Circuit
-*[UART]: Universal Asynchronous Receiver/Transmitter
-*[ADC]: Analog-to-Digital Converter
-*[DAC]: Digital-to-Analog Converter
-*[MCU]: Microcontroller Unit
-*[FPGA]: Field-Programmable Gate Array
-*[SLA]: Stereolithography
-*[DLP]: Digital Light Processing 
-*[SLS]: Selective Laser Sintering
-*[PLA]: Polylactic Acid 
-*[ABS]: Acrylonitrile Butadiene Styrene 
-*[PETG]: Polyethylene Terephthalate Glycol 
-*[CAD]: Computer-Aided Design
-*[CAM]: Computer-Aided Manufacturing
-*[G-code]: A language for controlling CNC machines
-*[PID]: Proportional-Integral-Derivative (control loop feedback mechanism)
-*[MOSFET]: Metal-Oxide-Semiconductor Field-Effect Transistor
-*[BJT]: Bipolar Junction Transistor
-*[SMD]: Surface-Mount Device
-*[THT]: Through-Hole Technology
-*[DIP]: Dual In-line Package
-*[ESC]: Electronic Speed Controller
-*[BEC]: Battery Eliminator Circuit
-*[LiPo]: Lithium Polymer 
-*[NiMH]: Nickel-Metal Hydride 
-*[EMI]: Electromagnetic Interference
-*[ESD]: Electrostatic Discharge

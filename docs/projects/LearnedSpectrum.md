@@ -3,7 +3,6 @@ title: Learned Spectrum
 description: Towards temporal understanding in AI through fMRI learning stage classification.
 keywords: fMRI, AI, Temporal Understanding
 thumbnail: /assets/images/learnedSpec/fig2.png
-readtime: "18–22 minutes"
 date: 2024-05-01
 hide:
   - navigation
@@ -11,9 +10,7 @@ hide:
 template: comments.html
 ---
 
-*Towards temporal understanding in AI through fMRI learning stage classification.*
-
-Learned Spectrum was the first research step I took when starting my venture, [Intempus](https://intempus.org). The full preprint may be accessed [here](../assets/misc/Learned_Spectrum.pdf).
+{.newthought}Learned Spectrum{/.newthought} was the first research step I took when starting, [Intempus](https://intempus.org). The full preprint may be accessed [here](../assets/misc/Learned_Spectrum.pdf).
 
 !!! abstract "Intempus's Thesis"
 
@@ -63,21 +60,21 @@ Traditional approaches to AI world models process time as a simple progression o
 
 As we've discussed, current artificial intelligence approaches to world modeling rely heavily on absolute temporal markers and timestamps, human perception of time operates as a fundamentally subjective experience that adapts with cognitive state and learning progress. We've utlized publically avalible fMRI data to demonstrate that neural activation patterns contain rich temporal information that can inform more nuanced approaches to temporal processing in AI systems. 
 
-This work implements a Vision Transformer architecture [^1] [^14] optimized for learning stage classification from fMRI data. While fMRI presents known limitations in its reliance on blood-oxygen-level-dependent (BOLD) signals [^15], deep learning architectures may be able to extract temporal patterns that traditional analysis methods miss.
+This work implements a Vision Transformer architecture {.sidenote}[Attention Is All You Need](https://arxiv.org/abs/1706.03762){/.sidenote} {.sidenote}[ViT: An Image is Worth 16x16 Words](https://arxiv.org/abs/2010.11929){/.sidenote} optimized for learning stage classification from fMRI data. While fMRI presents known limitations in its reliance on blood-oxygen-level-dependent (BOLD) signals {.sidenote}[Nature: fMRI BOLD Signals](https://www.nature.com/articles/nature06976){/.sidenote}, deep learning architectures may be able to extract temporal patterns that traditional analysis methods miss.
 
 ### Neural Bases of Learning Stages
 
-Human learning progresses through distinct stages characterized by shifting patterns of neural activation [^11]. These transitions are particularly evident in the striatum and medial temporal lobe regions [^12]. Our architecture's design mirrors these biological principles through its progressive processing stages and attention mechanisms.
+Human learning progresses through distinct stages characterized by shifting patterns of neural activation {.sidenote}[Learning Stage Theory](https://www.jstor.org/stable/2891421){/.sidenote}. These transitions are particularly evident in the striatum and medial temporal lobe regions {.sidenote}[Neural Activation in Learning](https://www.nature.com/articles/35107080){/.sidenote}. Our architecture's design mirrors these biological principles through its progressive processing stages and attention mechanisms.
 
-fMRI captures these learning stages through blood-oxygen-level-dependent (BOLD) signals, providing an indirect but reliable measure of neural activity [^15]. While this indirect measurement presents certain limitations, research has demonstrated correlations between BOLD signal temporal patterns and learning progression [^16]. The robust test-retest reliability of fMRI in classification learning tasks [^10] provides a stable foundation for extracting temporal patterns relevant to learning stages.
+fMRI captures these learning stages through blood-oxygen-level-dependent (BOLD) signals, providing an indirect but reliable measure of neural activity {.sidenote}[Nature: fMRI BOLD Signals](https://www.nature.com/articles/nature06976){/.sidenote}. While this indirect measurement presents certain limitations, research has demonstrated correlations between BOLD signal temporal patterns and learning progression {.sidenote}[BOLD Signal & Learning Progression](https://doi.org/10.1017/CBO9780511895029){/.sidenote}. The robust test-retest reliability of fMRI in classification learning tasks {.sidenote}[fMRI Test-Retest Reliability](https://pubmed.ncbi.nlm.nih.gov/16139527/){/.sidenote} provides a stable foundation for extracting temporal patterns relevant to learning stages.
 
 ## Methods
 
-Our implementation addresses two core challenges: extracting meaningful patterns from complex fMRI data [^16] and developing architectures capable of learning from these patterns [^10]. This section outlines our approach in three parts: data preprocessing implementation, fMRI-specific augmentation strategies, and temporal-aware transformer architecture design [^1] [^14].
+Our implementation addresses two core challenges: extracting meaningful patterns from complex fMRI data {.sidenote}[BOLD Signal & Learning Progression](https://doi.org/10.1017/CBO9780511895029){/.sidenote} and developing architectures capable of learning from these patterns {.sidenote}[fMRI Test-Retest Reliability](https://pubmed.ncbi.nlm.nih.gov/16139527/){/.sidenote}. This section outlines our approach in three parts: data preprocessing implementation, fMRI-specific augmentation strategies, and temporal-aware transformer architecture design {.sidenote}[Attention Is All You Need](https://arxiv.org/abs/1706.03762){/.sidenote} {.sidenote}[ViT: An Image is Worth 16x16 Words](https://arxiv.org/abs/2010.11929){/.sidenote}.
 
 ### Data Collection and Processing
 
-The implementation utilizes four complementary classification learning datasets from OpenFMRI. Each dataset provides specific insights into temporal learning aspects [^11]. The primary dataset (ds000002) contains data from 17 right-handed subjects performing probabilistic and deterministic classification tasks [^12]. Task structure includes:
+The implementation utilizes four complementary classification learning datasets from OpenFMRI. Each dataset provides specific insights into temporal learning aspects {.sidenote}[Learning Stage Theory](https://www.jstor.org/stable/2891421){/.sidenote}. The primary dataset (ds000002) contains data from 17 right-handed subjects performing probabilistic and deterministic classification tasks {.sidenote}[Neural Activation in Learning](https://www.nature.com/articles/35107080){/.sidenote}. Task structure includes:
 
 - Pure blocks: 10 cycles of 5 classification trials followed by 3 baseline trials
 - Mixed blocks: 100 stimuli split equally between probabilistic and deterministic trials
@@ -91,13 +88,13 @@ Data acquisition specifications:
 
 Three additional datasets complement the primary collection:
 
-- ds000011: 14 subjects, single/dual-task classification for attention-modulated learning analysis [^12]
-- ds000017: 8 subjects, classification with stop-signal tasks for inhibitory control examination [^10]
-- ds000052: Classification with reward contingency reversal for adaptive learning mechanism investigation [^11]
+- ds000011: 14 subjects, single/dual-task classification for attention-modulated learning analysis {.sidenote}[Neural Activation in Learning](https://www.nature.com/articles/35107080){/.sidenote}
+- ds000017: 8 subjects, classification with stop-signal tasks for inhibitory control examination {.sidenote}[fMRI Test-Retest Reliability](https://pubmed.ncbi.nlm.nih.gov/16139527/){/.sidenote}
+- ds000052: Classification with reward contingency reversal for adaptive learning mechanism investigation {.sidenote}[Learning Stage Theory](https://www.jstor.org/stable/2891421){/.sidenote}
 
 ### Preprocessing Pipeline
 
-Our implementation uses a three-stage preprocessing approach based on established neuroimaging practices [^16] with optimizations for temporal pattern preservation. The pipeline integrates spatial normalization and temporal alignment to maintain both anatomical accuracy and temporal fidelity. The complete preprocessing pipeline follows:
+Our implementation uses a three-stage preprocessing approach based on established neuroimaging practices {.sidenote}[BOLD Signal & Learning Progression](https://doi.org/10.1017/CBO9780511895029){/.sidenote} with optimizations for temporal pattern preservation. The pipeline integrates spatial normalization and temporal alignment to maintain both anatomical accuracy and temporal fidelity. The complete preprocessing pipeline follows:
 
 \begin{equation}
     x_{\text{processed}} = \mathcal{N}(\mathcal{R}(\mathcal{V}(x)))
@@ -107,7 +104,7 @@ Where $\mathcal{V}$ performs dimension validation, $\mathcal{R}$ applies spatial
 
 #### Dimension Validation
 
-fMRI acquisitions vary in dimensionality [^16]. Our validation ensures consistent dimensionality while preserving temporal information:
+fMRI acquisitions vary in dimensionality {.sidenote}[BOLD Signal & Learning Progression](https://doi.org/10.1017/CBO9780511895029){/.sidenote}. Our validation ensures consistent dimensionality while preserving temporal information:
 
 \begin{equation}
     \mathcal{V}(x) = \begin{cases}
@@ -117,21 +114,21 @@ fMRI acquisitions vary in dimensionality [^16]. Our validation ensures consisten
     \end{cases}
 \end{equation}
 
-This validation maintains spatial integrity while ensuring proper temporal dimension handling [^15]. Single-volume inputs receive an added temporal dimension for consistent processing.
+This validation maintains spatial integrity while ensuring proper temporal dimension handling {.sidenote}[Nature: fMRI BOLD Signals](https://www.nature.com/articles/nature06976){/.sidenote}. Single-volume inputs receive an added temporal dimension for consistent processing.
 
 #### Spatial Resizing
 
-The implementation standardizes spatial dimensions while maintaining anatomical proportions [^16] through trilinear interpolation:
+The implementation standardizes spatial dimensions while maintaining anatomical proportions {.sidenote}[BOLD Signal & Learning Progression](https://doi.org/10.1017/CBO9780511895029){/.sidenote} through trilinear interpolation:
 
 \begin{equation}
     \mathcal{R}(x) = \text{zoom}(x, [\frac{H_t}{H}, \frac{W_t}{W}, \frac{D_t}{D}, 1])
 \end{equation}
 
-Target dimensions $(H_t, W_t, D_t) = (64, 64, 30)$ balance spatial resolution and computational efficiency [^10]. The temporal dimension scaling factor of 1 preserves original temporal resolution.
+Target dimensions $(H_t, W_t, D_t) = (64, 64, 30)$ balance spatial resolution and computational efficiency {.sidenote}[fMRI Test-Retest Reliability](https://pubmed.ncbi.nlm.nih.gov/16139527/){/.sidenote}. The temporal dimension scaling factor of 1 preserves original temporal resolution.
 
 #### Intensity Normalization<
 
-Following fMRI preprocessing protocols [^16], we implement temporal-aware normalization accounting for BOLD signal dynamics:
+Following fMRI preprocessing protocols {.sidenote}[BOLD Signal & Learning Progression](https://doi.org/10.1017/CBO9780511895029){/.sidenote}, we implement temporal-aware normalization accounting for BOLD signal dynamics:
 
 \begin{equation}
     \mathcal{N}(x_t) = \frac{x_t - \mu_t}{\sigma_t + \epsilon} \;\; \forall t \in T
@@ -139,7 +136,7 @@ Following fMRI preprocessing protocols [^16], we implement temporal-aware normal
 
 Where $\mu_t$ and $\sigma_t$ represent mean and standard deviation at timepoint $t$ and $\epsilon = 1e\text{-}6$ prevents division by zero.
 
-This normalization preserves temporal dynamics while standardizing signal intensity across sessions and subjects [^15]. Independent timepoint normalization maintains relative temporal patterns crucial for learning stage classification.
+This normalization preserves temporal dynamics while standardizing signal intensity across sessions and subjects {.sidenote}[Nature: fMRI BOLD Signals](https://www.nature.com/articles/nature06976){/.sidenote}. Independent timepoint normalization maintains relative temporal patterns crucial for learning stage classification.
 
 ### Data Augmentation Strategies
 
@@ -184,7 +181,7 @@ The channel reduction component efficiently processes high-dimensional fMRI inpu
 
 #### Temporal Processing
 
-Our temporal processing incorporates hemodynamic response function (HRF) characteristics [^15] through causal attention masking:
+Our temporal processing incorporates hemodynamic response function (HRF) characteristics {.sidenote}[Nature: fMRI BOLD Signals](https://www.nature.com/articles/nature06976){/.sidenote} through causal attention masking:
 
 \begin{equation}
     M_{ij} = \begin{cases}
@@ -193,7 +190,7 @@ Our temporal processing incorporates hemodynamic response function (HRF) charact
     \end{cases}
 \end{equation}
 
-This enforces a 6-second BOLD delay constraint, reflecting established HRF parameters [^16] while maintaining temporal causality in BOLD response learning.
+This enforces a 6-second BOLD delay constraint, reflecting established HRF parameters {.sidenote}[BOLD Signal & Learning Progression](https://doi.org/10.1017/CBO9780511895029){/.sidenote} while maintaining temporal causality in BOLD response learning.
 
 #### Progressive Dropout
 
@@ -222,7 +219,7 @@ This adaptive scaling ensures stable training while maintaining computational ef
 
 #### Optimization Strategy
 
-The implementation uses AdamW optimizer with fMRI-validated parameters [^14]:
+The implementation uses AdamW optimizer with fMRI-validated parameters{.sidenote}[ViT: An Image is Worth 16x16 Words](https://arxiv.org/abs/2010.11929){/.sidenote}:
 
 - Learning rate: $1e\text{-}4$
 - Weight decay: 0.05
@@ -249,7 +246,7 @@ This provides stable initial training followed by gradual learning rate decay fo
 
 #### Regularization and Early Stopping
 
-We implement comprehensive regularization following established practices [^1]:
+We implement comprehensive regularization following established practices{.sidenote}[Attention Is All You Need](https://arxiv.org/abs/1706.03762){/.sidenote}:
 
 - Label smoothing: $\alpha = 0.1$
 - L2 regularization: $\lambda = 1e\text{-}4$
@@ -283,7 +280,7 @@ The Cohen's Kappa score of 0.093 indicates performance above chance but demonstr
 
 <figure markdown="1">
 
-![](../assets/images/learnedSpec/fig1.png){width="100%" alt="Training Results plots"}
+![Training Results plots](../assets/images/learnedSpec/fig1.png){ width="100%" }
 
 </figure>
 
@@ -309,7 +306,7 @@ Analysis of fMRI activation patterns, as exemplified in Figure 2, reveals charac
 
 <figure markdown="1">
 
-![](../assets/images/learnedSpec/fig2.png){width="50%" alt="Example f MRI slice"}
+![Example f MRI slice](../assets/images/learnedSpec/fig2.png){ width="50%" }
 
 </figure>
 
@@ -328,92 +325,3 @@ The mean loss of 1.082 (±0.257) suggests stable model training despite the clas
 fMRI data from varaying datasets/test conditions is quite volatile to work with, and reliance on publically avaliable data sources without standerized test conditions certaily dosen't help. Nonethless the above guessing odds results suggests a correlation worth exploring, suggesting that integrating physiological state data into world model training provides essential insights into biological temporal information processing.
 
 Future work should expand beyond fMRI to incorporate the full spectrum of physiological state signals identified in our introduction (facial EMG, heart rate variability, electrodermal activity). This multi-modal physiological state approach, combined with advanced transformer architectures, could enable world models to develop temporal understanding that more closely mirrors human cognitive processes, particularly in causal reasoning and state transitions. 
-
-[^1]: https://arxiv.org/abs/1706.03762
-[^2]: https://openreview.net/pdf?id=BZ5a1r-kVsf
-[^3]: https://pmc.ncbi.nlm.nih.gov/articles/PMC6904682/
-[^4]: https://www.nber.org/system/files/working_papers/w29587/w29587.pdf
-[^5]: https://pmc.ncbi.nlm.nih.gov/articles/PMC9824521/
-[^6]: https://www.biorxiv.org/content/10.1101/2022.02.28.482337v2.full
-[^7]: https://www.pnas.org/doi/10.1073/pnas.1016823108
-[^8]: https://pmc.ncbi.nlm.nih.gov/articles/PMC10960227/
-[^9]: https://arxiv.org/abs/2302.10035 
-[^10]: https://pubmed.ncbi.nlm.nih.gov/16139527/
-[^11]: https://www.jstor.org/stable/2891421
-[^12]: https://www.nature.com/articles/35107080
-[^13]: https://arxiv.org/abs/1803.10122
-[^14]: https://arxiv.org/abs/2010.11929
-[^15]: https://www.nature.com/articles/nature06976
-[^16]: https://doi.org/10.1017/CBO9780511895029
-
-*[FDM]: Fused Deposition Modeling
-*[CNC]: Computerized Numerical Control
-*[MPCNC]: Mostly Printed Computerized Numerical Control - https://docs.v1engineering.com/mpcnc/intro/
-*[SSH]: Secure Shell
-*[GPIO]: General-Purpose Input/Output
-*[USB]: Universal Serial Bus
-*[ETA]: Estimated Time of Arrival
-*[ISO]: International Organization for Standardization
-*[UPDI]: Unified Program and Debug Interface
-*[AVR]: A Family of microcontrollers developed since 1996 by Atmel
-*[JTAG]: Joint Test Action Group
-*[IDE]: Integrated Development Environment
-*[Rx]: Receiving Signal
-*[Tx]: Transmitting Signal
-*[VCC]: Voltage Common Collector (+)
-*[GND]: Ground / Common Drain (-)
-*[IC]: Integrated Circuit
-*[LED]: Light-Emitting Diode
-*[Cap]: Capacitor
-*[SPST]: Single Pole Single Throw Switch
-*[SPDT]: Single Pole Double Throw Switch
-*[DPST]: Double Pole Single Throw Switch
-*[DPDT]: Double Pole Double Throw Switch
-*[EEPROM]: Electrically Erasable Programmable Read-Only Memory
-*[PCB]: Printed Circuit Board
-*[PWM]: Pulse Width Modulation
-*[SPI]: Serial Peripheral Interface
-*[I2C]: Inter-Integrated Circuit
-*[UART]: Universal Asynchronous Receiver/Transmitter
-*[ADC]: Analog-to-Digital Converter
-*[DAC]: Digital-to-Analog Converter
-*[MCU]: Microcontroller Unit
-*[FPGA]: Field-Programmable Gate Array
-*[SLA]: Stereolithography
-*[DLP]: Digital Light Processing 
-*[SLS]: Selective Laser Sintering
-*[PLA]: Polylactic Acid 
-*[ABS]: Acrylonitrile Butadiene Styrene 
-*[PETG]: Polyethylene Terephthalate Glycol 
-*[CAD]: Computer-Aided Design
-*[CAM]: Computer-Aided Manufacturing
-*[G-code]: A language for controlling CNC machines
-*[PID]: Proportional-Integral-Derivative (control loop feedback mechanism)
-*[MOSFET]: Metal-Oxide-Semiconductor Field-Effect Transistor
-*[BJT]: Bipolar Junction Transistor
-*[SMD]: Surface-Mount Device
-*[THT]: Through-Hole Technology
-*[DIP]: Dual In-line Package
-*[ESC]: Electronic Speed Controller
-*[BEC]: Battery Eliminator Circuit
-*[LiPo]: Lithium Polymer 
-*[NiMH]: Nickel-Metal Hydride 
-*[EMI]: Electromagnetic Interference
-*[ESD]: Electrostatic Discharge
-*[fMRI]: functional Magnetic Resonance Imaging
-*[BOLD]: Blood-Oxygen-Level-Dependent
-*[LLM]: Large Language Model
-*[ROC]: Receiver Operating Characteristic
-*[AUC]: Area Under the Curve
-*[CUDA]: Compute Unified Device Architecture
-*[GPU]: Graphics Processing Unit
-*[GELU]: Gaussian Error Linear Unit
-*[AdamW]: Adam with Weight Decay
-*[HRF]: Hemodynamic Response Function
-*[F1]: F1 Score - Harmonic mean of precision and recall
-*[TR]: Repetition Time
-*[T2]: Type 2 MRI weighting
-*[3T]: 3 Tesla (magnetic field strength)
-*[NURIPS]: Neural Information Processing Systems
-*[WANDB]: Weights & Biases
-*[VENV]: Virtual Environment

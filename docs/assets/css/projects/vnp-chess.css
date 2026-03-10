@@ -1,0 +1,205 @@
+/* Von Niemann Probe — Chess + Morse interactive widget */
+
+.vnp-chess-widget {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  align-items: stretch;
+}
+
+/* Board */
+.vnp-board-wrapper {
+  flex: 0 0 auto;
+  width: min(100%, 340px);
+}
+
+.vnp-board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 2px;
+  overflow: hidden;
+  user-select: none;
+}
+
+.vnp-square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.vnp-light { background: #e8dcc8; }
+.vnp-dark  { background: #6b8cae; }
+
+[data-md-color-scheme="slate"] .vnp-light { background: #b8c6d4; }
+[data-md-color-scheme="slate"] .vnp-dark  { background: #4a6a8a; }
+
+.vnp-square:hover {
+  filter: brightness(1.08);
+}
+
+.vnp-square.vnp-selected {
+  box-shadow: inset 0 0 0 2.5px var(--md-default-fg-color);
+}
+
+.vnp-piece {
+  font-size: min(4vw, 1.8rem);
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+}
+
+.vnp-white-piece { color: #fff; text-shadow: 0 0 2px rgba(0,0,0,0.4); }
+.vnp-black-piece { color: #1a1a1a; }
+
+[data-md-color-scheme="slate"] .vnp-white-piece { color: #f0f0f0; }
+[data-md-color-scheme="slate"] .vnp-black-piece { color: #111; }
+
+.vnp-file-label,
+.vnp-rank-label {
+  position: absolute;
+  font-size: 0.55rem;
+  font-weight: 600;
+  opacity: 0.5;
+  pointer-events: none;
+  line-height: 1;
+  font-family: var(--md-text-font-family, sans-serif);
+}
+
+.vnp-file-label {
+  bottom: 2px;
+  right: 3px;
+}
+
+.vnp-rank-label {
+  top: 2px;
+  left: 3px;
+}
+
+.vnp-light .vnp-file-label,
+.vnp-light .vnp-rank-label { color: #6b8cae; }
+.vnp-dark .vnp-file-label,
+.vnp-dark .vnp-rank-label { color: #e8dcc8; }
+
+[data-md-color-scheme="slate"] .vnp-light .vnp-file-label,
+[data-md-color-scheme="slate"] .vnp-light .vnp-rank-label { color: #4a6a8a; }
+[data-md-color-scheme="slate"] .vnp-dark .vnp-file-label,
+[data-md-color-scheme="slate"] .vnp-dark .vnp-rank-label { color: #b8c6d4; }
+
+/* Moves panel */
+.vnp-moves-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vnp-moves-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(var(--md-default-fg-color--rgb, 0,0,0), 0.12);
+}
+
+.vnp-moves-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+}
+
+.vnp-reset-btn {
+  background: none;
+  border: 1px solid rgba(var(--md-default-fg-color--rgb, 0,0,0), 0.2);
+  color: var(--md-default-fg-color);
+  font-size: 0.7rem;
+  padding: 0.2em 0.6em;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--md-text-font-family, sans-serif);
+  transition: border-color 0.15s, opacity 0.15s;
+  opacity: 0.6;
+}
+
+.vnp-reset-btn:hover {
+  opacity: 1;
+  border-color: var(--md-default-fg-color);
+}
+
+.vnp-moves-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 320px;
+  scrollbar-width: thin;
+}
+
+.vnp-moves-empty {
+  font-size: 0.8rem;
+  opacity: 0.4;
+  font-style: italic;
+  padding: 1rem 0;
+}
+
+.vnp-move-entry {
+  display: grid;
+  grid-template-columns: 2rem 3.2rem 1fr;
+  gap: 0.4rem;
+  padding: 0.3rem 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(var(--md-default-fg-color--rgb, 0,0,0), 0.05);
+  opacity: 0.55;
+  transition: opacity 0.2s;
+}
+
+.vnp-move-entry.vnp-move-latest {
+  opacity: 1;
+}
+
+.vnp-move-num {
+  font-weight: 600;
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.vnp-move-notation {
+  font-weight: 600;
+  font-family: var(--md-code-font-family, monospace);
+}
+
+.vnp-move-morse {
+  font-family: var(--md-code-font-family, monospace);
+  opacity: 0.7;
+  word-break: break-all;
+  letter-spacing: 0.04em;
+}
+
+.vnp-turn-indicator {
+  font-size: 0.72rem;
+  opacity: 0.45;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 720px) {
+  .vnp-chess-widget {
+    flex-direction: column;
+  }
+  .vnp-board-wrapper {
+    width: 100%;
+    max-width: 340px;
+  }
+  .vnp-moves-list {
+    max-height: 200px;
+  }
+}

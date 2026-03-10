@@ -37,11 +37,9 @@ The easiest way to eradicate temptation to doom-scroll is to follow the "out of 
 > - The calendar app has a blank space you fill with a meaningful real-life event — say a meeting with an old friend or a pub quiz.
 > - Your flashcard app helps you learn trivia that wins you first place in a pub quiz, impressing everyone, including a stranger, who despite your normal-sized thumbs, learns to love you for who you are.
 
-<figure markdown="1" style="opacity:85%;">
-
- ![](../assets/images/juggle/light.png#only-light){width="50%" alt="Healthy apps placed within thumb's reach on iPhone home screen in light theme"}
- ![](../assets/images/juggle/dark.png#only-dark){width="50%" alt="Healthy apps placed within thumb's reach on iPhone home screen in dark theme"}
-
+<figure style="opacity:85%;">
+<img src="../assets/images/juggle/light.png" alt="Healthy apps placed within thumb's reach on iPhone home screen in light theme" class="only-light" width="50%">
+<img src="../assets/images/juggle/dark.png" alt="Healthy apps placed within thumb's reach on iPhone home screen in dark theme" class="only-dark" width="50%">
 </figure>
 
 Sometimes just tempting yourself with a healthy option isn't sufficient, however. If you have a truly toxic, doom-scrolling relationship with an app, delete it! I frequently try to dream up potential future use cases for apps that I don't want to delete. You can fight this by simply realizing that you can always reinstall the app as needed (yet usually once it's gone, the urge to scroll disappears).
@@ -87,12 +85,10 @@ To do so open settings and navigate to `Accessibility` -> `Display & Text Size`,
 2. Toggle on `Color Filters`
 3. Select `Greyscale`
 
-<figure markdown="1">
-
- ![](../assets/images/juggle/color.png){width="30%" alt="iPhone screen showing normal color display" align="left"}
- ![](../assets/images/juggle/grey.png){width="30%" alt="iPhone screen showing greyscale color filter applied" align="left"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../assets/images/juggle/color.png" alt="iPhone screen showing normal color display" width="30%">
+<img src="../assets/images/juggle/grey.png" alt="iPhone screen showing greyscale color filter applied" width="30%">
+</div>
 
 <h4>Making a greyscale filter shortcut</h4>
 
@@ -109,12 +105,3 @@ First, open the app and tap the plus icon in the top right corner, then:
 
 After clicking done, you've set up your shortcut! You can now add it to your home screen for easy access, or even set it to run automatically each day. 
 
-[^1]: https://www.reddit.com/r/AndroidQuestions/comments/czwzwp/why_is_android_minimum_brightness_so_high/
-[^2]:https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5839336/
-[^3]:https://cemind.org/blog/screen-brightness-and-how-it-negatively-impacts-your-sleep/
-[^4]:https://www.csl.sri.com/users/jha/papers/cases15.pdf
-[^5]:https://practicalbetterments.com/create-a-shortcut-for-even-lower-phone-brightness\
-[^6]:https://practicalbetterments.com/place-healthy-apps-within-thumbs-reach/
-[^7]:https://www.calm.com/blog/screen-time-before-bed
-[^8]:https://www.health.harvard.edu/staying-healthy/blue-light-has-a-dark-side
-[^9]:https://www.popularmechanics.com/technology/gadgets/how-to/a9340/how-to-fix-your-phones-brightness-settings-15839497/

@@ -12,7 +12,9 @@ hide:
 template: comments.html
 ---
 
-![](../assets/images/pinkhat/hat.png){width="30%" alt="A pink hat"}
+<figure>
+<img src="../assets/images/pinkhat/hat.png" alt="A pink hat" width="30%">
+</figure>
 
 A pink hat is a welcoming thing.
 

@@ -3,7 +3,6 @@ title: Quote Receipts
 description: Did I really say that? Why yes, you did.
 keywords: quote receipt printer, thermal printer project, raspberry pi, flask web server, DIY printer, quote collection, thermal receipt, python project, home automation, apartment project, raspberry pi 5, quote printer, receipt printer hack, thermal printing, local web server, skeuomorphic design
 thumbnail: /assets/images/quotes/thumb.png
-readtime: "19–24 minutes"
 date: 2025-09-01
 hide:
   - navigation
@@ -55,7 +54,7 @@ template: comments.html
   ">-Teddy</div>
 </div>
 
-I have some really wonderful friends. They, like I, say many silly things. 
+{.newthought}I have some really wonderful friends.{/.newthought} They, like I, say many silly things. 
 
 I wanted some means of capturing all of these quotes for later reference. Or to keep as nice souvenirs of thought.
 
@@ -65,7 +64,9 @@ And boom, I now knew how I would be spending my Saturday morning.
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/F5_00bj8dHo" title="Quote Receipt" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -250,10 +251,13 @@ As a final step to prep for step 2: Printer Hacking, we'll set up this app to au
 
   After reboot, http://receipt.local:5000 should be live automatically!
 
+{.marginnote}Here's the first print with the Quote Printer{/.marginnote}
+
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/sNBxLepgpb0" title="First Quote Receipt" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-<figcaption>Here's the first print with the Quote Printer</figcaption>
+</div></div>
 
 </center>
 
@@ -317,7 +321,7 @@ What fun is a whimsical apartment project if it doesn't look inconspicuous! To s
 
 <figure markdown="1">
 
-![](../assets/images/quotes/noBackPrinter.JPG){width="80%"}
+![](../assets/images/quotes/noBackPrinter.JPG){ width="80%" }
 
 </figure>
 
@@ -325,42 +329,38 @@ Unsurprisingly the internals of this receipt printer hardly fill the printer cav
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b602811b204791807ac66bf?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 </center>
 
 I printed this new base on my Prusa I3 MK3S+, cleaned it up, and then prepared the thermal printer for installation. This primarly involved unmounting and detaching all plugs from the mainboard to prepare to mount it to the new base. Additionally, I used some wire snippers to remove the old mainboard mounts (as pictured below)
 
-<figure markdown="1">
-
-![](../assets/images/quotes/finishedprint.JPG){width="48%" align="left"}
-![](../assets/images/quotes/cutpegs.JPG){width="48%" align="right"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/quotes/finishedprint.JPG" alt="">
+<img src="../../assets/images/quotes/cutpegs.JPG" alt="">
+</div>
 
 Then I started mounting components to the 3D printed baseplate, first the raspberry pi, then the buck converter.
 
-<figure markdown="1">
-
-![](../assets/images/quotes/mountedPi.JPG){width="48%" align="left"}
-![](../assets/images/quotes/mountedBuck.JPG){width="48%" align="right"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/quotes/mountedPi.JPG" alt="">
+<img src="../../assets/images/quotes/mountedBuck.JPG" alt="">
+</div>
 
 Before continuing with the mainboard mounting, I wired the - IN terminal of the buck converter to the 24V in connector on the printer mainboard and the + IN to the printer power switch(note polarity below), and then used the potentiometer on the buck converter to set the output voltage to 5V.
 
-<figure markdown="1">
-
-![](../assets/images/quotes/solderedBuck.JPG){width="48%" align="left"}
-![](../assets/images/quotes/buckTuning.JPG){width="48%" align="right"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/quotes/solderedBuck.JPG" alt="">
+<img src="../../assets/images/quotes/buckTuning.JPG" alt="">
+</div>
 
 I wired the +/- 5V output lines from the buck converter to the Raspberry Pi's GPIO, connected the printer mainboard to the Raspberry Pi via USB, and plugged in the printer mainboard's power (don't actually attach this to the wall yet, get everything mounted and closed up first) and then mounted the mainboard to the 3D printed baseplate (you'll need to plug in all the wires before mounting, its a tight fit).
 
 <figure markdown="1">
 
-![](../assets/images/quotes/mountedMainboard.JPG){width="80%"}
+![](../assets/images/quotes/mountedMainboard.JPG){ width="80%" }
 
 </figure>
 
@@ -368,7 +368,7 @@ I then reattached the printer mainboard wires,
 
 <figure markdown="1">
 
-![](../assets/images/quotes/wiredSystem.JPG){width="40%"}
+![](../assets/images/quotes/wiredSystem.JPG){ width="40%" }
 
 </figure>
 
@@ -376,7 +376,9 @@ I then reattached the printer mainboard wires,
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/b8bMIGniOwY" title="First Quote Receipt Printer Test" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -384,14 +386,19 @@ I then reattached the printer mainboard wires,
 
 Building a quote receipt printer of your own is easy enough. The full project repo is at [github.com/Twarner491/quotes](https://github.com/Twarner491/quotes). Here's all you need:
 
-| Qty |  Description    |  Price  |           Link           | Notes  |
-|-----|-----------------|---------|--------------------------|--------|
-| 1 | miemieyo Thermal Receipt Printer 80mm | $65.99 | [Amazon](https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share) |  |
-| 1 | MPRT 5 Rolls Thermal Paper 3-1/8" x 230' | $15.99 | [Amazon](https://www.amazon.com/dp/B0D14DYMHQ?ref=ppx_pop_mob_ap_share) |  |
-| 1 | LM2596 Buck Converter | $7.99 | [Amazon](https://www.amazon.com/dp/B0DBVYP91F?ref=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&ref_=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&social_share=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&titleSource=true&th=1) |  |
-| 1 | Raspberry Pi 5 | $79.95 | [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-5/) | Any Pi model should work - I happened to have a RPI5 8GB lying around  |
-|  | Some spare wire |  |  |  |
-| ∞ | Friends that say silly things | Free | [Find My Friends](https://apps.apple.com/us/app/find-my-friends/id466122094) |  |
+<div class="bom-table" markdown>
+
+| Qty | Description | Price | Link | Notes |
+|-----|-------------|-------|------|-------|
+| 1 | Thermal Receipt Printer 80mm | $65.99 | [Link](https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share) | miemieyo |
+| 1 | Thermal Paper 3-1/8" x 230' | $15.99 | [Link](https://www.amazon.com/dp/B0D14DYMHQ?ref=ppx_pop_mob_ap_share) | MPRT, 5 rolls |
+| 1 | LM2596 Buck Converter | $7.99 | [Link](https://www.amazon.com/dp/B0DBVYP91F) | |
+| 1 | Raspberry Pi 5 | $79.95 | [Link](https://www.raspberrypi.com/products/raspberry-pi-5/) | Any Pi model works |
+| - | Spare Wire | - | - | |
+| ∞ | Friends that say silly things | Free | [Link](https://apps.apple.com/us/app/find-my-friends/id466122094) | |
+| | **Total** | **~$169.92** | | |
+
+</div>
 
 ### Quotebook
 
@@ -454,7 +461,9 @@ Also, thermal printers are really wonderful pieces of technology. I was astonish
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/d4OV7coOji8" title="Bee Movie" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -462,7 +471,7 @@ I hung the results like tinsel in my living room.
 
 <figure markdown="1">
 
-![](../assets/images/quotes/bms.JPG){width="100%"}
+![](../assets/images/quotes/bms.JPG){ width="100%" }
 
 </figure>
 

@@ -11,12 +11,115 @@ Transforms shorthand syntax into Tufte HTML elements:
   {.fullwidth} content {/.fullwidth}
 """
 
+import math
 import os
 import re
 
 
+def _calculate_readtime(markdown):
+    """Calculate reading time range from markdown word count.
+
+    Strips YAML frontmatter, HTML tags, and shorthand syntax before counting.
+    Uses 150-190 WPM range (comfortable reading speed, matches Firefox Reader).
+    Returns a string like "5–7 mins" or "" if too short.
+    """
+    text = markdown
+    # Strip YAML frontmatter
+    text = re.sub(r'^---\s*\n.*?\n---\s*\n', '', text, count=1, flags=re.DOTALL)
+    # Strip HTML tags
+    text = re.sub(r'<[^>]+>', ' ', text)
+    # Strip shorthand syntax markers
+    text = re.sub(r'\{\.?\/?\.?\w+\}', ' ', text)
+    # Strip image/link markdown syntax
+    text = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', text)
+    text = re.sub(r'\[[^\]]*\]\([^)]*\)', lambda m: m.group(0).split(']')[0][1:], text)
+    # Strip code fences
+    text = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
+    # Strip inline code
+    text = re.sub(r'`[^`]+`', '', text)
+
+    words = len(text.split())
+    if words < 50:
+        return ''
+
+    slow = max(1, math.ceil(words / 190))
+    fast = max(1, math.ceil(words / 150))
+
+    if slow == fast:
+        return f"{slow} min" if slow == 1 else f"{slow} mins"
+    return f"{slow}\u2013{fast} mins"
+
+
 _sidenote_counter = 0
 _carousel_counter = 0
+
+# Regex to find bare URLs not already inside <a> tags or markdown links
+_URL_RE = re.compile(
+    r'(?<!\()'           # not preceded by ( (markdown link target)
+    r'(?<!href=")'       # not preceded by href="
+    r'(?<!")'            # not preceded by "
+    r'(https?://[^\s<>)\]]+)',
+)
+
+
+def _md_to_html_inline(text):
+    """Convert markdown inline formatting to HTML for use inside HTML spans.
+
+    Handles: [text](url) links, **bold**, *italic*.
+    """
+    # Convert markdown links to HTML <a> tags
+    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
+    # Convert bold **text** to <strong>
+    text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+    # Convert italic *text* to <em> (but not LaTeX \( ... \) content)
+    # Protect LaTeX first
+    latex_blocks = []
+    lcount = [0]
+
+    def protect_latex(m):
+        lcount[0] += 1
+        token = f'\x00LATEX{lcount[0]}\x00'
+        latex_blocks.append((token, m.group(0)))
+        return token
+
+    text = re.sub(r'\\\(.*?\\\)', protect_latex, text, flags=re.DOTALL)
+    text = re.sub(r'\\\[.*?\\\]', protect_latex, text, flags=re.DOTALL)
+    text = re.sub(r'\$\$.*?\$\$', protect_latex, text, flags=re.DOTALL)
+    text = re.sub(r'\$[^$]+\$', protect_latex, text)
+
+    text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+
+    for token, original in latex_blocks:
+        text = text.replace(token, original)
+
+    return text
+
+
+def _linkify_urls(text):
+    """Convert bare URLs in text to clickable <a> tags.
+
+    Skips URLs already inside markdown link syntax [text](url) or HTML <a> tags.
+    """
+    protected = []
+    counter = [0]
+
+    def protect(match):
+        counter[0] += 1
+        token = f'\x00PROTECTED{counter[0]}\x00'
+        protected.append((token, match.group(0)))
+        return token
+
+    # Protect HTML <a> tags
+    result = re.sub(r'<a\s[^>]*>.*?</a>', protect, text, flags=re.DOTALL)
+
+    # Now linkify remaining bare URLs
+    result = _URL_RE.sub(r'<a href="\1">\1</a>', result)
+
+    # Restore protected content
+    for token, original in protected:
+        result = result.replace(token, original)
+
+    return result
 
 
 def _reset_counter():
@@ -43,7 +146,7 @@ def _process_newthought(markdown):
 
 def _process_sidenotes(markdown):
     def replace_sidenote(match):
-        text = match.group(1).strip()
+        text = _linkify_urls(_md_to_html_inline(match.group(1).strip()))
         sn_id = _next_sidenote_id()
         return (
             f'<label for="{sn_id}" class="margin-toggle sidenote-number"></label>'
@@ -56,7 +159,7 @@ def _process_sidenotes(markdown):
 
 def _process_marginnotes(markdown):
     def replace_marginnote(match):
-        text = match.group(1).strip()
+        text = _linkify_urls(_md_to_html_inline(match.group(1).strip()))
         mn_id = _next_marginnote_id()
         return (
             f'<input type="checkbox" id="{mn_id}" class="margin-toggle"/>'
@@ -281,6 +384,11 @@ def on_page_markdown(markdown, page, config, files, **kwargs):
     if not (src_path.startswith('projects/') or src_path.startswith('writings/')):
         return markdown
 
+    # Auto-calculate readtime if not manually set
+    readtime = _calculate_readtime(markdown)
+    if readtime:
+        page.meta['readtime'] = readtime
+
     _reset_counter()
     global _carousel_counter
     _carousel_counter = 0
@@ -298,54 +406,33 @@ def on_page_markdown(markdown, page, config, files, **kwargs):
 
 _bom_counter = 0
 
-# JS for dynamic figure grid height matching.
-# Sets flex-grow proportional to each image's aspect ratio so images in a row
-# share the same height with dynamic widths. Skips 2x2 grids (they wrap).
-_FIGURE_GRID_JS = """
+# JS to open external links in new tabs.
+_EXTERNAL_LINKS_JS = """
 <script>
 (function() {
-  function initGrids() {
-    document.querySelectorAll('.figure-grid').forEach(function(grid) {
-      if (grid.classList.contains('grid-2x2')) return;
-      var imgs = grid.querySelectorAll('img');
-      var loaded = 0;
-      var total = imgs.length;
-      if (!total) return;
-      function applyFlex() {
-        imgs.forEach(function(img) {
-          if (img.naturalWidth && img.naturalHeight) {
-            img.style.flexGrow = (img.naturalWidth / img.naturalHeight).toString();
-            img.style.flexShrink = '1';
-            img.style.flexBasis = '0px';
-            img.style.height = 'auto';
-            img.style.width = 'auto';
-            img.style.minWidth = '0';
-          }
-        });
-      }
-      imgs.forEach(function(img) {
-        function check() {
-          loaded++;
-          if (loaded >= total) applyFlex();
-        }
-        if (img.complete && img.naturalWidth) check();
-        else img.addEventListener('load', check);
-      });
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGrids);
-  } else {
-    initGrids();
-  }
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
 })();
 </script>
 """
+
+# JS for dynamic figure grid height matching.
+# Sets flex-grow proportional to each image's aspect ratio so images in a row
+# share the same height with dynamic widths. Skips 2x2 grids (they wrap).
+_FIGURE_GRID_JS = ""
+# Grid JS is now in docs/assets/js/grids.js (loaded via extra_javascript)
+# so it persists across Material instant navigation (SPA page swaps).
 
 # CSS injected on pages with margin elements to hide TOC content
 # but preserve the sidebar space for proper content width
 _HIDE_TOC_CSS = """
 <style>
+.md-sidebar--secondary { pointer-events: none; }
 .md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
 .md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
 </style>
@@ -389,12 +476,10 @@ def on_page_content(html, page, config, files, **kwargs):
     if 'figure-grid' in html:
         html += _FIGURE_GRID_JS
 
-    # If page has margin elements, hide the TOC content (keep sidebar for width)
-    has_margin = ('class="sidenote"' in html or
-                  'class="marginnote"' in html or
-                  'class="marginfigure"' in html)
-    if has_margin:
-        html = _HIDE_TOC_CSS + html
+    html += _EXTERNAL_LINKS_JS
+
+    # Hide TOC content on all project/writing pages (keep sidebar for width)
+    html = _HIDE_TOC_CSS + html
 
     # Convert margin notes before fullwidth figures to non-floating captions
     if 'class="fullwidth"' in html:

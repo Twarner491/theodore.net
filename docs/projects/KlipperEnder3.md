@@ -3,7 +3,6 @@ title: Klipper Enabled Ender 3
 description: As the name suggests, an Ender 3 with Klipper firmware.
 keywords: Klipper, Ender 3, 3D Printer, Firmware, FluiddPi, Raspberry Pi, DIY, Printer modifications, Direct drive, Auto bed leveling, Custom firmware, 3D printing
 thumbnail: /assets/images/KlipperEnder3/hero.png
-readtime: "10-12 minutes"
 date: 2021-05-01
 date_modified: 2021-09-01
 hide:
@@ -12,7 +11,7 @@ hide:
 template: comments.html
 ---
 
-Due to uncertainty surrounding lab access during the Covid-19 pandemic, I received an Ender 3 3D-printer at the start of my cycle in [Fab Academy](https://fabacademy.org/). During my [second week](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/week02/) in the course, I built and began to mod this machine as a little side project to the course work. However as the cycle progressed, I quickly ran out of time to keep working on this machine's mods and moved the machine to my closet, where it sat up until the [Klipper](https://www.klipper3d.org/) firmware piqued my interest. After modding the printer during Fab Academy[^1], I was running the machine on Marlin linked to Octoprint[^2], a setup I use on my other machines. This setup worked great with my machine mods, allowing me to print over a network through Octoprint as I would on any of my other Octoprint enabled machines. In this configuration, a Raspberry Pi running Octorpint hosts a local server that *.gcode* flies can be uploaded to and ran from. The Pi sends this uploaded *.gcode* to the machine's mainboard, where the code is processed, and movements/operations are determined.
+{.newthought}Due to uncertainty{/.newthought} surrounding lab access during the Covid-19 pandemic, I received an Ender 3 3D-printer at the start of my cycle in [Fab Academy](https://fabacademy.org/). During my [second week](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/week02/) in the course, I built and began to mod this machine as a little side project to the course work. However as the cycle progressed, I quickly ran out of time to keep working on this machine's mods and moved the machine to my closet, where it sat up until the [Klipper](https://www.klipper3d.org/) firmware piqued my interest. After modding the printer during Fab Academy{.sidenote}[Fab Academy Week 2](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/week02/){/.sidenote}, I was running the machine on Marlin linked to Octoprint{.sidenote}[Octoprint Project Page](https://theodore.net/projects/Octoprint/){/.sidenote}, a setup I use on my other machines. This setup worked great with my machine mods, allowing me to print over a network through Octoprint as I would on any of my other Octoprint enabled machines. In this configuration, a Raspberry Pi running Octorpint hosts a local server that *.gcode* flies can be uploaded to and ran from. The Pi sends this uploaded *.gcode* to the machine's mainboard, where the code is processed, and movements/operations are determined.
 
 !!! abstract "Klipper Opperation Principal"
 
@@ -26,25 +25,22 @@ Due to uncertainty surrounding lab access during the Covid-19 pandemic, I receiv
 
 <figure markdown="1">
 
-![](../assets/images/KlipperEnder3/directdrive.jpg){width="70%" alt="Direct drive system with custom nameplate on Ender 3"}
+![Direct drive system with custom nameplate on Ender 3](../assets/images/KlipperEnder3/directdrive.jpg){ width="70%" }
 
 </figure>
 
 Finally, I moved all of the electronics of the machine to the rear of the machine using this Thingiverse [design](https://www.thingiverse.com/thing:3688967). This mod gave the space to add a raspberry pi and a means of power for it in addition to the mainboard, a perfect case for a Klipper-enabled machine.
 
-<figure markdown="1">
-
-![](../assets/images/KlipperEnder3/electronicsenclouser.jpg){width="80%" alt="Electronics enclosure at the rear of the Ender 3"}
-
-![](../assets/images/KlipperEnder3/installedelebox.jpg){width="80%" alt="Installed electronics box with Raspberry Pi and mainboard"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/KlipperEnder3/electronicsenclouser.jpg" alt="Electronics enclosure at the rear of the Ender 3">
+<img src="../../assets/images/KlipperEnder3/installedelebox.jpg" alt="Installed electronics box with Raspberry Pi and mainboard">
+</div>
 
 I used this Thingiverse [design](https://www.thingiverse.com/thing:2886101) to mount a raspberry pi camera to my printer's x-axis as shown in one of the pictures below. All of these modifications were done with parts printed on my [Prusa I3 Mk3S+](https://shop.prusa3d.com/en/3d-printers/181-original-prusa-i3-mk3s-3d-printer.html), and electronics I had laying around, making these printer modifications only take around three days to complete, including the time it took to print the parts.
 
 <figure markdown="1">
 
-![](../assets/images/KlipperEnder3/ender3cam.jpg){width="80%" alt="Raspberry Pi camera mounted on Ender 3's x-axis"}
+![Raspberry Pi camera mounted on Ender 3's x-axis](../assets/images/KlipperEnder3/ender3cam.jpg){ width="80%" }
 
 </figure>
 
@@ -56,7 +52,7 @@ As mentioned in the introduction paragraph of this page, I settled on using [Flu
 
 <figure markdown="1">
 
-[Download the Latest FluiddPi Image :fontawesome-solid-download:](https://github.com/cadriel/FluiddPI/releases/tag/v1.16.2){ .md-button .md-button--primary }
+[Download the Latest FluiddPi Image :fontawesome-solid-download:](https://github.com/cadriel/FluiddPI/releases/tag/v1.16.2){ .md-button .md-button--outlined }
 
 </figure>
 
@@ -64,13 +60,13 @@ Beginning the installation of Klipper, the first step is to download and flash t
 
 Next, some basic Pi config. Make sure you are on the same WiFi network you set up your Pi on, and then SSH into your booted Pi at the IP *fluiddpi.local* with the Pi's default credentials (Username - *pi* / Password - *raspberry*). I use [Putty](https://www.putty.org/) as my SSH client as again, it's pretty straightforward to use. Once connected to your Pi, run the command ...
 
-``` py linenums="1"
+``` py 
 sudo raspi-config
 ```
 
 to open the configuration GUI. Here you can change your Pi's credentials (highly recommended), set up your local timezone (to allow for accurate machine ETAs), and change your machine's hostname (thus changing the URL from the default *fluiddpi.local* to *YOURHOSTNAME.local*). After all, changes, reboot your Pi and then confirm all software is up to date with the lines
 
-``` py linenums="1"
+``` py 
 sudo apt-get update
 sudo apt-get upgrade
 ```
@@ -79,10 +75,11 @@ sudo apt-get upgrade
 
     You have now successfully set up [FluiddPi](https://github.com/cadriel/FluiddPI) on your Raspberry Pi, and can now connect to its web server with the URL *http://fluiddpi.local* ( or if you changed your hostname, with the URL *http://YOURHOSTNAME.local*).
 
+{.marginnote}The FluiddPi Web Server Interface{/.marginnote}
+
 <figure markdown="1">
 
-![](../assets/images/KlipperEnder3/fluiddinterface.png){width="95%" alt="FluiddPi web server interface for Klipper"}
-  <figcaption>The FluiddPi Web Server Interface</figcaption>
+![FluiddPi web server interface for Klipper](../assets/images/KlipperEnder3/fluiddinterface.png){ width="95%" }
 
 </figure>
 
@@ -91,20 +88,20 @@ Upon connection, the webserver will throw an error with a lack of a *printer.cfg
 
 Next up, building Klipper to for machines mainboard. SSH back into your Raspberry Pi (making sure to change your IP to match your altered hostname if you changed it) and run the commands ...
 
-``` py linenums="1"
+``` py 
 cd ~/klipper/
 make menuconfig
 ```
 
 to open the mainboard configuration GUI. Work through this interface with your mainboards information before running the command ...
 
-``` py linenums="1"
+``` py 
 make
 ```
 
 to build your set configurations. Now, connect your Pi and machine mainboard via USB and determine the connected serial port with the line
 
-``` py linenums="1"
+``` py 
 ls /dev/serial/by-id/*
 ```
 
@@ -112,7 +109,7 @@ the report this line will yield provides the serial port that connects your main
 
 Now, to begin the flashing, run the lines...
 
-``` py linenums="1"
+``` py 
 sudo service klipper stop
 make flash FLASH_DEVICE=YOUR-SERIAL-PORT-INFORMATION-HERE
 sudo service klipper start
@@ -128,10 +125,11 @@ making sure to paste in the reported serial port where it says *YOUR-SERIAL-PORT
 
 As mentioned prior, unlike the Marlin firmware, Klipper is not compiled for a specific machine. Instead, the firmware looks to a machine configuration file - *printer.cfg*. This file can be altered without the reflashing of the firmware, just a simple reboot, thus making machine tinkering and hardware swapping significantly simpler. This *printer.cfg* file can be altered in the [FluiddPi](https://github.com/cadriel/FluiddPI) web server interface, simplifying the configuration process even more. 
 
+{.marginnote}FluiddPi's Configuration Menu in Web Server Interface{/.marginnote}
+
 <figure markdown="1">
 
-![](../assets/images/KlipperEnder3/fluiddconfig.png){width="95%" alt="FluiddPi configuration menu for printer.cfg file"}
-  <figcaption>FluiddPi's Configuration Menu in Web Server Interface</figcaption>
+![FluiddPi configuration menu for printer.cfg file](../assets/images/KlipperEnder3/fluiddconfig.png){ width="95%" }
 
 </figure>
 
@@ -145,7 +143,7 @@ As shown above, your *printer.cfg* file can be accessed in FluiddPi's configurat
 
 <div style="height:660px; overflow:scroll;">
 
-  ```yaml linenums="1" title="printer.cfg"
+  ```yaml  title="printer.cfg"
   # See docs/Config_Reference.md for a description of parameters.
 
   [virtual_sdcard]
@@ -488,61 +486,3 @@ Check out my Klipper Enabled Ender 3 machine profile page, linked below, for inf
 [Klipper Enabled Ender 3 Profile](https://github.com/Twarner491/project-files/blob/main/PrusaSlicer%20Profiles/Klipper-Ender3-PrusaSlicer-Config.ini){ .md-button .md-button--primary }
 
 </figure>
-
-[^1]: http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/week02/
-[^2]: https://theodore.net/projects/Octoprint/
-
-*[FDM]: Fused Deposition Modeling
-*[CNC]: Computerized Numerical Control
-*[MPCNC]: Mostly Printed Computerized Numerical Control - https://docs.v1engineering.com/mpcnc/intro/
-*[SSH]: Secure Shell
-*[GPIO]: General-Purpose Input/Output
-*[USB]: Universal Serial Bus
-*[ETA]: Estimated Time of Arrival
-*[ISO]: International Organization for Standardization
-*[UPDI]: Unified Program and Debug Interface
-*[AVR]: A Family of microcontrollers developed since 1996 by Atmel
-*[JTAG]: Joint Test Action Group
-*[IDE]: Integrated Development Environment
-*[Rx]: Receiving Signal
-*[Tx]: Transmitting Signal
-*[VCC]: Voltage Common Collector (+)
-*[GND]: Ground / Common Drain (-)
-*[IC]: Integrated Circuit
-*[LED]: Light-Emitting Diode
-*[Cap]: Capacitor
-*[SPST]: Single Pole Single Throw Switch
-*[SPDT]: Single Pole Double Throw Switch
-*[DPST]: Double Pole Single Throw Switch
-*[DPDT]: Double Pole Double Throw Switch
-*[EEPROM]: Electrically Erasable Programmable Read-Only Memory
-*[PCB]: Printed Circuit Board
-*[PWM]: Pulse Width Modulation
-*[SPI]: Serial Peripheral Interface
-*[I2C]: Inter-Integrated Circuit
-*[UART]: Universal Asynchronous Receiver/Transmitter
-*[ADC]: Analog-to-Digital Converter
-*[DAC]: Digital-to-Analog Converter
-*[MCU]: Microcontroller Unit
-*[FPGA]: Field-Programmable Gate Array
-*[SLA]: Stereolithography
-*[DLP]: Digital Light Processing 
-*[SLS]: Selective Laser Sintering
-*[PLA]: Polylactic Acid 
-*[ABS]: Acrylonitrile Butadiene Styrene 
-*[PETG]: Polyethylene Terephthalate Glycol 
-*[CAD]: Computer-Aided Design
-*[CAM]: Computer-Aided Manufacturing
-*[G-code]: A language for controlling CNC machines
-*[PID]: Proportional-Integral-Derivative (control loop feedback mechanism)
-*[MOSFET]: Metal-Oxide-Semiconductor Field-Effect Transistor
-*[BJT]: Bipolar Junction Transistor
-*[SMD]: Surface-Mount Device
-*[THT]: Through-Hole Technology
-*[DIP]: Dual In-line Package
-*[ESC]: Electronic Speed Controller
-*[BEC]: Battery Eliminator Circuit
-*[LiPo]: Lithium Polymer 
-*[NiMH]: Nickel-Metal Hydride 
-*[EMI]: Electromagnetic Interference
-*[ESD]: Electrostatic Discharge

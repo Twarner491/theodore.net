@@ -9,6 +9,7 @@ Tokens:
   <!-- WRITINGS_FULL_LIST --> - Full writings list for writings.md
 """
 
+import math
 import os
 import re
 import json
@@ -21,6 +22,26 @@ from pathlib import Path
 _projects_cache = None
 _writings_cache = None
 _config_cache = None
+
+
+def _calculate_readtime(markdown):
+    """Calculate reading time range from markdown word count (150-190 WPM)."""
+    text = markdown
+    text = re.sub(r'^---\s*\n.*?\n---\s*\n', '', text, count=1, flags=re.DOTALL)
+    text = re.sub(r'<[^>]+>', ' ', text)
+    text = re.sub(r'\{\.?\/?\.?\w+\}', ' ', text)
+    text = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', text)
+    text = re.sub(r'\[[^\]]*\]\([^)]*\)', lambda m: m.group(0).split(']')[0][1:], text)
+    text = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
+    text = re.sub(r'`[^`]+`', '', text)
+    words = len(text.split())
+    if words < 50:
+        return ''
+    slow = max(1, math.ceil(words / 190))
+    fast = max(1, math.ceil(words / 150))
+    if slow == fast:
+        return f"{slow} min" if slow == 1 else f"{slow} mins"
+    return f"{slow}\u2013{fast} mins"
 
 
 def _get_config(docs_dir):
@@ -135,8 +156,8 @@ def _scan_folder(docs_dir, folder_name):
                 elif isinstance(date_val, str):
                     item_date = _parse_date(date_val + "T00:00:00Z")
             
-            # Get readtime (for writings)
-            readtime = frontmatter.get('readtime', '')
+            # Calculate readtime from content word count
+            readtime = _calculate_readtime(content)
             
             # Build URL from file path
             file_stem = md_file.stem

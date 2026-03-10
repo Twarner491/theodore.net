@@ -3,7 +3,6 @@ title: CNC Milling Workflows
 description: A relatively comprehensive guide for CNC milling.
 keywords: CNC milling, CAM, Feeds and speeds, ShopBot, Bantam Tools, Fusion 360, Vectric Aspire, Machining, Subtractive manufacturing, Tool paths, CNC programming
 thumbnail: /assets/images/MillingWorkflow/thumb.jpg
-readtime: "12-15 minutes"
 date: 2022-12-01
 date_modified: 2023-02-01
 hide:
@@ -17,14 +16,12 @@ template: comments.html
 
 <link rel="stylesheet" href="../../assets/css/projects/milling.css">
 
-Subtractive manufacturing is a process I've always found mesmerizing. Although additive processes such as 3D printing allow for the creation of something from seemingly nothing, I believe it's even cooler to watch the morphing of existing stock into a different object. Despite this interest, I feel as though I've barely scratched the surface of CNC - primarily focusing on PCB milling in my subtractive manufacturing projects. I made a first attempt to dive into more subtractive manufacturing work a couple of years ago now when I built [V1 Engineering's](https://www.v1engineering.com/) original [MPCNC](https://docs.v1engineering.com/mpcnc/burly/).
+{.newthought}Subtractive manufacturing{/.newthought} is a process I've always found mesmerizing. Although additive processes such as 3D printing allow for the creation of something from seemingly nothing, I believe it's even cooler to watch the morphing of existing stock into a different object. Despite this interest, I feel as though I've barely scratched the surface of CNC - primarily focusing on PCB milling in my subtractive manufacturing projects. I made a first attempt to dive into more subtractive manufacturing work a couple of years ago now when I built [V1 Engineering's](https://www.v1engineering.com/) original [MPCNC](https://docs.v1engineering.com/mpcnc/burly/).
 
-<figure markdown="1">
-
-![](../assets/images/MillingWorkflow/MPCNC1.jpg){width="48%" align="left"}
-![](../assets/images/MillingWorkflow/MPCNC2.jpg){width="48%" align="left"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/MillingWorkflow/MPCNC1.jpg" alt="">
+<img src="../../assets/images/MillingWorkflow/MPCNC2.jpg" alt="">
+</div>
 
 I absolutely loved building this machine and recommend it to all interested in understanding the workings of CNC, yet I don't mill on mine all that often, I find more use in using the machine as a GCode dev platform for some of my other projects. 
 
@@ -875,166 +872,121 @@ In hopes of providing a slightly better "conclusion" to this piece, I've appende
 
 ### Gale Crater Mill
 
+{.marginnote}Scanning the profile of my cedar stock{/.marginnote}
+
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe width="98%" height="550" src="https://www.youtube.com/embed/coUpBlCA4uU" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  <figcaption>Scanning the profile of my cedar stock</figcaption>
+</div></div>
 </center>
 
+{.marginnote}and processing this scan on Inkscape{/.marginnote}
+
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe width="98%" height="550" src="https://www.youtube.com/embed/yV5A9La4UWM" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  <figcaption>and processing this scan on Inkscape</figcaption>
+</div></div>
 </center>
 
+{.marginnote}Gale Crater model on Fusion 360{/.marginnote}
+
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a4a5951829956659aa?mode=embed" width="98%" height="550" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
-  <figcaption>Gale Crater model on Fusion 360</figcaption>
+</div></div>
 </center>
+
+{.marginnote}Milling on the Shopbot Desktop MAX{/.marginnote}
 
 <center>
  <div style="width: 98%; height: 550; margin: 10px;">
+<div class="embed-frame"><div class="embed-inner">
   <iframe width="49%" height="550" align="left" src="https://www.youtube.com/embed/KlI0BbFsN2A" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe><iframe width="49%" height="550" align="right" src="https://www.youtube.com/embed/8p87vys_IMQ" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
  </div>
-   <figcaption>Milling on the Shopbot Desktop MAX</figcaption>
 </center>
 
-<figure markdown="1">
+{.marginnote}... and the results{/.marginnote}
 
-![](../assets/images/MillingWorkflow/galeraw.jpg){width="98%"}
-   <figcaption>... and the results</figcaption>
-
-</figure>
+{.marginnote}Final Gale Crater Mill after finishing{/.marginnote}
 
 <figure markdown="1">
 
-![](../assets/images/MillingWorkflow/galeglory1.jpg){width="48%" align="left"}
-![](../assets/images/MillingWorkflow/galeglory2.jpg){width="48%" align="right"}
-   <figcaption>Final Gale Crater Mill after finishing</figcaption>
+![](../assets/images/MillingWorkflow/galeraw.jpg){ width="98%" }
 
 </figure>
+
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/MillingWorkflow/galeglory1.jpg" alt="">
+<img src="../../assets/images/MillingWorkflow/galeglory2.jpg" alt="">
+</div>
 
 ### Topography Paper Weight
 
+{.marginnote}Using <a href="https://jthatch.com/Terrain2STL/">Terrain2STL</a> to generate the topography{/.marginnote}
+
 <figure markdown="1">
 
-![](../assets/images/MillingWorkflow/Topographyselection.jpg){width="100%"}
-  <figcaption>Using <a href="https://jthatch.com/Terrain2STL/">Terrain2STL</a> to generate the topography</figcaption>
+![](../assets/images/MillingWorkflow/Topographyselection.jpg){ width="100%" }
 
 </figure>
+
+{.marginnote}Milling on the Bantam Tools Desktop CNC Milling Machine{/.marginnote}
 
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe width="98%" height="550" align="left" src="https://www.youtube.com/embed/U-eiMsjUyIY" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-   <figcaption>Milling on the Bantam Tools Desktop CNC Milling Machine</figcaption>
+</div></div>
 </center>
 
-<figure markdown="1">
+{.marginnote}Some more milling media{/.marginnote}
 
-![](../assets/images/MillingWorkflow/tahoestock.jpg){width="31%" align="left"}
-![](../assets/images/MillingWorkflow/tahoeroughingpass.jpg){width="31%" align="left"}
-![](../assets/images/MillingWorkflow/tahoefinishingpass.jpg){width="31%" align="left"}
-   <figcaption>Some more milling media</figcaption>
+<div class="figure-grid grid-3x1">
+<img src="../../assets/images/MillingWorkflow/tahoestock.jpg" alt="">
+<img src="../../assets/images/MillingWorkflow/tahoeroughingpass.jpg" alt="">
+<img src="../../assets/images/MillingWorkflow/tahoefinishingpass.jpg" alt="">
+</div>
 
-</figure>
+{.marginnote}and some more milling media{/.marginnote}
 
 <center>
  <div style="width: 98%; height: 550; margin: 0px;">
+<div class="embed-frame"><div class="embed-inner">
   <iframe width="49%" height="550" align="left" src="https://www.youtube.com/embed/-axCvptGYzE" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe><iframe width="49%" height="550" align="right" src="https://www.youtube.com/embed/ofZhTsMJd7w" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
  </div>
-<figcaption>and some more milling media</figcaption>
 </center>
 
-<figure markdown="1">
+{.marginnote}... and the results{/.marginnote}
 
-![](../assets/images/MillingWorkflow/tahoeglory1.jpg){width="48%" align="left"}
-![](../assets/images/MillingWorkflow/tahoeglory2.jpg){width="48%" align="right"}
-   <figcaption>... and the results</figcaption>
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/MillingWorkflow/tahoeglory1.jpg" alt="">
+<img src="../../assets/images/MillingWorkflow/tahoeglory2.jpg" alt="">
+</div>
 
 ### Flat-Pack Stool
 
+{.marginnote}Flat-Pack Stool model in Fusion 360{/.marginnote}
+
 <center>
+<div class="embed-frame"><div class="embed-inner">
   <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a41ede4ded2003d332?mode=embed" width="98%" height="550" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
-   <figcaption>Flat-Pack Stool model in Fusion 360</figcaption>
+</div></div>
 </center>
 
-<figure markdown="1">
+{.marginnote}Milling in progress{/.marginnote}
 
-![](../assets/images/MillingWorkflow/cncnostool.jpg){width="48%" align="left"}
-![](../assets/images/MillingWorkflow/cncyesstool.jpg){width="48%" align="right"}
-   <figcaption>Milling in progress</figcaption>
+{.marginnote}... and the results{/.marginnote}
 
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/MillingWorkflow/cncnostool.jpg" alt="">
+<img src="../../assets/images/MillingWorkflow/cncyesstool.jpg" alt="">
+</div>
 
-<figure markdown="1">
 
-![](../assets/images/MillingWorkflow/stool1.jpg){width="31%" align="left"}
-![](../assets/images/MillingWorkflow/stool2.jpg){width="31%" align="left"}
-![](../assets/images/MillingWorkflow/stool3.jpg){width="31%" align="left"}
-   <figcaption>... and the results</figcaption>
-
-</figure>
-
-[^1]: https://www.cnccookbook.com/machining-carbon-fiber-composites-drilling-cnc-tools/
-[^2]: https://dragonplate.com/how-to-cut-carbon-fiber
-[^3]: https://www.gutenberg.org/files/12299/12299-h/12299-h.htm
-[^4]: https://www.practicalmachinist.com/vb/general-archive/face-milling-pvc-152424/
-[^5]: https://www.precisebits.com/tutorials/spindle-rpm
-[^6]: https://pub.pages.cba.mit.edu/feed_speeds/
-[^7]: https://www.protolabs.com/resources/design-tips/cnc-machining-materials/
-[^8]: https://www.3erp.com/blog/cnc-milling-materials-choose-application/
-[^9]: https://www.hubs.com/knowledge-base/selecting-right-cnc-material/
-
-*[FDM]: Fused Deposition Modeling
-*[CNC]: Computerized Numerical Control
-*[MPCNC]: Mostly Printed Computerized Numerical Control - https://docs.v1engineering.com/mpcnc/intro/
-*[SSH]: Secure Shell
-*[GPIO]: General-Purpose Input/Output
-*[USB]: Universal Serial Bus
-*[ETA]: Estimated Time of Arrival
-*[ISO]: International Organization for Standardization
-*[UPDI]: Unified Program and Debug Interface
-*[AVR]: A Family of microcontrollers developed since 1996 by Atmel
-*[JTAG]: Joint Test Action Group
-*[IDE]: Integrated Development Environment
-*[Rx]: Receiving Signal
-*[Tx]: Transmitting Signal
-*[VCC]: Voltage Common Collector (+)
-*[GND]: Ground / Common Drain (-)
-*[IC]: Integrated Circuit
-*[LED]: Light-Emitting Diode
-*[Cap]: Capacitor
-*[SPST]: Single Pole Single Throw Switch
-*[SPDT]: Single Pole Double Throw Switch
-*[DPST]: Double Pole Single Throw Switch
-*[DPDT]: Double Pole Double Throw Switch
-*[EEPROM]: Electrically Erasable Programmable Read-Only Memory
-*[PCB]: Printed Circuit Board
-*[PWM]: Pulse Width Modulation
-*[SPI]: Serial Peripheral Interface
-*[I2C]: Inter-Integrated Circuit
-*[UART]: Universal Asynchronous Receiver/Transmitter
-*[ADC]: Analog-to-Digital Converter
-*[DAC]: Digital-to-Analog Converter
-*[MCU]: Microcontroller Unit
-*[FPGA]: Field-Programmable Gate Array
-*[SLA]: Stereolithography
-*[DLP]: Digital Light Processing 
-*[SLS]: Selective Laser Sintering
-*[PLA]: Polylactic Acid 
-*[ABS]: Acrylonitrile Butadiene Styrene 
-*[PETG]: Polyethylene Terephthalate Glycol 
-*[CAD]: Computer-Aided Design
-*[CAM]: Computer-Aided Manufacturing
-*[G-code]: A language for controlling CNC machines
-*[PID]: Proportional-Integral-Derivative (control loop feedback mechanism)
-*[MOSFET]: Metal-Oxide-Semiconductor Field-Effect Transistor
-*[BJT]: Bipolar Junction Transistor
-*[SMD]: Surface-Mount Device
-*[THT]: Through-Hole Technology
-*[DIP]: Dual In-line Package
-*[ESC]: Electronic Speed Controller
-*[BEC]: Battery Eliminator Circuit
-*[LiPo]: Lithium Polymer 
-*[NiMH]: Nickel-Metal Hydride 
-*[EMI]: Electromagnetic Interference
-*[ESD]: Electrostatic Discharge
+<div class="figure-grid grid-3x1">
+<img src="../../assets/images/MillingWorkflow/stool1.jpg" alt="">
+<img src="../../assets/images/MillingWorkflow/stool2.jpg" alt="">
+<img src="../../assets/images/MillingWorkflow/stool3.jpg" alt="">
+</div>

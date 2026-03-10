@@ -145,6 +145,8 @@ extra:
 
 extra_javascript:
   - assets/js/error-suppressor.js
+  - assets/js/grids.js
+  - assets/js/lightbox.js
   - assets/js/index.js
 
 nav:

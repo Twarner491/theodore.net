@@ -17,12 +17,11 @@ While race car tires are designed to maintain grip even at high speeds, they hav
 
 To account for this, engineers implement wings and underbody designs to generate a "downforce" upon the car while traveling at high enough speeds. This force increases the vertical load on the tires, effectively increasing their grip without adding additional weight.
 
-<figure markdown="1" style="opacity:90%;">
-
- ![](../assets/images/force/light.png#only-light){width="70%" alt="Diagram showing downforce effect on race car in light theme"}
- ![](../assets/images/force/dark.png#only-dark){width="70%" alt="Diagram showing downforce effect on race car in dark theme"}[^1]
-
+<figure style="opacity:90%;">
+<img src="../assets/images/force/light.png" alt="Diagram showing downforce effect on race car in light theme" class="only-light" width="70%">
+<img src="../assets/images/force/dark.png" alt="Diagram showing downforce effect on race car in dark theme" class="only-dark" width="70%">
 </figure>
+{.sidenote}[Sebastian](https://www.instagram.com/by_tatian/) drew this.{/.sidenote}
 
 Race car drivers must learn to utilize downforce. Doing so entails rounding corners at speeds high enough to generate sufficient vertical load. Not fast enough and the driver will understeer. Too slow and the driver will be passed.
 
@@ -36,6 +35,3 @@ You must endure challenges where confidence is your only tether.
 
 *You must apply downforce.*
 
-[^1]: [Sebastian](https://www.instagram.com/by_tatian/) drew this.
-[^2]: https://driver61.com/uni/different-corner-technique/
-[^3]: https://www.reddit.com/r/EASPORTSWRC/comments/ljkyy2/what_is_the_fastest_cornering_technique/

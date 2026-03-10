@@ -3,7 +3,6 @@ title: Pizza-Pizza CNC Machine
 description: A Pizza-Preparing, Tool-Changing, 3-Axis, 3D-printed CNC Machine!
 keywords: CNC, Robot, Pizza, Pizza Machine
 thumbnail: /assets/images/Pizza/thumb.png
-readtime: "38–48 minutes"
 date: 2022-12-20
 date_modified: 2023-07-01
 hide:
@@ -14,13 +13,15 @@ template: comments.html
 
 *A Pizza-Preparing, Tool-Changing, 3-Axis, 3D-printed CNC Machine!*
 
-The Pizza-Pizza CNC Machine is a Marlin-based, three-axis CNC Machine I developed alongside three of my friends. My contributions to the project include the machine's gantry, electronic housing, and parts of the frame CAD, as well as the machine's electronics system, firmware, and pizza-preparing gcode. This publication covers the fabrication of the CNC in-depth, with a focus on my project contributions, while also including final-result media.
+{.newthought}The Pizza-Pizza CNC Machine{/.newthought} is a Marlin-based, three-axis CNC Machine I developed alongside three of my friends. My contributions to the project include the machine's gantry, electronic housing, and parts of the frame CAD, as well as the machine's electronics system, firmware, and pizza-preparing gcode. This publication covers the fabrication of the CNC in-depth, with a focus on my project contributions, while also including final-result media.
 
 The machine includes two tool ends, one for sauce distribution and another for cheese, with the potential for expandability to have toping tool ends in future iterations. The CNC is mostly 3D-printed, with the exception of its aluminum rails and laser-cut wooden baseplate, and operates with a mini RAMBo - or RepRap Arduino-Mega-compatible Mother Board.
 
 The Pizza-Pizza CNC is a prototype. While all files are provided for your recreation, our initial build was in a time trial: the machine was designed, manufactured, and assembled in a little under 2 weeks. That being said, we'd love to see your recreations and refined iterations of the project!
 
 ### Supplies
+
+<div class="bom-table" markdown>
 
 | Item | Quantity | Price |
 |------|----------|-------|
@@ -38,8 +39,9 @@ The Pizza-Pizza CNC is a prototype. While all files are provided for your recrea
 | 20x20 Aluminum Extrusion (Pack) | 2 | $50.99 |
 | Stepper Belts (10 Meters) | 1 | $14.99 |
 | M3 Hardware Assortment (Bolts, Nuts & Screws) | 1 | - |
+| | **Total** | **$316.99** |
 
-*--- Total Cost: $316.99 ---*
+</div>
 
 ### Downloads
 
@@ -57,7 +59,7 @@ The carriage itself is a rather simple piece, using linear bearings to move alon
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/gantry1.png){width="100%"}
+![](../assets/images/Pizza/gantry1.png){ width="100%" }
 
 </figure>
 
@@ -67,7 +69,7 @@ With the Y-axis motion of the carriage flattened out, I began the Z-axis design.
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/gantry2.png){width="100%"}
+![](../assets/images/Pizza/gantry2.png){ width="100%" }
 
 </figure>
 
@@ -75,7 +77,9 @@ The final bit to this carriage puzzle was the Z-axis claw. Similar to the carria
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a42f26fe2631228f01?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 </center>
 
@@ -83,7 +87,7 @@ With the carriage flattened out, I derived this Z-Carriage model into a communal
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/frame1.png){width="100%"}
+![](../assets/images/Pizza/frame1.png){ width="100%" }
 
 </figure>
 
@@ -93,7 +97,7 @@ I next began work on the Pizza-Pizza CNC Machine's gantry alongside my friend, [
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/corner1.png){width="100%"}
+![](../assets/images/Pizza/corner1.png){ width="100%" }
 
 </figure>
 
@@ -101,7 +105,9 @@ With the X-axis motion done, I moved on to the axis’s one endstop, which will 
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://charlottelatin3.autodesk360.com/shares/public/SH56a43QTfd62c1cd968eed7bd9352f896cc?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 </center>
 
@@ -111,7 +117,7 @@ Along with the prior carriage, belt tensioner, and endstop CAD work, I dealt wit
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/sketch1.jpg){width="50%"}
+![](../assets/images/Pizza/sketch1.jpg){ width="50%" }
 
 </figure>
 
@@ -119,7 +125,7 @@ As a complement to the importance of the machine electronics system, I began des
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/enc1.png){width="100%"}
+![](../assets/images/Pizza/enc1.png){ width="100%" }
 
 </figure>
 
@@ -129,13 +135,15 @@ Next up: electronic enclosure ventilation. Luckily enough for me, the Mini RAMBo
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/colorenc.png){width="100%"}
+![](../assets/images/Pizza/colorenc.png){ width="100%" }
 
 </figure>
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a474b052f2397a5078?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
  
 </center>
 
@@ -143,7 +151,7 @@ Upon the completion of this electronics box, I derived it into our shared Pizza 
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/enconframe.png){width="100%"}
+![](../assets/images/Pizza/enconframe.png){ width="100%" }
 
 </figure>
 
@@ -180,18 +188,16 @@ With the custom screen options enabled, the next step was to generate and includ
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/bitmapconv.jpg){width="100%"}
+![](../assets/images/Pizza/bitmapconv.jpg){ width="100%" }
 
 </figure>
 
 Moving on to the firmware status screen file, the basic file setup for the screen is practically the same as the boot screen. First, I created a new file in my Marlin folder, titled _Statusscreen.h, and then used the same [Bitmap Converter](https://marlinfw.org/tools/u8glib/converter.html) to convert a Pizza Pizza - CLS Fab Lab logo and Pizza icon into our systems status screen. This conversion can be done by checking all the same boxes as before, Marlin 2.x, Binary, ASCII Art, except the Boot checkbox, as now because were generating the status screen, I checked the Status box. Despite these correct settings, I would receive an error while generating this status screen, as, unlike the systems boot screen, Marlin’s status screen has more space requirements. I found these two lectures on [Customizing Marlin LCD](https://www.youtube.com/watch?v=3fGHgzZqaGs) and Marlin’s [Custom Status Screen](https://www.youtube.com/watch?v=GOAsx42Anrk) helpful while troubleshooting this, as both videos explain the different requirements of these custom screens and the workings behind them. The Marlin status display screen leaves a 128x19 pixel canvas for a custom status screen, with even less room for any other display graphics included on the status display. Our instance of Marlin has a 105x19 pixel canvas for this custom screen, due to the animated fan icon shown on the status display when the electronics encloser fan is activated. This fan icon comes preset when a fan is set up in Marlin, and I think adds a nice touch to the status display, so I decided to leave it, and work with the 105x19 pixel canvas. Keeping this size in mind, I rescaled the logo bitmap to the correct size and touched up the image pixel by pixel until the entire thing was clean black and white. I then reimported the small bitmap into the converter, checking the boxes listed above, and converted the image before copying the output into the `_Statusscreen.h` file in my Marlin folder.
 
-<figure markdown="1">
-
-![](../assets/images/Pizza/homebitmap.jpg){width="45%" align="left"}
-![](../assets/images/Pizza/bitmapcode.jpg){width="51%" align="right"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/Pizza/homebitmap.jpg" alt="">
+<img src="../../assets/images/Pizza/bitmapcode.jpg" alt="">
+</div>
 
 ### Custom Interface Menu
 
@@ -250,7 +256,7 @@ Now with our instance of Marlin configured, the next step was to build and flash
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/encstuffed.jpg){width="100%"}
+![](../assets/images/Pizza/encstuffed.jpg){ width="100%" }
 
 </figure>
 
@@ -258,7 +264,7 @@ Now with our instance of Marlin configured, the next step was to build and flash
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/flashed.jpg){width="100%"}
+![](../assets/images/Pizza/flashed.jpg){ width="100%" }
 
 </figure>
 
@@ -268,7 +274,9 @@ I began to move on to testing both the electronics system and firmware. Visually
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/Jc3l15KAwwE" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -278,7 +286,9 @@ One of the coolest aspects of running Marlin on our CNC is its easy LCD interfac
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/4IKbeooSaIM" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -288,7 +298,7 @@ The machine manufacturing and assembly process began with lots of print time. Du
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/slicer.jpg){width="100%"}
+![](../assets/images/Pizza/slicer.jpg){ width="100%" }
 
 </figure>
 
@@ -298,19 +308,16 @@ Before worrying about any wiring, I first began with print cleanup for our elect
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/rawprint.jpg){width="100%"}
+![](../assets/images/Pizza/rawprint.jpg){ width="100%" }
 
 </figure>
 
 After this cleanup, I began to install the electronics inside the case, first screwing the LCD panel to its mounting place, using the plate’s spacers, to align the screen in its opening, shown below.
 
-<figure markdown="1">
-
-![](../assets/images/Pizza/mountedlcd.jpg){width="100%"}
-
-![](../assets/images/Pizza/sidelcdmount.jpg){width="100%"}
-
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/Pizza/mountedlcd.jpg" alt="">
+<img src="../../assets/images/Pizza/sidelcdmount.jpg" alt="">
+</div>
 
 I then moved on to welding this front plate with the LCD attached to the encloser's base, sticking the two together with superglue, before using a hairdryer and some sandpaper to clean up the edge. Nextly, I installed the Mini RAMBo on its mounting pins, aligning the board’s USB port with its corresponding cutout, and also screwed in the enclosure fan with some M3 screws and bolts.
 
@@ -318,7 +325,7 @@ I moved on to setting up the machine wiring harnesses and altering some stepper 
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/wireharness.jpg){width="100%"}
+![](../assets/images/Pizza/wireharness.jpg){ width="100%" }
 
 </figure>
 
@@ -326,7 +333,7 @@ The next wiring step was the power of the system, which simply meant connecting 
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/wire2psu.jpg){width="100%"}
+![](../assets/images/Pizza/wire2psu.jpg){ width="100%" }
 
 </figure>
 
@@ -340,7 +347,7 @@ starting with the belt tensioners. There were eight corners on our machine in to
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/belttension.jpg){width="100%"}
+![](../assets/images/Pizza/belttension.jpg){ width="100%" }
 
 </figure>
 
@@ -348,7 +355,7 @@ I then used these eight printed corners, along with some 20x20 aluminum extrusio
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/cutMetal.jpg){width="100%"}
+![](../assets/images/Pizza/cutMetal.jpg){ width="100%" }
 
 </figure>
 
@@ -356,7 +363,7 @@ before attaching the corners to the extrusion with some work with a mallet. Unfo
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/gantrystart.jpg){width="100%"}
+![](../assets/images/Pizza/gantrystart.jpg){ width="100%" }
 
 </figure>
 
@@ -364,7 +371,7 @@ The Z-carriage claw assembly was pretty simple, the only step was to attach the 
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/zclaw.jpg){width="100%"}
+![](../assets/images/Pizza/zclaw.jpg){ width="100%" }
 
 </figure>
 
@@ -372,7 +379,7 @@ To complete the rest of the Z-carriage, I first, like all the other prints befor
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/gantryraw.jpg){width="100%"}
+![](../assets/images/Pizza/gantryraw.jpg){ width="100%" }
 
 </figure>
 
@@ -380,7 +387,7 @@ The first step in this carriage assembly was the installation of the embedded co
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/gantrybearing.jpg){width="100%"}
+![](../assets/images/Pizza/gantrybearing.jpg){ width="100%" }
 
 </figure>
 
@@ -390,7 +397,7 @@ The Z-carriage assembly now just came down to mounting the stepper, claw, and Z-
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/assembledgantry.jpg){width="100%"}
+![](../assets/images/Pizza/assembledgantry.jpg){ width="100%" }
 
 </figure>
 
@@ -398,7 +405,7 @@ I then mounted the Z-carriage to the two Y-axis steel rods, and handed off the g
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/machine1.jpg){width="100%"}
+![](../assets/images/Pizza/machine1.jpg){ width="100%" }
 
 </figure>
 
@@ -423,7 +430,7 @@ I began the pizza gcode work in Fusion 360, as I planned on generating a circle 
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/fusionpizza.png){width="100%"}
+![](../assets/images/Pizza/fusionpizza.png){ width="100%" }
 
 </figure>
 
@@ -433,7 +440,7 @@ I began in the Estlcam software by importing my circle SVG created in Fusion, be
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/estlcam1.jpg){width="100%"}
+![](../assets/images/Pizza/estlcam1.jpg){ width="100%" }
 
 </figure>
 
@@ -447,7 +454,7 @@ and then view the generated .gcode in Esltcam’s GCODE preview window.
 
 <figure markdown="1">
 
-![](../assets/images/Pizza/estlcam2.jpg){width="100%"}
+![](../assets/images/Pizza/estlcam2.jpg){ width="100%" }
 
 </figure>
 
@@ -455,7 +462,9 @@ This process left me with generated gcode of a single circle, that I could later
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/azvfDjM_h1E" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -481,7 +490,9 @@ After the servo control gcode was flattened out, Charles began the work of writi
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/MYHNym9zk10" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -505,7 +516,9 @@ Of course, after all this work on a pizza-preparing machine, the only logical te
 
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/Tk6OREM7gic" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
