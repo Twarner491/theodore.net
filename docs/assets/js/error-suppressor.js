@@ -18,7 +18,7 @@
 // ❌ Partitioned cookie warnings (logged by browser)
 // ❌ WebGL warnings (logged by browser graphics layer)
 //
-// IMPORTANT: Browser-level warnings from iframes (YouTube, Giscus, etc.) 
+// IMPORTANT: Browser-level warnings from iframes (YouTube, Giscus, etc.)
 // do NOT affect PageSpeed Insights "Best Practices" score because they're
 // from third-party origins. Only first-party JavaScript errors count.
 //
@@ -28,61 +28,59 @@
 const SUPPRESS_ALL_ERRORS = true;  // Set to false to see all errors for debugging
 // =======================================
 
-if (SUPPRESS_ALL_ERRORS) {
-  
-  // Polyfill for SVGImageElement.href to prevent "has only a getter" errors
-  // This fixes conflicts with MkDocs Material instant navigation and Cloudflare email-decode
-  (function() {
-    try {
-      const imgProto = SVGImageElement.prototype;
-      const hrefDesc = Object.getOwnPropertyDescriptor(imgProto, 'href');
-      if (hrefDesc && !hrefDesc.set) {
-        // Create a writable wrapper that stores values in a WeakMap
-        const hrefStorage = new WeakMap();
-        Object.defineProperty(imgProto, 'href', {
-          get: function() {
-            return hrefStorage.has(this) ? hrefStorage.get(this) : hrefDesc.get.call(this);
-          },
-          set: function(val) {
-            hrefStorage.set(this, val);
-            // Also try to set the attribute if possible
-            try {
-              if (typeof val === 'string') {
-                this.setAttribute('href', val);
-              } else if (val && val.baseVal !== undefined) {
-                this.setAttribute('href', val.baseVal);
-              }
-            } catch (e) { /* ignore */ }
-          },
-          configurable: true
-        });
-      }
-    } catch (e) { /* ignore if SVGImageElement doesn't exist */ }
-  })();
+// Polyfill for SVGImageElement.href to prevent "has only a getter" errors
+// This fixes conflicts with MkDocs Material instant navigation and Cloudflare email-decode
+// MUST run unconditionally — Material instant nav crashes without it
+(function() {
+  try {
+    const imgProto = SVGImageElement.prototype;
+    const hrefDesc = Object.getOwnPropertyDescriptor(imgProto, 'href');
+    if (hrefDesc && !hrefDesc.set) {
+      const hrefStorage = new WeakMap();
+      Object.defineProperty(imgProto, 'href', {
+        get: function() {
+          return hrefStorage.has(this) ? hrefStorage.get(this) : hrefDesc.get.call(this);
+        },
+        set: function(val) {
+          hrefStorage.set(this, val);
+          try {
+            if (typeof val === 'string') {
+              this.setAttribute('href', val);
+            } else if (val && val.baseVal !== undefined) {
+              this.setAttribute('href', val.baseVal);
+            }
+          } catch (e) { /* ignore */ }
+        },
+        configurable: true
+      });
+    }
+  } catch (e) { /* ignore if SVGImageElement doesn't exist */ }
+})();
 
-  // Override getElementById FIRST before anything else can call it
+// Override getElementById to handle empty string calls
+(function() {
+  const originalGetElementById = Document.prototype.getElementById;
+  Document.prototype.getElementById = function(id) {
+    if (id === '' || id === null || id === undefined) {
+      return null;
+    }
+    return originalGetElementById.call(this, id);
+  };
+})();
+
+if (Element.prototype.getElementById) {
   (function() {
-    const originalGetElementById = Document.prototype.getElementById;
-    Document.prototype.getElementById = function(id) {
+    const originalGetElementById = Element.prototype.getElementById;
+    Element.prototype.getElementById = function(id) {
       if (id === '' || id === null || id === undefined) {
         return null;
       }
       return originalGetElementById.call(this, id);
     };
   })();
+}
 
-  // Override Element.getElementById as well (just in case)
-  if (Element.prototype.getElementById) {
-    (function() {
-      const originalGetElementById = Element.prototype.getElementById;
-      Element.prototype.getElementById = function(id) {
-        if (id === '' || id === null || id === undefined) {
-          return null;
-        }
-        return originalGetElementById.call(this, id);
-      };
-    })();
-  }
+if (SUPPRESS_ALL_ERRORS) {
 
   (function() {
     'use strict';
@@ -133,12 +131,12 @@ if (SUPPRESS_ALL_ERRORS) {
     // Wrap XMLHttpRequest to suppress errors
     const originalXHROpen = XMLHttpRequest.prototype.open;
     const originalXHRSend = XMLHttpRequest.prototype.send;
-    
+
     XMLHttpRequest.prototype.open = function(...args) {
       this._suppressErrors = true;
       return originalXHROpen.apply(this, args);
     };
-    
+
     XMLHttpRequest.prototype.send = function(...args) {
       if (this._suppressErrors) {
         this.addEventListener('error', function(e) {
@@ -154,4 +152,3 @@ if (SUPPRESS_ALL_ERRORS) {
   // Debugging mode - show a message that suppression is OFF
   console.log('%c🔍 Error Suppression is OFF - All errors visible for debugging', 'color: #ff6b6b; font-weight: bold; font-size: 14px;');
 }
-

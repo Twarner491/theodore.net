@@ -42,14 +42,12 @@ theme:
 
   logo: assets/images/TeddyWarner.svg
 
-  favicon: assets/images/favicon.gif
+  favicon: assets/images/favicon.png
 
   icon:
     repo: fontawesome/brands/git-alt
                           
   features:
-   - navigation.instant
-   - navigation.tracking
    - navigation.tabs
    - navigation.expand
    - content.code.annotate
@@ -78,7 +76,7 @@ plugins:
       json_feed_enabled: false
       use_material_social_cards: false
       feed_ttl: 1440
-      image: https://theodore.net/assets/images/favicon.gif
+      image: https://theodore.net/assets/images/favicon.png
       abstract_chars_count: 200
       pretty_print: true
       length: 100
