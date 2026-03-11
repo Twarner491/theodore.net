@@ -5,14 +5,13 @@ date: 2024-08-01
 draft: true
 keywords: Neuroscience, Belonging, Social psychology, Mirror neurons, Theory of Mind, Emotions, Decision making, Moral foundations, Social pain, Altruistic behavior
 thumbnail: /assets/images/index/onb.png
-readtime: "4-6 mins"
 hide:
   - navigation
   - tags
 template: comments.html
 ---
 
-Ive been thinking alot about the neuroscience of otherness and belonging. *Here are my notes, I'll write a nice piece on this at some point.*
+{.newthought}Ive been thinking alot{/.newthought} about the neuroscience of otherness and belonging. *Here are my notes, I'll write a nice piece on this at some point.*
 
 - Maslow's Motivation Model
 	-  Foundational needs must be met or a person feels deficient.

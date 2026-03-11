@@ -4,7 +4,6 @@ description: Discovering Eastern philosophy.
 keywords: Eastern philosophy, Buddhism, Hinduism, The Upanishads, The Other Shore, Thich Nhat Hanh, Meaning of life, Interbeing, Meditation, Nietzsche, Philosophical writing
 thumbnail: /assets/images/index/orange.png
 draft: true
-readtime: "7-11 mins"
 date: 2024-10-01
 hide:
   - navigation
@@ -12,7 +11,7 @@ hide:
 template: comments.html
 ---
 
-While many find Nietzsche’s nihilistic interpretation of the meaning of life to be disheartening, I’ve always appreciated the personal agency it permits. 
+{.newthought}While many find Nietzsche’s{/.newthought} nihilistic interpretation of the meaning of life to be disheartening, I’ve always appreciated the personal agency it permits. 
 
 To be clear, I don't think I've ever bought into Nietzschian philosophy, as I've always appreciated traditional morality, yet I’ve enjoyed the concept of being able to assign my own meaning to life. Prior to my introduction to Hindu and Buddhist philosophy in The Upanishads and The Other Shore, I was on board with the Nietzschian belief in a lack of inherent meaning to life, yet these texts introduced me to the appealing concept of meaning derived from existence and impact. These philosophies don't rid me of my agency to assign meaning, they’ve equipped me with tools to do so, while also filling the abyss left open by Nietzsche, an inherent meaning to life, our impact on each other.
 

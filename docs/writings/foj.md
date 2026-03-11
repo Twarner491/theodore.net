@@ -2,8 +2,7 @@
 title: The Fallacy of Justice
 description: A Platonic Dialogue
 keywords: philosophy, Platonic dialogue, justice, Socrates, George Orwell, 1984, political philosophy, power dynamics, class exploitation, social hierarchy, ethics, virtue, philosophy essay, classical Athens, philosophical discourse
-thumbnail: /assets/images/foj/thumb.png
-readtime: "8–10 mins"
+thumbnail: /assets/images/foj/thumb.pnga-mutual-meaning.md
 draft: true
 date: 2022-12-01
 hide:
@@ -16,7 +15,7 @@ template: comments.html
 
 ---
 
-O'BRIEN. Socrates, whom do you believe is the true beneficiary of justice? Justice presents itself in a way that one would believe is most advantageous to the exploited, as it offers a form of protection from those in power, yet I refuse to believe it would exist in our society if it were negative to those who control society altogether.
+{.newthought}O'BRIEN.{/.newthought} Socrates, whom do you believe is the true beneficiary of justice? Justice presents itself in a way that one would believe is most advantageous to the exploited, as it offers a form of protection from those in power, yet I refuse to believe it would exist in our society if it were negative to those who control society altogether.
 
 SOCRATES. O'Brien, I'd argue that justice is no more advantageous to the people being exploited than it is to those in power.
 

@@ -2,7 +2,6 @@
 title: My Favorite Brain Parasite
 description: CHANGE
 keywords: INSERT
-readtime: 5-7 mins
 date: 2026-03-02
 draft: true
 hide:
@@ -11,11 +10,11 @@ hide:
 template: comments.html
 ---
 
-I've been on a bit of a toxoplasmosis (my favorite brain parasite) kick as of late and I think provides an interesting resolve to this. If you've ever seen one of those funny videos where a mouse chases after a cat you've probably seen toxoplasmosis at play - the parasite rewires the 'fear cortex' of the mouse to 'sexual arousal' - making them attracted to cat scent instead of scared of it.
+{.newthought}I've been on a bit of a toxoplasmosis{/.newthought} (my favorite brain parasite) kick as of late and I think provides an interesting resolve to this. If you've ever seen one of those funny videos where a mouse chases after a cat you've probably seen toxoplasmosis at play - the parasite rewires the 'fear cortex' of the mouse to 'sexual arousal' - making them attracted to cat scent instead of scared of it.
 
-The CDC claims that roughly 22% of Americans have chronic toxoplasmosis (which is nuts), and studies show that it roughly doubles traffic accident risk in humans, and I'd assume this is due to a similar rewiring of fear response we see in mice.{.sidenote}[https://www.cdc.gov/toxoplasmosis/about/](https://www.cdc.gov/toxoplasmosis/about/){/.sidenote}{.sidenote}[https://pubmed.ncbi.nlm.nih.gov/29906469/](https://pubmed.ncbi.nlm.nih.gov/29906469/){/.sidenote} One autopsy study found 59.5% of traffic fatality drivers tested positive which is just insane.{.sidenote}[https://pubmed.ncbi.nlm.nih.gov/23745372/](https://pubmed.ncbi.nlm.nih.gov/23745372/){/.sidenote}
+The CDC claims that roughly 22% of Americans have chronic toxoplasmosis (which is nuts), and studies show that it roughly doubles traffic accident risk in humans, and I'd assume this is due to a similar rewiring of fear response we see in mice.{.sidenote}[CDC — Toxoplasmosis](https://www.cdc.gov/toxoplasmosis/about/){/.sidenote}{.sidenote}[Toxoplasma and traffic accidents](https://pubmed.ncbi.nlm.nih.gov/29906469/) — meta-analysis of risk association.{/.sidenote} One autopsy study found 59.5% of traffic fatality drivers tested positive which is just insane.{.sidenote}[Autopsy study on traffic fatalities](https://pubmed.ncbi.nlm.nih.gov/23745372/).{/.sidenote}
 
-Imagine I started selling toxoplasmosis in pill form that would make you ~2x more risk tolerant (and thus a better entrepreneur!), would you take it? Overwhelmingly people say no when I ask this, that they feel comfortable with the general risk tolerance they have now. Presumably the potential tail end loss (dying from increased life-threatening, physical risk or the parasite itself) doesn't equate to the upside of risk tolerance, even though taking the pill would almost certainly make them better entrepreneurs. I think segregating risk into a "bad" and "good" is probably the right idea, but the two are undoubtedly intertwined, and risk tolerance decreases as a whole.
+{.newthought}Imagine I started selling toxoplasmosis{/.newthought} in pill form that would make you ~2x more risk tolerant (and thus a better entrepreneur!), would you take it? Overwhelmingly people say no when I ask this, that they feel comfortable with the general risk tolerance they have now. Presumably the potential tail end loss (dying from increased life-threatening, physical risk or the parasite itself) doesn't equate to the upside of risk tolerance, even though taking the pill would almost certainly make them better entrepreneurs. I think segregating risk into a "bad" and "good" is probably the right idea, but the two are undoubtedly intertwined, and risk tolerance decreases as a whole.
 
 As for more time for more ventures, this is almost certainly true, but I doubt it coxes more people into starting ventures, it simply allows those who do so a higher chance of success (and in turn a lower need for risk tolerance), as odds are you get something right over 100 years.
 

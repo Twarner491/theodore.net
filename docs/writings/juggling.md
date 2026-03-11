@@ -3,7 +3,6 @@ title: Learning to Juggle
 description: A journey to lessen doom-scrolling.
 keywords: Juggling, Digital wellness, Phone addiction, Screen time, Productivity habits, Phone brightness, Greyscale mode, Digital minimalism, Screen addiction, Healthy apps
 thumbnail: /assets/images/juggle/juggle.png
-readtime: "5-7 mins"
 date: 2024-10-01
 hide:
   - navigation
@@ -11,9 +10,9 @@ hide:
 template: comments.html
 ---
 
-This semester I've found myself in quite an interesting class at the USC Marshall School of Business: *BAEP 472 - The Science of Peak Performance*.
+{.newthought}This semester{/.newthought} I've found myself in quite an interesting class at the USC Marshall School of Business: *BAEP 472 - The Science of Peak Performance*.{.sidenote}Taught by [Dr. Glenn Fox](https://glennrfox.com/) and [Coach Pete Carroll](https://www.petecarroll.com/).{/.sidenote}
 
-The course was written by [Dr. Glenn Fox](https://glennrfox.com/) and [Coach Pete Caroll](https://www.petecarroll.com/), and its aspiration is rather straightforward, it seeks to equip students with a science-based approach to productivity (and every other facet of life).
+The course's aspiration is rather straightforward, it seeks to equip students with a science-based approach to productivity (and every other facet of life).
 
 On the first day of class, as we discussed the structure of the weekly lecture, and notably, how we would have a 15-minute break in the middle of each lecture, Dr. Fox told us a story.
 
@@ -31,15 +30,19 @@ So here it is, the blog post where I'll be documenting my journey learning to ju
 
 The easiest way to eradicate temptation to doom-scroll is to follow the "out of sight, out of mind" mantra - and this principle's inverse works as well. 
 
-*Place healthy apps within your thumbs reach.* By doing so, you increase the likelihood of future you opening those apps in an attempt to doom-scroll, get bored, and shutting off your phone. Nathaniel from [Practical Betterments](https://practicalbetterments.com/) has a few good "plausible scenarios" for placing healthy apps within reach:
+*Place healthy apps within your thumbs reach.* By doing so, you increase the likelihood of future you opening those apps in an attempt to doom-scroll, get bored, and shutting off your phone. Nathaniel from [Practical Betterments](https://practicalbetterments.com/) has a few good "plausible scenarios" for placing healthy apps within reach:{.sidenote}[Practical Betterments](https://practicalbetterments.com/) — Nathaniel's newsletter on small, actionable self-improvement.{/.sidenote}
 
 > - The weather app reminds you to go outside and water the plants — you do and the fresh air is invigorating.
 > - The calendar app has a blank space you fill with a meaningful real-life event — say a meeting with an old friend or a pub quiz.
 > - Your flashcard app helps you learn trivia that wins you first place in a pub quiz, impressing everyone, including a stranger, who despite your normal-sized thumbs, learns to love you for who you are.
 
-<figure style="opacity:85%;">
-<img src="../assets/images/juggle/light.png" alt="Healthy apps placed within thumb's reach on iPhone home screen in light theme" class="only-light" width="50%">
-<img src="../assets/images/juggle/dark.png" alt="Healthy apps placed within thumb's reach on iPhone home screen in dark theme" class="only-dark" width="50%">
+{.marginnote}Healthy apps placed within thumb's reach{/.marginnote}
+
+<figure markdown="1" style="opacity:85%;">
+
+ ![](../assets/images/juggle/light.png#only-light){width="50%" alt="Healthy apps placed within thumb's reach on iPhone home screen in light theme"}
+ ![](../assets/images/juggle/dark.png#only-dark){width="50%" alt="Healthy apps placed within thumb's reach on iPhone home screen in dark theme"}
+
 </figure>
 
 Sometimes just tempting yourself with a healthy option isn't sufficient, however. If you have a truly toxic, doom-scrolling relationship with an app, delete it! I frequently try to dream up potential future use cases for apps that I don't want to delete. You can fight this by simply realizing that you can always reinstall the app as needed (yet usually once it's gone, the urge to scroll disappears).
@@ -85,9 +88,11 @@ To do so open settings and navigate to `Accessibility` -> `Display & Text Size`,
 2. Toggle on `Color Filters`
 3. Select `Greyscale`
 
-<div class="figure-grid grid-2x1">
-<img src="../assets/images/juggle/color.png" alt="iPhone screen showing normal color display" width="30%">
-<img src="../assets/images/juggle/grey.png" alt="iPhone screen showing greyscale color filter applied" width="30%">
+{.marginnote}Normal color vs. greyscale filter{/.marginnote}
+
+<div class="figure-grid grid-2x1" style="width:50%">
+<img src="../../assets/images/juggle/color.png" alt="iPhone screen showing normal color display" width="30%">
+<img src="../../assets/images/juggle/grey.png" alt="iPhone screen showing greyscale color filter applied" width="30%">
 </div>
 
 <h4>Making a greyscale filter shortcut</h4>

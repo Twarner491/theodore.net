@@ -3,7 +3,6 @@ title: Torpediniformes
 description: An analysis of The Meno.
 keywords: Plato, The Meno, Socratic dialogue, Virtue, Naïveté, Learning process, Philosophy, Socrates, Meno, Bravery, Knowledge, Correct opinion
 thumbnail: /assets/images/index/snake.png
-readtime: "3-5 minutes"
 date: 2022-05-01
 hide:
   - navigation
@@ -11,7 +10,7 @@ hide:
 template: comments.html
 ---
 
-Naïveté serves as the nemesis to bravery. Plato’s text, The Meno, recounts a conversation between Socrates and Meno, initially exploring the teachability of virtue, before branching into definition of the attribute itself. 
+{.newthought}Naïveté serves as the nemesis to bravery.{/.newthought} Plato’s text, The Meno, recounts a conversation between Socrates and Meno, initially exploring the teachability of virtue, before branching into definition of the attribute itself. 
 
 Though The Meno concludes with an unsatisfactory crutch on the gods to ‘explain’ virtue and its origin, the recollection of ‘inherent’ knowledge produced by logical conversation throughout the text demonstrates the learning process. The bravery required to recollect your inherent knowledge lies in one's ability to realize their naïveté on a topic and in their commitment to endure the numbness of the learning process. 
 
@@ -21,7 +20,7 @@ Meno branches his conversation from the teachability of virtue to his attempt to
 
 Despite Meno’s seeming grasp on the concept of virtue, Socrates' logical line of questioning cleaves away at his shroud of false, perceived knowledge until Meno is left “quite perplexed”{.sidenote}Plato, et al. Meno, 80a.{/.sidenote}. *It is this perplexity, or the ‘numbness’ as Socrates refers to, that is the result of the departure from the comfort of perceived knowledge and naïveté, yet also the brave first step to learning.*
 
-In the case of learning, bravery not only is held by those willing (or thrust) into their ‘first step’, but required from those who choose to endure their numbness. 
+{.newthought}In the case of learning{/.newthought}, bravery not only is held by those willing (or thrust) into their ‘first step’, but required from those who choose to endure their numbness. 
 
 Socrates’ careful description of this numb state in his metaphor of the torpedo fish successfully emphasizes the lack of “harm” despite the potential discomfort this state of “perplex[ity]” yields{.sidenote}Plato, et al. Meno, 84b.{/.sidenote}. In the face of the torpedo fish, of the un-answered, unknown knowledge, bravery is to face the state of “perplexity” and strive for the knowledge one “d[oes] not know”{.sidenote}Plato, et al. Meno, 84c.{/.sidenote}. 
 

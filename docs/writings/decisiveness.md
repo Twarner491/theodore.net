@@ -3,7 +3,6 @@ title: Ex Nihilo Nihil Fit
 description: Nothing comes out of nothing. Some thoughts on decisiveness.
 keywords: decisiveness, decision-making, agency, philosophy, Buridan's ass, Aristotle, Anaximander, free will, tech twitter, productivity, motivation, opportunity, timeliness, virtue, philosophy of action, existentialism, choice theory, decision paralysis, action bias, tech culture, personal development
 thumbnail: /assets/images/decisiveness/decisiveness.png
-readtime: "2–3 mins"
 date: 2025-01-01
 hide:
   - navigation
@@ -11,7 +10,7 @@ hide:
 template: comments.html
 ---
 
-*Ex nihilo nihil fit*. Nothing comes out of nothing.
+{.newthought}*Ex nihilo nihil fit*{/.newthought}. Nothing comes out of nothing.
 
 !!! quote "Buridan's Ass"
       If you place a mule equidistant between two identical bales of hay, the mule will starve to death.
@@ -39,9 +38,9 @@ For a while, I thought of this as quite profound inspiration, until I read a twe
   <br>
 </center>
 
-While considering Anaximander's beliefs on Astronomy, Aristotle (for whatever reason) says if a man were placed at the center of a circle with food at various points of the circumference, he would starve to death for lack of reason to choose one portion of food over another. While this would be a more apt scenario in a discussion of free will, not the heavenly bodies, Aristotle's consideration nonetheless extends the implications of Buridan's satirical ass to mankind.
+While considering Anaximander's beliefs on Astronomy, Aristotle (for whatever reason) says if a man were placed at the center of a circle with food at various points of the circumference, he would starve to death for lack of reason to choose one portion of food over another.{.sidenote}Aristotle, *De Caelo*, Book II.{/.sidenote} While this would be a more apt scenario in a discussion of free will, not the heavenly bodies, Aristotle's consideration nonetheless extends the implications of Buridan's satirical ass to mankind.
 
-Having agency or "just doing things" calls for timeliness in decision-making, as almost always, the things most worth doing come with a finite window of opportunity. 
+{.newthought}Having agency{/.newthought} or "just doing things" calls for timeliness in decision-making, as almost always, the things most worth doing come with a finite window of opportunity.
 
 Decisiveness is a virtue both in the process of doing novel/interesting/worthwhile things and in the aftermath of your actions.
 

@@ -4,7 +4,6 @@ description: A demonstration of Tufte-inspired typographic elements and refined 
 keywords: Tufte, typography, design, sidenotes, epigraphs
 thumbnail: /assets/images/index/orange.png
 draft: true
-readtime: "5-8 mins"
 date: 2026-03-06
 hide:
   - navigation

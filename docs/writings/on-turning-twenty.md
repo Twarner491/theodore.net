@@ -3,7 +3,6 @@ title: On Turning Twenty
 description: I turned twenty today.
 keywords: Turning twenty, Personal reflection, Life lessons, University dropout, Entrepreneurship, Thiel Fellowship, Intempus, USC Iovine and Young Academy, Carpe diem, Causa sui, Intrinsic motivation, Confidence building, Self-improvement, Life advice, Personal growth, Teenage years, Career decisions, Startup journey, Young entrepreneur, Life philosophy
 thumbnail: /assets/images/20/thumb.png
-readtime: "9–11 mins"
 date: 2025-08-01
 hide:
   - navigation
@@ -11,7 +10,7 @@ hide:
 template: comments.html
 ---
 
-Today I turned twenty. Kind of crazy (or at least feels more substantial than the past few years).
+{.newthought}Today I turned twenty{/.newthought}. Kind of crazy (or at least feels more substantial than the past few years).
 
 Three years ago, I had a long think about what I wanted to do with myself, with my future. I was sitting in my high school's woodshop after school and had a few hours to kill while watching a CNC machine hum. I loved engineering (and still do). Yet, I couldn't help but feel as I progressed nearer and nearer to university, the parts of engineering I loved most (tangible building, making, experimenting) would fade away in favor of a more meticulous, tedious commitment to theory.
 
@@ -21,7 +20,7 @@ This certainly felt like a dilemma. Everyone I knew, and I always associated mys
 
 I wasn't quite sure where I'd end up or what I'd be doing, but this uncertainty never really bothered me much. In fact, for a few months, I thought I might become a YouTuber (and even made a banger video for one of my projects: [We Built the Alleged Hans Niemann Chess Cheating Device](https://www.youtube.com/watch?v=ygy8M-QhbSo&t)) as it felt like a good means of financially justifying my continued work on my projects.
 
-It was around this time in my life that one of my old friends/coworkers told me about this program he was in at USC: the [Iovine and Young Academy](https://iovine-young.usc.edu/). This program was pretty epic, and it looked to address my dilemma exceedingly well: the academy spans engineering, business, and design - a great balance for the aspiring maker. I applied, got in, and moved to California. It was awesome.
+{.newthought}It was around this time{/.newthought} in my life that one of my old friends/coworkers told me about this program he was in at USC: the [Iovine and Young Academy](https://iovine-young.usc.edu/). This program was pretty epic, and it looked to address my dilemma exceedingly well: the academy spans engineering, business, and design - a great balance for the aspiring maker. I applied, got in, and moved to California. It was awesome.
 
 I loved university, I loved the classes, I loved the people. I met some of my closest friends, worked on my [first venture](https://tone.computer), and then at eighteen landed an early position on the [Midjourney](https://www.midjourney.com/home) hardware team. A few months later, I found myself at a crossroads: I loved my work at Midjourney and got to work alongside the most incredible people, yet I had just turned nineteen and felt compelled to spend my next few years doing work of my own. Ultimately, I decided to return to USC.
 
@@ -29,7 +28,7 @@ Yet after much reflection, I found university an exceedingly high-risk place to 
 
 Around last Christmas, I floated my theory for Intempus and what I had been up to to my parents for the first time in a cafe in Washington, DC, and again floated the potential of dropping out. Somehow, this time that statement felt much more serious than the prior two. My mom told me something along the lines of "you keep telling me you want to drop out and then backing out. It's going to keep digging at you unless you give it a shot."
 
-So, three days into my fourth semester in college, I rented a U-Haul, packed up all my stuff, and moved to San Francisco to work on Intempus full-time. I had gone from not quite knowing what I wanted to do with myself, to finding a program which somehow solved my dilemma, to leaving that program altogether. I stand by this being one of my all time best decisions and took a considerable amount of mental back and forth, and several late night walks before I built up the courage to pull the trigger (I think talking with my Mom ultimately gave me the final boost of courage needed for this which I couldn't appreciate more. Thanks Mom, I love you!).
+{.newthought}So, three days{/.newthought} into my fourth semester in college, I rented a U-Haul, packed up all my stuff, and moved to San Francisco to work on Intempus full-time. I had gone from not quite knowing what I wanted to do with myself, to finding a program which somehow solved my dilemma, to leaving that program altogether. I stand by this being one of my all time best decisions and took a considerable amount of mental back and forth, and several late night walks before I built up the courage to pull the trigger (I think talking with my Mom ultimately gave me the final boost of courage needed for this which I couldn't appreciate more. Thanks Mom, I love you!).
 
 For a while, I lived without accolade, sleeping in my buddy's kitchen a few feet from my desk. Nine months after starting Intempus and five months after dropping out, I received the [Thiel Fellowship](https://thielfellowship.org/), a fellowship for young people who want to build new things instead of sitting in a classroom.
 

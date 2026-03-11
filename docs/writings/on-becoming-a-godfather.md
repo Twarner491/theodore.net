@@ -3,7 +3,6 @@ title: On Becoming a Godfather
 description: This confers great benefits like, being able to speak in a raspy voice.
 keywords: Godfather, Baptism, Catholicism, Faith journey, Religious conversion, Catholic education, Philosophy, Science vs faith, Werner Heisenberg, Thich Nhat Hanh, Eastern philosophy, Thomas the Apostle, Doubting Thomas, John 20:24-29, Father Anthony De Mello, The Way to Love, Intrinsic happiness, Extrinsic goals, Silicon Valley culture, Personal growth, Spiritual development, Religious questioning, Teenage faith crisis, Cultural Catholicism, Secular education, North Carolina, California, Bay Area, Thiel Fellowship, Werner Heisenberg quote, No man's land metaphor, Faith and science harmony, Gödel's incompleteness, Big Bang, Consciousness, Subjective experience, Neural computation, Mathematical reality, Infinite regress, Moral frameworks, Existential meaning, Ultimate purpose, Transcendence
 thumbnail: /assets/images/Godfather/thumb.png
-readtime: "10–13 mins"
 date: 2025-08-01
 hide:
   - navigation
@@ -43,7 +42,7 @@ template: comments.html
 
 ---
 
-I was raised Catholic, as was my mom. My dad converted to Catholicism when I was young, and faith was always present in our household. I attended Catholic school in my youth - though this was partly practical (Catholic schools in Chicago let you start kindergarten a year early, perfect for my working professional parents).
+{.newthought}I was raised Catholic{/.newthought}, as was my mom. My dad converted to Catholicism when I was young, and faith was always present in our household. I attended Catholic school in my youth - though this was partly practical (Catholic schools in Chicago let you start kindergarten a year early, perfect for my working professional parents).
 
 The Catholic education system in Chicago was wonderful—full of smart people looking to thoughtfully engage with their faith. I never questioned my faith in my childhood. It was what I knew, and I embraced it fully, serving as an altar boy for several years.
 
@@ -63,11 +62,11 @@ Outside of my projects, I became fascinated by philosophy, and eventually, found
 
 One of the quams of attending a secular school is that this appears to be the norm. The brightest young, often left-leaning, high school minds want to rebel against institution and prove their intellectual prowess, and there is no target more apt than the Catholic church. I fell into this bucket of students, desperately wanting to free myself from any intellectual "prerequisites" that had been "thrust" upon me, and with no one willing to take the other side, I ruthlessly kept picking for logical inconsistencies. 
 
-I ended my high school career with a focus on Eastern philosophy. Thich Nhat Hanh's *The Other Shore* was a particular favorite of mine (see: [A Mutual Meaning](https://theodore.net/writings/a-mutual-meaning/)), as I found it provided a sense of peace and resolution to many outstanding questions: What matters? What am I to do with my life? (both of which felt particarly pressing as I ended my time in high school - see: [On Turning Twenty](https://theodore.net/writings/on-turning-twenty/)) I've always had a laissez-faire nature, and rarely get too worked up about decisions, and found this eastern philosophy to be a really nice confirmation that this is, in fact, a sane way to live.
+{.newthought}I ended my high school career{/.newthought} with a focus on Eastern philosophy. Thich Nhat Hanh's *The Other Shore* was a particular favorite of mine (see: [A Mutual Meaning](https://theodore.net/writings/a-mutual-meaning/)), as I found it provided a sense of peace and resolution to many outstanding questions: What matters? What am I to do with my life? (both of which felt particarly pressing as I ended my time in high school - see: [On Turning Twenty](https://theodore.net/writings/on-turning-twenty/)) I've always had a laissez-faire nature, and rarely get too worked up about decisions, and found this eastern philosophy to be a really nice confirmation that this is, in fact, a sane way to live.
 
 I think it was through my acceptance of this eastern philosophy (initially through an entirely secular lens) that I finally allowed my faith to slowly creep back into my life. 
 
-I moved to California after high school and had a brief stint at university before moving to the Bay Area to work and research full-time. As I lived and grew on the cutting edge, I began to realize how woefully naive I had been.
+{.newthought}I moved to California{/.newthought} after high school and had a brief stint at university before moving to the Bay Area to work and research full-time. As I lived and grew on the cutting edge, I began to realize how woefully naive I had been.
 
 When I first experienced "cultural Catholicism," my ego rose to a place where I felt all the knowledge I'd amassed was somehow too substantial, too worthy, to bother thoughtfully engaging with Faith any longer. As it turns out, we know extraordinarily little about the world and our reality. The atheist argument falls apart when you consider the scientific vanguard! There's so much we don't know, and more notably, so much where logic and science fall short.
 
@@ -79,7 +78,7 @@ The list goes on.
 >
 > *-- Werner Heisenberg*
 
-When I sat down to record a video for my application to the [Thiel Fellowship](https://thielfellowship.org) in late January this year, I read this quote from one of my favorite German physicists. I think it's the most eloquent summary of my adolescent Catholic experience.
+When I sat down to record a video for my application to the [Thiel Fellowship](https://thielfellowship.org) in late January this year, I read this quote from one of my favorite German physicists.{.sidenote}Werner Heisenberg (1901–1976), Nobel laureate in physics for the creation of quantum mechanics.{/.sidenote} I think it's the most eloquent summary of my adolescent Catholic experience.
 
 One may place themselves, their intellect, in higher regard than faith as a whole (this is quite easy to justify when you have no one to thoughtfully engage your faith with!), and this will drive you mad. Man simply doesn't know the world well enough to justify or debunk the faith, and as such, we cannot view this as a logical problem (nor a tool for bright high school students to prove their intellectual independence).
 
@@ -103,22 +102,24 @@ Rather, we must simply believe.
 
 ### No Man's Land
 
-I propose one may think of the dynamics of faith and science as a trenched battlefield from the top down (this is more of a visual metaphor, not meant to imply a necessary conflict between faith and science). Both faith and science have many entrenched positions: Science predicts natural phenomena, explains our perceptions, and maps measurable cause-and-effect relationships, while Faith provides existential meaning, moral frameworks, and addresses questions of ultimate purpose and transcendence.
+{.newthought}I propose{/.newthought} one may think of the dynamics of faith and science as a trenched battlefield from the top down (this is more of a visual metaphor, not meant to imply a necessary conflict between faith and science). Both faith and science have many entrenched positions: Science predicts natural phenomena, explains our perceptions, and maps measurable cause-and-effect relationships, while Faith provides existential meaning, moral frameworks, and addresses questions of ultimate purpose and transcendence.
 
-<figure style="opacity:95%;">
-<img src="../assets/images/Godfather/lightTrench.png" alt="Diagram showing faith/science battlefield" class="only-light" width="40%">
-<img src="../assets/images/Godfather/darkTrench.png" alt="Diagram showing faith/science battlefield" class="only-dark" width="40%">
+<figure markdown="1" style="opacity:95%;">
+
+ ![](../assets/images/Godfather/lightTrench.png#only-light){width="40%" alt="Diagram showing faith/science battlefield"}
+ ![](../assets/images/Godfather/darkTrench.png#only-dark){width="40%" alt="Diagram showing faith/science battlefield"}
+
 </figure>
 
 These two fronts can (theoretically) exist in beautiful harmony. The space between them - a no man's land of sorts - remains particularly interesting. It is this no man's land that becomes an origin of doubt for many. If there's a true unknown, one not understood through faith nor science, it seems natural for the human mind to imagine how we could discover and justify that thing rationally (which is, in fact, the essence of science).
 
-Yet even if we could successfully discover and justify every unknown within this no man's land, there would still be the trench of faith. This is because, as discussed earlier, there's a line at which science and secular logic fall short (most notably on the vanguard). Gödel was our living proof of this.
+Yet even if we could successfully discover and justify every unknown within this no man's land, there would still be the trench of faith. This is because, as discussed earlier, there's a line at which science and secular logic fall short (most notably on the vanguard). Gödel was our living proof of this.{.sidenote}Kurt Gödel's incompleteness theorems (1931) — any sufficiently powerful formal system contains truths it cannot prove within itself.{/.sidenote}
 
 More likely, however, we can clear the fog of this no man's land through the progression of both fronts: the thoughtful engagement of both faith and science. This would certainly yield the most rewarding understanding of ourselves, our duty, and our place in the cosmos.
 
 ### The Way to Love
 
-In preperation for the Baptism, I've been reading the last meditations of Father Anthony De Mello: *The Way to Love*. A few of my favorite thoughts thus far:
+{.newthought}In preperation for the Baptism{/.newthought}, I've been reading the last meditations of Father Anthony De Mello: *The Way to Love*.{.sidenote}Anthony De Mello, *The Way to Love: Meditations for Life* (1991).{/.sidenote} A few of my favorite thoughts thus far:
 
 Many people deceive themselves into unhappiness, but there is never a moment when you don’t have everything you need to be happy. Happiness is quite literally the most intrinsic experience there is.
 

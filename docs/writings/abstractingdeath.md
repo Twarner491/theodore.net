@@ -3,8 +3,6 @@ title: Abstracting Death
 description: Death as infinite abstraction.
 keywords: death, philosophy, abstraction, mortality, existence, life experience, Western philosophy, Eastern philosophy, linear time, cyclical time, consciousness, metaphysics, life and death, philosophical essay
 thumbnail: /assets/images/abstractingdeath/ad.png
-draft: true
-readtime: "2–3 mins"
 date: 2025-10-01
 hide:
   - navigation
@@ -12,13 +10,13 @@ hide:
 template: comments.html
 ---
 
-Death is an infinite abstraction.
+{.newthought}Death is an infinite{/.newthought} abstraction.
 
 Experience grows proportionally to life span. Every second, every day, every year provides more content for us to abstract upon.
 
 Death is, by definition, the end of our living experience, and as such, as we approach death, our ability to experience it approaches \(0\). Inversely, however, our capacity to abstract approaches \(\infty\).
 
-In this, our experience before birth and after death MUST be different, as before birth we do not hold any lived experience to abstract upon.
+{.newthought}In this{/.newthought}, our experience before birth and after death MUST be different, as before birth we do not hold any lived experience to abstract upon.
 
 Before birth: potential for experience is \(\infty\), while capacity to abstract is \(0\).
 
