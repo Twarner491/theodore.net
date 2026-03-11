@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/Pizza/thumb.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -835,7 +838,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Dec 2022 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 38–48 minutes</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 39–49 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -850,11 +853,18 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p><em>A Pizza-Preparing, Tool-Changing, 3-Axis, 3D-printed CNC Machine!</em></p>
-<p>The Pizza-Pizza CNC Machine is a Marlin-based, three-axis CNC Machine I developed alongside three of my friends. My contributions to the project include the machine&rsquo;s gantry, electronic housing, and parts of the frame CAD, as well as the machine&rsquo;s electronics system, firmware, and pizza-preparing gcode. This publication covers the fabrication of the CNC in-depth, with a focus on my project contributions, while also including final-result media.</p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><em>A Pizza-Preparing, Tool-Changing, 3-Axis, 3D-printed CNC Machine!</em></p>
+<p><span class="newthought">The Pizza-Pizza CNC Machine</span> is a Marlin-based, three-axis CNC Machine I developed alongside three of my friends. My contributions to the project include the machine&rsquo;s gantry, electronic housing, and parts of the frame CAD, as well as the machine&rsquo;s electronics system, firmware, and pizza-preparing gcode. This publication covers the fabrication of the CNC in-depth, with a focus on my project contributions, while also including final-result media.</p>
 <p>The machine includes two tool ends, one for sauce distribution and another for cheese, with the potential for expandability to have toping tool ends in future iterations. The CNC is mostly 3D-printed, with the exception of its aluminum rails and laser-cut wooden baseplate, and operates with a mini RAMBo - or RepRap Arduino-Mega-compatible Mother Board.</p>
 <p>The Pizza-Pizza CNC is a prototype. While all files are provided for your recreation, our initial build was in a time trial: the machine was designed, manufactured, and assembled in a little under 2 weeks. That being said, we&rsquo;d love to see your recreations and refined iterations of the project!</p>
 <h3 id="supplies">Supplies<a class="headerlink" href="#supplies" title="Permanent link">&para;</a></h3>
+<div class="bom-table"><input type="checkbox" id="bom-toggle-3" class="bom-collapse-toggle"><div class="bom-table-inner">
 <table>
 <thead>
 <tr>
@@ -934,9 +944,14 @@
 <td>1</td>
 <td>-</td>
 </tr>
+<tr>
+<td></td>
+<td><strong>Total</strong></td>
+<td><strong>$316.99</strong></td>
+</tr>
 </tbody>
 </table>
-<p><em>&mdash; Total Cost: $316.99 &mdash;</em></p>
+</div><div class="bom-fade"></div><label for="bom-toggle-3" class="bom-toggle-label"><span class="bom-label-expand">Show all 15 items</span><span class="bom-label-collapse">Collapse</span></label></div>
 <h3 id="downloads">Downloads<a class="headerlink" href="#downloads" title="Permanent link">&para;</a></h3>
 <p>Click <a href="https://drive.google.com/drive/folders/1MkSBvkSNUbUM2MBJjWq7NP9Jycz6-_t8?usp=share_link">here</a> to access and download all files, including CAD, Code, and Schematics, for this project. These files can be used and altered with attribution, as stated and enforced by my <a href="https://github.com/Twarner491/project-files/blob/main/LICENSE">project license</a>. In addition to the files included in this downloads folder, please note that Fusion 360 source files can be accessed with the Open in Fusion 360 button in the bottom right-hand corner of each of the embedded designs on this page.</p>
 <div class="admonition abstract">
@@ -957,7 +972,9 @@
 <p>The final bit to this carriage puzzle was the Z-axis claw. Similar to the carriage itself, this claw utilizes linear bearings to roll vertically on the Z-axis’s two steel rods. The claw is driven up and down by the 8mm threaded rod attached to the Z-axis stepper motor, meshing with the rod&rsquo;s corresponding threaded nut. The pass-through hole for this nut is designed to allow the nut to sit flush with the top surface of the claw and can be inserted into the claw as you would a brass insert, by heating the nut with a soldering iron, while applying pressure to guild the nut into the hole. Next to the claws’ nut is a small feature laying on the underside of the claw. This jut-out box ensures the Z-axis endstop hits the claw before the claw’s linear bearings hit the bottom of the axis. From this feature, the claw ramps up into the hopper-holding end. This end consists of a 240-degree semi-circle, allowing for the end to slide into the bottom end of the hopper, and the rais to lock the hopper in the semi-circle. This claw was finished up with a small chef hat icon, which I imported into Fusion as an SVG before extruding the outlines of the design into some of the claw’s space. Below is the finished Z-Axis Carriage model, including the Y-axis motion, Z-Axis, and the claw of the machines.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a42f26fe2631228f01?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 </center>
 
@@ -973,7 +990,9 @@
 <p>With the X-axis motion done, I moved on to the axis’s one endstop, which will allow our machine to home its X-axis to the switch before usage. The mount for this endstop switch is not overly complicated, attaching a switch holding bracket to the top of the 2020 aluminum extrusion t-slots. The feature uses an M4 bolt and corresponding T-Bolt to attach the bracket to the top of the extrusion through a hole in the bracket. From here the feature stems up to a slot that holds an endstop switch in line with the machine’s X-axis carriage. The switch is held in this slot by its bottom screw hole, using an M2 bolt and nut. I positioned this endstop in the back right of the machine, keeping the endstop away from the cluttered front of the machine, and the switch’s cable distanced as close to the electronic enclosure as possible. The feature can be seen mounted in this position in our final Pizza Pizza CNC render shown below.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://charlottelatin3.autodesk360.com/shares/public/SH56a43QTfd62c1cd968eed7bd9352f896cc?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 </center>
 
@@ -993,7 +1012,9 @@
 </figure>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a474b052f2397a5078?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 </center>
 
@@ -1028,10 +1049,11 @@
 <p><img alt="" src="../../assets/images/Pizza/bitmapconv.jpg" width="100%" /></p>
 </figure>
 <p>Moving on to the firmware status screen file, the basic file setup for the screen is practically the same as the boot screen. First, I created a new file in my Marlin folder, titled _Statusscreen.h, and then used the same <a href="https://marlinfw.org/tools/u8glib/converter.html">Bitmap Converter</a> to convert a Pizza Pizza - CLS Fab Lab logo and Pizza icon into our systems status screen. This conversion can be done by checking all the same boxes as before, Marlin 2.x, Binary, ASCII Art, except the Boot checkbox, as now because were generating the status screen, I checked the Status box. Despite these correct settings, I would receive an error while generating this status screen, as, unlike the systems boot screen, Marlin’s status screen has more space requirements. I found these two lectures on <a href="https://www.youtube.com/watch?v=3fGHgzZqaGs">Customizing Marlin LCD</a> and Marlin’s <a href="https://www.youtube.com/watch?v=GOAsx42Anrk">Custom Status Screen</a> helpful while troubleshooting this, as both videos explain the different requirements of these custom screens and the workings behind them. The Marlin status display screen leaves a 128x19 pixel canvas for a custom status screen, with even less room for any other display graphics included on the status display. Our instance of Marlin has a 105x19 pixel canvas for this custom screen, due to the animated fan icon shown on the status display when the electronics encloser fan is activated. This fan icon comes preset when a fan is set up in Marlin, and I think adds a nice touch to the status display, so I decided to leave it, and work with the 105x19 pixel canvas. Keeping this size in mind, I rescaled the logo bitmap to the correct size and touched up the image pixel by pixel until the entire thing was clean black and white. I then reimported the small bitmap into the converter, checking the boxes listed above, and converted the image before copying the output into the <code>_Statusscreen.h</code> file in my Marlin folder.</p>
-<figure>
-<p><img align="left" alt="" src="../../assets/images/Pizza/homebitmap.jpg" width="45%" />
-<img align="right" alt="" src="../../assets/images/Pizza/bitmapcode.jpg" width="51%" /></p>
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/Pizza/homebitmap.jpg" alt="">
+<img src="../../assets/images/Pizza/bitmapcode.jpg" alt="">
+</div>
+
 <h3 id="custom-interface-menu">Custom Interface Menu<a class="headerlink" href="#custom-interface-menu" title="Permanent link">&para;</a></h3>
 <p>With our instance of Marlin customized with a custom boot and status screen, I next moved on to the interface’s LCD menus. Due to the lack of an SD card reader on both the Mini RAMBo board and the Ender 3 LCD, I opted to enable a customer menu in Marlin where we could store our pizza-making gcode and run it through the LCD interface. Marlin can be configured with custom menus like this through its <code>Configuration_adv.h</code>. I started a new custom menu by uncommenting line 3227,</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-3227">3227</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-3227" name="__codelineno-1-3227"></a><span class="o">//</span> <span class="c1">#define CUSTOM_USER_MENUS</span>
@@ -1074,7 +1096,9 @@
 <p>I began to move on to testing both the electronics system and firmware. Visually, Scrolling through the LCD interface I found no issues, and every part of the system powered on correctly. I nest connected the Mini RAMBo to my laptop vias USB and began to test the system by sending it commands. I used CNCjs, a javascript CNC controller, and gcode sender, to first ensure I could connect to the system via USB, and next to test the board’s three active stepper motor ports by hooking up a stepper to the boards X, Y, and Z stepper ports. This jerry-rigged test, shown in the video below, yielded good results, confirming control over the steppers through firmware.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/Jc3l15KAwwE" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -1082,7 +1106,9 @@
 <p>One of the coolest aspects of running Marlin on our CNC is its easy LCD interface integration, a feature that adds more flair to a machine. Although different unique sections of this interface are discussed above under the Marlin configuring section of this page, I threw together a walkthrough of the final product, all the parts together, shown below.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/4IKbeooSaIM" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -1097,10 +1123,11 @@
 <p><img alt="" src="../../assets/images/Pizza/rawprint.jpg" width="100%" /></p>
 </figure>
 <p>After this cleanup, I began to install the electronics inside the case, first screwing the LCD panel to its mounting place, using the plate’s spacers, to align the screen in its opening, shown below.</p>
-<figure>
-<p><img alt="" src="../../assets/images/Pizza/mountedlcd.jpg" width="100%" /></p>
-<p><img alt="" src="../../assets/images/Pizza/sidelcdmount.jpg" width="100%" /></p>
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/Pizza/mountedlcd.jpg" alt="">
+<img src="../../assets/images/Pizza/sidelcdmount.jpg" alt="">
+</div>
+
 <p>I then moved on to welding this front plate with the LCD attached to the encloser&rsquo;s base, sticking the two together with superglue, before using a hairdryer and some sandpaper to clean up the edge. Nextly, I installed the Mini RAMBo on its mounting pins, aligning the board’s USB port with its corresponding cutout, and also screwed in the enclosure fan with some M3 screws and bolts.</p>
 <p>I moved on to setting up the machine wiring harnesses and altering some stepper cables for each axis. The Machines X-axis steppers are set to run off of the same port on the Mini RAMBo, so I first prepared this cable, by splicing two stepper connectors to one of the board connectors, and next reversing two of the stepper connector wires, one of the stepper cables, to ensure the two motors would be reversed, and thus move in the same direction when mounted in a mirrored position. One of these X-axis stepper cables also needed to be longer than the other, due to the mounting position of the stepper in correspondence to the electronics housing, so I added a bit of length to one of the connectors. I also repeated this added length of the Z-axis stepper, and plugged these two wires, along with the unaltered Y-axis wire into the Mini RAMBo.</p>
 <figure>
@@ -1180,7 +1207,9 @@
 <p>This process left me with generated gcode of a single circle, that I could later manipulate into our pizza-preparing gcode. I ran a quick test of this generated gcode on my personal CNC, just to confirm it’s working, shown in the video below.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/azvfDjM_h1E" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -1200,7 +1229,9 @@
 <p>After the servo control gcode was flattened out, Charles began the work of writing tool change gcode for our CNC, writing out the rough positioning of each hopper when on its holder, jogging the machine to line up with the holder, and picking up the hopper. He wrote the tool change instructions for each hopper’s pickup and return based on these positions, before having to leave for the night. Unfortunately, the next day Charles was unable to make it back to the lab due to COVID protocol, so I took over testing his work, with a little help from Graham Smith. With Charles’s tool changing code as a starting place, we began altering each position value little by little until we had a completely successful automated tool change, shown in the video below.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/MYHNym9zk10" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -1215,11 +1246,25 @@
 <p>Of course, after all this work on a pizza-preparing machine, the only logical test for the machine would be preparing a pizza. We set up our CNC by covering the entire work area and all parts that could be covered with a plastic trash bag, as I didn’t want to get sauce on our newly working machine. From here, we loaded the two hoppers with tomato sauce and some shredded cheese, confirmed everything looked right, and then ran the final pizza preparing gcode, and…</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/Tk6OREM7gic" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
 <p>&hellip; it worked!! The pizza preparing gcode worked through both of its tool changes, creating spirals of sauce and cheese on our pizza crust. Unfortunately, there were a couple of small issues in the run-through, one being not enough sauce put in our sauce hopper, so upon its tool docking, the hopper wasn’t heavy enough to stay in the holder, and the other being a sticky cheese. We had left our cheese and sauce out in our lab for almost two days before the test, and not only did this cause the cheese to smell, but also left us with a cheese that would not stop sticking to itself, proving an issue when trying to get the cheese to fall from the hopper, however, the cheese fell through the hopper hole with a little convincing, and finally we had prepared a pizza.</p>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -1337,12 +1382,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

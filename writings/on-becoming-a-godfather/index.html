@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/Godfather/thumb.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -641,7 +644,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Aug 2025 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 10–13 mins</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 10–13 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -656,7 +659,13 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p><link rel="stylesheet" href="../../assets/css/messages.css"></p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><link rel="stylesheet" href="../../assets/css/messages.css"></p>
 <div class="message-exchange">
   <div class="message-container">
     <div class="message sender">
@@ -686,7 +695,7 @@
 </div>
 
 <hr />
-<p>I was raised Catholic, as was my mom. My dad converted to Catholicism when I was young, and faith was always present in our household. I attended Catholic school in my youth - though this was partly practical (Catholic schools in Chicago let you start kindergarten a year early, perfect for my working professional parents).</p>
+<p><span class="newthought">I was raised Catholic</span>, as was my mom. My dad converted to Catholicism when I was young, and faith was always present in our household. I attended Catholic school in my youth - though this was partly practical (Catholic schools in Chicago let you start kindergarten a year early, perfect for my working professional parents).</p>
 <p>The Catholic education system in Chicago was wonderful—full of smart people looking to thoughtfully engage with their faith. I never questioned my faith in my childhood. It was what I knew, and I embraced it fully, serving as an altar boy for several years.</p>
 <p>In 2016, my family moved to North Carolina for my dad&rsquo;s work. I was just starting middle school.</p>
 <p>My mom wanted to keep my siblings and me in Catholic school, so I started sixth grade at a large Catholic middle school. I found my new school dismally easy and started coasting. More troubling, I hadn&rsquo;t found the same thoughtful engagement with faith; instead, I found what I would call &ldquo;culturally Catholic&rdquo; (we go to church, we do the things, because this is what we are told to do).</p>
@@ -696,9 +705,9 @@
 <p>I changed schools in eighth grade, transferring to a secular private school that was much more intellectually engaging. I started research and writing, eventually finding all my free time outside school (and sometimes when I really should have been studying) taken up by whatever my latest project was. I finally had a proper outlet for &ldquo;thoughtful engagement,&rdquo; though my participation and attitude towards faith had been quite tarnished.</p>
 <p>Outside of my projects, I became fascinated by philosophy, and eventually, found myself in a philosophy class my senior year of high school. I held the <a href="https://theodore.net/writings/torpediniformes/">Classics</a> in high reverence, alongside my contemporary favorites: Niezche and Dostoevsky. Yet when we took on Catholic philosophy and even secular attempts at &ldquo;proving&rdquo; the faith (ahem &hellip; Descartes), I took up my old search for logical inconsistencies (with a much greater rigor than any other era/domain we covered in the class). </p>
 <p>One of the quams of attending a secular school is that this appears to be the norm. The brightest young, often left-leaning, high school minds want to rebel against institution and prove their intellectual prowess, and there is no target more apt than the Catholic church. I fell into this bucket of students, desperately wanting to free myself from any intellectual &ldquo;prerequisites&rdquo; that had been &ldquo;thrust&rdquo; upon me, and with no one willing to take the other side, I ruthlessly kept picking for logical inconsistencies. </p>
-<p>I ended my high school career with a focus on Eastern philosophy. Thich Nhat Hanh&rsquo;s <em>The Other Shore</em> was a particular favorite of mine (see: <a href="https://theodore.net/writings/a-mutual-meaning/">A Mutual Meaning</a>), as I found it provided a sense of peace and resolution to many outstanding questions: What matters? What am I to do with my life? (both of which felt particarly pressing as I ended my time in high school - see: <a href="https://theodore.net/writings/on-turning-twenty/">On Turning Twenty</a>) I&rsquo;ve always had a laissez-faire nature, and rarely get too worked up about decisions, and found this eastern philosophy to be a really nice confirmation that this is, in fact, a sane way to live.</p>
+<p><span class="newthought">I ended my high school career</span> with a focus on Eastern philosophy. Thich Nhat Hanh&rsquo;s <em>The Other Shore</em> was a particular favorite of mine (see: <a href="https://theodore.net/writings/a-mutual-meaning/">A Mutual Meaning</a>), as I found it provided a sense of peace and resolution to many outstanding questions: What matters? What am I to do with my life? (both of which felt particarly pressing as I ended my time in high school - see: <a href="https://theodore.net/writings/on-turning-twenty/">On Turning Twenty</a>) I&rsquo;ve always had a laissez-faire nature, and rarely get too worked up about decisions, and found this eastern philosophy to be a really nice confirmation that this is, in fact, a sane way to live.</p>
 <p>I think it was through my acceptance of this eastern philosophy (initially through an entirely secular lens) that I finally allowed my faith to slowly creep back into my life. </p>
-<p>I moved to California after high school and had a brief stint at university before moving to the Bay Area to work and research full-time. As I lived and grew on the cutting edge, I began to realize how woefully naive I had been.</p>
+<p><span class="newthought">I moved to California</span> after high school and had a brief stint at university before moving to the Bay Area to work and research full-time. As I lived and grew on the cutting edge, I began to realize how woefully naive I had been.</p>
 <p>When I first experienced &ldquo;cultural Catholicism,&rdquo; my ego rose to a place where I felt all the knowledge I&rsquo;d amassed was somehow too substantial, too worthy, to bother thoughtfully engaging with Faith any longer. As it turns out, we know extraordinarily little about the world and our reality. The atheist argument falls apart when you consider the scientific vanguard! There&rsquo;s so much we don&rsquo;t know, and more notably, so much where logic and science fall short.</p>
 <p>Take, for instance, what happened before the Big Bang? Or what lies beyond the observable universe? How does subjective experience arise from neural computation? What determines the boundary between conscious and non-conscious systems? What determines emergent behaviors and phase transitions? What is the relationship between mathematical objects and physical reality? How do we handle infinite regressions in causal explanations? </p>
 <p>The list goes on.</p>
@@ -706,7 +715,7 @@
 <p>The first gulp from the glass of natural sciences will turn you into an atheist, but at the bottom of the glass God is waiting for you.</p>
 <p><em>&ndash; Werner Heisenberg</em></p>
 </blockquote>
-<p>When I sat down to record a video for my application to the <a href="https://thielfellowship.org">Thiel Fellowship</a> in late January this year, I read this quote from one of my favorite German physicists. I think it&rsquo;s the most eloquent summary of my adolescent Catholic experience.</p>
+<p>When I sat down to record a video for my application to the <a href="https://thielfellowship.org">Thiel Fellowship</a> in late January this year, I read this quote from one of my favorite German physicists.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">Werner Heisenberg (1901–1976), Nobel laureate in physics for the creation of quantum mechanics.</span> I think it&rsquo;s the most eloquent summary of my adolescent Catholic experience.</p>
 <p>One may place themselves, their intellect, in higher regard than faith as a whole (this is quite easy to justify when you have no one to thoughtfully engage your faith with!), and this will drive you mad. Man simply doesn&rsquo;t know the world well enough to justify or debunk the faith, and as such, we cannot view this as a logical problem (nor a tool for bright high school students to prove their intellectual independence).</p>
 <p>Rather, we must simply believe.</p>
 <div style="font-family: 'Crimson Pro', serif;">
@@ -720,16 +729,16 @@
 </blockquote>
 </div>
 <h3 id="no-mans-land">No Man&rsquo;s Land<a class="headerlink" href="#no-mans-land" title="Permanent link">&para;</a></h3>
-<p>I propose one may think of the dynamics of faith and science as a trenched battlefield from the top down (this is more of a visual metaphor, not meant to imply a necessary conflict between faith and science). Both faith and science have many entrenched positions: Science predicts natural phenomena, explains our perceptions, and maps measurable cause-and-effect relationships, while Faith provides existential meaning, moral frameworks, and addresses questions of ultimate purpose and transcendence.</p>
+<p><span class="newthought">I propose</span> one may think of the dynamics of faith and science as a trenched battlefield from the top down (this is more of a visual metaphor, not meant to imply a necessary conflict between faith and science). Both faith and science have many entrenched positions: Science predicts natural phenomena, explains our perceptions, and maps measurable cause-and-effect relationships, while Faith provides existential meaning, moral frameworks, and addresses questions of ultimate purpose and transcendence.</p>
 <figure style="opacity:95%;">
 <p><img alt="Diagram showing faith/science battlefield" src="../../assets/images/Godfather/lightTrench.png#only-light" width="40%" />
  <img alt="Diagram showing faith/science battlefield" src="../../assets/images/Godfather/darkTrench.png#only-dark" width="40%" /></p>
 </figure>
 <p>These two fronts can (theoretically) exist in beautiful harmony. The space between them - a no man&rsquo;s land of sorts - remains particularly interesting. It is this no man&rsquo;s land that becomes an origin of doubt for many. If there&rsquo;s a true unknown, one not understood through faith nor science, it seems natural for the human mind to imagine how we could discover and justify that thing rationally (which is, in fact, the essence of science).</p>
-<p>Yet even if we could successfully discover and justify every unknown within this no man&rsquo;s land, there would still be the trench of faith. This is because, as discussed earlier, there&rsquo;s a line at which science and secular logic fall short (most notably on the vanguard). Gödel was our living proof of this.</p>
+<p>Yet even if we could successfully discover and justify every unknown within this no man&rsquo;s land, there would still be the trench of faith. This is because, as discussed earlier, there&rsquo;s a line at which science and secular logic fall short (most notably on the vanguard). Gödel was our living proof of this.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Kurt Gödel&rsquo;s incompleteness theorems (1931) — any sufficiently powerful formal system contains truths it cannot prove within itself.</span></p>
 <p>More likely, however, we can clear the fog of this no man&rsquo;s land through the progression of both fronts: the thoughtful engagement of both faith and science. This would certainly yield the most rewarding understanding of ourselves, our duty, and our place in the cosmos.</p>
 <h3 id="the-way-to-love">The Way to Love<a class="headerlink" href="#the-way-to-love" title="Permanent link">&para;</a></h3>
-<p>In preperation for the Baptism, I&rsquo;ve been reading the last meditations of Father Anthony De Mello: <em>The Way to Love</em>. A few of my favorite thoughts thus far:</p>
+<p><span class="newthought">In preperation for the Baptism</span>, I&rsquo;ve been reading the last meditations of Father Anthony De Mello: <em>The Way to Love</em>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Anthony De Mello, <em>The Way to Love: Meditations for Life</em> (1991).</span> A few of my favorite thoughts thus far:</p>
 <p>Many people deceive themselves into unhappiness, but there is never a moment when you don’t have everything you need to be happy. Happiness is quite literally the most intrinsic experience there is.</p>
 <p>Our society (particularly Silicon Valley - where I live) has an unbelievably misconceived concept of happiness, and it usually follows the lines of “if I achieve [insert greatness/success/fame/etc. ], then I will be happy”. These things may bring momentary joy, but certainly not happiness. This “path to happiness” is so commonly held that it never occurs to most to question it! </p>
 <p>How many genuinely happy people do you know? probably very few (if you’re lucky), so clearly our current perception of what leads us to happiness is wrong.</p>
@@ -766,6 +775,18 @@
     </div>
   </div>
 </div>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -883,12 +904,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

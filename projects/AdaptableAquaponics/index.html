@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/AdaptableAquaponics/hero.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -741,7 +744,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Jun 2022 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 18-23 minutes</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 16–20 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -756,96 +759,170 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p><strong>A Theoretical Confrontation to Contemporary Farming Challenges.</strong></p>
-<p>Paralleling the growth of the global human population, the increased strain is placed on ever-expanding food production. Following current population growth trends, the <a href="https://www.un.org/en/global-issues/food">United Nation&rsquo;s</a> <em>Food and Agricultural Organization (FAO)</em> predicts a required <strong>70% growth</strong> in food production by 2050 to adequately match global needs.<a href="https://www.un.org/en/global-issues/food">^1</a> As of 2020, 9.9% of the present human population faced undernourishment with an estimated <strong>720 and 811 million humans</strong> going hungry. Continued reliance on current insufficient North American Agriculture practices will bolster inadequate access to nutrition. <a href="http://seedstock.com/2012/04/18/five-major-challenges-facing-north-american-agriculture/">Seedstock.com</a> divides problems with contemporary agricultural practices into categories including &hellip;</p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought">Paralleling the growth</span> of the global human population, the increased strain is placed on ever-expanding food production. Following current population growth trends, the <a href="https://www.un.org/en/global-issues/food">United Nation&rsquo;s</a> <em>Food and Agricultural Organization (FAO)</em> predicts a required <strong>70% growth</strong> in food production by 2050 to adequately match global needs.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"><a href="https://www.un.org/en/global-issues/food">UN Global Issues: Food</a></span> As of 2020, 9.9% of the present human population faced undernourishment with an estimated <strong>720 and 811 million humans</strong> going hungry. Continued reliance on current insufficient North American Agriculture practices will bolster inadequate access to nutrition. <a href="http://seedstock.com/2012/04/18/five-major-challenges-facing-north-american-agriculture/">Seedstock.com</a> divides problems with contemporary agricultural practices into categories including &hellip;</p>
 <ul>
 <li>Resource Depletion - The Costs of Industrial Agriculture</li>
 <li>Land Management - Degrading and Undervaluing Farmland</li>
 <li>Food Waste - Compromising Food Security</li>
 <li>Demographic Changes - A Disconnected Public</li>
 </ul>
-<p>Addressing the developing demand for food requires a direct confrontation with each of these four challenges and opens the door for sustainable alternatives to classic agricultural practices - massive potential for entrepreneurial pursuit. Aquaponics offers the potential to address the problems of contemporary agricultural practices whilst demonstrating scientific principles and modeling biological cycles for the education of a local community. &ldquo;Aquaponics is a form of agriculture that combines raising fish in tanks (recirculating aquaculture) with soilless plant culture (hydroponics). In aquaponics, the nutrient-rich water from raising fish provides a natural fertilizer for the plants and the plants help to purify the water for the fish&rdquo;, and this is a sustainable method to both raise fish and grow crops.<a href="https://aquaponics.com/">^2</a></p>
-<p><img align="left" alt="Basic aquaponics system diagram showing water flow" src="../../assets/images/AdaptableAquaponics/note1.png" width="48.5%" /> <img align="right" alt="Detailed aquaponics system diagram with component labels" src="../../assets/images/AdaptableAquaponics/note2.png" width="48%" /></p>
-<p><strong>Adaptable Aquaponics</strong> serves as a theoretical successor to my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>, a small-scale, self-sustaining ecosystem, with the hopes ofexpanding the accessibility of successful &amp; thriving aquaponics ecosystems to individuals. While the <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a> is equipped to enable access to aquaponics at an individual level, economic optimization of the project came second to maintaining a sleek design hoping to catalyze in-house acceptance of the product. Adaptable Aquaponics offers some contrasting design choices with the goal of addressing all four categories of contemporary agricultural challenges and addressing the current bottlenecks of global nutrition.</p>
-<p>Both the Fusion 360 model and the prototyping mesh &amp; SVG files for this project can be accessed via the button below. These files can be used and altered with attribution, as stated and enforced by my project license. In addition to the files included in this downloads folder, please note that Fusion 360 source files can be accessed with the Open in Fusion 360 button in the bottom right-hand corner of each of the embedded designs on this page. The renders of my Adaptable Aquaponics model utilize the <a href="https://polyhaven.com/a/ulmer_muenster">Ulmer Muenster</a> HDRI from <a href="https://polyhaven.com/">polyhaven.com</a> in their environment. Additionally, this model&rsquo;s <a href="https://grabcad.com/library/solar-panel-86">Solar Panels</a>, <a href="https://www.cadblocksfree.com/en/catalogsearch/result/?q=clean+water+pump&amp;amnoroute">Water Pump</a> &amp; <a href="https://gallery.autodesk.com/fusion360/Projects/50197/caster-wheel-3">Casters</a> are altered files from <abbr title="Computer-Aided Design">CAD</abbr> libraries.</p>
-<p><a class="md-button md-button--primary" href="https://drive.google.com/file/d/1_D22L8d_AXw41mTjiqi8GC2dSMdzqQIH/view?usp=sharing">Adaptable Aquaponics Files <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M256 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v210.7l-41.4-41.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 242.7zM64 320c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64v-32c0-35.3-28.7-64-64-64h-46.9l-56.6 56.6c-31.2 31.2-81.9 31.2-113.1 0L110.9 320zm304 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48"/></svg></span></a></p>
+<p>Addressing the developing demand for food requires a direct confrontation with each of these four challenges and opens the door for sustainable alternatives to classic agricultural practices - massive potential for entrepreneurial pursuit. Aquaponics offers the potential to address the problems of contemporary agricultural practices whilst demonstrating scientific principles and modeling biological cycles for the education of a local community. &ldquo;Aquaponics is a form of agriculture that combines raising fish in tanks (recirculating aquaculture) with soilless plant culture (hydroponics). In aquaponics, the nutrient-rich water from raising fish provides a natural fertilizer for the plants and the plants help to purify the water for the fish&rdquo;, and this is a sustainable method to both raise fish and grow crops.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"><a href="https://aquaponics.com/">Aquaponics.com</a></span></p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AdaptableAquaponics/note1.png" alt="Basic aquaponics system diagram">
+<img src="../../assets/images/AdaptableAquaponics/note2.png" alt="Detailed aquaponics system diagram">
+</div>
+
+<p><em>Adaptable Aquaponics</em> serves as a theoretical successor to my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>, a small-scale, self-sustaining ecosystem, with the hopes of expanding the accessibility of successful &amp; thriving aquaponics ecosystems to individuals. While the <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a> is equipped to enable access to aquaponics at an individual level, economic optimization of the project came second to maintaining a sleek design hoping to catalyze in-house acceptance of the product. Adaptable Aquaponics offers some contrasting design choices with the goal of addressing all four categories of contemporary agricultural challenges and addressing the current bottlenecks of global nutrition.</p>
+<p>Both the Fusion 360 model and the prototyping mesh &amp; SVG files for this project can be accessed via the button below. These files can be used and altered with attribution, as stated and enforced by my project license. In addition to the files included in this downloads folder, please note that Fusion 360 source files can be accessed with the Open in Fusion 360 button in the bottom right-hand corner of each of the embedded designs on this page. The renders of my Adaptable Aquaponics model utilize the <a href="https://polyhaven.com/a/ulmer_muenster">Ulmer Muenster</a> HDRI from <a href="https://polyhaven.com/">polyhaven.com</a> in their environment. Additionally, this model&rsquo;s <a href="https://grabcad.com/library/solar-panel-86">Solar Panels</a>, <a href="https://www.cadblocksfree.com/en/catalogsearch/result/?q=clean+water+pump&amp;amnoroute">Water Pump</a> &amp; <a href="https://gallery.autodesk.com/fusion360/Projects/50197/caster-wheel-3">Casters</a> are altered files from CAD libraries.</p>
+<p><a class="md-button md-button--outlined" href="https://drive.google.com/file/d/1_D22L8d_AXw41mTjiqi8GC2dSMdzqQIH/view?usp=sharing">Adaptable Aquaponics Files <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M256 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v210.7l-41.4-41.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 242.7zM64 320c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64v-32c0-35.3-28.7-64-64-64h-46.9l-56.6 56.6c-31.2 31.2-81.9 31.2-113.1 0L110.9 320zm304 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48"/></svg></span></a></p>
 <div class="admonition success">
 <p class="admonition-title">Make it Modular</p>
+<p><img align="left" alt="Autodesk Construction Solutions Scholarship Award badge" height="4em" src="../../assets/images/AdaptableAquaponics/scholarship.jpg" /></p>
+<p>Adaptive Aquaponics is the scaled successor to my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a> &amp; my winning entry into Autodesk Instructable&rsquo;s <a href="https://www.instructables.com/contest/makeitmodular2022/">Make It Modular</a> student design challenge receiving the Autodesk Construction Solutions Scholarship Award. Be sure to check <a href="https://www.instructables.com/Adaptable-Aquaponics/">Adaptable Aquaponics</a> out on instructables!</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>![alt-text](../assets/images/AdaptableAquaponics/scholarship.jpg){: align=left height=&quot;4em&quot; alt=&quot;Autodesk Construction Solutions Scholarship Award badge&quot;}
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a> Adaptive Aquaponics is the scaled successor to my &lt;a href=&quot;https://theodore.net/projects/AssistiveAquaponics/&quot;&gt;Assistive Aquaponics Fish Tank&lt;/a&gt; &amp; my winning entry into Autodesk Instructable&#39;s &lt;a href=&quot;https://www.instructables.com/contest/makeitmodular2022/&quot;&gt;Make It Modular&lt;/a&gt; student design challenge receiving the Autodesk Construction Solutions Scholarship Award. Be sure to check [Adaptable Aquaponics](https://www.instructables.com/Adaptable-Aquaponics/) out on instructables!
-</code></pre></div>
-<h2 id="cad-fusion-360"><abbr title="Computer-Aided Design">CAD</abbr> - Fusion 360<a class="headerlink" href="#cad-fusion-360" title="Permanent link">&para;</a></h2>
-<p>Being the theoretical successor to my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>, the <abbr title="Computer-Aided Design">CAD</abbr> for Adaptable Aquaponics utilizes the same &ldquo;skeleton&rdquo; of a closed-loop water circulation system, incorporating a remixed version of my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank&rsquo;s</a> plant box. Each &ldquo;Aquaponics Cell&rdquo; in Adaptable Aquaponics (I&rsquo;ll touch on the distinction of these mentioned modules later in this section) contains eight individual plant boxes, each with a volume over two times as great as the smaller plant box of my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>. These up-scaled cells have been altered to ensure proper water flow at a larger scale, and are linked in series via several pipes to a <em>Biofilter</em> housed on the &ldquo;Aquaponics Rack&rdquo;. Unlike in a small-scale ecosystem such as my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>, a biofilter is an essential component of a large-scale aquaponics setup. The filter expands the surface area of your system, providing ample space for the nitrogen cycle to occur.</p>
+<h2 id="cad-fusion-360">CAD - Fusion 360<a class="headerlink" href="#cad-fusion-360" title="Permanent link">&para;</a></h2>
+<p>Being the theoretical successor to my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>, the CAD for Adaptable Aquaponics utilizes the same &ldquo;skeleton&rdquo; of a closed-loop water circulation system, incorporating a remixed version of my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank&rsquo;s</a> plant box. Each &ldquo;Aquaponics Cell&rdquo; in Adaptable Aquaponics (I&rsquo;ll touch on the distinction of these mentioned modules later in this section) contains eight individual plant boxes, each with a volume over two times as great as the smaller plant box of my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>. These up-scaled cells have been altered to ensure proper water flow at a larger scale, and are linked in series via several pipes to a <em>Biofilter</em> housed on the &ldquo;Aquaponics Rack&rdquo;. Unlike in a small-scale ecosystem such as my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>, a biofilter is an essential component of a large-scale aquaponics setup. The filter expands the surface area of your system, providing ample space for the nitrogen cycle to occur.</p>
 <p>Following the <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a> once more, Adaptable Aquaponics is a cross between a Nutrient Film &amp; Media Bed aquaponics system. As water is pumped into each plant box from the biofilter, it continuously flows along the sloping profile of the plant box&rsquo;s bed, passing through the plant roots, before exiting the plant box through a waterfall-esk exit slit &amp; draining into the fish tank below. Plant beds &amp; fish tanks are placed in an eight-to-one ratio in each &ldquo;Aquaponics Cell&rdquo;, a stack in contrast to the small tank and one-to-one ratio of the <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>. Opting for a larger fish tank increases the output efficiency of an aquaponics farm. Instead of being restrained to small-scale aquaculture (such as goldfish in my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>), hardier fish such as Tilapia &amp; Catfish can be farmed - making the food output of the farms even more efficient. Water is pumped out through a drain pipe at the bottom of each tank, flowing through a sediment tank located on the &ldquo;Aquaponics Rack&rdquo; before into the water pump &amp; then back into the biofilter. Parraling the system&rsquo;s inclusion of a larger tank for larger fish, a sediment tank is a must to free the system of excessive fish waste, allowing for maintained water clarity. Heavy waste carried in by the stream of water in the system will sink to the bottom of the sediment tank under conditions of low flow.</p>
-<p>The principle behind my design work on Adaptable Aquaponics parallels the &ldquo;circles of progress&rdquo; model, where you begin by achieving the core minimum viable product, and expanding the diameter of your &ldquo;circle&rdquo;, inflating your project with more layers of progress. Though this isn&rsquo;t my suggested approach to <abbr title="Computer-Aided Design">CAD</abbr>, I found using the &ldquo;circles of progress&rdquo; mindset useful while thinking of the modularity scales in my file.</p>
-<p>Aquaponics Cell</p>
-<p>Adaptable Aquaponics System</p>
+<p>The principle behind my design work on Adaptable Aquaponics parallels the &ldquo;circles of progress&rdquo; model, where you begin by achieving the core minimum viable product, and expanding the diameter of your &ldquo;circle&rdquo;, inflating your project with more layers of progress. Though this isn&rsquo;t my suggested approach to CAD, I found using the &ldquo;circles of progress&rdquo; mindset useful while thinking of the modularity scales in my file.</p>
 <p>Adaptable Aquaponics is constructed with layered modularity, a distinction highlighted by the component layering in my Fusion browser. </p>
-<p>{width=&rdquo;100%&rdquo; alt=&rdquo;Fusion 360 browser showing component layering&rdquo;}</p>
-<p>Eight Individual plant boxes make up a single aquaponics cell, two aquaponics cells make up a single aquaponics rack, and two aquaponics racks are housed inside of a single shipping container. The scaling of modularity allows for application scaling to be applied to Adaptable Aquaponics. A single plant box could be used in the form factor of my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>, or multiple Adaptable Aquaponic Shipping Containers could be housed in parallel to allow for large-scale farming. <strong>Modularity in the case of Adaptable Aquaponics not only enables future iteration &amp; reconfiguration but also the scaling of the ecosystem itself - meeting the needs of any potential consumers - ranging from individual to community.</strong></p>
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/modelinfucion.jpg" alt="Fusion 360 browser showing component layering" width="100%">
+</figure>
+
+<p>Eight Individual plant boxes make up a single aquaponics cell, two aquaponics cells make up a single aquaponics rack, and two aquaponics racks are housed inside of a single shipping container. The scaling of modularity allows for application scaling to be applied to Adaptable Aquaponics. A single plant box could be used in the form factor of my <a href="https://theodore.net/projects/AssistiveAquaponics/">Assistive Aquaponics Fish Tank</a>, or multiple Adaptable Aquaponic Shipping Containers could be housed in parallel to allow for large-scale farming. <em>Modularity in the case of Adaptable Aquaponics not only enables future iteration &amp; reconfiguration but also the scaling of the ecosystem itself - meeting the needs of any potential consumers - ranging from individual to community.</em></p>
 <h3 id="computational-design">Computational Design<a class="headerlink" href="#computational-design" title="Permanent link">&para;</a></h3>
-<p>Shifting to an analysis of the <abbr title="Computer-Aided Design">CAD</abbr> work behind Adaptable Aquaponics, I was super stoked to get to experiment with Fusion 360&rsquo;s new Automated Modeling tool! I used automated modeling to generate an optimized vertical support structure for my systems aquaponics rack, as well as for the angled mounts for adaptable aquaponics solar panels. The tool can be found under the <em>Automate</em> menu in the toolbar. </p>
-<p>{width=&rdquo;100%&rdquo; alt=&rdquo;Fusion 360 automated modeling toolbar interface&rdquo;}</p>
-<p>Automated modeling is about as intuitive as you can get, requiring only three inputs to generate a body - <em>Faces to Connect</em>, <em>Bodies to Avoid</em> &amp; <em>Operation</em> type. I began the computational design work of my aquaponics rack outside of the automated modeling tool itself, but instead by creating both the top and bottom plates of my Aquaponics rack &amp; attaching 6 mounting points to each sheet. Then, working around the prepositioned Aquaponics Cells, biofilter &amp; sediment tank, I created shelves to hold the content of the racks, unattached to support. I then opened the automated modeling tool and selected the previously created mounting points on both the top and bottom plates as well as each shelf with the <em>Faces to Connect</em> selection tool. Note, that there are three individual vertical supports on each Aquaponics rack, so I selected a corresponding set of 1/3 of the total created faces for each automated operation. I moved on to the <em>Bodies to Avoid</em> selection tool, highlighting the components of each Aquaponics Cell, the biofilter &amp; the sediment tank closest to the selected points of connection. I was careful here to only select crucial bodies to avoid, not all in the model - the fewer input selections, the faster computation time. With these selected inputs, I generated a design with a <em>New Body</em> operation.</p>
-<p>{width=&rdquo;100%&rdquo; alt=&rdquo;Automated design workspace showing bodies to avoid in red and faces to connect in blue&rdquo;}
-  Bodies to Avoid are highlighted red, while Faces to Connect are highlighted in blue</p>
-<p>After ~10 Mins, the Automated Modeling menu presented me with 6 generated bodies under the <em>Alternatives</em> menu. You can click through these generated bodies to see them in the workspace, before finalizing your selection with the <em>Ok</em> button. I repeated this generation for the two other vertical supports on the Aquaponics Rack, choosing a visually similar generation between all three to keep consistency to the rack. Computationally designed bodies can also be seen in the solar panel mounts located on the roof of Adaptable Aquaponics. These bodies followed a similar workflow, where I connected the back face of each solar panel to pre-created mounting points.</p>
+<p>Shifting to an analysis of the CAD work behind Adaptable Aquaponics, I was super stoked to get to experiment with Fusion 360&rsquo;s new Automated Modeling tool! I used automated modeling to generate an optimized vertical support structure for my systems aquaponics rack, as well as for the angled mounts for adaptable aquaponics solar panels. The tool can be found under the <code>Automate</code> menu in the toolbar. </p>
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/AutomatedModelingToolbar.jpg" alt="Fusion 360 automated modeling toolbar" width="100%">
+</figure>
+
+<p>Automated modeling is about as intuitive as you can get, requiring only three inputs to generate a body - <code>Faces to Connect</code>, <code>Bodies to Avoid</code> &amp; <code>Operation</code> type. I began the computational design work of my aquaponics rack outside of the automated modeling tool itself, but instead by creating both the top and bottom plates of my Aquaponics rack &amp; attaching 6 mounting points to each sheet. Then, working around the prepositioned Aquaponics Cells, biofilter &amp; sediment tank, I created shelves to hold the content of the racks, unattached to support. I then opened the automated modeling tool and selected the previously created mounting points on both the top and bottom plates as well as each shelf with the <code>Faces to Connect</code> selection tool. Note, that there are three individual vertical supports on each Aquaponics rack, so I selected a corresponding set of 1/3 of the total created faces for each automated operation. I moved on to the <code>Bodies to Avoid</code> selection tool, highlighting the components of each Aquaponics Cell, the biofilter &amp; the sediment tank closest to the selected points of connection. I was careful here to only select crucial bodies to avoid, not all in the model - the fewer input selections, the faster computation time. With these selected inputs, I generated a design with a <code>New Body</code> operation.</p>
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/automateddesign.jpg" alt="Automated design workspace — bodies to avoid in red, faces to connect in blue" width="100%">
+</figure>
+
+<p>Bodies to Avoid are highlighted red, while Faces to Connect are highlighted in blue</p>
+<p>After ~10 Mins, the Automated Modeling menu presented me with 6 generated bodies under the <code>Alternatives</code> menu. You can click through these generated bodies to see them in the workspace, before finalizing your selection with the <code>Ok</code> button. I repeated this generation for the two other vertical supports on the Aquaponics Rack, choosing a visually similar generation between all three to keep consistency to the rack. Computationally designed bodies can also be seen in the solar panel mounts located on the roof of Adaptable Aquaponics. These bodies followed a similar workflow, where I connected the back face of each solar panel to pre-created mounting points.</p>
 <h3 id="3d-plumbing">3D Plumbing<a class="headerlink" href="#3d-plumbing" title="Permanent link">&para;</a></h3>
 <p>The complex spatial routing of Adaptable Aquaponics plumbing required the use of Fusion 360&rsquo;s ability to sketch non-planar line sand splines. To enable this feature, click on your user icon in the top right of the window &amp; navigate to &hellip;</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Preferences &lt; Design &lt; Allow 3D sketching of lines and splines
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Preferences &lt; Design &lt; Allow 3D sketching of lines and splines
 </code></pre></div>
-<p>&hellip; and toggle this option on. Be sure to click <em>Apply</em> in the bottom right-hand corner of the <em>Preferences</em> menu before exiting.</p>
-<p>{width=&rdquo;100%&rdquo; alt=&rdquo;Fusion 360 preferences menu showing 3D sketching option&rdquo;}</p>
+<p>&hellip; and toggle this option on. Be sure to click <code>Apply</code> in the bottom right-hand corner of the <code>Preferences</code> menu before exiting.</p>
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/preferences.jpg" alt="Fusion 360 preferences menu showing 3D sketching option" width="100%">
+</figure>
+
 <p>Fusion 360&rsquo;s non-planar sketching allows spline points to be removed from their initial sketch plane and routed to other planes. Once a point is placed on a 3D spline, Fusion allows for the alteration of direction in three dimensions before you place the next point. </p>
-<p>{width=&rdquo;100%&rdquo; alt=&rdquo;3D spline routing for plumbing system&rdquo;}</p>
-<p>Beginning from the intake valve of each plant box, I routed a spline to a t-connector before using the <em>Pipe</em> tool with each routed spline as a reference - leaving me with all of the plant boxes in a given Aquaponics Cell routed in series. Additionally, 3D splines were used to route the plumbing from each fish tank to the sediment tank, from the sediment tank to the water pump, from the water pump to the biofilter, and from the biofilter back to the plant boxes.</p>
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/spatialplumbing.jpg" alt="3D spline routing for plumbing system" width="100%">
+</figure>
+
+<p>Beginning from the intake valve of each plant box, I routed a spline to a t-connector before using the <code>Pipe</code> tool with each routed spline as a reference - leaving me with all of the plant boxes in a given Aquaponics Cell routed in series. Additionally, 3D splines were used to route the plumbing from each fish tank to the sediment tank, from the sediment tank to the water pump, from the water pump to the biofilter, and from the biofilter back to the plant boxes.</p>
 <h2 id="rendering-fusion-360">Rendering - Fusion 360<a class="headerlink" href="#rendering-fusion-360" title="Permanent link">&para;</a></h2>
 <p>Once Adaptable Aquaponics was finalized - <em>the 95th iteration &hellip; phew</em> - I continued to Fusion 360&rsquo;s rendering workspace.</p>
-<p>{width=&rdquo;55%&rdquo; alt=&rdquo;Fusion 360 render workspace toolbar&rdquo;}</p>
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/rendertoolbar.jpg" alt="Fusion 360 render workspace toolbar" width="55%">
+</figure>
+
 <p>I began by setting up the renders scene by navigating to &hellip;</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Setup &lt; Scene Settings &lt; Environment Library
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Setup &lt; Scene Settings &lt; Environment Library
 </code></pre></div>
 <p>&hellip; where I chose to upload a custom HDRI backdrop. </p>
-<p><img align="left" alt="Render workspace setup with HDRI environment" src="../../assets/images/AdaptableAquaponics/RenderWorkspace.jpg" width="74.8%" /> <img align="right" alt="Ulmer Muenster HDRI background preview" src="../../assets/images/AdaptableAquaponics/hdirbg.jpg" width="21%" /></p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AdaptableAquaponics/RenderWorkspace.jpg" alt="Render workspace setup with HDRI environment">
+<img src="../../assets/images/AdaptableAquaponics/hdirbg.jpg" alt="Ulmer Muenster HDRI background preview">
+</div>
+
 <p>As mentioned earlier on this page, I chose the <a href="https://polyhaven.com/a/ulmer_muenster">Ulmer Muenster</a> HDRI from <a href="https://polyhaven.com/">polyhaven.com</a> as my backdrop, as the scene offers a compromise of beauty and urban (not that those are mutually exclusive) - preserving the largest of my envisioned use cases for Adaptable Aquaponics, urban farming (stay tuned for the next section!). Once my HDRI backdrop was uploaded, I navigated back to &hellip;</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Setup &lt; Scene Settings
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Setup &lt; Scene Settings
 </code></pre></div>
 <p>&hellip; where I took a trial and error approach to tune the renders Environment, Ground &amp; Camera settings until I was left with some nice looking renders! <em>Check them out below!</em></p>
-<p alt="Final render of Adaptable Aquaponics system - full setup" width="100%">{width=&rdquo;61%&rdquo; alt=&rdquo;Final render of Adaptable Aquaponics system - perspective view&rdquo; align=&rdquo;left&rdquo;}
-{width=&rdquo;35.5%&rdquo; alt=&rdquo;Final render of Adaptable Aquaponics system - side view&rdquo; align=&rdquo;right&rdquo;}</p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AdaptableAquaponics/Render1.png" alt="Render — perspective view">
+<img src="../../assets/images/AdaptableAquaponics/render2.png" alt="Render — side view">
+</div>
+
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/render3.png" alt="Render — full setup" width="100%">
+</figure>
+
 <h2 id="addressing-the-current-bottlenecks-of-global-nutrition">Addressing the Current Bottlenecks of Global Nutrition<a class="headerlink" href="#addressing-the-current-bottlenecks-of-global-nutrition" title="Permanent link">&para;</a></h2>
 <h3 id="resource-depletion-the-costs-of-industrial-agriculture">Resource Depletion - The Costs of Industrial Agriculture<a class="headerlink" href="#resource-depletion-the-costs-of-industrial-agriculture" title="Permanent link">&para;</a></h3>
-<p>Contemporary agriculture is completely dependent on non-renewable materials. Dependence on fossil fuels is not only not a sustainable practice that is damaging our planet but jeopardizes the future of our agricultural stability. With rigid dependence, how do we expect to handle the extinction of a non-renewable? Adaptable Aquaponics offers a solar-powered solution, completely independent of any non-renewables &amp; costly electric bills that hinder access in communities facing a scarcity of access. Though the elimination of dependencies is crucial to making Adaptable Aquaponics a sustainable solution to contemporary farming challenges, the vertical integration of the system offers a Carnegie-esk entrepreneurial venture, ensuring freedom from the potentially binding agreement for resources.</p>
-<p>Data from the US Geological Society shows rainfall patterns &ldquo;may become less predictable and dependable&rdquo;, while the amount of groundwater &ldquo;drawn for use in irrigation has tripled since the 1950s&rdquo;.<a href="http://seedstock.com/2012/04/18/five-major-challenges-facing-north-american-agriculture/">^3</a> Though, unlike fossil fuels, water is a renewable resource, freshwater has its limits. Considering nearly 70% of all freshwater used by humans is used in agriculture, addressing water usage is a warranted concern. When compared to standard agricultural practices, Aquaponics requires 90 to 99% less water.<a href="https://earth.org/data_visualization/aquaponics-a-solution-to-food-insecurity/">^4</a> Similar to the potential lack of electricity access, Adaptive Aquaponics offers communities with a shortage or imposition in access to water a sustainable agricultural alternative, while also offering entrepreneurs another opportunity to continue to vertically integrate.</p>
+<p><span class="newthought">Contemporary agriculture is</span> completely dependent on non-renewable materials. Dependence on fossil fuels is not only not a sustainable practice that is damaging our planet but jeopardizes the future of our agricultural stability. With rigid dependence, how do we expect to handle the extinction of a non-renewable? Adaptable Aquaponics offers a solar-powered solution, completely independent of any non-renewables &amp; costly electric bills that hinder access in communities facing a scarcity of access. Though the elimination of dependencies is crucial to making Adaptable Aquaponics a sustainable solution to contemporary farming challenges, the vertical integration of the system offers a Carnegie-esk entrepreneurial venture, ensuring freedom from the potentially binding agreement for resources.</p>
+<p>Data from the US Geological Society shows rainfall patterns &ldquo;may become less predictable and dependable&rdquo;, while the amount of groundwater &ldquo;drawn for use in irrigation has tripled since the 1950s&rdquo;.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"><a href="http://seedstock.com/2012/04/18/five-major-challenges-facing-north-american-agriculture/">Seedstock: Five Major Challenges Facing North American Agriculture</a></span> Though, unlike fossil fuels, water is a renewable resource, freshwater has its limits. Considering nearly 70% of all freshwater used by humans is used in agriculture, addressing water usage is a warranted concern. When compared to standard agricultural practices, Aquaponics requires 90 to 99% less water.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"><a href="https://earth.org/data_visualization/aquaponics-a-solution-to-food-insecurity/">Earth.org: Aquaponics — A Solution to Food Insecurity</a></span> Similar to the potential lack of electricity access, Adaptive Aquaponics offers communities with a shortage or imposition in access to water a sustainable agricultural alternative, while also offering entrepreneurs another opportunity to continue to vertically integrate.</p>
 <h3 id="land-management-degrading-and-undervaluing-farmland">Land Management - Degrading and Undervaluing Farmland<a class="headerlink" href="#land-management-degrading-and-undervaluing-farmland" title="Permanent link">&para;</a></h3>
 <p>Faulty land management techniques have stripped soil from its nutrients, requiring fertilizers to aid plant growth. The nature of aquaponics replaces any dependency on soil with nutrients from the nitrogen cycle - a naturally occurring ecosystem that can run independently from fertilizers. Adaptive Aquaponics&rsquo; cross between a Nutrient Film &amp; Media Bed aquaponics system preserves the dirt-free nature of hydroponics, whilst maintaining a small, modular structure of its plant boxes. The modular nature of adaptive aquaponics allows the system to potentially thrive regardless of scale and location, opening the door for urban farming!</p>
 <h3 id="food-waste-demographic-changes">Food Waste &amp; Demographic Changes<a class="headerlink" href="#food-waste-demographic-changes" title="Permanent link">&para;</a></h3>
-<p>The UN estimates that 1/3 &ldquo;of the world’s food goes to waste, either during agricultural production, post-harvest handling, and storage, processing, distribution, or consumption&rdquo;.<a href="http://seedstock.com/2012/04/18/five-major-challenges-facing-north-american-agriculture/">^3</a> The modular nature of Adaptive Aquaponics ensures adequate scaling of agriculture in a given population. The compacted form factor and potential for urban or harsh environment farming enable the growth of food locally to a population. Instead of depending on agricultural preservation, processing, storage, and distribution, providing a community with Adaptable Aquaponics enables full control over food production, ensuring neither over nor under production. Interaction with agriculture at a community scale may remove the barrier between farming communities and consumers and hopefully, will catalyze a shift from to favor &ldquo;conservation over convenience&rdquo; thus regulating agriculture to ensure adequate food is provided.<a href="http://seedstock.com/2012/04/18/five-major-challenges-facing-north-american-agriculture/">^3</a></p>
+<p>The UN estimates that 1/3 &ldquo;of the world’s food goes to waste, either during agricultural production, post-harvest handling, and storage, processing, distribution, or consumption&rdquo;.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"><a href="http://seedstock.com/2012/04/18/five-major-challenges-facing-north-american-agriculture/">Seedstock: Five Major Challenges Facing North American Agriculture</a></span> The modular nature of Adaptive Aquaponics ensures adequate scaling of agriculture in a given population. The compacted form factor and potential for urban or harsh environment farming enable the growth of food locally to a population. Instead of depending on agricultural preservation, processing, storage, and distribution, providing a community with Adaptable Aquaponics enables full control over food production, ensuring neither over nor under production. Interaction with agriculture at a community scale may remove the barrier between farming communities and consumers and hopefully, will catalyze a shift from to favor &ldquo;conservation over convenience&rdquo; thus regulating agriculture to ensure adequate food is provided.<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote"><a href="http://seedstock.com/2012/04/18/five-major-challenges-facing-north-american-agriculture/">Seedstock: Five Major Challenges Facing North American Agriculture</a></span></p>
 <h2 id="scale-prototyping">Scale Prototyping<a class="headerlink" href="#scale-prototyping" title="Permanent link">&para;</a></h2>
 <p>As has seemingly become a trend across my work, I attempted to use a plethora of digital fabrication in the creation of my scale model. My model is a 2.3% scale prototype of Adaptable Aquaponics, fabricated with both additive and subtractive processes. Shout out to <a href="https://www.instagram.com/taimakestuff/">@taimakestuff</a> who was my lab buddy <a href="https://www.instagram.com/makerspacecharlotte/">@makerspaceCharlotte</a> while I ground out this project&rsquo;s post-processing :)</p>
-<p>Computationally designed elements utilize organic surveys to ensure optimal geometry for both strength and efficiency, thus the perfect partner for additive manufacturing. I opted to 3D print all elements of my scale model that utilized Fusion 360&rsquo;s Automated Modeling, including the shipping container with its solar panel mounts &amp; Aquaponics Rack with its vertical supports. I also printed the contents of each aquaponics rack to achieve the highest accuracy to the draft angles and plumbing locations on the bodies. All parts for this project were printed on my Prusa I3 MK3S+ with a 0.4mm nozzle at a 0.3mm layer height. I chose a white <abbr title="Polyethylene Terephthalate Glycol">PETG</abbr>, along with a pretty aggressive layer height to allow for ease of post-processing &amp; painting of the model.</p>
-<p align="right" width="49.4%">{width=&rdquo;51%&rdquo; align=&rdquo;left&rdquo;}
-{width=&rdquo;44.5%&rdquo; align=&rdquo;right&rdquo;}
-{width=&rdquo;46%&rdquo; align=&rdquo;left&rdquo;}</p>
-<p><abbr title="Polyethylene Terephthalate Glycol">PETG</abbr> is my go-to generic 3D printing material, however, it really shines when faced with post-processing. <abbr title="Polyethylene Terephthalate Glycol">PETG</abbr> takes well to sanding and is overall rather easy to clean up. One of my favorite tricks is taking hot air from a hair-dryer to a <abbr title="Polyethylene Terephthalate Glycol">PETG</abbr> printed part. The hot air shrivels any stringing or surface defects into masses that fall off after rubbing your finger over the surface.</p>
-<p>{width=&rdquo;98%&rdquo;}</p>
+<p>Computationally designed elements utilize organic surveys to ensure optimal geometry for both strength and efficiency, thus the perfect partner for additive manufacturing. I opted to 3D print all elements of my scale model that utilized Fusion 360&rsquo;s Automated Modeling, including the shipping container with its solar panel mounts &amp; Aquaponics Rack with its vertical supports. I also printed the contents of each aquaponics rack to achieve the highest accuracy to the draft angles and plumbing locations on the bodies. All parts for this project were printed on my Prusa I3 MK3S+ with a 0.4mm nozzle at a 0.3mm layer height. I chose a white PETG, along with a pretty aggressive layer height to allow for ease of post-processing &amp; painting of the model.</p>
+<div class="figure-grid grid-2x2">
+<img src="../../assets/images/AdaptableAquaponics/print1.jpg" alt="Prusa printing parts">
+<img src="../../assets/images/AdaptableAquaponics/print2.jpg" alt="Printing larger components">
+<img src="../../assets/images/AdaptableAquaponics/print3.jpg" alt="Printing small parts">
+<img src="../../assets/images/AdaptableAquaponics/prusaslicer.jpg" alt="PrusaSlicer layout">
+</div>
+
+<p>PETG is my go-to generic 3D printing material, however, it really shines when faced with post-processing. PETG takes well to sanding and is overall rather easy to clean up. One of my favorite tricks is taking hot air from a hair-dryer to a PETG printed part. The hot air shrivels any stringing or surface defects into masses that fall off after rubbing your finger over the surface.</p>
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/post-processedprint.jpg" alt="Post-processed 3D printed shipping container" width="98%">
+</figure>
+
 <p>I was lucky enough to stumble across some gloss black acrylic in the scrap bin <a href="https://www.instagram.com/makerspacecharlotte/">@makerspaceCharlotte</a>, which I used to create Adaptable Aquaponic&rsquo;s solar panels. This was my first time using the lasers <a href="https://www.instagram.com/makerspacecharlotte/">@makerspaceCharlotte</a>, and the machine that I was on ran a different wattage than the lasers at the <a href="https://www.instagram.com/clsfablab/">Charlotte Latin Fab Lab</a> (my school&rsquo;s lab &amp; my workplace) so I began with a bit of research into optimal cut settings. After altering the laser focus to achieve the desired (slightly thickened beam) effect, I began batch cutting the model solar panels.</p>
 <p><em>Note the other test cuts on the stock material above. Though for the sake of focusing on Adaptable Aquaponics and not the prototyping process I&rsquo;ve chosen to not mention much of the prototyping behind this physical model. I usually include ample prototyping content in my articles, so it felt necessary to call attention to the test cuts here :)</em></p>
 <p>I cleaned up the final cut parts with some soap and water, before continuing to attach each solar panel to its 3D printed mount &amp; then to the roof of the Adaptable Aquaponics shipping container.</p>
-<p align="right" width="38%">{width=&rdquo;58%&rdquo; align=&rdquo;left&rdquo;}</p>
-<p>{width=&rdquo;99%&rdquo;}</p>
+<div class="figure-grid grid-2over1">
+<img src="../../assets/images/AdaptableAquaponics/solarparts.jpg" alt="Laser-cut solar panel parts">
+<img src="../../assets/images/AdaptableAquaponics/assembledsolar.jpg" alt="Assembled solar panel on mount">
+<img src="../../assets/images/AdaptableAquaponics/assembledmodel.jpg" alt="Assembled model on workbench">
+</div>
+
 <p>I followed up my acrylic cutting with the wooden base and top to each Aquaponics Rack. Unfortunately, I didn&rsquo;t have access to any 1/8&rdquo; ply, so I had to do some prep work with a piece of 1/4&rdquo; plywood stock. I planned the surface of my stock material on a drum-sander until down to just below 1/8&rdquo;. I then focused the laser to this stock &amp; cut all four planks.</p>
 <p>The glue up of these shelves was a bit finicky, as my fingers just seem to be a super glue magnet - but eventually, I got both Aquaponics Racks complete with their plants, vertical support, shelves, Aquaponics Cells, biofilter &amp; sediment tank, and then installed them inside the shipping container.</p>
-<p width="100%">{width=&rdquo;47%&rdquo; align=&rdquo;left&rdquo;}
-{width=&rdquo;48%&rdquo; align=&rdquo;right&rdquo;}</p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AdaptableAquaponics/assembledshelf.jpg" alt="Assembled aquaponics rack">
+<img src="../../assets/images/AdaptableAquaponics/installedshelf.jpg" alt="Rack installed in shipping container">
+</div>
+
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/assembledshippingcont.jpg" alt="Completed shipping container assembly" width="100%">
+</figure>
+
 <p>As a finishing touch, I used a <a href="https://cricut.com/en-us/cutting-machines/cricut-explore/cricut-explore-air-2">Cricut Explore Air 2</a> to cut the sign attached to the side of Adaptable Aquaponics from vinyl. Though I&rsquo;ve made dozens upon dozens of stickers with the same workflow, the scale of this logo proved to be a bit of a challenge. I not only had difficulties weeding the cut vinyl at such a small scale, but the machine itself was ripping up parts of the design upon retraction. I ended up altering the cut settings to a custom array as suggested by <a href="https://sofontsy.com/blogs/tutorials/tips-for-cutting-intricate-designs-with-cricut-maker-explore">sofontsy.com</a>, using the Washi Sheet default with a pressure set to More. With these settings, I was able to get a clean enough cut that I could weed the sticker, layer the two colors, and then apply to the side of the Adaptable Aquaponics model.</p>
-<p>{width=&rdquo;98%&rdquo;}</p>
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/Sticker!.jpg" alt="Vinyl sticker for Adaptable Aquaponics logo" width="98%">
+</figure>
+
 <h2 id="glory-shots">Glory Shots<a class="headerlink" href="#glory-shots" title="Permanent link">&para;</a></h2>
-<p width="100%">{width=&rdquo;49.5%&rdquo; align=&rdquo;left&rdquo;}
-{width=&rdquo;47%&rdquo; align=&rdquo;right&rdquo;}</p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AdaptableAquaponics/glory1.jpg" alt="Glory shot — front view">
+<img src="../../assets/images/AdaptableAquaponics/glory2.jpg" alt="Glory shot — low angle">
+</div>
+
+<figure>
+<img src="../../assets/images/AdaptableAquaponics/glory3.jpg" alt="Glory shot — full model in parking lot" width="100%">
+</figure>
+
 <p>With the design and prototyping completed, I headed out to my local strip mall for a photo op, only getting a couple of strange looks from shoppers wondering what the boy in the old-navy pajama pants was doing taking pictures of a miniature in the middle of the parking lot. But it was worth it! As opposed to settling for a diorama background, or just pictures of my model on my workbench, I highlighted a legitimate potential environment for such a product, and I promise you, when Adaptable Aquaponics hits full scale in a parking lot, the shoppers won&rsquo;t be blown away by my magnificent fashion choices, but instead by the wonders of Aquaponics!</p>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -963,12 +1040,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

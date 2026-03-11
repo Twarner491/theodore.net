@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/learnedSpec/fig2.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -991,7 +994,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| May 2024 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 18–22 minutes</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 12–15 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -1006,11 +1009,13 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
-<p><em>Towards temporal understanding in AI through <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> learning stage classification.</em></p>
-<p>Learned Spectrum was the first research step I took when starting my venture, <a href="https://intempus.org">Intempus</a>. The full preprint may be accessed <a href="../../assets/misc/Learned_Spectrum.pdf">here</a>.</p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought">Learned Spectrum</span> was the first research step I took when starting, <a href="https://intempus.org">Intempus</a>. The full preprint may be accessed <a href="../../assets/misc/Learned_Spectrum.pdf">here</a>.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Intempus&rsquo;s Thesis</p>
 <p>World models cannot truly gain a comprehensive temporal understanding based solely on data collected from robots or purely external observations. </p>
@@ -1021,61 +1026,61 @@
 <p>Data collected from human subjects could provide a window into how humans subjectively experience time, potentially leading to more sophisticated and human-like temporal reasoning in AI systems.</p>
 </div>
 <h2 id="abstract">Abstract<a class="headerlink" href="#abstract" title="Permanent link">&para;</a></h2>
-<p>This research presents a novel approach to understanding temporal cognition through the application of Vision Transformers to functional Magnetic Resonance Imaging (<abbr title="functional Magnetic Resonance Imaging">fMRI</abbr>) data analysis. While current artificial intelligence approaches to world modeling rely heavily on absolute temporal markers and timestamps, human perception of time operates as a fundamentally subjective experience that adapts with cognitive state and learning progress. We demonstrate that neural activation patterns captured during learning through <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> contain rich temporal information that can inform more nuanced approaches to temporal processing in AI systems. </p>
+<p>This research presents a novel approach to understanding temporal cognition through the application of Vision Transformers to functional Magnetic Resonance Imaging (fMRI) data analysis. While current artificial intelligence approaches to world modeling rely heavily on absolute temporal markers and timestamps, human perception of time operates as a fundamentally subjective experience that adapts with cognitive state and learning progress. We demonstrate that neural activation patterns captured during learning through fMRI contain rich temporal information that can inform more nuanced approaches to temporal processing in AI systems. </p>
 <p>Our implementation achieves significant accuracy in learning stage classification through three key technical innovations: </p>
 <ol>
-<li>A systematic channel reduction network that efficiently processes high-dimensional <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data while preserving critical spatial and temporal patterns.</li>
+<li>A systematic channel reduction network that efficiently processes high-dimensional fMRI data while preserving critical spatial and temporal patterns.</li>
 <li>Specialized temporal processing networks that incorporate hemodynamic response characteristics and causal attention mechanisms.</li>
 <li>Progressive dropout strategies that maintain signal fidelity while encouraging robust feature learning. </li>
 </ol>
 <p>By analyzing these temporal patterns across multiple learning stages and tasks, we demonstrate the feasibility of developing AI systems capable of processing time as a relative rather than absolute construct. This work represents an important step toward artificial intelligence systems that can reason about time in ways that more closely mirror human cognitive processes.</p>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>The development of artificial intelligence world models faces a fundamental constraint in temporal processing. While current systems effectively handle timestamp data and sequential predictions, they lack the ability to process time as a subjective, relative construct - a core component of human cognition and learning.</p>
-<p>Training world models exclusively on robot-collected data proves insufficient for developing true temporal understanding. We propose that biometric data, specifically neural activation patterns from <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr>, provides essential insights into subjective time perception during learning processes.</p>
-<p>This work implements a Vision Transformer architecture optimized for learning stage classification from <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data. While <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> presents known limitations in its reliance on blood-oxygen-level-dependent (<abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr>) signals, deep learning architectures can extract temporal patterns that traditional analysis methods miss.</p>
+<p>Training world models exclusively on robot-collected data proves insufficient for developing true temporal understanding. We propose that biometric data, specifically neural activation patterns from fMRI, provides essential insights into subjective time perception during learning processes.</p>
+<p>This work implements a Vision Transformer architecture optimized for learning stage classification from fMRI data. While fMRI presents known limitations in its reliance on blood-oxygen-level-dependent (BOLD) signals, deep learning architectures can extract temporal patterns that traditional analysis methods miss.</p>
 <h2 id="theoretical-framework">Theoretical Framework<a class="headerlink" href="#theoretical-framework" title="Permanent link">&para;</a></h2>
 <p>Our implementation builds on three foundational principles that bridge neuroscience and artificial intelligence:</p>
 <ul>
 <li>Time perception functions as an inherently subjective experience that varies with cognitive state and learning progress</li>
 <li>Effective world models must incorporate mechanisms for understanding and adapting to subjective temporal experiences</li>
-<li>Biometric data, particularly <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr>, provides a unique window into how biological systems process temporal information</li>
+<li>Biometric data, particularly fMRI, provides a unique window into how biological systems process temporal information</li>
 </ul>
 <p>Traditional approaches to AI world models process time as a simple progression of timestamped events. However, human cognition demonstrates that temporal perception is deeply integrated with learning states, emotional conditions, and physiological factors. This integration proves essential for causal reasoning and adaptive learning. Our architecture incorporates these principles through specialized temporal processing networks and attention mechanisms that can adapt their temporal processing based on context.</p>
 <h2 id="background">Background<a class="headerlink" href="#background" title="Permanent link">&para;</a></h2>
-<p>As we&rsquo;ve discussed, current artificial intelligence approaches to world modeling rely heavily on absolute temporal markers and timestamps, human perception of time operates as a fundamentally subjective experience that adapts with cognitive state and learning progress. We&rsquo;ve utlized publically avalible <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data to demonstrate that neural activation patterns contain rich temporal information that can inform more nuanced approaches to temporal processing in AI systems. </p>
-<p>This work implements a Vision Transformer architecture <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> <sup id="fnref:14"><a class="footnote-ref" href="#fn:14">14</a></sup> optimized for learning stage classification from <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data. While <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> presents known limitations in its reliance on blood-oxygen-level-dependent (<abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr>) signals <sup id="fnref:15"><a class="footnote-ref" href="#fn:15">15</a></sup>, deep learning architectures may be able to extract temporal patterns that traditional analysis methods miss.</p>
+<p>As we&rsquo;ve discussed, current artificial intelligence approaches to world modeling rely heavily on absolute temporal markers and timestamps, human perception of time operates as a fundamentally subjective experience that adapts with cognitive state and learning progress. We&rsquo;ve utlized publically avalible fMRI data to demonstrate that neural activation patterns contain rich temporal information that can inform more nuanced approaches to temporal processing in AI systems. </p>
+<p>This work implements a Vision Transformer architecture <label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></span> <label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"><a href="https://arxiv.org/abs/2010.11929">ViT: An Image is Worth 16x16 Words</a></span> optimized for learning stage classification from fMRI data. While fMRI presents known limitations in its reliance on blood-oxygen-level-dependent (BOLD) signals <label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"><a href="https://www.nature.com/articles/nature06976">Nature: fMRI BOLD Signals</a></span>, deep learning architectures may be able to extract temporal patterns that traditional analysis methods miss.</p>
 <h3 id="neural-bases-of-learning-stages">Neural Bases of Learning Stages<a class="headerlink" href="#neural-bases-of-learning-stages" title="Permanent link">&para;</a></h3>
-<p>Human learning progresses through distinct stages characterized by shifting patterns of neural activation <sup id="fnref:11"><a class="footnote-ref" href="#fn:11">11</a></sup>. These transitions are particularly evident in the striatum and medial temporal lobe regions <sup id="fnref:12"><a class="footnote-ref" href="#fn:12">12</a></sup>. Our architecture&rsquo;s design mirrors these biological principles through its progressive processing stages and attention mechanisms.</p>
-<p><abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> captures these learning stages through blood-oxygen-level-dependent (<abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr>) signals, providing an indirect but reliable measure of neural activity <sup id="fnref2:15"><a class="footnote-ref" href="#fn:15">15</a></sup>. While this indirect measurement presents certain limitations, research has demonstrated correlations between <abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr> signal temporal patterns and learning progression <sup id="fnref:16"><a class="footnote-ref" href="#fn:16">16</a></sup>. The robust test-retest reliability of <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> in classification learning tasks <sup id="fnref:10"><a class="footnote-ref" href="#fn:10">10</a></sup> provides a stable foundation for extracting temporal patterns relevant to learning stages.</p>
+<p>Human learning progresses through distinct stages characterized by shifting patterns of neural activation <label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"><a href="https://www.jstor.org/stable/2891421">Learning Stage Theory</a></span>. These transitions are particularly evident in the striatum and medial temporal lobe regions <label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"><a href="https://www.nature.com/articles/35107080">Neural Activation in Learning</a></span>. Our architecture&rsquo;s design mirrors these biological principles through its progressive processing stages and attention mechanisms.</p>
+<p>fMRI captures these learning stages through blood-oxygen-level-dependent (BOLD) signals, providing an indirect but reliable measure of neural activity <label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote"><a href="https://www.nature.com/articles/nature06976">Nature: fMRI BOLD Signals</a></span>. While this indirect measurement presents certain limitations, research has demonstrated correlations between BOLD signal temporal patterns and learning progression <label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote"><a href="https://doi.org/10.1017/CBO9780511895029">BOLD Signal &amp; Learning Progression</a></span>. The robust test-retest reliability of fMRI in classification learning tasks <label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote"><a href="https://pubmed.ncbi.nlm.nih.gov/16139527/">fMRI Test-Retest Reliability</a></span> provides a stable foundation for extracting temporal patterns relevant to learning stages.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<p>Our implementation addresses two core challenges: extracting meaningful patterns from complex <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data <sup id="fnref2:16"><a class="footnote-ref" href="#fn:16">16</a></sup> and developing architectures capable of learning from these patterns <sup id="fnref2:10"><a class="footnote-ref" href="#fn:10">10</a></sup>. This section outlines our approach in three parts: data preprocessing implementation, <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr>-specific augmentation strategies, and temporal-aware transformer architecture design <sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> <sup id="fnref2:14"><a class="footnote-ref" href="#fn:14">14</a></sup>.</p>
+<p>Our implementation addresses two core challenges: extracting meaningful patterns from complex fMRI data <label for="sn-9" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-9" class="margin-toggle"/><span class="sidenote"><a href="https://doi.org/10.1017/CBO9780511895029">BOLD Signal &amp; Learning Progression</a></span> and developing architectures capable of learning from these patterns <label for="sn-10" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-10" class="margin-toggle"/><span class="sidenote"><a href="https://pubmed.ncbi.nlm.nih.gov/16139527/">fMRI Test-Retest Reliability</a></span>. This section outlines our approach in three parts: data preprocessing implementation, fMRI-specific augmentation strategies, and temporal-aware transformer architecture design <label for="sn-11" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-11" class="margin-toggle"/><span class="sidenote"><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></span> <label for="sn-12" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-12" class="margin-toggle"/><span class="sidenote"><a href="https://arxiv.org/abs/2010.11929">ViT: An Image is Worth 16x16 Words</a></span>.</p>
 <h3 id="data-collection-and-processing">Data Collection and Processing<a class="headerlink" href="#data-collection-and-processing" title="Permanent link">&para;</a></h3>
-<p>The implementation utilizes four complementary classification learning datasets from OpenFMRI. Each dataset provides specific insights into temporal learning aspects <sup id="fnref2:11"><a class="footnote-ref" href="#fn:11">11</a></sup>. The primary dataset (ds000002) contains data from 17 right-handed subjects performing probabilistic and deterministic classification tasks <sup id="fnref2:12"><a class="footnote-ref" href="#fn:12">12</a></sup>. Task structure includes:</p>
+<p>The implementation utilizes four complementary classification learning datasets from OpenFMRI. Each dataset provides specific insights into temporal learning aspects <label for="sn-13" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-13" class="margin-toggle"/><span class="sidenote"><a href="https://www.jstor.org/stable/2891421">Learning Stage Theory</a></span>. The primary dataset (ds000002) contains data from 17 right-handed subjects performing probabilistic and deterministic classification tasks <label for="sn-14" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-14" class="margin-toggle"/><span class="sidenote"><a href="https://www.nature.com/articles/35107080">Neural Activation in Learning</a></span>. Task structure includes:</p>
 <ul>
 <li>Pure blocks: 10 cycles of 5 classification trials followed by 3 baseline trials</li>
 <li>Mixed blocks: 100 stimuli split equally between probabilistic and deterministic trials</li>
 </ul>
 <p>Data acquisition specifications:</p>
 <ul>
-<li>Scanner: <abbr title="3 Tesla (magnetic field strength)">3T</abbr> Siemens Allegra MRI</li>
-<li>Parameters: <abbr title="Repetition Time">TR</abbr> = 2s, 180 functional <abbr title="Type 2 MRI weighting">T2</abbr>*-weighted echoplanar images per session</li>
+<li>Scanner: 3T Siemens Allegra MRI</li>
+<li>Parameters: TR = 2s, 180 functional T2*-weighted echoplanar images per session</li>
 <li>Resolution: 2mm slice thickness, 2x2mm in-plane resolution</li>
 <li>Enhancement: Multiband acceleration factor of 4</li>
 </ul>
 <p>Three additional datasets complement the primary collection:</p>
 <ul>
-<li>ds000011: 14 subjects, single/dual-task classification for attention-modulated learning analysis <sup id="fnref3:12"><a class="footnote-ref" href="#fn:12">12</a></sup></li>
-<li>ds000017: 8 subjects, classification with stop-signal tasks for inhibitory control examination <sup id="fnref4:10"><a class="footnote-ref" href="#fn:10">10</a></sup></li>
-<li>ds000052: Classification with reward contingency reversal for adaptive learning mechanism investigation <sup id="fnref3:11"><a class="footnote-ref" href="#fn:11">11</a></sup></li>
+<li>ds000011: 14 subjects, single/dual-task classification for attention-modulated learning analysis <label for="sn-15" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-15" class="margin-toggle"/><span class="sidenote"><a href="https://www.nature.com/articles/35107080">Neural Activation in Learning</a></span></li>
+<li>ds000017: 8 subjects, classification with stop-signal tasks for inhibitory control examination <label for="sn-16" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-16" class="margin-toggle"/><span class="sidenote"><a href="https://pubmed.ncbi.nlm.nih.gov/16139527/">fMRI Test-Retest Reliability</a></span></li>
+<li>ds000052: Classification with reward contingency reversal for adaptive learning mechanism investigation <label for="sn-17" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-17" class="margin-toggle"/><span class="sidenote"><a href="https://www.jstor.org/stable/2891421">Learning Stage Theory</a></span></li>
 </ul>
 <h3 id="preprocessing-pipeline">Preprocessing Pipeline<a class="headerlink" href="#preprocessing-pipeline" title="Permanent link">&para;</a></h3>
-<p>Our implementation uses a three-stage preprocessing approach based on established neuroimaging practices <sup id="fnref3:16"><a class="footnote-ref" href="#fn:16">16</a></sup> with optimizations for temporal pattern preservation. The pipeline integrates spatial normalization and temporal alignment to maintain both anatomical accuracy and temporal fidelity. The complete preprocessing pipeline follows:</p>
+<p>Our implementation uses a three-stage preprocessing approach based on established neuroimaging practices <label for="sn-18" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-18" class="margin-toggle"/><span class="sidenote"><a href="https://doi.org/10.1017/CBO9780511895029">BOLD Signal &amp; Learning Progression</a></span> with optimizations for temporal pattern preservation. The pipeline integrates spatial normalization and temporal alignment to maintain both anatomical accuracy and temporal fidelity. The complete preprocessing pipeline follows:</p>
 <div class="arithmatex">\[\begin{equation}
     x_{\text{processed}} = \mathcal{N}(\mathcal{R}(\mathcal{V}(x)))
 \end{equation}\]</div>
 <p>Where <span class="arithmatex">\(\mathcal{V}\)</span> performs dimension validation, <span class="arithmatex">\(\mathcal{R}\)</span> applies spatial resizing, and <span class="arithmatex">\(\mathcal{N}\)</span> implements intensity normalization.</p>
 <h4 id="dimension-validation">Dimension Validation<a class="headerlink" href="#dimension-validation" title="Permanent link">&para;</a></h4>
-<p><abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> acquisitions vary in dimensionality <sup id="fnref4:16"><a class="footnote-ref" href="#fn:16">16</a></sup>. Our validation ensures consistent dimensionality while preserving temporal information:</p>
+<p>fMRI acquisitions vary in dimensionality <label for="sn-19" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-19" class="margin-toggle"/><span class="sidenote"><a href="https://doi.org/10.1017/CBO9780511895029">BOLD Signal &amp; Learning Progression</a></span>. Our validation ensures consistent dimensionality while preserving temporal information:</p>
 <div class="arithmatex">\[\begin{equation}
     \mathcal{V}(x) = \begin{cases}
         x &amp; \text{if } x \in \mathbb{R}^{H \times W \times D \times T} \\
@@ -1083,22 +1088,22 @@
         \text{undefined} &amp; \text{otherwise}
     \end{cases}
 \end{equation}\]</div>
-<p>This validation maintains spatial integrity while ensuring proper temporal dimension handling <sup id="fnref3:15"><a class="footnote-ref" href="#fn:15">15</a></sup>. Single-volume inputs receive an added temporal dimension for consistent processing.</p>
+<p>This validation maintains spatial integrity while ensuring proper temporal dimension handling <label for="sn-20" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-20" class="margin-toggle"/><span class="sidenote"><a href="https://www.nature.com/articles/nature06976">Nature: fMRI BOLD Signals</a></span>. Single-volume inputs receive an added temporal dimension for consistent processing.</p>
 <h4 id="spatial-resizing">Spatial Resizing<a class="headerlink" href="#spatial-resizing" title="Permanent link">&para;</a></h4>
-<p>The implementation standardizes spatial dimensions while maintaining anatomical proportions <sup id="fnref5:16"><a class="footnote-ref" href="#fn:16">16</a></sup> through trilinear interpolation:</p>
+<p>The implementation standardizes spatial dimensions while maintaining anatomical proportions <label for="sn-21" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-21" class="margin-toggle"/><span class="sidenote"><a href="https://doi.org/10.1017/CBO9780511895029">BOLD Signal &amp; Learning Progression</a></span> through trilinear interpolation:</p>
 <div class="arithmatex">\[\begin{equation}
     \mathcal{R}(x) = \text{zoom}(x, [\frac{H_t}{H}, \frac{W_t}{W}, \frac{D_t}{D}, 1])
 \end{equation}\]</div>
-<p>Target dimensions <span class="arithmatex">\((H_t, W_t, D_t) = (64, 64, 30)\)</span> balance spatial resolution and computational efficiency <sup id="fnref3:10"><a class="footnote-ref" href="#fn:10">10</a></sup>. The temporal dimension scaling factor of 1 preserves original temporal resolution.</p>
+<p>Target dimensions <span class="arithmatex">\((H_t, W_t, D_t) = (64, 64, 30)\)</span> balance spatial resolution and computational efficiency <label for="sn-22" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-22" class="margin-toggle"/><span class="sidenote"><a href="https://pubmed.ncbi.nlm.nih.gov/16139527/">fMRI Test-Retest Reliability</a></span>. The temporal dimension scaling factor of 1 preserves original temporal resolution.</p>
 <h4 id="intensity-normalization">Intensity Normalization&lt;<a class="headerlink" href="#intensity-normalization" title="Permanent link">&para;</a></h4>
-<p>Following <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> preprocessing protocols <sup id="fnref6:16"><a class="footnote-ref" href="#fn:16">16</a></sup>, we implement temporal-aware normalization accounting for <abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr> signal dynamics:</p>
+<p>Following fMRI preprocessing protocols <label for="sn-23" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-23" class="margin-toggle"/><span class="sidenote"><a href="https://doi.org/10.1017/CBO9780511895029">BOLD Signal &amp; Learning Progression</a></span>, we implement temporal-aware normalization accounting for BOLD signal dynamics:</p>
 <div class="arithmatex">\[\begin{equation}
     \mathcal{N}(x_t) = \frac{x_t - \mu_t}{\sigma_t + \epsilon} \;\; \forall t \in T
 \end{equation}\]</div>
 <p>Where <span class="arithmatex">\(\mu_t\)</span> and <span class="arithmatex">\(\sigma_t\)</span> represent mean and standard deviation at timepoint <span class="arithmatex">\(t\)</span> and <span class="arithmatex">\(\epsilon = 1e\text{-}6\)</span> prevents division by zero.</p>
-<p>This normalization preserves temporal dynamics while standardizing signal intensity across sessions and subjects <sup id="fnref4:15"><a class="footnote-ref" href="#fn:15">15</a></sup>. Independent timepoint normalization maintains relative temporal patterns crucial for learning stage classification.</p>
+<p>This normalization preserves temporal dynamics while standardizing signal intensity across sessions and subjects <label for="sn-24" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-24" class="margin-toggle"/><span class="sidenote"><a href="https://www.nature.com/articles/nature06976">Nature: fMRI BOLD Signals</a></span>. Independent timepoint normalization maintains relative temporal patterns crucial for learning stage classification.</p>
 <h3 id="data-augmentation-strategies">Data Augmentation Strategies<a class="headerlink" href="#data-augmentation-strategies" title="Permanent link">&para;</a></h3>
-<p>Our implementation includes a comprehensive suite of domain-specific augmentation techniques designed to enhance model robustness while respecting the unique characteristics of <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data. These techniques are validated through neuroimaging research and carefully adapted for deep learning applications:</p>
+<p>Our implementation includes a comprehensive suite of domain-specific augmentation techniques designed to enhance model robustness while respecting the unique characteristics of fMRI data. These techniques are validated through neuroimaging research and carefully adapted for deep learning applications:</p>
 <h4 id="temporal-masking">Temporal Masking<a class="headerlink" href="#temporal-masking" title="Permanent link">&para;</a></h4>
 <p>We implement an adaptive temporal dropout mechanism that helps the model learn robust temporal features despite potential signal interruptions or artifacts. The masking strategy:</p>
 <ul>
@@ -1121,24 +1126,24 @@
 <li>Apply smooth transformations through Gaussian filtering</li>
 </ul>
 <h3 id="model-architecture">Model Architecture<a class="headerlink" href="#model-architecture" title="Permanent link">&para;</a></h3>
-<p>Our architecture combines Vision Transformer principles with specific adaptations for <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data processing. The implementation consists of three primary components, each optimized for the unique characteristics of neuroimaging data:</p>
+<p>Our architecture combines Vision Transformer principles with specific adaptations for fMRI data processing. The implementation consists of three primary components, each optimized for the unique characteristics of neuroimaging data:</p>
 <h4 id="channel-reduction-network">Channel Reduction Network<a class="headerlink" href="#channel-reduction-network" title="Permanent link">&para;</a></h4>
-<p>The channel reduction component efficiently processes high-dimensional <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> input through a dual-stage approach:</p>
+<p>The channel reduction component efficiently processes high-dimensional fMRI input through a dual-stage approach:</p>
 <ul>
 <li>Initial dimensionality reduction from 30 to 16 channels</li>
-<li>Batch normalization and <abbr title="Gaussian Error Linear Unit">GELU</abbr> activation for stable training</li>
+<li>Batch normalization and GELU activation for stable training</li>
 <li>Progressive dropout for regularization</li>
 <li>Careful preservation of spatial relationships</li>
 </ul>
 <h4 id="temporal-processing">Temporal Processing<a class="headerlink" href="#temporal-processing" title="Permanent link">&para;</a></h4>
-<p>Our temporal processing incorporates hemodynamic response function (<abbr title="Hemodynamic Response Function">HRF</abbr>) characteristics <sup id="fnref5:15"><a class="footnote-ref" href="#fn:15">15</a></sup> through causal attention masking:</p>
+<p>Our temporal processing incorporates hemodynamic response function (HRF) characteristics <label for="sn-25" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-25" class="margin-toggle"/><span class="sidenote"><a href="https://www.nature.com/articles/nature06976">Nature: fMRI BOLD Signals</a></span> through causal attention masking:</p>
 <div class="arithmatex">\[\begin{equation}
     M_{ij} = \begin{cases}
         -\infty &amp; \text{if } j &lt; i + 3 \\
         0 &amp; \text{otherwise}
     \end{cases}
 \end{equation}\]</div>
-<p>This enforces a 6-second <abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr> delay constraint, reflecting established <abbr title="Hemodynamic Response Function">HRF</abbr> parameters <sup id="fnref7:16"><a class="footnote-ref" href="#fn:16">16</a></sup> while maintaining temporal causality in <abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr> response learning.</p>
+<p>This enforces a 6-second BOLD delay constraint, reflecting established HRF parameters <label for="sn-26" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-26" class="margin-toggle"/><span class="sidenote"><a href="https://doi.org/10.1017/CBO9780511895029">BOLD Signal &amp; Learning Progression</a></span> while maintaining temporal causality in BOLD response learning.</p>
 <h4 id="progressive-dropout">Progressive Dropout<a class="headerlink" href="#progressive-dropout" title="Permanent link">&para;</a></h4>
 <p>We implement a depth-dependent dropout strategy that provides stronger regularization in deeper layers while maintaining high information flow in early layers.</p>
 <div class="arithmatex">\[\begin{equation}
@@ -1156,14 +1161,14 @@
 \end{equation}\]</div>
 <p>This adaptive scaling ensures stable training while maintaining computational efficiency.</p>
 <h4 id="optimization-strategy">Optimization Strategy<a class="headerlink" href="#optimization-strategy" title="Permanent link">&para;</a></h4>
-<p>The implementation uses <abbr title="Adam with Weight Decay">AdamW</abbr> optimizer with <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr>-validated parameters <sup id="fnref3:14"><a class="footnote-ref" href="#fn:14">14</a></sup>:</p>
+<p>The implementation uses AdamW optimizer with fMRI-validated parameters<label for="sn-27" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-27" class="margin-toggle"/><span class="sidenote"><a href="https://arxiv.org/abs/2010.11929">ViT: An Image is Worth 16x16 Words</a></span>:</p>
 <ul>
 <li>Learning rate: <span class="arithmatex">\(1e\text{-}4\)</span></li>
 <li>Weight decay: 0.05</li>
 <li>Beta parameters: <span class="arithmatex">\(\beta_1 = 0.9\)</span>, <span class="arithmatex">\(\beta_2 = 0.999\)</span></li>
 </ul>
 <h4 id="learning-rate-schedule">Learning Rate Schedule<a class="headerlink" href="#learning-rate-schedule" title="Permanent link">&para;</a></h4>
-<p>We implement a custom warmup-decay schedule optimized for <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data processing:</p>
+<p>We implement a custom warmup-decay schedule optimized for fMRI data processing:</p>
 <div class="arithmatex">\[\begin{equation}
     \eta_t = \begin{cases}
         \eta_{\text{base}} \cdot \frac{t}{t_w} &amp; \text{if } t &lt; t_w\\
@@ -1178,7 +1183,7 @@
 </ul>
 <p>This provides stable initial training followed by gradual learning rate decay for optimal parameter convergence.</p>
 <h4 id="regularization-and-early-stopping">Regularization and Early Stopping<a class="headerlink" href="#regularization-and-early-stopping" title="Permanent link">&para;</a></h4>
-<p>We implement comprehensive regularization following established practices <sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup>:</p>
+<p>We implement comprehensive regularization following established practices<label for="sn-28" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-28" class="margin-toggle"/><span class="sidenote"><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></span>:</p>
 <ul>
 <li>Label smoothing: <span class="arithmatex">\(\alpha = 0.1\)</span></li>
 <li>L2 regularization: <span class="arithmatex">\(\lambda = 1e\text{-}4\)</span></li>
@@ -1197,27 +1202,27 @@
 <li>Patience period <span class="arithmatex">\(p = 7\)</span></li>
 </ul>
 <h2 id="results">Results<a class="headerlink" href="#results" title="Permanent link">&para;</a></h2>
-<p>Our implementation demonstrated patterns in learning stage classification from <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data, with performance characteristics varying significantly across learning stages. The complete analysis reveals both potential capabilities and areas requiring further refinement.</p>
+<p>Our implementation demonstrated patterns in learning stage classification from fMRI data, with performance characteristics varying significantly across learning stages. The complete analysis reveals both potential capabilities and areas requiring further refinement.</p>
 <h3 id="overall-model-performance">Overall Model Performance<a class="headerlink" href="#overall-model-performance" title="Permanent link">&para;</a></h3>
-<p>The model achieved an overall accuracy of 35.6% across four learning stages, with a balanced accuracy of 42.8% and a macro <abbr title="F1 Score - Harmonic mean of precision and recall">F1</abbr> score of 0.407. </p>
+<p>The model achieved an overall accuracy of 35.6% across four learning stages, with a balanced accuracy of 42.8% and a macro F1 score of 0.407. </p>
 <p>While exceeding random chance performance (25% for four classes), these metrics highlight the inherent complexity of learning stage classification from neuroimaging data.</p>
 <p>The Cohen&rsquo;s Kappa score of 0.093 indicates performance above chance but demonstrates the substantial challenge in achieving consistent classification across all learning stages.</p>
 <figure>
 <p><img alt="Training Results plots" src="../../assets/images/learnedSpec/fig1.png" width="100%" /></p>
 </figure>
-<p><em>Figure 1: Comprehensive model performance analysis showing (A) Normalized confusion matrix demonstrating classification patterns across learning stages, (B) <abbr title="Receiver Operating Characteristic">ROC</abbr> curves indicating increasing reliability from early to mastery stages, (C) Per-class performance metrics highlighting strongest performance in mastery classification, and (D) Prediction confidence distributions revealing distinct patterns for each learning stage.</em></p>
+<p><em>Figure 1: Comprehensive model performance analysis showing (A) Normalized confusion matrix demonstrating classification patterns across learning stages, (B) ROC curves indicating increasing reliability from early to mastery stages, (C) Per-class performance metrics highlighting strongest performance in mastery classification, and (D) Prediction confidence distributions revealing distinct patterns for each learning stage.</em></p>
 <h3 id="stage-specific-classification-performance">Stage-Specific Classification Performance<a class="headerlink" href="#stage-specific-classification-performance" title="Permanent link">&para;</a></h3>
-<p>Performance varied substantially across learning stages, revealing distinct patterns in the model&rsquo;s classification capabilities. The model demonstrated strongest performance in identifying the mastery stage, achieving a precision of 0.600 and recall of 0.750 (<abbr title="F1 Score - Harmonic mean of precision and recall">F1</abbr> = 0.667). The <abbr title="Receiver Operating Characteristic">ROC</abbr> curve for mastery classification shows an impressive <abbr title="Area Under the Curve">AUC</abbr> of 0.945, suggesting highly distinctive neural activation patterns associated with mastery-level learning.</p>
-<p>The middle learning stage showed moderate classification success (precision = 0.353, recall = 0.429, <abbr title="F1 Score - Harmonic mean of precision and recall">F1</abbr> = 0.387), while early and late stages proved more challenging to classify (<abbr title="F1 Score - Harmonic mean of precision and recall">F1</abbr> scores of 0.258 and 0.316 respectively). The confusion matrix reveals a tendency to misclassify early learning stages as middle stages (47.1% of cases), suggesting a gradual transition in neural activation patterns during learning progression.</p>
+<p>Performance varied substantially across learning stages, revealing distinct patterns in the model&rsquo;s classification capabilities. The model demonstrated strongest performance in identifying the mastery stage, achieving a precision of 0.600 and recall of 0.750 (F1 = 0.667). The ROC curve for mastery classification shows an impressive AUC of 0.945, suggesting highly distinctive neural activation patterns associated with mastery-level learning.</p>
+<p>The middle learning stage showed moderate classification success (precision = 0.353, recall = 0.429, F1 = 0.387), while early and late stages proved more challenging to classify (F1 scores of 0.258 and 0.316 respectively). The confusion matrix reveals a tendency to misclassify early learning stages as middle stages (47.1% of cases), suggesting a gradual transition in neural activation patterns during learning progression.</p>
 <table>
 <thead>
 <tr>
 <th>Learning Stage</th>
 <th>Precision</th>
 <th>Recall</th>
-<th><abbr title="F1 Score - Harmonic mean of precision and recall">F1</abbr></th>
+<th>F1</th>
 <th>Support</th>
-<th><abbr title="Receiver Operating Characteristic">ROC</abbr> <abbr title="Area Under the Curve">AUC</abbr></th>
+<th>ROC AUC</th>
 <th>Mean Conf.</th>
 <th>Error Rate</th>
 </tr>
@@ -1276,71 +1281,30 @@
 </tbody>
 </table>
 <h3 id="neural-activation-patterns">Neural Activation Patterns<a class="headerlink" href="#neural-activation-patterns" title="Permanent link">&para;</a></h3>
-<p>Analysis of <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> activation patterns, as exemplified in Figure 2, reveals characteristic spatial distributions associated with different learning stages. The sample brain slice visualization demonstrates the complex nature of the neural activation patterns the model must interpret, with varying intensity values representing normalized <abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr> signal strength across different brain regions.</p>
+<p>Analysis of fMRI activation patterns, as exemplified in Figure 2, reveals characteristic spatial distributions associated with different learning stages. The sample brain slice visualization demonstrates the complex nature of the neural activation patterns the model must interpret, with varying intensity values representing normalized BOLD signal strength across different brain regions.</p>
 <figure>
 <p><img alt="Example f MRI slice" src="../../assets/images/learnedSpec/fig2.png" width="50%" /></p>
 </figure>
-<p><em>Figure 2: Representative brain slice visualization from early learning stage (z=15, t=118) demonstrating characteristic activation patterns. Intensity values represent normalized <abbr title="Blood-Oxygen-Level-Dependent">BOLD</abbr> signal strength.</em></p>
+<p><em>Figure 2: Representative brain slice visualization from early learning stage (z=15, t=118) demonstrating characteristic activation patterns. Intensity values represent normalized BOLD signal strength.</em></p>
 <h3 id="classification-reliability-analysis">Classification Reliability Analysis<a class="headerlink" href="#classification-reliability-analysis" title="Permanent link">&para;</a></h3>
 <p>The model&rsquo;s reliability metrics provide crucial insight into its decision-making characteristics. The mean confidence of 0.437 with an overconfidence measure of 0.088 indicates relatively calibrated predictions, though the expected calibration error of 0.491 suggests room for improvement in uncertainty estimation. As shown in Figure 1, the confidence distribution shows distinct patterns for each learning stage, with mastery predictions showing a broader, right-skewed distribution compared to the more concentrated distributions of earlier stages.</p>
-<p>The <abbr title="Receiver Operating Characteristic">ROC</abbr> curves reveal a clear progression in classification reliability across learning stages: early (<abbr title="Area Under the Curve">AUC</abbr> = 0.368), middle (<abbr title="Area Under the Curve">AUC</abbr> = 0.556), late (<abbr title="Area Under the Curve">AUC</abbr> = 0.740), and mastery (<abbr title="Area Under the Curve">AUC</abbr> = 0.945). This progression suggests that distinctive neural patterns become increasingly detectable as learning progresses, with mastery showing particularly clear neural signatures.</p>
-<p>The mean loss of 1.082 (±0.257) suggests stable model training despite the classification challenges, with the relatively small standard deviation indicating consistent performance across validation folds. These results demonstrate both the promise and limitations of our approach, suggesting that while neural activation patterns contain meaningful information about learning stages, additional architectural innovations may be needed to fully capture the complexity of temporal learning progression in <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data.</p>
+<p>The ROC curves reveal a clear progression in classification reliability across learning stages: early (AUC = 0.368), middle (AUC = 0.556), late (AUC = 0.740), and mastery (AUC = 0.945). This progression suggests that distinctive neural patterns become increasingly detectable as learning progresses, with mastery showing particularly clear neural signatures.</p>
+<p>The mean loss of 1.082 (±0.257) suggests stable model training despite the classification challenges, with the relatively small standard deviation indicating consistent performance across validation folds. These results demonstrate both the promise and limitations of our approach, suggesting that while neural activation patterns contain meaningful information about learning stages, additional architectural innovations may be needed to fully capture the complexity of temporal learning progression in fMRI data.</p>
 <h2 id="discussion">Discussion<a class="headerlink" href="#discussion" title="Permanent link">&para;</a></h2>
-<p><abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> data from varaying datasets/test conditions is quite volatile to work with, and reliance on publically avaliable data sources without standerized test conditions certaily dosen&rsquo;t help. Nonethless the above guessing odds results suggests a correlation worth exploring, suggesting that integrating physiological state data into world model training provides essential insights into biological temporal information processing.</p>
-<p>Future work should expand beyond <abbr title="functional Magnetic Resonance Imaging">fMRI</abbr> to incorporate the full spectrum of physiological state signals identified in our introduction (facial EMG, heart rate variability, electrodermal activity). This multi-modal physiological state approach, combined with advanced transformer architectures, could enable world models to develop temporal understanding that more closely mirrors human cognitive processes, particularly in causal reasoning and state transitions. </p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>https://arxiv.org/abs/1706.03762&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>https://openreview.net/pdf?id=BZ5a1r-kVsf&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-<li id="fn:3">
-<p>https://pmc.ncbi.nlm.nih.gov/articles/PMC6904682/&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
-</li>
-<li id="fn:4">
-<p>https://www.nber.org/system/files/working_papers/w29587/w29587.pdf&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
-</li>
-<li id="fn:5">
-<p>https://pmc.ncbi.nlm.nih.gov/articles/PMC9824521/&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
-</li>
-<li id="fn:6">
-<p>https://www.biorxiv.org/content/10.1101/2022.02.28.482337v2.full&#160;<a class="footnote-backref" href="#fnref:6" title="Jump back to footnote 6 in the text">&#8617;</a></p>
-</li>
-<li id="fn:7">
-<p>https://www.pnas.org/doi/10.1073/pnas.1016823108&#160;<a class="footnote-backref" href="#fnref:7" title="Jump back to footnote 7 in the text">&#8617;</a></p>
-</li>
-<li id="fn:8">
-<p>https://pmc.ncbi.nlm.nih.gov/articles/PMC10960227/&#160;<a class="footnote-backref" href="#fnref:8" title="Jump back to footnote 8 in the text">&#8617;</a></p>
-</li>
-<li id="fn:9">
-<p>https://arxiv.org/abs/2302.10035&#160;<a class="footnote-backref" href="#fnref:9" title="Jump back to footnote 9 in the text">&#8617;</a></p>
-</li>
-<li id="fn:10">
-<p>https://pubmed.ncbi.nlm.nih.gov/16139527/&#160;<a class="footnote-backref" href="#fnref:10" title="Jump back to footnote 10 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:10" title="Jump back to footnote 10 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:10" title="Jump back to footnote 10 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:10" title="Jump back to footnote 10 in the text">&#8617;</a></p>
-</li>
-<li id="fn:11">
-<p>https://www.jstor.org/stable/2891421&#160;<a class="footnote-backref" href="#fnref:11" title="Jump back to footnote 11 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:11" title="Jump back to footnote 11 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:11" title="Jump back to footnote 11 in the text">&#8617;</a></p>
-</li>
-<li id="fn:12">
-<p>https://www.nature.com/articles/35107080&#160;<a class="footnote-backref" href="#fnref:12" title="Jump back to footnote 12 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:12" title="Jump back to footnote 12 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:12" title="Jump back to footnote 12 in the text">&#8617;</a></p>
-</li>
-<li id="fn:13">
-<p>https://arxiv.org/abs/1803.10122&#160;<a class="footnote-backref" href="#fnref:13" title="Jump back to footnote 13 in the text">&#8617;</a></p>
-</li>
-<li id="fn:14">
-<p>https://arxiv.org/abs/2010.11929&#160;<a class="footnote-backref" href="#fnref:14" title="Jump back to footnote 14 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:14" title="Jump back to footnote 14 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:14" title="Jump back to footnote 14 in the text">&#8617;</a></p>
-</li>
-<li id="fn:15">
-<p>https://www.nature.com/articles/nature06976&#160;<a class="footnote-backref" href="#fnref:15" title="Jump back to footnote 15 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:15" title="Jump back to footnote 15 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:15" title="Jump back to footnote 15 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:15" title="Jump back to footnote 15 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:15" title="Jump back to footnote 15 in the text">&#8617;</a></p>
-</li>
-<li id="fn:16">
-<p>https://doi.org/10.1017/CBO9780511895029&#160;<a class="footnote-backref" href="#fnref:16" title="Jump back to footnote 16 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:16" title="Jump back to footnote 16 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:16" title="Jump back to footnote 16 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:16" title="Jump back to footnote 16 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:16" title="Jump back to footnote 16 in the text">&#8617;</a><a class="footnote-backref" href="#fnref6:16" title="Jump back to footnote 16 in the text">&#8617;</a><a class="footnote-backref" href="#fnref7:16" title="Jump back to footnote 16 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
+<p>fMRI data from varaying datasets/test conditions is quite volatile to work with, and reliance on publically avaliable data sources without standerized test conditions certaily dosen&rsquo;t help. Nonethless the above guessing odds results suggests a correlation worth exploring, suggesting that integrating physiological state data into world model training provides essential insights into biological temporal information processing.</p>
+<p>Future work should expand beyond fMRI to incorporate the full spectrum of physiological state signals identified in our introduction (facial EMG, heart rate variability, electrodermal activity). This multi-modal physiological state approach, combined with advanced transformer architectures, could enable world models to develop temporal understanding that more closely mirrors human cognitive processes, particularly in causal reasoning and state transitions. </p>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -1458,12 +1422,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

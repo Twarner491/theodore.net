@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/thumb.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
   <link rel="stylesheet" href="https://theodore.net/assets/css/draft-auth.css">
   
@@ -752,7 +755,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Jan 2022 </span>
-        
+        <span class="readTime">| <i class="far fa-clock"></i> 5–6 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -767,29 +770,32 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p>Progress</p>
-<p>I&rsquo;ve used microcontrollers in most of my past projects. <abbr title="Integrated Circuit">IC</abbr> data sheets are super helpful in board design with their pinouts, but I&rsquo;ve noticed much of the contents have been pretty foreign to me. Every once in a while, the youtube algorithm recommended one of <a href="https://eater.net">Ben Eater&rsquo;s</a> computer concept videos to me, which provide a great explanation of the simplistic logic and proofs in computers. I ended up watching his entire <a href="https://eater.net/8bit">8-bit Breadboard Computer</a> series (embedded below) over the fall of 2021, to try to get a bit of a better idea of the workings of a microcontroller. The computer is an &ldquo;as simple as possible&rdquo;<a href="https://eater.net/8bit">^1</a> take on an 8-bit computer, using only simple logic to create an 8-bit computer on breadboards. The computer is built-in sectioned modules and then interfaced together, making each section a bit easier to swallow.</p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought">I&rsquo;ve used microcontrollers</span> in most of my past projects. IC data sheets are super helpful in board design with their pinouts, but I&rsquo;ve noticed much of the contents have been pretty foreign to me. Every once in a while, the youtube algorithm recommended one of <a href="https://eater.net">Ben Eater&rsquo;s</a> computer concept videos to me, which provide a great explanation of the simplistic logic and proofs in computers. I ended up watching his entire <a href="https://eater.net/8bit">8-bit Breadboard Computer</a> series (embedded below) over the fall of 2021, to try to get a bit of a better idea of the workings of a microcontroller. The computer is an &ldquo;as simple as possible&rdquo;<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"><a href="https://eater.net/8bit">https://eater.net/8bit</a></span> take on an 8-bit computer, using only simple logic to create an 8-bit computer on breadboards. The computer is built-in sectioned modules and then interfaced together, making each section a bit easier to swallow.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Documentation Style</p>
+<p>This page is a bit different than my other project pages, as it is a build log for my take on this <a href="https://eater.net/8bit">8-bit Breadboard Computer</a>. Instead of outlining project development (as Mr. Eaters&rsquo; videos do an amazing job with that), this page will be a collection of media behind each of my computer modules, as well as some final programs ran on the computer.</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>This page is a bit different than my other project pages, as it is a build log for my take on this [8-bit Breadboard Computer](https://eater.net/8bit). Instead of outlining project development (as Mr. Eaters&#39; videos do an amazing job with that), this page will be a collection of media behind each of my computer modules, as well as some final programs ran on the computer.
-</code></pre></div>
 <h2 id="bill-of-materials">Bill of Materials<a class="headerlink" href="#bill-of-materials" title="Permanent link">&para;</a></h2>
+<div class="bom-table"><input type="checkbox" id="bom-toggle-1" class="bom-collapse-toggle"><div class="bom-table-inner">
 <table>
 <thead>
 <tr>
-<th>Qty.</th>
+<th>Qty</th>
 <th>Description</th>
-<th></th>
 <th>Cost</th>
-<th>URL</th>
+<th>Link</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>14</td>
 <td>Breadboard</td>
-<td></td>
 <td>$112</td>
 <td><a href="https://www.amazon.com/gp/product/B0040Z4QN8/ref=as_li_tl?ie=UTF8&amp;tag=beneater-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=B0040Z4QN8&amp;linkId=32ebed06d70737d48f7dff50892868b2">link</a></td>
 </tr>
@@ -797,13 +803,11 @@
 <td>10</td>
 <td>1kΩ resistor</td>
 <td></td>
-<td></td>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.03 13.92h4V5l2.01-.03v8.95h3.99l-5 5Z"/></svg></span></td>
 </tr>
 <tr>
 <td>9</td>
 <td>10kΩ resistor</td>
-<td></td>
 <td></td>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.03 13.92h4V5l2.01-.03v8.95h3.99l-5 5Z"/></svg></span></td>
 </tr>
@@ -811,266 +815,242 @@
 <td>1</td>
 <td>100kΩ resistor</td>
 <td></td>
-<td></td>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.03 13.92h4V5l2.01-.03v8.95h3.99l-5 5Z"/></svg></span></td>
 </tr>
 <tr>
 <td>24</td>
 <td>470Ω resistor</td>
 <td></td>
-<td></td>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.03 13.92h4V5l2.01-.03v8.95h3.99l-5 5Z"/></svg></span></td>
 </tr>
 <tr>
 <td>1</td>
 <td>1MΩ resistor</td>
-<td></td>
 <td>$16.99</td>
 <td><a href="https://www.amazon.com/gp/product/B00E3JGGF2/ref=as_li_tl?ie=UTF8&amp;tag=beneater-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=B00E3JGGF2&amp;linkId=37bccc3872a0e7c701200d3f8a46f841">link</a></td>
 </tr>
 <tr>
 <td>1</td>
 <td>1MΩ potentiometer</td>
-<td></td>
 <td>$1.39</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=2161422&amp;avad=234285_b24a928cd&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>6</td>
 <td>0.01µF capacitor</td>
-<td></td>
 <td>$1.20</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=15229&amp;avad=234285_e24a83cb1&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>16</td>
 <td>0.1µF capacitor</td>
-<td></td>
 <td>$3.00</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=151116&amp;avad=234285_f24a7e1b9&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>1</td>
 <td>1µF capacitor</td>
-<td></td>
 <td>$0.15</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=330431&amp;avad=234285_c24a8fac5&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>4</td>
-<td>555 timer <abbr title="Integrated Circuit">IC</abbr></td>
-<td></td>
+<td>555 timer IC</td>
 <td>$0.63</td>
 <td><a href="https://www.aliexpress.com/item/32823042746.html?spm=a2g0o.productlist.0.0.2786782fopOSRM&amp;algo_pvid=96d0349a-68b7-4336-988d-4738811be810&amp;algo_exp_id=96d0349a-68b7-4336-988d-4738811be810-0&amp;pdp_ext_f=%7B%22sku_id%22%3A%2264903037377%22%7D">link</a></td>
 </tr>
 <tr>
 <td>2</td>
 <td>74LS00 (Quad NAND gate)</td>
-<td></td>
 <td>$0.76</td>
 <td><a href="https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.productlist.0.0.3a184f8baiaLU3&amp;algo_pvid=07ae07c6-5f66-4969-989e-1b63359f0b36&amp;algo_exp_id=07ae07c6-5f66-4969-989e-1b63359f0b36-0&amp;pdp_ext_f=%7B%22sku_id%22%3A%2212000024102730486%22%7D">link</a></td>
 </tr>
 <tr>
 <td>1</td>
 <td>74LS02 (Quad NOR gate)</td>
-<td></td>
 <td>$0.76</td>
 <td><a href="https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.productlist.0.0.3a184f8baiaLU3&amp;algo_pvid=07ae07c6-5f66-4969-989e-1b63359f0b36&amp;algo_exp_id=07ae07c6-5f66-4969-989e-1b63359f0b36-0&amp;pdp_ext_f=%7B%22sku_id%22%3A%2212000024102730486%22%7D">link</a></td>
 </tr>
 <tr>
 <td>5</td>
 <td>74LS04 (Hex inverter)</td>
-<td></td>
 <td>$0.87</td>
 <td><a href="https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.productlist.0.0.3a184f8baiaLU3&amp;algo_pvid=07ae07c6-5f66-4969-989e-1b63359f0b36&amp;algo_exp_id=07ae07c6-5f66-4969-989e-1b63359f0b36-0&amp;pdp_ext_f=%7B%22sku_id%22%3A%2212000024102730486%22%7D">link</a></td>
 </tr>
 <tr>
 <td>3</td>
 <td>74LS08 (Quad AND gate)</td>
-<td></td>
 <td>$0.72</td>
 <td><a href="https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.cart.0.0.faec3c00RQNoMs&amp;mp=1">link</a></td>
 </tr>
 <tr>
 <td>1</td>
 <td>74LS32 (Quad OR gate)</td>
-<td></td>
 <td>$0.89</td>
 <td><a href="https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.cart.0.0.faec3c00RQNoMs&amp;mp=1">link</a></td>
 </tr>
 <tr>
 <td>1</td>
-<td>74LS107 (Dual JK flip-flop)</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Note: The videos use the 74LS76 which is extremely difficult to find. The 74LS107 is functionally equivalent but be careful: it has a different pinout.</td>
-<td></td>
+<td>74LS107 (Dual JK flip-flop)<br><small>Note: The 74LS76 is hard to find. The 74LS107 is functionally equivalent but has a different pinout.</small></td>
 <td>$1.58</td>
 <td><a href="https://www.aliexpress.com/item/32837207073.html?spm=a2g0o.productlist.0.0.207015cbIMimMw&amp;algo_pvid=c81f15db-70af-4c8a-b7f0-f3ad2aefd724&amp;algo_exp_id=c81f15db-70af-4c8a-b7f0-f3ad2aefd724-0&amp;pdp_ext_f=%7B%22sku_id%22%3A%2212000021439605652%22%7D">link</a></td>
-<td></td>
 </tr>
 <tr>
 <td>2</td>
 <td>74LS86 (Quad XOR gate)</td>
-<td></td>
 <td>$1.11</td>
 <td><a href="https://www.aliexpress.com/item/1005003103565042.html?spm=a2g0o.cart.0.0.faec3c00RQNoMs&amp;mp=1">link</a></td>
 </tr>
 <tr>
 <td>1</td>
 <td>74LS138 (3-to-8 line decoder)</td>
-<td></td>
 <td>$0.80</td>
 <td><a href="https://www.aliexpress.com/item/1005003102981081.html?spm=a2g0o.productlist.0.0.7d5673d7KhGF0Y&amp;algo_pvid=c8b19dec-d621-4c22-9ff8-5dee7269a3cb&amp;algo_exp_id=c8b19dec-d621-4c22-9ff8-5dee7269a3cb-0&amp;pdp_ext_f=%7B%22sku_id%22%3A%2212000024100200959%22%7D">link</a></td>
 </tr>
 <tr>
 <td>1</td>
-<td>74LS139 (Dual 2-line to 4-line decoder)</td>
-<td></td>
+<td>74LS139 (Dual 2-to-4 line decoder)</td>
 <td>$1.55</td>
 <td><a href="https://www.aliexpress.com/item/32835244421.html?spm=a2g0o.productlist.0.0.3122402fsGGTYE&amp;algo_pvid=3748f071-9375-479f-b6c5-85001b10ac54&amp;algo_exp_id=3748f071-9375-479f-b6c5-85001b10ac54-0&amp;pdp_ext_f=%7B%22sku_id%22%3A%2265146220182%22%7D">link</a></td>
 </tr>
 <tr>
 <td>4</td>
-<td>74LS157 (Quad 2-to-1 line data selector)</td>
-<td></td>
+<td>74LS157 (Quad 2-to-1 line selector)</td>
 <td>$1.58</td>
 <td><a href="http://link/">link</a></td>
 </tr>
 <tr>
 <td>2</td>
 <td>74LS161 (4-bit synchronous binary counter)</td>
-<td></td>
 <td>$1.95</td>
 <td><a href="https://www.aliexpress.com/item/33020267124.html?spm=a2g0o.productlist.0.0.1677721es4x1SK&amp;algo_pvid=d2780b90-5738-4546-b5de-5d6bb2d811c9&amp;algo_exp_id=d2780b90-5738-4546-b5de-5d6bb2d811c9-1&amp;pdp_ext_f=%7B%22sku_id%22%3A%2212000021439709306%22%7D">link</a></td>
 </tr>
 <tr>
 <td>8</td>
 <td>74LS173 (4-bit D-type register)</td>
-<td></td>
 <td>$1.45</td>
 <td><a href="https://www.aliexpress.com/item/33018650807.html?spm=a2g0o.productlist.0.0.14e742d1pRCGVb&amp;algo_pvid=8a07540f-898b-486a-8838-56f791cd0250&amp;algo_exp_id=8a07540f-898b-486a-8838-56f791cd0250-1&amp;pdp_ext_f=%7B%22sku_id%22%3A%2267178993411%22%7D">link</a></td>
 </tr>
 <tr>
 <td>2</td>
-<td>74189 (64-bit random access memory)</td>
-<td></td>
+<td>74189 (64-bit RAM)</td>
 <td>$9.90</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=49883&amp;avad=234285_e24a84fe5&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>6</td>
 <td>74LS245 (Octal bus transceiver)</td>
-<td></td>
 <td>$1.26</td>
 <td><a href="https://www.aliexpress.com/item/1005001437010289.html?spm=a2g0o.productlist.0.0.2a9464edzJi9rC&amp;algo_pvid=8b6dcbac-4a44-40e8-9cf1-13b00ce0ea20&amp;algo_exp_id=8b6dcbac-4a44-40e8-9cf1-13b00ce0ea20-1&amp;pdp_ext_f=%7B%22sku_id%22%3A%2212000016109356828%22%7D">link</a></td>
 </tr>
 <tr>
 <td>1</td>
 <td>74LS273 (Octal D flip-flop)</td>
-<td></td>
 <td>$1.99</td>
 <td><a href="https://www.aliexpress.com/item/32904754683.html?spm=a2g0o.productlist.0.0.103f6a156A0dsq&amp;algo_pvid=a4d9d0cb-9b2a-49b2-aad8-2dc4b3f1ecc3&amp;algo_exp_id=a4d9d0cb-9b2a-49b2-aad8-2dc4b3f1ecc3-1&amp;pdp_ext_f=%7B%22sku_id%22%3A%2265797111425%22%7D">link</a></td>
 </tr>
 <tr>
 <td>2</td>
 <td>74LS283 (4-bit binary full adder)</td>
-<td></td>
 <td>$1.38</td>
 <td><a href="https://www.aliexpress.com/item/32903704766.html?spm=a2g0o.productlist.0.0.5be92163FIwyiz&amp;algo_pvid=4123097d-3bbb-4234-b315-ca930c2e2f42&amp;algo_exp_id=4123097d-3bbb-4234-b315-ca930c2e2f42-0&amp;pdp_ext_f=%7B%22sku_id%22%3A%2212000021439617925%22%7D">link</a></td>
 </tr>
 <tr>
 <td>3</td>
-<td>28C16 <abbr title="Electrically Erasable Programmable Read-Only Memory">EEPROM</abbr></td>
-<td></td>
+<td>28C16 EEPROM</td>
 <td>$11.85</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=74691&amp;avad=234285_b24a93fbd&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>3</td>
 <td>Double-throw toggle switch</td>
-<td></td>
 <td>$2.97</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?history=&amp;catalogId=10001&amp;langId=-1&amp;freeText=2258831&amp;storeId=10001&amp;productId=2258831&amp;avad=234285_f24a7f961&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>3</td>
 <td>Momentary 6mm tact switch</td>
-<td></td>
 <td>$1.05</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=149948&amp;avad=234285_b24a94221&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>1</td>
-<td>8-position <abbr title="Dual In-line Package">DIP</abbr> switch</td>
-<td></td>
+<td>8-position DIP switch</td>
 <td>$0.79</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=38842&amp;avad=234285_f24a7fa49&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>1</td>
-<td>4-position <abbr title="Dual In-line Package">DIP</abbr> switch</td>
-<td></td>
+<td>4-position DIP switch</td>
 <td>$0.79</td>
 <td><a href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=38820&amp;avad=234285_e24a855bd&amp;source=Avantlink">link</a></td>
 </tr>
 <tr>
 <td>44</td>
-<td>Red <abbr title="Light-Emitting Diode">LED</abbr></td>
-<td></td>
+<td>Red LED</td>
 <td></td>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.03 13.92h4V5l2.01-.03v8.95h3.99l-5 5Z"/></svg></span></td>
 </tr>
 <tr>
 <td>8</td>
-<td>Yellow <abbr title="Light-Emitting Diode">LED</abbr></td>
-<td></td>
+<td>Yellow LED</td>
 <td></td>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.03 13.92h4V5l2.01-.03v8.95h3.99l-5 5Z"/></svg></span></td>
 </tr>
 <tr>
 <td>12</td>
-<td>Green <abbr title="Light-Emitting Diode">LED</abbr></td>
-<td></td>
+<td>Green LED</td>
 <td></td>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.03 13.92h4V5l2.01-.03v8.95h3.99l-5 5Z"/></svg></span></td>
 </tr>
 <tr>
 <td>21</td>
-<td>Blue <abbr title="Light-Emitting Diode">LED</abbr></td>
-<td></td>
+<td>Blue LED</td>
 <td>$12.99</td>
 <td><a href="https://www.amazon.com/DiCUNO-450pcs-Colors-Emitting-Assorted/dp/B073QMYKDM/ref=sr_1_7?dchild=1&amp;keywords=5mm+LED+pack&amp;qid=1635892042&amp;qsid=143-4488646-5725765&amp;sr=8-7&amp;sres=B07T8H6V37%2CB07PG84V17%2CB07N2H23DC%2CB086JM3WMM%2CB073QMYKDM%2CB01AKPKC84%2CB01AUI4VSI%2CB07PVVL2S6%2CB06XPV4CSH%2CB093GL1FFH%2CB01LX8JVG7%2CB01C3ZZT2I%2CB08L5T37N8%2CB08ZXK5WMZ%2CB07WNMNS9P%2CB097RMK592">link</a></td>
 </tr>
 <tr>
 <td>4</td>
 <td>Common cathode 7-segment display</td>
-<td></td>
 <td>$4.36</td>
 <td><a href="https://www.jameco.com/z/UA5651-11-R-Jameco-Valuepro-LED-Display-7-Segment-Red-0-56-Inch-Common-Anode-RHDP-0-8mcd_335090.html?CID=MERCH">link</a></td>
 </tr>
 <tr>
 <td>1</td>
 <td>22 AWG Solid Tinned-Copper Hook-Up Wire</td>
-<td></td>
 <td>$29.95</td>
 <td><a href="https://www.adafruit.com/product/3174?gclid=Cj0KCQjww4OMBhCUARIsAILndv4TcRmMF-8TiYvh74DqYKzl6-iRXDQZRWgg_geBEG7LG3p2uWDhGiQaAlhYEALw_wcB">link</a></td>
 </tr>
+<tr>
+<td></td>
+<td><strong>Total</strong></td>
+<td><strong>$228.66</strong></td>
+<td></td>
+</tr>
 </tbody>
 </table>
-<p>&mdash; Total Cost - <strong>$228.66</strong> &mdash;</p>
+</div><div class="bom-fade"></div><label for="bom-toggle-1" class="bom-toggle-label"><span class="bom-label-expand">Show all 39 items</span><span class="bom-label-collapse">Collapse</span></label></div>
 <h2 id="clock-module">Clock Module<a class="headerlink" href="#clock-module" title="Permanent link">&para;</a></h2>
+<figure>
 <p><img alt="Setup of astable circuit" src="../../assets/images/8-bitComputer/setastable.jpg" width="80%" /></p>
+</figure>
+<figure>
 <p><img alt="Oscilloscope display showing clock vs capacitor waveforms" src="../../assets/images/8-bitComputer/555wave.jpg" width="100%" /></p>
+</figure>
 <p>Clock vs Capacitor</p>
+<figure>
 <p><img alt="Variable astable multivibrator circuit setup" src="../../assets/images/8-bitComputer/variableastable.jpg" width="80%" /></p>
+</figure>
+<figure>
 <p><img alt="Monostable multivibrator circuit setup" src="../../assets/images/8-bitComputer/monostable.jpg" width="80%" /></p>
+</figure>
+<figure>
 <p><img alt="Completed clock module assembly" src="../../assets/images/8-bitComputer/clockmodule.jpg" width="100%" /></p>
+</figure>
 <h2 id="registers">Registers<a class="headerlink" href="#registers" title="Permanent link">&para;</a></h2>
+<figure>
 <p><img alt="8-bit register module assembly" src="../../assets/images/8-bitComputer/8-BitRegister.jpg" width="100%" /></p>
+</figure>
 <h2 id="arithmetic-logic-unit-alu">Arithmetic Logic Unit (ALU)<a class="headerlink" href="#arithmetic-logic-unit-alu" title="Permanent link">&para;</a></h2>
 <h2 id="random-access-memory-module-ram">Random Access Memory Module (RAM)<a class="headerlink" href="#random-access-memory-module-ram" title="Permanent link">&para;</a></h2>
 <h2 id="program-counter">Program Counter<a class="headerlink" href="#program-counter" title="Permanent link">&para;</a></h2>
@@ -1078,9 +1058,9 @@
 <h2 id="module-meshing">Module Meshing<a class="headerlink" href="#module-meshing" title="Permanent link">&para;</a></h2>
 <h2 id="cpu-control-logic">CPU Control Logic<a class="headerlink" href="#cpu-control-logic" title="Permanent link">&para;</a></h2>
 <h3 id="fibonacci-sequence">Fibonacci Sequence<a class="headerlink" href="#fibonacci-sequence" title="Permanent link">&para;</a></h3>
-<p><img alt="Visual representation of Fibonacci sequence spiral" src="../../assets/images/8-bitComputer/Fibonaccisequencespiral.png" width="60%" /></p>
-<p><img alt="Mathematical equation for Fibonacci sequence" src="../../assets/images/8-bitComputer/FibonacciEquasion.png" width="80%" /></p>
-<p><strong>First 12 Numberes in the Fibonacci Sequence</strong></p>
+<p><input type="checkbox" id="mn-2" class="margin-toggle"/><label for="mn-2" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginfigure"><img alt="Fibonacci spiral" src="../../assets/images/8-bitComputer/Fibonaccisequencespiral.png" /><span class="caption">The Fibonacci spiral — each square&rsquo;s side length is a Fibonacci number.</span></span></p>
+<div class="arithmatex">\[F_n = \frac{1}{\sqrt{5}} \left( \left( \frac{1 + \sqrt{5}}{2} \right)^n - \left( \frac{1 - \sqrt{5}}{2} \right)^n \right)\]</div>
+<p><strong>First 12 Numbers in the Fibonacci Sequence</strong></p>
 <table>
 <thead>
 <tr>
@@ -1139,6 +1119,18 @@
 </tr>
 </tbody>
 </table>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -1258,12 +1250,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

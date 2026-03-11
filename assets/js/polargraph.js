@@ -671,3 +671,84 @@ class GPenTPromptDemo {
     }, intervalTime);
   }
 }
+
+// Sidenote blob generator — random organic shapes, click to reshuffle
+(function() {
+  function generateBlob(cx, cy, r) {
+    var n = 5 + Math.floor(Math.random() * 4);
+    var points = [];
+    for (var i = 0; i < n; i++) {
+      var angle = (2 * Math.PI * i) / n;
+      var jitter = r * (0.6 + Math.random() * 0.8);
+      points.push({
+        x: cx + Math.cos(angle) * jitter,
+        y: cy + Math.sin(angle) * jitter
+      });
+    }
+    var d = '';
+    for (var i = 0; i < n; i++) {
+      var curr = points[i];
+      var next = points[(i + 1) % n];
+      var prev = points[(i - 1 + n) % n];
+      var next2 = points[(i + 2) % n];
+      var tension = 0.3 + Math.random() * 0.15;
+      var cp1x = curr.x + (next.x - prev.x) * tension;
+      var cp1y = curr.y + (next.y - prev.y) * tension;
+      var cp2x = next.x - (next2.x - curr.x) * tension;
+      var cp2y = next.y - (next2.y - curr.y) * tension;
+      if (i === 0) d += 'M' + curr.x.toFixed(1) + ',' + curr.y.toFixed(1);
+      d += ' C' + cp1x.toFixed(1) + ',' + cp1y.toFixed(1) +
+           ' ' + cp2x.toFixed(1) + ',' + cp2y.toFixed(1) +
+           ' ' + next.x.toFixed(1) + ',' + next.y.toFixed(1);
+    }
+    d += 'Z';
+    return d;
+  }
+
+  var blobCenters = [
+    { cx: 40,  cy: 55, r: 28 },
+    { cx: 105, cy: 60, r: 32 },
+    { cx: 165, cy: 50, r: 25 }
+  ];
+
+  function fillBlobs(svg) {
+    svg.innerHTML = '';
+    blobCenters.forEach(function(b) {
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', generateBlob(b.cx, b.cy, b.r));
+      path.setAttribute('class', 'blob-shape');
+      svg.appendChild(path);
+    });
+  }
+
+  function initBlobs() {
+    document.querySelectorAll('.blob-sidenote-svg').forEach(function(svg) {
+      if (svg.dataset.blobInit) return;
+      svg.dataset.blobInit = '1';
+      fillBlobs(svg);
+      svg.style.cursor = 'pointer';
+      svg.addEventListener('click', function() { fillBlobs(svg); });
+    });
+  }
+
+  // Only use document$ for SPA — skip the eager DOMContentLoaded to avoid double-fire
+  var sub = setInterval(function() {
+    if (typeof document$ !== 'undefined') {
+      clearInterval(sub);
+      document$.subscribe(function() {
+        // Reset init flags so blobs re-init on SPA navigation
+        document.querySelectorAll('.blob-sidenote-svg').forEach(function(svg) {
+          delete svg.dataset.blobInit;
+        });
+        initBlobs();
+      });
+    }
+  }, 100);
+
+  // Fallback for non-SPA / direct page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBlobs);
+  } else {
+    initBlobs();
+  }
+})();

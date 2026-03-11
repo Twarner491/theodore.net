@@ -626,16 +626,7 @@
   }
 }
 
-/* Body text links - make underlined instead of blue */
-.md-typeset a:not(.md-button):not(.md-header__button):not(.main-navigation a):not(.return2feed a):not(.abtlinks a):not(.share a):not(.md-footer__link) {
-  text-decoration: underline;
-  color: inherit;
-}
-
-.md-typeset a:not(.md-button):not(.md-header__button):not(.main-navigation a):not(.return2feed a):not(.abtlinks a):not(.share a):not(.md-footer__link):hover {
-  text-decoration: underline;
-  color: inherit;
-}
+/* Body text links: handled by tufte.css */
 
 /* ===== Email Subscription Form ===== */
 .subscribe-section {

@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/downsideprotection/thumb.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -606,7 +609,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Dec 2025 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 5–6 mins</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 4–5 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -621,15 +624,33 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p><em>Novel hardware adoption is implicitly limited by downside tolerance, not upside potential.</em></p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought"><em>Novel hardware adoption</em></span> <em>is implicitly limited by downside tolerance, not upside potential.</em></p>
 <p>Hardware that&rsquo;s worth developing innately contains exponential upside. That&rsquo;s the prior to novel hardware work, the justification for the stupendous time/energy/and capital into it; the resulting tech must be exponentially better than the prior most comparable thing. Unlike software where it&rsquo;s possible to stack marginal improvements, the &ldquo;square wave&rdquo; of time/energy/cost of hardware demands this massive upside.</p>
 <p>Yet the repercussive nature of such a substantial upside often hinders the propagation of that novel hardware itself. Say I have a robot arm that I&rsquo;ve developed to pack boxes in an amazon factory. This particular robot arm can do the work of 5 men in a single day. Great! Stupendous even! Very easy to justify the cost of said arm, as opposed to the salaries of 5 men. So why doesn&rsquo;t every factory deploy thousands of arms and save a ton of money?</p>
 <p>When those robots fail (and they do, though somewhat infrequently) you now lose the productive output of 5 men. Very rarely (when employing humans) do such a large multiple call in sick, or quit, or have some sudden downtime. Yet when deploying robots with such a substantial upside multiple, we seem to do so despite our downside protection not yet following.</p>
 <p>Consider a robot arm at $70K that replaces 5 warehouse workers at $35K/year each ($175K in annual labor). Let&rsquo;s say this robot works at ~10x human speed, so it can accomplish in one hour what takes a human ten hours. Looks like a 5 month payback period, right? Now assume the robot fails just 1.5% of the time, that&rsquo;s 131 hours per year. During those 131 hours, you don&rsquo;t just lose one worker&rsquo;s output. You lose the productive capacity of that 10x speed multiplier doing the work of 5 people. That&rsquo;s 131 hours of zero output where you expected 5 worker equivalent productivity at 10x speed, or roughly 6,550 man-hours lost annually. At $35K per worker/year (~$17/hour), that&rsquo;s $111K in lost productivity. This gets even worse when you consider that this robot must be removed from the production line for debugging (further reducing productive output), and debugged by a costly roboticist (increasing expenses). The 5 month payback stretches to 18-24 months, and that&rsquo;s if the factory can even stomach the productivity volatility.</p>
-<p>This fail state is everything. It keeps the market size and CAGR small by minimizing the number of people who can see a true ROI with that new technology. This has very little to do with the cost of debugging. This has everything to do with the loss of productivity.</p>
+<p><span class="newthought">This fail state</span> is everything. It keeps the market size and CAGR small by minimizing the number of people who can see a true ROI with that new technology. This has very little to do with the cost of debugging. This has everything to do with the loss of productivity.</p>
 <p>This pattern doesn&rsquo;t apply universally. Novel hardware that has achieved massive scale historically solved adequately protected their downsides or avoided it entirely. Smartphones replaced telegraphs and landlines, but the downside of a dead smartphone is just reverting to baseline: you can&rsquo;t make a call for a few hours. As such, smartphones had lower absolute downside risk despite being more complex. Similarly, EVs replace combustion vehicles but with comparable failure modes. When a Tesla fails, you&rsquo;re down one car, same as a combustion vehicle failure. The productivity multiplier is 1:1, so the failure multiplier is also 1:1. Industrial robots are different. A warehouse robot arm that replaces 5 workers creates a 5:1 productivity multiplier, but also a 5:1 downside multiplier. This is the core asymmetry that limits industrial robot adoption despite obvious ROI.</p>
-<p>Hardware founders and engineers consistently underweight tail risk in adoption decisions. The compounding economic impact of correlated failures is the primary hindrance in expansion of hardware efforts. If more engineers considered this, propagation of novel hardware in the physical world would compound much faster.</p>
+<p><span class="newthought">Hardware founders</span> and engineers consistently underweight tail risk in adoption decisions. The compounding economic impact of correlated failures is the primary hindrance in expansion of hardware efforts. If more engineers considered this, propagation of novel hardware in the physical world would compound much faster.</p>
 <p>The market prices hardware startups like SaaS companies, favoring sleek launch videos and niche early adopter markets. This works for software because SaaS companies can build $100M ARR businesses selling to 500 companies in a tight, self-reinforcing ecosystem. Hardware can&rsquo;t play this game. The market is the physical world itself, and mass adoption is limited by downside tolerance, not upside potential.</p>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -747,12 +768,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

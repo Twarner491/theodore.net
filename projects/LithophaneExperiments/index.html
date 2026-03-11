@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/LithophaneExperiments/hero.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -641,7 +644,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Jan 2019 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 1-2 minutes</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 1 min</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -656,53 +659,87 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p>A Lithophane is a piece of art made out of a thin translucent material designed to show an image in a &ldquo;grisaille&rdquo; color format when held up to light.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 3D printers can be utilized to create some nice-looking lithophanes, a practice made easy with <em>3dp.rocks</em> lithophane generator, linked below. Due to their easy creation, I find lithophanes to be a nice medium to test slicer changes with, allowing for your time to be spent with the slicer settings, and not the file prep. </p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought">A Lithophane</span> is a piece of art made out of a thin translucent material designed to show an image in a &ldquo;grisaille&rdquo; color format when held up to light.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"><a href="https://en.wikipedia.org/wiki/Lithophane">Wikipedia: Lithophane</a></span> 3D printers can be utilized to create some nice-looking lithophanes, a practice made easy with <em>3dp.rocks</em> lithophane generator, linked below. Due to their easy creation, I find lithophanes to be a nice medium to test slicer changes with, allowing for your time to be spent with the slicer settings, and not the file prep. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This page is not documentation on the lithophane making process, but more of a portfolio of some notable lithophanes I&rsquo;ve printed since taking up this medium.</p>
 </div>
 <figure>
-<p><a class="md-button md-button--primary" href="https://3dp.rocks/lithophane/">3dp.rocks&rsquo;s Lithophane Generator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m55.7 199.7 30.9 30.9c6 6 14.1 9.4 22.6 9.4h21.5c8.5 0 16.6 3.4 22.6 9.4l29.3 29.3c6 6 9.4 14.1 9.4 22.6v37.5c0 8.5 3.4 16.6 9.4 22.6l13.3 13.3c6 6 9.4 14.1 9.4 22.6V416c0 17.7 14.3 32 32 32s32-14.3 32-32v-2.7c0-8.5 3.4-16.6 9.4-22.6l45.3-45.3c6-6 9.4-14.1 9.4-22.6v-34.7c0-17.7-14.3-32-32-32h-82.7c-8.5 0-16.6-3.4-22.6-9.4l-16-16c-4.2-4.2-6.6-10-6.6-16 0-12.5 10.1-22.6 22.6-22.6h34.7c12.5 0 22.6-10.1 22.6-22.6 0-6-2.4-11.8-6.6-16l-19.7-19.7c-3.9-3.8-5.9-8.7-5.9-13.8s2-10 5.7-13.7L263 89c5.8-5.8 9.1-13.7 9.1-21.9 0-7.2-2.4-13.7-6.4-18.9-3.2-.1-6.4-.2-9.6-.2-95.4 0-175.7 64.2-200.3 151.7zM464 256c0-34.6-8.4-67.2-23.4-95.8-6.4.9-12.7 3.9-17.9 9.1l-13.4 13.4c-6 6-9.4 14.1-9.4 22.6V240c0 17.7 14.3 32 32 32H456c2.5 0 5-.3 7.3-.8.4-5 .5-10.1.5-15.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1-512 0"/></svg></span></a></p>
+<p><a class="md-button md-button--outlined" href="https://3dp.rocks/lithophane/">3dp.rocks&rsquo;s Lithophane Generator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m55.7 199.7 30.9 30.9c6 6 14.1 9.4 22.6 9.4h21.5c8.5 0 16.6 3.4 22.6 9.4l29.3 29.3c6 6 9.4 14.1 9.4 22.6v37.5c0 8.5 3.4 16.6 9.4 22.6l13.3 13.3c6 6 9.4 14.1 9.4 22.6V416c0 17.7 14.3 32 32 32s32-14.3 32-32v-2.7c0-8.5 3.4-16.6 9.4-22.6l45.3-45.3c6-6 9.4-14.1 9.4-22.6v-34.7c0-17.7-14.3-32-32-32h-82.7c-8.5 0-16.6-3.4-22.6-9.4l-16-16c-4.2-4.2-6.6-10-6.6-16 0-12.5 10.1-22.6 22.6-22.6h34.7c12.5 0 22.6-10.1 22.6-22.6 0-6-2.4-11.8-6.6-16l-19.7-19.7c-3.9-3.8-5.9-8.7-5.9-13.8s2-10 5.7-13.7L263 89c5.8-5.8 9.1-13.7 9.1-21.9 0-7.2-2.4-13.7-6.4-18.9-3.2-.1-6.4-.2-9.6-.2-95.4 0-175.7 64.2-200.3 151.7zM464 256c0-34.6-8.4-67.2-23.4-95.8-6.4.9-12.7 3.9-17.9 9.1l-13.4 13.4c-6 6-9.4 14.1-9.4 22.6V240c0 17.7 14.3 32 32 32H456c2.5 0 5-.3 7.3-.8.4-5 .5-10.1.5-15.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1-512 0"/></svg></span></a></p>
 </figure>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="90%" height="495" src="https://www.youtube.com/embed/ZNlbl6uhqbI" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
 <hr />
 <h2 id="people">People<a class="headerlink" href="#people" title="Permanent link">&para;</a></h2>
-<figure>
-<p><img align="left" alt="Original photo of friends group" src="../../assets/images/LithophaneExperiments/friends.jpg" width="48.5%" />
-<img align="right" alt="Lithophane print of friends group photo" src="../../assets/images/LithophaneExperiments/friendslithophane.jpg" width="45.6%" /></p>
-<p><img align="left" alt="Original family photo" src="../../assets/images/LithophaneExperiments/fam.jpg" width="50.5%" />
-<img align="right" alt="Lithophane print of family photo" src="../../assets/images/LithophaneExperiments/famlithophane.jpg" width="44.7%" /></p>
-<p><img align="left" alt="Original photo of MC" src="../../assets/images/LithophaneExperiments/MC.jpg" width="50.5%" />
-<img align="right" alt="Lithophane print of MC photo" src="../../assets/images/LithophaneExperiments/MClithophane.jpg" width="45.3%" /></p>
-<p><img align="left" alt="Original photo of Nina" src="../../assets/images/LithophaneExperiments/nina.jpg" width="49%" />
-<img align="right" alt="Lithophane print of Nina photo" src="../../assets/images/LithophaneExperiments/ninalithophane.jpg" width="45.4%" /></p>
-<p><img align="left" alt="Original photo of Maeko" src="../../assets/images/LithophaneExperiments/maeko.jpg" width="46.2%" />
-<img align="right" alt="Lithophane print of Maeko photo" src="../../assets/images/LithophaneExperiments/lithophanemakeo.jpg" width="48.1%" /></p>
-<p><img align="left" alt="Original photo of Alex" src="../../assets/images/LithophaneExperiments/alex.jpg" width="50.5%" />
-<img align="right" alt="Lithophane print of Alex photo" src="../../assets/images/LithophaneExperiments/alexlithophane.jpg" width="43.5%" /></p>
-</figure>
-<h2 id="art">Art<a class="headerlink" href="#art" title="Permanent link">&para;</a></h2>
-<figure>
-<p><img align="left" alt="Original Keith Haring artwork" src="../../assets/images/LithophaneExperiments/keithharring.jpg" width="50%" />
-<img align="right" alt="Lithophane print of Keith Haring artwork" src="../../assets/images/LithophaneExperiments/keithharringlithophane.jpg" width="44%" /></p>
-<p><img align="left" alt="Original painting artwork" src="../../assets/images/LithophaneExperiments/painting.jpg" width="51%" />
-<img align="right" alt="Lithophane print of painting" src="../../assets/images/LithophaneExperiments/paintinglithophane.jpg" width="45%" /></p>
-<p><img align="left" alt="Original Georgia O'Keeffe artwork" src="../../assets/images/LithophaneExperiments/gerogiaokeef.jpg" width="50.5%" />
-<img align="right" alt="Lithophane print of Georgia O'Keeffe artwork" src="../../assets/images/LithophaneExperiments/gerogiaokeeflithophane.jpg" width="43.6%" /></p>
-</figure>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>https://en.wikipedia.org/wiki/Lithophane&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/friends.jpg" alt="Original photo of friends group">
+<img src="../../assets/images/LithophaneExperiments/friendslithophane.jpg" alt="Lithophane print of friends group photo">
 </div>
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/fam.jpg" alt="Original family photo">
+<img src="../../assets/images/LithophaneExperiments/famlithophane.jpg" alt="Lithophane print of family photo">
+</div>
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/MC.jpg" alt="Original photo of MC">
+<img src="../../assets/images/LithophaneExperiments/MClithophane.jpg" alt="Lithophane print of MC photo">
+</div>
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/nina.jpg" alt="Original photo of Nina">
+<img src="../../assets/images/LithophaneExperiments/ninalithophane.jpg" alt="Lithophane print of Nina photo">
+</div>
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/maeko.jpg" alt="Original photo of Maeko">
+<img src="../../assets/images/LithophaneExperiments/lithophanemakeo.jpg" alt="Lithophane print of Maeko photo">
+</div>
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/alex.jpg" alt="Original photo of Alex">
+<img src="../../assets/images/LithophaneExperiments/alexlithophane.jpg" alt="Lithophane print of Alex photo">
+</div>
+
+<h2 id="art">Art<a class="headerlink" href="#art" title="Permanent link">&para;</a></h2>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/keithharring.jpg" alt="Original Keith Haring artwork">
+<img src="../../assets/images/LithophaneExperiments/keithharringlithophane.jpg" alt="Lithophane print of Keith Haring artwork">
+</div>
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/painting.jpg" alt="Original painting artwork">
+<img src="../../assets/images/LithophaneExperiments/paintinglithophane.jpg" alt="Lithophane print of painting">
+</div>
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/LithophaneExperiments/gerogiaokeef.jpg" alt="Original Georgia O'Keeffe artwork">
+<img src="../../assets/images/LithophaneExperiments/gerogiaokeeflithophane.jpg" alt="Lithophane print of Georgia O'Keeffe artwork">
+</div>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -820,12 +857,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

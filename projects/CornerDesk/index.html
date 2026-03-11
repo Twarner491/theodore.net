@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/CornerDesk/finishedwoodassembly.jpg">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -696,7 +699,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Mar 2020 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 6-8 minutes</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 7–8 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -711,39 +714,54 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p>This start of the Pandemic project stemmed from my freshman year engineering capstone project. At the start of 8th grade I had an issue, I was a couple of months into learning Fusion360 and I decided to upgrade my setup from an old janky pc to a brand new laptop and some 20-inch monitors to go along with it, which was great and all but gave me a whole tone of issues to sort out. I had this great desk in the corner of my room, that my great grandfather built and that had been passed down to me, however, there was one huge flaw using that desk with my brand new setup and that was cable management. Below are some plans draw out for the desk.</p>
-<figure>
-<p><img align="left" alt="Initial design sketches and measurements for corner desk" src="../../assets/images/CornerDesk/desknotes1.jpg" width="55%" />
-<img align="right" alt="Additional design notes and calculations for desk" src="../../assets/images/CornerDesk/desknotes2.jpg" width="41.5%" /></p>
-</figure>
-<h2 id="cad"><abbr title="Computer-Aided Design">CAD</abbr><a class="headerlink" href="#cad" title="Permanent link">&para;</a></h2>
-<p>So I set off in Fusion to design a desk that fit all of my needs. My goals were to have a desk measured to fit perfectly in the corner of my room, with plenty of legroom so I would never hit my knees on it, and the best cable management imaginable. And after a couple of different iterations, I came up with this Model.</p>
-<iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a4da78a9b17ff5a725?mode=embed" width="100%" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought">This start</span> of the Pandemic project stemmed from my freshman year engineering capstone project. At the start of 8th grade I had an issue, I was a couple of months into learning Fusion360 and I decided to upgrade my setup from an old janky pc to a brand new laptop and some 20-inch monitors to go along with it, which was great and all but gave me a whole tone of issues to sort out. I had this great desk in the corner of my room, that my great grandfather built and that had been passed down to me, however, there was one huge flaw using that desk with my brand new setup and that was cable management. Below are some plans draw out for the desk.</p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/CornerDesk/desknotes1.jpg" alt="Initial design sketches and measurements for corner desk">
+<img src="../../assets/images/CornerDesk/desknotes2.jpg" alt="Additional design notes and calculations for desk">
+</div>
 
+<h2 id="cad">CAD<a class="headerlink" href="#cad" title="Permanent link">&para;</a></h2>
+<p>So I set off in Fusion to design a desk that fit all of my needs. My goals were to have a desk measured to fit perfectly in the corner of my room, with plenty of legroom so I would never hit my knees on it, and the best cable management imaginable. And after a couple of different iterations, I came up with this Model.</p>
+<div class="embed-frame"><div class="embed-inner">
+<iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a4da78a9b17ff5a725?mode=embed" width="100%" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
+
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH286ddQT78850c0d8a4b7c004627795f9d8?mode=embed" width="100%" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 <h2 id="lowes-trip-and-new-tool">Lowes Trip and New Tool<a class="headerlink" href="#lowes-trip-and-new-tool" title="Permanent link">&para;</a></h2>
-<p>However shortly after finishing up the <abbr title="Computer-Aided Design">CAD</abbr> aspect of this project, Covid-19 caused our school to resort to online learning, cutting me off from our school&rsquo;s lab equipment, however, I happen to have a lot of the tools we have in our lab in my little workshop at my house, and I was pretty determined to finish the desk, so just before everything closed down I took a trip to lowes to pick up some lumber and supplies. I settled on a frame and cabinet of 2x4s and some plywood that was painted white pretty quickly, but the top took some more thought. Eventually, I decided to make the top out of cedar planks that were stained with Provincial to match the stain of the floor in my room. Also at lowes, I picked up a Kreg-Jig to drill pocket holes for the desk, as I didn&rsquo;t like the idea of screws being visible. It was my first time using a Kreg-Jig but it went super well as it&rsquo;s a relatively simple jig to use.</p>
+<p>However shortly after finishing up the CAD aspect of this project, Covid-19 caused our school to resort to online learning, cutting me off from our school&rsquo;s lab equipment, however, I happen to have a lot of the tools we have in our lab in my little workshop at my house, and I was pretty determined to finish the desk, so just before everything closed down I took a trip to lowes to pick up some lumber and supplies. I settled on a frame and cabinet of 2x4s and some plywood that was painted white pretty quickly, but the top took some more thought. Eventually, I decided to make the top out of cedar planks that were stained with Provincial to match the stain of the floor in my room. Also at lowes, I picked up a Kreg-Jig to drill pocket holes for the desk, as I didn&rsquo;t like the idea of screws being visible. It was my first time using a Kreg-Jig but it went super well as it&rsquo;s a relatively simple jig to use.</p>
 <figure>
 <p><img alt="Kreg Jig setup for pocket hole joinery" src="../../assets/images/CornerDesk/kregjig.jpg" width="100%" /></p>
 </figure>
 <h2 id="building-process">Building Process<a class="headerlink" href="#building-process" title="Permanent link">&para;</a></h2>
-<p>A couple of days after getting the wood, I finally started assembling the desk, starting by laying down the frame, making sure the front 2x4 was flat and the back was upright (to give more leg space) and I was pretty excited to get the whole thing together. Maybe a little too excited because even though you can&rsquo;t tell from the pictures above, I built the whole desk wrong, putting the corner on the wrong side. This was a huge setback to fix as it meant that I would have to take the entire desk apart, use wood filler on all of the newly exposed holes, and build it back up the right way. I was even considering just leave the desk as is, and rearrange my room to match the flaw, however, I wanted my desk to be perfect and that meant fixing it according to my <abbr title="Computer-Aided Design">CAD</abbr> model. So I did the laborious tasks listed above and finished the frame of the desk the right way late that night. The next day I was ready to do some more on of the desk, so I decided to start throwing together the top. I spent that whole day sawing, planning, and sanding the cedar before I put the top together using the Kreg-Jig the next morning. And this time I didn&rsquo;t make a single mistake, and I&rsquo;m really happy with the result.</p>
-<figure>
-<p><img alt="Initial layout of desk frame components" src="../../assets/images/CornerDesk/framelayout.jpg" width="100%" /></p>
-<p><img alt="Assembled base frame of the desk" src="../../assets/images/CornerDesk/baseframe.jpg" width="100%" /></p>
-<p><img alt="Completed wood assembly before finishing" src="../../assets/images/CornerDesk/finishedwoodassembly.jpg" width="100%" /></p>
-</figure>
+<p>A couple of days after getting the wood, I finally started assembling the desk, starting by laying down the frame, making sure the front 2x4 was flat and the back was upright (to give more leg space) and I was pretty excited to get the whole thing together. Maybe a little too excited because even though you can&rsquo;t tell from the pictures above, I built the whole desk wrong, putting the corner on the wrong side. This was a huge setback to fix as it meant that I would have to take the entire desk apart, use wood filler on all of the newly exposed holes, and build it back up the right way. I was even considering just leave the desk as is, and rearrange my room to match the flaw, however, I wanted my desk to be perfect and that meant fixing it according to my CAD model. So I did the laborious tasks listed above and finished the frame of the desk the right way late that night. The next day I was ready to do some more on of the desk, so I decided to start throwing together the top. I spent that whole day sawing, planning, and sanding the cedar before I put the top together using the Kreg-Jig the next morning. And this time I didn&rsquo;t make a single mistake, and I&rsquo;m really happy with the result.</p>
+<div class="figure-grid grid-3x1">
+<img src="../../assets/images/CornerDesk/framelayout.jpg" alt="Initial layout of desk frame components">
+<img src="../../assets/images/CornerDesk/baseframe.jpg" alt="Assembled base frame of the desk">
+<img src="../../assets/images/CornerDesk/finishedwoodassembly.jpg" alt="Completed wood assembly before finishing">
+</div>
+
 <h2 id="painting-and-staining">Painting and Staining<a class="headerlink" href="#painting-and-staining" title="Permanent link">&para;</a></h2>
 <p>I spent the next two days painting the frame with three coats of white paint and staining the cedar with Provincial. </p>
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="450" src="https://www.youtube.com/embed/Ur2js0Qi-xc" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="450" src="https://www.youtube.com/embed/ipKd49bhELs" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
 
+<p><input type="checkbox" id="mn-1" class="margin-toggle"/><label for="mn-1" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Stained Desktop</span></p>
 <figure>
-<p><img alt="Cedar desktop after staining with Provincial finish" src="../../assets/images/CornerDesk/stainedtop.jpg" width="100%" />
-  </p>
-<figcaption>Stained Desktop</figcaption>
+<p><img alt="Cedar desktop after staining with Provincial finish" src="../../assets/images/CornerDesk/stainedtop.jpg" width="100%" /></p>
 </figure>
 <h2 id="assembling-the-desk">Assembling the Desk<a class="headerlink" href="#assembling-the-desk" title="Permanent link">&para;</a></h2>
 <p>As I said earlier the choice of wood for the surface of the desk took some thought, but I&rsquo;m super glad I went the cedar route. Originally I was planning on using oak, but the cost scared me away to a much better smelling and looking cedar. My only concern with this type of wood was how much it expands and contracts. I was concerned that screwing a cedar top to my frame would just wiggle itself loose over time and cause issues. So I came up with a workaround. Instead of attaching the Cedar top directly to the frame, it&rsquo;s held by 3d Printed mounts that allow the top to expand and contract a whole lot more without becoming loose. I&rsquo;m super happy I took the time to figure this one out as it&rsquo;s going to save me trouble with using cedar in the long run.</p>
@@ -757,11 +775,22 @@
 </figure>
 <h2 id="final-thoughts">Final Thoughts<a class="headerlink" href="#final-thoughts" title="Permanent link">&para;</a></h2>
 <p>I love how my desk came out, It solves all of my annoying cable issues and fits perfectly in the right corner of my room. Eventually, I&rsquo;m planning on wall mounting my monitors to give me even more desk space, however, the little corner piece gives me a perfect location to use a pen and some paper and write things out. Putting the desk in its place, I realized that there was way too much space above it and after some browsing, I found some shelves on amazon that use the same stain and match perfectly, so I ordered and installed those over the desk. This project we surprisingly smoothly in the face of the current Pandemic, and even with my building setbacks came out well.</p>
+<p><input type="checkbox" id="mn-2" class="margin-toggle"/><label for="mn-2" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Final Desk Beauty Shot</span></p>
 <figure>
-<p><img alt="Final beauty shot of completed corner desk installation" src="../../assets/images/CornerDesk/deskbeautyshot.jpg" width="100%" />
-  </p>
-<figcaption>Final Desk Beauty Shot</figcaption>
+<p><img alt="Final beauty shot of completed corner desk installation" src="../../assets/images/CornerDesk/deskbeautyshot.jpg" width="100%" /></p>
 </figure>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -879,12 +908,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

@@ -1,0 +1,1339 @@
+/* ===== Tufte-inspired styles for theodore.net ===== */
+/* Reference: https://github.com/edwardtufte/tufte-css */
+
+/* ===== ET-Book @font-face declarations ===== */
+@font-face {
+  font-family: 'ET Book';
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url('../fonts/et-book/et-book-roman.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'ET Book';
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+  src: url('../fonts/et-book/et-book-italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'ET Book';
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: url('../fonts/et-book/et-book-bold.woff') format('woff');
+}
+
+/* ===== Crimson Pro @font-face (local, variable font) ===== */
+@font-face {
+  font-family: 'Crimson Pro';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('../fonts/crimson-pro/crimson-pro-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Crimson Pro';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('../fonts/crimson-pro/crimson-pro-italic.woff2') format('woff2');
+}
+
+/* ===== JetBrains Mono @font-face (local, variable font) ===== */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('../fonts/jetbrains-mono/jetbrains-mono-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: italic;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('../fonts/jetbrains-mono/jetbrains-mono-italic.woff2') format('woff2');
+}
+
+/* ===== Body text sizing for article content ===== */
+.md-typeset .md-content__inner p,
+.md-typeset .md-content__inner ol,
+.md-typeset .md-content__inner ul,
+.md-typeset .md-content__inner dl,
+.md-typeset .md-content__inner blockquote p {
+  line-height: 1.8;
+}
+
+/* ===== Newthought: small caps section opener ===== */
+.md-typeset .newthought {
+  font-variant: small-caps;
+  font-size: 1.15em;
+  letter-spacing: 0.02em;
+}
+
+/* ===== Epigraphs ===== */
+.md-typeset .epigraph {
+  margin: 2.5em auto;
+  max-width: 80%;
+}
+
+.md-typeset .epigraph blockquote {
+  margin: 1.5em 0;
+  border-left: none !important;
+  padding: 0 !important;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.md-typeset .epigraph blockquote p {
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+.md-typeset .epigraph blockquote footer {
+  font-style: normal;
+  font-size: 0.75em;
+  text-align: right;
+  margin-top: 0.5em;
+  padding-right: 0;
+  opacity: 0.5;
+  letter-spacing: 0.02em;
+}
+
+.md-typeset .epigraph blockquote footer::before {
+  content: "\2014\2002";
+}
+
+.md-typeset .epigraph blockquote footer cite {
+  font-style: italic;
+}
+
+/* ===== Standalone blockquotes ===== */
+.md-typeset .md-content blockquote:not(.epigraph blockquote):not(.twitter-tweet) {
+  border-left: 3px solid var(--md-default-fg-color--lightest);
+  padding: 0.1em 1.5em;
+  margin: 1.5em 0;
+  font-style: italic;
+  color: var(--md-default-fg-color);
+  opacity: 0.8;
+}
+
+/* ===== Sidenotes & Margin Notes ===== */
+/* Positioned to fit within the TOC sidebar area (~12.1rem) */
+.md-content__inner {
+  counter-reset: sidenote-counter;
+}
+
+.md-typeset .sidenote-number {
+  counter-increment: sidenote-counter;
+}
+
+.md-typeset .sidenote-number::after {
+  content: counter(sidenote-counter);
+  font-size: 0.75em;
+  position: relative;
+  top: -0.5em;
+  left: 0.1em;
+  font-feature-settings: "tnum";
+}
+
+.md-typeset .sidenote {
+  float: right;
+  clear: right;
+  margin-right: -25%;
+  width: 22%;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  font-size: 0.75em;
+  line-height: 1.4;
+  position: relative;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .sidenote::before {
+  content: counter(sidenote-counter) ". ";
+  font-size: 0.85em;
+  position: relative;
+  top: -0.3em;
+  font-feature-settings: "tnum";
+}
+
+.md-typeset .marginnote {
+  float: right;
+  clear: right;
+  margin-right: -25%;
+  width: 22%;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  font-size: 0.75em;
+  line-height: 1.4;
+  position: relative;
+  color: var(--md-default-fg-color--light);
+}
+
+/* Links inside sidenotes and margin notes — visible and clickable */
+.md-typeset .sidenote a,
+.md-typeset .marginnote a {
+  color: var(--md-default-fg-color--light);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+  text-decoration-thickness: 0.05em;
+  text-decoration-color: var(--md-default-fg-color--lighter);
+  word-break: break-all;
+}
+
+.md-typeset .sidenote a:hover,
+.md-typeset .marginnote a:hover {
+  text-decoration-color: var(--md-default-fg-color);
+}
+
+input.margin-toggle {
+  display: none;
+}
+
+label.margin-toggle.sidenote-number {
+  cursor: default;
+}
+
+label.margin-toggle:not(.sidenote-number) {
+  display: none;
+}
+
+/* Margin note toggle icon styling */
+label.margin-toggle .fa-circle-plus {
+  font-size: 0.75em;
+  padding: 0 0.3em;
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+/* Rotate icon 45deg when expanded (+ becomes x) */
+input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
+  transform: rotate(45deg);
+}
+
+/* ===== Responsive: collapse sidenotes on small screens ===== */
+@media (max-width: 1100px) {
+  .md-typeset .sidenote,
+  .md-typeset .marginnote,
+  .md-typeset .marginfigure {
+    float: none !important;
+    clear: both !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    position: static !important;
+    display: none;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5em 0;
+    font-size: 0.85em;
+    color: var(--md-default-fg-color--light);
+  }
+
+  label.margin-toggle:not(.sidenote-number) {
+    display: inline;
+    cursor: pointer;
+    color: var(--md-default-fg-color);
+    opacity: 0.5;
+  }
+
+  label.margin-toggle.sidenote-number {
+    cursor: pointer;
+  }
+
+  input.margin-toggle:checked ~ .sidenote,
+  input.margin-toggle:checked ~ .marginnote,
+  input.margin-toggle:checked ~ .marginfigure {
+    display: block;
+  }
+}
+
+/* ===== Fullwidth figures ===== */
+/* Expands right into the TOC sidebar area while preserving left alignment */
+.md-typeset figure.fullwidth {
+  display: block !important;
+  width: calc(100% + 12.1rem) !important;
+  max-width: calc(100% + 12.1rem) !important;
+  margin: 0 0 1em 0 !important;
+  padding: 0 !important;
+  text-align: left;
+}
+
+.md-typeset figure.fullwidth img {
+  width: 100%;
+  display: block;
+}
+
+@media (max-width: 76.234375em) {
+  .md-typeset figure.fullwidth {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ===== Fullwidth captions ===== */
+/* When a margin note precedes a fullwidth figure, it's converted to a
+   non-floating caption to avoid the clear:right gap issue.
+   Positioned in the margin area like a regular margin note. */
+/* The parent <p> needs to be a positioning context */
+.md-typeset p:has(.fullwidth-caption) {
+  position: relative;
+}
+
+.md-typeset .fullwidth-caption {
+  position: absolute;
+  right: -25%;
+  top: 0;
+  width: 22%;
+  font-size: 0.75em;
+  line-height: 1.4;
+  color: var(--md-default-fg-color--light);
+}
+
+@media (max-width: 1100px) {
+  .md-typeset .fullwidth-caption {
+    position: static;
+    display: none;
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5em 0;
+    font-size: 0.85em;
+    color: var(--md-default-fg-color--light);
+  }
+
+  /* Show toggle icon for fullwidth-caption on narrow screens */
+  input.margin-toggle ~ label.margin-toggle:has(~ .fullwidth-caption) {
+    display: inline;
+    cursor: pointer;
+    color: var(--md-default-fg-color--light);
+  }
+
+  input.margin-toggle:checked ~ .fullwidth-caption {
+    display: block;
+  }
+}
+
+/* ===== Margin figures ===== */
+/* Images placed in the margin alongside text, like tufte-css */
+.md-typeset .marginfigure {
+  float: right;
+  clear: right;
+  margin-right: -25%;
+  width: 22%;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  font-size: 0.75em;
+  line-height: 1.4;
+  position: relative;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .marginfigure img {
+  width: 100%;
+  margin-bottom: 0.3em;
+  cursor: zoom-in;
+}
+
+/* ===== Margin figure lightbox ===== */
+.marginfigure-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsla(0, 0%, 0%, 0.0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+              background 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+              backdrop-filter 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  cursor: zoom-out;
+}
+
+.marginfigure-lightbox.active {
+  opacity: 1;
+  background: hsla(0, 0%, 0%, 0.15);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+}
+
+.marginfigure-lightbox-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 85vw;
+  max-height: 90vh;
+  transform: scale(0.92);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+              opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.marginfigure-lightbox.active .marginfigure-lightbox-inner {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.marginfigure-lightbox img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px hsla(0, 0%, 0%, 0.25);
+  cursor: zoom-out;
+}
+
+.marginfigure-lightbox-caption {
+  margin: 0.75em 0 0;
+  font-family: 'ET Book', 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--md-default-fg-color);
+  opacity: 0.7;
+  text-align: center;
+  max-width: 500px;
+}
+
+@media (max-width: 1100px) {
+  .md-typeset .marginfigure img {
+    cursor: default;
+  }
+}
+
+.md-typeset .marginfigure .caption {
+  display: block;
+}
+
+
+/* ===== Figure grids ===== */
+/* Flex-based: JS reads each image's aspect ratio after load and sets
+   flex-grow proportionally, so images in a row share the same height
+   while adjusting widths based on aspect ratio. */
+.md-typeset .figure-grid {
+  display: flex;
+  gap: 0.5em;
+  margin: 1.5em 0;
+}
+
+.md-typeset .figure-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.md-typeset .figure-grid > * {
+  min-width: 0;
+}
+
+/* Fallback: if markdown wraps images in <p>, make <p> invisible to flex */
+.md-typeset .figure-grid > p {
+  margin: 0;
+  display: contents;
+}
+
+/* 2x1 and 3x1: single-row flex (default behavior) — no overrides needed */
+
+/* 2x2: flex-wrap, JS sets widths per row pair for height-matching */
+.md-typeset .figure-grid.grid-2x2 {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* 2-over-1: flex-wrap, JS sets widths; last image spans full width */
+.md-typeset .figure-grid.grid-2over1 {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Grid captions */
+.md-typeset .figure-grid figcaption {
+  font-size: 0.8em;
+  opacity: 0.65;
+  text-align: center;
+  padding-top: 0.3em;
+}
+
+@media (max-width: 600px) {
+  .md-typeset .figure-grid {
+    flex-direction: column;
+  }
+  .md-typeset .figure-grid.grid-2x2 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .md-typeset .figure-grid.grid-2over1 {
+    grid-template-columns: 1fr;
+  }
+  .md-typeset .figure-grid.grid-2over1 img:last-of-type,
+  .md-typeset .figure-grid.grid-2over1 > p:last-of-type {
+    grid-column: auto;
+  }
+}
+
+/* ===== Links: always greyscale, Tufte-style ===== */
+/* Override Material's link color variable at the content scope */
+/* DOM: .md-content > .md-content__inner.md-typeset > a */
+.md-content .md-typeset {
+  --md-typeset-a-color: var(--md-default-fg-color);
+  --md-accent-fg-color: var(--md-default-fg-color);
+}
+
+/* Text body links: subtle underline, no color change */
+/* Only applies to inline text links — excludes UI chrome */
+.md-content .md-typeset p a,
+.md-content .md-typeset li a,
+.md-content .md-typeset dd a,
+.md-content .md-typeset td a,
+.md-content .md-typeset figcaption a,
+.md-content .md-typeset blockquote a,
+.md-content .md-typeset .admonition a,
+.md-content .md-typeset details a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 0.05em;
+  text-decoration-color: var(--md-default-fg-color--lighter);
+  transition: text-decoration-color 0.2s ease;
+}
+
+.md-content .md-typeset p a:hover,
+.md-content .md-typeset li a:hover,
+.md-content .md-typeset dd a:hover,
+.md-content .md-typeset td a:hover,
+.md-content .md-typeset figcaption a:hover,
+.md-content .md-typeset blockquote a:hover,
+.md-content .md-typeset .admonition a:hover,
+.md-content .md-typeset details a:hover {
+  text-decoration-color: var(--md-default-fg-color);
+}
+
+/* Exclude buttons, footnote markers from underline */
+.md-typeset .md-button,
+.md-typeset .footnote-ref,
+.md-typeset .footnote-backref {
+  text-decoration: none !important;
+}
+
+/* Links inside code: inherit, no blue */
+.md-typeset code a,
+.md-typeset pre a,
+.md-typeset .highlight a {
+  color: inherit !important;
+}
+
+/* ===== Buttons: sleek, minimal ===== */
+.md-typeset .md-button {
+  border: 1px solid var(--md-default-fg-color--lighter) !important;
+  border-radius: 4px !important;
+  color: var(--md-default-fg-color) !important;
+  background: transparent !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.8em;
+  font-weight: 400;
+  padding: 0.6em 1.5em;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.md-typeset .md-button:hover,
+.md-typeset .md-button:focus {
+  border-color: var(--md-default-fg-color) !important;
+  background: transparent !important;
+  color: var(--md-default-fg-color) !important;
+  opacity: 1;
+  transform: none;
+}
+
+.md-typeset .md-button--primary {
+  background: var(--md-default-fg-color) !important;
+  color: var(--md-default-bg-color) !important;
+  border-color: var(--md-default-fg-color) !important;
+  opacity: 0.85;
+}
+
+.md-typeset .md-button--primary:hover,
+.md-typeset .md-button--primary:focus {
+  background: var(--md-default-fg-color) !important;
+  color: var(--md-default-bg-color) !important;
+  opacity: 0.65;
+}
+
+/* ===== Task lists / Checklists: monochromatic ===== */
+/* Material uses mask-image SVGs; background-color must be visible for both states */
+.md-typeset [type="checkbox"]:checked + .task-list-indicator::before {
+  background-color: var(--md-default-fg-color) !important;
+}
+
+.md-typeset [type="checkbox"]:not(:checked) + .task-list-indicator::before {
+  background-color: var(--md-default-fg-color--lighter) !important;
+}
+
+.md-typeset .task-list-indicator::before {
+  border-radius: 2px !important;
+}
+
+/* ===== Tables: refined ===== */
+.md-typeset table:not([class]) {
+  font-size: 0.85em;
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.md-typeset table:not([class]) th {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--md-default-fg-color--lighter);
+  padding: 0.6em 0.8em;
+  color: var(--md-default-fg-color);
+  opacity: 0.7;
+  background: transparent;
+}
+
+.md-typeset table:not([class]) td {
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  padding: 0.5em 0.8em;
+  vertical-align: top;
+}
+
+.md-typeset table:not([class]) tr:last-child td {
+  border-bottom: none;
+}
+
+.md-typeset table:not([class]) tbody tr:hover {
+  background: var(--md-default-fg-color--lightest);
+}
+
+/* ===== BOM tables: collapsible with gradient fade ===== */
+.md-typeset .bom-table {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 4px;
+  margin: 1.5em 0;
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.md-typeset .bom-table .bom-collapse-toggle {
+  display: none;
+}
+
+.md-typeset .bom-table .bom-table-inner {
+  max-height: 260px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.md-typeset .bom-table .bom-collapse-toggle:checked ~ .bom-table-inner {
+  max-height: 4000px;
+}
+
+.md-typeset .bom-table table {
+  margin: 0;
+  width: 100%;
+  font-size: 0.82em;
+}
+
+.md-typeset .bom-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--md-default-fg-color--lighter);
+  padding: 0.6em 0.8em;
+  color: var(--md-default-fg-color);
+  opacity: 0.65;
+  white-space: nowrap;
+  background: var(--md-default-bg-color);
+}
+
+.md-typeset .bom-table td {
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  padding: 0.4em 0.8em;
+  vertical-align: middle;
+}
+
+.md-typeset .bom-table td a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+}
+
+.md-typeset .bom-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Alternating row shading (subtle) */
+.md-typeset .bom-table tbody tr:nth-child(even) {
+  background: hsla(0, 0%, 50%, 0.03);
+}
+
+.md-typeset .bom-table tbody tr:hover {
+  background: hsla(0, 0%, 50%, 0.08);
+}
+
+/* Gradient fade when collapsed */
+.md-typeset .bom-table .bom-fade {
+  display: block;
+  height: 48px;
+  margin-top: -48px;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(to bottom, transparent, var(--md-default-bg-color));
+  pointer-events: none;
+}
+
+.md-typeset .bom-table .bom-collapse-toggle:checked ~ .bom-fade {
+  display: none;
+}
+
+/* Toggle label positioned under the table, centered */
+.md-typeset .bom-table .bom-toggle-label {
+  display: block;
+  text-align: center;
+  padding: 0.4em 1em;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72em;
+  letter-spacing: 0.03em;
+  color: var(--md-default-fg-color);
+  opacity: 0.5;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: opacity 0.2s ease;
+}
+
+.md-typeset .bom-table .bom-toggle-label:hover {
+  opacity: 0.85;
+}
+
+.md-typeset .bom-table .bom-collapse-toggle:not(:checked) ~ .bom-toggle-label .bom-label-collapse {
+  display: none;
+}
+
+.md-typeset .bom-table .bom-collapse-toggle:checked ~ .bom-toggle-label .bom-label-expand {
+  display: none;
+}
+
+.md-typeset .bom-table tbody tr:last-child.bom-total td {
+  border-top: 2px solid var(--md-default-fg-color--lighter);
+  border-bottom: none;
+  font-weight: 600;
+  padding-top: 0.6em;
+}
+
+/* ===== Content tabs: monochromatic ===== */
+.md-typeset .tabbed-set > input:checked + label,
+.md-typeset .tabbed-labels > label.tabbed-label--active {
+  color: var(--md-default-fg-color);
+  border-color: var(--md-default-fg-color);
+  opacity: 0.9;
+}
+
+.md-typeset .tabbed-set > label,
+.md-typeset .tabbed-labels > label,
+.md-typeset .tabbed-labels label {
+  color: var(--md-default-fg-color);
+  opacity: 0.5;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.8em !important;
+  font-weight: 400 !important;
+}
+
+/* Tab active indicator line */
+.md-typeset .tabbed-set > input:checked + label {
+  opacity: 0.9;
+}
+
+/* Override the accent-colored active indicator */
+.md-typeset .tabbed-labels .tabbed-label--active,
+.md-typeset .tabbed-set .tabbed-labels {
+  --md-accent-fg-color: var(--md-default-fg-color);
+}
+
+/* ===== Definition lists ===== */
+.md-typeset dd {
+  margin-left: 1.5em;
+}
+
+/* ===== Footnotes: refined ===== */
+.md-typeset .footnote {
+  font-size: 0.85em;
+  opacity: 0.75;
+}
+
+/* ===== Code: monochromatic via Material CSS variables ===== */
+/* All syntax tokens set to greyscale — no color highlighting */
+:root,
+[data-md-color-scheme="default"],
+[data-md-color-scheme="slate"] {
+  --md-code-hl-color: hsla(0, 0%, 50%, 0.1);
+  --md-code-hl-number-color: var(--md-code-fg-color);
+  --md-code-hl-special-color: var(--md-code-fg-color);
+  --md-code-hl-function-color: var(--md-code-fg-color);
+  --md-code-hl-constant-color: var(--md-code-fg-color);
+  --md-code-hl-keyword-color: var(--md-code-fg-color);
+  --md-code-hl-string-color: var(--md-code-fg-color);
+  --md-code-hl-name-color: var(--md-code-fg-color);
+  --md-code-hl-operator-color: var(--md-code-fg-color);
+  --md-code-hl-punctuation-color: var(--md-code-fg-color);
+  --md-code-hl-comment-color: var(--md-default-fg-color--light);
+  --md-code-hl-generic-color: var(--md-code-fg-color);
+  --md-code-hl-variable-color: var(--md-code-fg-color);
+}
+
+/* Force all Pygments spans to inherit — belt and suspenders */
+/* Exclude annotation elements from this override */
+.md-typeset code span:not(.md-annotation__index):not([data-md-annotation]),
+.md-typeset pre span:not(.md-annotation__index):not([data-md-annotation]) {
+  color: var(--md-code-fg-color) !important;
+}
+/* Ensure annotation index keeps its own colors */
+.md-typeset .md-annotation__index,
+.md-typeset .md-annotation__index * {
+  color: var(--md-default-bg-color) !important;
+}
+/* Except comments — slightly muted */
+.md-typeset code .c,
+.md-typeset code .c1,
+.md-typeset code .cm,
+.md-typeset code .cs,
+.md-typeset code .ch,
+.md-typeset pre .c,
+.md-typeset pre .c1,
+.md-typeset pre .cm,
+.md-typeset pre .cs,
+.md-typeset pre .ch {
+  color: var(--md-default-fg-color--light) !important;
+}
+
+/* Code block titles: JetBrains Mono, not bold, smaller */
+.md-typeset .highlight span.filename,
+.md-typeset .highlighttable span.filename,
+.md-typeset code.filename,
+.highlight .filename {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 400 !important;
+  font-size: 0.75em !important;
+}
+
+/* Code annotations: fully monochromatic, override Material accent */
+.md-typeset .md-annotation,
+.md-typeset [data-md-annotation],
+.md-typeset .code-annotation-tip {
+  --md-accent-fg-color: var(--md-default-fg-color) !important;
+  --md-accent-fg-color--transparent: transparent !important;
+}
+
+/* Annotation index: transparent element, let pseudo-elements show through */
+.md-typeset .md-annotation__index {
+  background: transparent !important;
+  overflow: visible !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.md-typeset .md-annotation__index:hover,
+.md-typeset .md-annotation__index:focus,
+.md-typeset .md-annotation:focus-within .md-annotation__index,
+.md-typeset [data-md-annotation] :focus-within .md-annotation__index,
+.md-typeset .md-annotation__index[data-md-state="active"] {
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Hide the background-fill circle pseudo-element */
+.md-typeset .md-annotation__index::before {
+  display: none !important;
+}
+
+/* Plus icon — monochromatic, bring to front */
+.md-typeset .md-annotation__index::after {
+  background-color: var(--md-default-fg-color--lighter) !important;
+  z-index: 1 !important;
+}
+
+/* On hover/focus — stay monochromatic */
+.md-typeset .md-annotation:focus-within .md-annotation__index::after,
+.md-typeset :hover > .md-annotation__index::after,
+.md-typeset .md-annotation__index:hover::after {
+  background-color: var(--md-default-fg-color) !important;
+}
+
+/* Hide the number badge inside annotation */
+.md-typeset .md-annotation__index [data-md-annotation-id] {
+  opacity: 0 !important;
+}
+
+/* Annotation tooltip container — monochromatic */
+.md-typeset .md-annotation .md-tooltip {
+  --md-accent-fg-color: var(--md-default-fg-color) !important;
+}
+
+/* ===== Admonitions: monochromatic, no accent colors ===== */
+.md-typeset .admonition,
+.md-typeset details {
+  border-color: var(--md-default-fg-color--lightest) !important;
+  box-shadow: none;
+}
+
+.md-typeset .admonition .admonition-title,
+.md-typeset details summary {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 400;
+  font-size: 0.85em;
+  letter-spacing: 0.02em;
+}
+
+/* Monochromatic icons — keep each type's own icon, just greyscale */
+.md-typeset .admonition .admonition-title::before,
+.md-typeset details summary::before {
+  background-color: var(--md-default-fg-color--lighter) !important;
+}
+
+/* Override all type-specific accent colors */
+.md-typeset .admonition.note,
+.md-typeset .admonition.abstract,
+.md-typeset .admonition.info,
+.md-typeset .admonition.tip,
+.md-typeset .admonition.success,
+.md-typeset .admonition.question,
+.md-typeset .admonition.warning,
+.md-typeset .admonition.failure,
+.md-typeset .admonition.danger,
+.md-typeset .admonition.bug,
+.md-typeset .admonition.example,
+.md-typeset .admonition.quote,
+.md-typeset details.note,
+.md-typeset details.abstract,
+.md-typeset details.info,
+.md-typeset details.tip,
+.md-typeset details.success,
+.md-typeset details.question,
+.md-typeset details.warning,
+.md-typeset details.failure,
+.md-typeset details.danger,
+.md-typeset details.bug,
+.md-typeset details.example,
+.md-typeset details.quote {
+  border-color: var(--md-default-fg-color--lightest) !important;
+}
+
+.md-typeset .admonition.note .admonition-title,
+.md-typeset .admonition.abstract .admonition-title,
+.md-typeset .admonition.info .admonition-title,
+.md-typeset .admonition.tip .admonition-title,
+.md-typeset .admonition.success .admonition-title,
+.md-typeset .admonition.question .admonition-title,
+.md-typeset .admonition.warning .admonition-title,
+.md-typeset .admonition.failure .admonition-title,
+.md-typeset .admonition.danger .admonition-title,
+.md-typeset .admonition.bug .admonition-title,
+.md-typeset .admonition.example .admonition-title,
+.md-typeset .admonition.quote .admonition-title,
+.md-typeset details.note summary,
+.md-typeset details.abstract summary,
+.md-typeset details.info summary,
+.md-typeset details.tip summary,
+.md-typeset details.success summary,
+.md-typeset details.question summary,
+.md-typeset details.warning summary,
+.md-typeset details.failure summary,
+.md-typeset details.danger summary,
+.md-typeset details.bug summary,
+.md-typeset details.example summary,
+.md-typeset details.quote summary {
+  background-color: transparent !important;
+  border-bottom-color: var(--md-default-fg-color--lightest);
+}
+
+.md-typeset .admonition.note .admonition-title::before,
+.md-typeset .admonition.abstract .admonition-title::before,
+.md-typeset .admonition.info .admonition-title::before,
+.md-typeset .admonition.tip .admonition-title::before,
+.md-typeset .admonition.success .admonition-title::before,
+.md-typeset .admonition.question .admonition-title::before,
+.md-typeset .admonition.warning .admonition-title::before,
+.md-typeset .admonition.failure .admonition-title::before,
+.md-typeset .admonition.danger .admonition-title::before,
+.md-typeset .admonition.bug .admonition-title::before,
+.md-typeset .admonition.example .admonition-title::before,
+.md-typeset .admonition.quote .admonition-title::before,
+.md-typeset details.note summary::before,
+.md-typeset details.abstract summary::before,
+.md-typeset details.info summary::before,
+.md-typeset details.tip summary::before,
+.md-typeset details.success summary::before,
+.md-typeset details.question summary::before,
+.md-typeset details.warning summary::before,
+.md-typeset details.failure summary::before,
+.md-typeset details.danger summary::before,
+.md-typeset details.bug summary::before,
+.md-typeset details.example summary::before,
+.md-typeset details.quote summary::before {
+  background-color: var(--md-default-fg-color--lighter) !important;
+}
+
+/* Override accent color on admonitions so focus/click shadows use fg */
+.md-typeset .admonition,
+.md-typeset details {
+  --md-accent-fg-color: var(--md-default-fg-color) !important;
+  --md-accent-fg-color--transparent: hsla(0, 0%, 50%, 0.1) !important;
+}
+
+/* Collapsible details: no colored glow on open */
+.md-typeset details[open] {
+  box-shadow: none !important;
+}
+
+.md-typeset details:focus-within {
+  box-shadow: 0 0 0 0.1rem var(--md-default-fg-color--lightest) !important;
+}
+
+/* Collapsible marker */
+.md-typeset details summary::after {
+  color: var(--md-default-fg-color--lighter) !important;
+}
+
+/* Inline admonitions */
+.md-typeset .admonition.inline,
+.md-typeset .admonition.inline.end {
+  border-color: var(--md-default-fg-color--lightest) !important;
+}
+
+/* ===== Section spacing ===== */
+.md-typeset .md-content__inner > hr {
+  border: none;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  margin: 2.5em 0;
+}
+
+/* ===== Embed frames: YouTube, iframes ===== */
+/* Rounded card frame inspired by the index page SVG cards */
+.md-typeset .embed-frame {
+  background: var(--md-default-fg-color--lightest);
+  border: 1px solid hsla(0, 0%, 50%, 0.15);
+  border-radius: 21px;
+  padding: 8px;
+  margin: 1.5em 0;
+  overflow: hidden;
+}
+
+.md-typeset .embed-frame iframe {
+  border-radius: 14px;
+  display: block;
+  width: 100%;
+}
+
+/* Non-video embeds: use CSS variable for explicit height */
+.md-typeset .embed-frame[style*="--embed-height"] > iframe {
+  height: var(--embed-height, 500px);
+}
+
+/* Responsive 16:9 wrapper inside the frame */
+.md-typeset .embed-frame .embed-inner {
+  position: relative;
+  padding-bottom: 56.25%;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.md-typeset .embed-frame .embed-inner iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ===== Print styles ===== */
+@media print {
+  @page {
+    size: letter;
+    margin: 0.75in 0.75in 0.75in 1in;
+  }
+
+  /* Hide site chrome — only UI elements, not content */
+  .md-header,
+  .md-tabs,
+  .md-sidebar,
+  .md-footer,
+  .main-navigation,
+  .blur-overlay,
+  .return2feed,
+  .article-meta .share,
+  .article-meta .profilepic,
+  .article-meta .readTime,
+  .subscribe-section,
+  .giscus,
+  .giscus-frame,
+  #__comments,
+  .md-dialog,
+  .md-top,
+  .md-source,
+  .carousel-btn,
+  .tweet-container,
+  .md-button,
+  .footer,
+  .draft-overlay {
+    display: none !important;
+  }
+
+  /* Hide margin toggle inputs/labels — notes are always visible in print.
+     Keep .sidenote-number labels visible so counters increment properly. */
+  input.margin-toggle {
+    display: none !important;
+  }
+  label.margin-toggle:not(.sidenote-number) {
+    display: none !important;
+  }
+
+  /* Layout: constrain main column to ~65% to leave room for margin notes */
+  .md-content {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .md-content__inner {
+    max-width: 65% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .md-grid {
+    max-width: 100% !important;
+  }
+
+  .md-main__inner {
+    margin-top: 0 !important;
+  }
+
+  /* Typography for print — slightly larger base */
+  .md-typeset {
+    font-size: 12pt !important;
+    line-height: 1.55 !important;
+    color: #000 !important;
+  }
+
+  .md-typeset h1 { font-size: 26pt !important; }
+  .md-typeset h2 { font-size: 20pt !important; }
+  .md-typeset h3 { font-size: 16.5pt !important; }
+  .md-typeset h4 { font-size: 14pt !important; }
+
+  /* Article title — prominent, pushed down slightly */
+  .article-title {
+    font-size: 28pt !important;
+    line-height: 1.15 !important;
+    margin-top: 0.75in !important;
+    margin-bottom: 0.15em !important;
+  }
+
+  /* Article meta — just author name + date, no popup/readtime */
+  .article-meta {
+    margin-top: 0 !important;
+    margin-bottom: 0.3em !important;
+    padding-bottom: 0.5em !important;
+    font-size: 9.5pt !important;
+  }
+
+  /* Hide the "| " separator before readtime (now hidden) */
+  .article-meta .abt[style] {
+    font-size: 9.5pt !important;
+  }
+
+  .article-divider {
+    margin-top: 0.5em !important;
+    margin-bottom: 1.5em !important;
+  }
+
+  /* Sidenotes & margin notes — positioned in the right margin */
+  .md-typeset .sidenote,
+  .md-typeset .marginnote {
+    display: block !important;
+    float: right !important;
+    clear: right !important;
+    width: 45% !important;
+    margin-right: -52% !important;
+    margin-top: 0.3rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 8.5pt !important;
+    line-height: 1.35 !important;
+    color: #444 !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+
+  /* Sidenote number in print */
+  .md-typeset .sidenote::before {
+    font-size: 0.75em !important;
+  }
+
+  /* Margin figures */
+  .md-typeset .marginfigure {
+    display: block !important;
+    float: right !important;
+    clear: right !important;
+    width: 45% !important;
+    margin-right: -52% !important;
+    margin-top: 0.3rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 8.5pt !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+
+  /* Fullwidth captions in margin */
+  .md-typeset .fullwidth-caption {
+    display: block !important;
+    position: static !important;
+    float: right !important;
+    clear: right !important;
+    width: 45% !important;
+    margin-right: -52% !important;
+    font-size: 8.5pt !important;
+    color: #444 !important;
+    opacity: 1 !important;
+  }
+
+  /* Fullwidth: constrain to main column for print */
+  .md-typeset figure.fullwidth {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Images: prevent overflow, avoid page breaks */
+  .md-typeset img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Figure grids */
+  .md-typeset .figure-grid {
+    page-break-inside: avoid;
+  }
+
+  /* Embed frames: show frame but hide interactive content */
+  .md-typeset .embed-frame {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1em;
+    text-align: center;
+    background: #f9f9f9 !important;
+    page-break-inside: avoid;
+  }
+
+  .md-typeset .embed-frame iframe {
+    display: none !important;
+  }
+
+  .md-typeset .embed-frame .embed-inner {
+    padding-bottom: 0 !important;
+  }
+
+  .md-typeset .embed-frame::after {
+    content: "[Interactive embed — view online]";
+    font-size: 9pt;
+    color: #888;
+    font-style: italic;
+  }
+
+  /* Code blocks */
+  .md-typeset pre {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+    font-size: 8.5pt !important;
+  }
+
+  .md-typeset code {
+    font-size: 8.5pt !important;
+  }
+
+  /* Links: show URL after text */
+  .md-typeset a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 7pt;
+    opacity: 0.5;
+    word-break: break-all;
+  }
+
+  /* Don't show URL for image links, footnotes, internal refs */
+  .md-typeset a:has(img)::after,
+  .md-typeset .footnote-ref::after,
+  .md-typeset .footnote-backref::after,
+  .md-typeset .headerlink::after,
+  .md-typeset .sidenote a::after,
+  .md-typeset .marginnote a::after {
+    content: none !important;
+  }
+
+  /* Headings: avoid orphaned headings */
+  .md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4 {
+    page-break-after: avoid;
+  }
+
+  /* Epigraphs */
+  .md-typeset .epigraph {
+    page-break-inside: avoid;
+  }
+
+  /* Admonitions */
+  .md-typeset .admonition,
+  .md-typeset details {
+    page-break-inside: avoid;
+    border: 1px solid #ccc !important;
+  }
+
+  /* Collapsible details: always open for print */
+  .md-typeset details {
+    open: true;
+  }
+  .md-typeset details > summary::after {
+    display: none !important;
+  }
+
+  /* BOM table: fully expanded */
+  .md-typeset .bom-table .bom-table-inner {
+    max-height: none !important;
+  }
+  .md-typeset .bom-table .bom-fade,
+  .md-typeset .bom-table .bom-toggle-label {
+    display: none !important;
+  }
+
+  /* Remove backgrounds for ink saving */
+  .md-typeset .admonition,
+  .md-typeset details,
+  .md-typeset code,
+  .md-typeset pre {
+    background: #f8f8f8 !important;
+  }
+
+  /* HR */
+  .md-typeset hr {
+    border-top-color: #ccc !important;
+  }
+
+  /* Carousel: show first image only */
+  .md-typeset .carousel-wrapper {
+    page-break-inside: avoid;
+  }
+  .md-typeset .carousel-slide:not(.active) {
+    display: none !important;
+  }
+}

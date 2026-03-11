@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/immortalitytrap/colorOtime.webp">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -606,7 +609,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Dec 2025 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 12–15 mins</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 9–11 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -621,113 +624,79 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
-<p>This morning a friend sent me an intresting read: <a href="https://www.experimental-history.com/p/the-decline-of-deviance?utm_campaign=post&amp;utm_medium=web">The Decline of Deviance</a> an aggregate of data showing a massive collapse in risk-taking behavior over the past few decade. Teen alcohol use down 50%. Sexual activity down 40%. Fighting down 35%. Geographic mobility collapsed from 20% of Americans moving annually to 10%. Even our aesthetics became safer, British Museums analyzed photos of their artifacts over time and found a steady shift toward black, gray, and white, away from bold colors. Seemingly, we’ve entered an “epidemic of the mundane”.<sup id="fnref:8"><a class="footnote-ref" href="#fn:8">8</a></sup></p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought">This morning a friend</span> sent me an intresting read: <a href="https://www.experimental-history.com/p/the-decline-of-deviance?utm_campaign=post&amp;utm_medium=web">The Decline of Deviance</a> an aggregate of data showing a massive collapse in risk-taking behavior over the past few decade. Teen alcohol use down 50%. Sexual activity down 40%. Fighting down 35%. Geographic mobility collapsed from 20% of Americans moving annually to 10%. Even our aesthetics became safer, British Museums analyzed photos of their artifacts over time and found a steady shift toward black, gray, and white, away from bold colors. Seemingly, we’ve entered an “epidemic of the mundane”.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">Adam Mastroianni, <a href="https://www.experimental-history.com/p/the-decline-of-deviance">The Decline of Deviance</a> — documenting the collapse in risk-taking behavior from 1990–2024.</span></p>
+<p><input type="checkbox" id="mn-13" class="margin-toggle"/><label for="mn-13" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Changes in the color of objects over time</span></p>
 <figure>
 <p><img alt="Changes in the color of objects over time" src="../../assets/images/immortalitytrap/colorOtime.webp#only-light" width="70%" />
- <img alt="Changes in the color of objects over time dark" src="../../assets/images/immortalitytrap/colorOtimeDark.png#only-dark" width="70%" />
- </p>
-<figcaption>Changes in the color of objects over time</figcaption>
+ <img alt="Changes in the color of objects over time dark" src="../../assets/images/immortalitytrap/colorOtimeDark.png#only-dark" width="70%" /></p>
 </figure>
-<p>At the time of writing this piece, I’m 20 years old. According to the Social Security Administration, my average life expectancy is 81.6, meaning I have roughly 61 years left on this planet.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>Every time I get in a car to go somewhere, I run about a 1 in 8.3 million chance of death.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> Every time I sit down to eat, about a 1 in 147 million chance of choking.<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> Every walk I take, roughly 1 in 5.5 million.<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup> Every time I take up a simple convience, I wager the remaining 61 years of my life for said convience (i.e. I’m essentially wagering 61 years at 1:8.3M odds every time I drive).</p>
+<p>At the time of writing this piece, I’m 20 years old. According to the Social Security Administration, my average life expectancy is 81.6, meaning I have roughly 61 years left on this planet.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"><a href="https://www.ssa.gov/oact/TR/2011/lr5a4.html">SSA Period Life Table</a> — life expectancy for 20-year-old males: 81.6 years.</span></p>
+<p>Every time I get in a car to go somewhere, I run about a 1 in 8.3 million chance of death.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"><a href="https://crashstats.nhtsa.dot.gov/">NHTSA</a> reports 1.20 deaths per 100M vehicle miles in 2024. At ~10 miles per trip: 1 in 8.3 million.</span> Every time I sit down to eat, about a 1 in 147 million chance of choking.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">~2,500 food-related choking deaths/year (CDC) across ~367 billion annual meals: 1 in 147 million per meal.</span> Every walk I take, roughly 1 in 5.5 million.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">~7,148 pedestrian deaths in 2024 (GHSA) across ~39 billion walking trips: 1 in 5.5 million per walk.</span> Every time I take up a simple convience, I wager the remaining 61 years of my life for said convience (i.e. I’m essentially wagering 61 years at 1:8.3M odds every time I drive).</p>
 <p>Let’s conceive of a world of pragmatic ‘immortality’, one where the average lifespan is 1000 years. Our wager of years of life in exchange for convience still occurs, except in this world I’d be wagering 980 years for those same conveniences. The stakes increase 16 fold while the benefits remain near identical!</p>
 <blockquote>
-<p>To state this precisely: the average drive is about 10 miles, that’s currently about 4 minutes of expected life loss per trip. With a 1000-year lifespan, that same trip costs 62 minutes of expected life. The wager is 15.8x larger.<sup id="fnref:5"><a class="footnote-ref" href="#fn:5">5</a></sup></p>
+<p>To state this precisely: the average drive is about 10 miles, that’s currently about 4 minutes of expected life loss per trip. With a 1000-year lifespan, that same trip costs 62 minutes of expected life. The wager is 15.8x larger.<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">Expected life loss per trip = years at stake × death probability × distance. At 61 years remaining: ~3.9 min/trip. At 980 years remaining: ~61.9 min/trip. A 15.8× larger wager.</span></p>
 </blockquote>
 <p>So what happens if we achieve our sought after ‘immortality’? Say we cure aging, dampen disease, and successfully extend the human lifespan to ~1000 years. The transhumanist dream.</p>
 <p>I conjecture our lives would be no better than they are now.</p>
 <hr />
 <p>But Teddy! Surely, by the time we have 1000-year lifespans, we’ll have much safer technology. And you would be right to claim this, the fatal risk associated with any given acction will continus to decline!</p>
-<p>Between 1900 and 2024, life expectancy jumped 68%, from 47 to 79 years.<sup id="fnref:6"><a class="footnote-ref" href="#fn:6">6</a></sup> During the same period, transportation got dramatically safer and faster. Traffic deaths dropped from ~18 per 100 million miles in the 1920s to 1.20 today, a 15x improvement.<sup id="fnref:7"><a class="footnote-ref" href="#fn:7">7</a></sup> Average speeds increased from 8 mph (stagecoach) to 45 mph (cars), roughly 5.6x faster.</p>
+<p>Between 1900 and 2024, life expectancy jumped 68%, from 47 to 79 years.<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote"><a href="https://www.cdc.gov/nchs/data-visualization/mortality-trends/index.htm">CDC NCHS</a> — 47.3 years in 1900 to <a href="https://www.macrotrends.net/global-metrics/countries/usa/united-states/life-expectancy">79.25 in 2024</a>, a 68% increase.</span> During the same period, transportation got dramatically safer and faster. Traffic deaths dropped from ~18 per 100 million miles in the 1920s to 1.20 today, a 15x improvement.<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote"><a href="https://injuryfacts.nsc.org/motor-vehicle/historical-fatality-trends/deaths-and-rates/">NSC Historical Data</a> — 18.65 deaths per 100M VMT in the 1920s. <a href="https://crashstats.nhtsa.dot.gov/Api/Public/ViewPublication/813710">NHTSA 2024</a> — 1.20 deaths. A 15.5× improvement.</span> Average speeds increased from 8 mph (stagecoach) to 45 mph (cars), roughly 5.6x faster.</p>
+<p><input type="checkbox" id="mn-14" class="margin-toggle"/><label for="mn-14" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Life expectancy vs transportation speed 1900-2024</span></p>
 <figure>
 <p><img alt="Life expectancy vs transportation speed 1900-2024" src="../../assets/images/immortalitytrap/life_expectancy_vs_transport_speed.png#only-light" width="70%" />
- <img alt="Life expectancy vs transportation speed 1900-2024 dark" src="../../assets/images/immortalitytrap/life_expectancy_vs_transport_speed_dark.png#only-dark" width="70%" />
- </p>
-<figcaption>Life expectancy vs transportation speed 1900-2024</figcaption>
+ <img alt="Life expectancy vs transportation speed 1900-2024 dark" src="../../assets/images/immortalitytrap/life_expectancy_vs_transport_speed_dark.png#only-dark" width="70%" /></p>
 </figure>
 <p>For most of the last century, technological safety and speed massively outpaced our lifespan. Risk per trip decreased 110x while stakes only increased 1.3x. Subjectively, travel got safer despite having more years of life at risk.</p>
 <p>Yet, unfortunately, this trend tapered off towards the end of the 20th century. Since 1970, transportation speeds have stagnated or declined. The Boeing 747 (1970) cruised at ~600 mph. The Boeing 787 (2024)? only ~560 mph. We had supersonic passenger flight with the Concorde at 1,350 mph - we abandoned it in 2003. US highway speeds have been stuck at 55-75 mph for fifty years. Meanwhile, mean life expectancy kept climbing, with about a 12% increase (from 70.8 to 79.2 years).</p>
 <blockquote>
 <p>I find the Concorde’s retirement to reveal something profound: people with longer lives value safety over speed. They’d rather fly 7 hours at 560 mph than 3.5 hours at 1,350 mph if the crash rate is marginally higher. With 1000-year lifespans and those same risk ratios, would anyone fly at all?</p>
 </blockquote>
-<p>Or look at playgrounds - I grew up playing in this massive wooden playground in the Chicago suburbs, with a somewhat ever-present risk of injury.<sup id="fnref:13"><a class="footnote-ref" href="#fn:13">12</a></sup> Today, it is illegal to build a sandbox in a playground in San Francisco.<sup id="fnref:16"><a class="footnote-ref" href="#fn:16">13</a></sup> As our life expectancy rises, it makes more sense to optimize toys and playgrounds for preventing lawsuits rather than developing children who know how to manage risk.</p>
+<p>Or look at playgrounds - I grew up playing in this massive wooden playground in the Chicago suburbs, with a somewhat ever-present risk of injury.<label for="sn-9" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-9" class="margin-toggle"/><span class="sidenote"><a href="https://rpwrhs.org/2014/08/04/indian-boundary-park/">Indian Boundary Park</a> — built in 1989 by neighborhood volunteers.</span> Today, it is illegal to build a sandbox in a playground in San Francisco.<label for="sn-10" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-10" class="margin-toggle"/><span class="sidenote"><a href="https://www.sfchronicle.com/bayarea/article/Citing-safety-hygiene-SF-parks-considers-11437854.php?psid=bLEge">SF Chronicle</a> — SF banned sandboxes due to bacterial contamination concerns.</span> As our life expectancy rises, it makes more sense to optimize toys and playgrounds for preventing lawsuits rather than developing children who know how to manage risk.</p>
 <hr />
-<p>Our modest (~12%) lifespan increase since the end of the last century has already caused massive behavioral changes. The value of statistical life has jumped from $2.5M in 1982 to $12.5M in 2023 (inflation-adjusted).<sup id="fnref:9"><a class="footnote-ref" href="#fn:9">9</a></sup> That&rsquo;s a 5x increase in what society would ‘pay’ to prevent one death, while GDP per capita only grew 2.5x (so clearly wealth alone isn’t our driving motivator).</p>
+<p>Our modest (~12%) lifespan increase since the end of the last century has already caused massive behavioral changes. The value of statistical life has jumped from $2.5M in 1982 to $12.5M in 2023 (inflation-adjusted).<label for="sn-11" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-11" class="margin-toggle"/><span class="sidenote"><a href="https://www.transportation.gov/office-policy/transportation-policy/revised-departmental-guidance-on-valuation-of-a-statistical-life-in-economic-analysis">DOT VSL Guidance</a> — $2.5M in 1982 to $12.5M in 2023 (inflation-adjusted), a 5× increase.</span> That&rsquo;s a 5x increase in what society would ‘pay’ to prevent one death, while GDP per capita only grew 2.5x (so clearly wealth alone isn’t our driving motivator).</p>
+<p><input type="checkbox" id="mn-15" class="margin-toggle"/><label for="mn-15" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Value of statistical life 1982-2023</span></p>
 <figure>
 <p><img alt="Value of statistical life 1982-2023" src="../../assets/images/immortalitytrap/vsl_vs_gdp.png#only-light" width="70%" />
- <img alt="Value of statistical life 1982-2023 dark" src="../../assets/images/immortalitytrap/vsl_vs_gdp_dark.png#only-dark" width="70%" />
- </p>
-<figcaption>Value of statistical life 1982-2023</figcaption>
+ <img alt="Value of statistical life 1982-2023 dark" src="../../assets/images/immortalitytrap/vsl_vs_gdp_dark.png#only-dark" width="70%" /></p>
 </figure>
 <p>If we try extrapolating this out over even the next 500 years, we can assume a near-complete eridication of risk. Not necessary because people are conscious of this, but rather because the expected value of any convience shifts dramatically. If people’s base state is one of higher comfort, they have substantially more time to do things, and doing any rapid convienent thing is wasting this additional time, of course, society becomes sluggish!</p>
-<p>This derisking problem compounds even further when we consider that risk aversion grows with age. How much longer will a parent “baby” their child in a society of 1000-year lifespans? The age of those setting the behavioral norms will continously shift higher and hider, and society will become more and more risk adverse. In a society with 1000 year lifespans, the median person (presumably the cohort of people setting behavioral precidant) would be 500 years old. If risk adversion continues growing with age at the rate observed in current populations (roughly 1.5% per year of age), a 500 year old would be about 8.5x more risk-averse than the average 20 year old today.<sup id="fnref:10"><a class="footnote-ref" href="#fn:10">10</a></sup> 92% of the population would be more risk-averse than today’s 80-year-olds. Can you imagine what a pathologically conservative culture we would regress into? That all “young” people would inherit and thus compound?</p>
+<p>This derisking problem compounds even further when we consider that risk aversion grows with age. How much longer will a parent “baby” their child in a society of 1000-year lifespans? The age of those setting the behavioral norms will continously shift higher and hider, and society will become more and more risk adverse. In a society with 1000 year lifespans, the median person (presumably the cohort of people setting behavioral precidant) would be 500 years old. If risk adversion continues growing with age at the rate observed in current populations (roughly 1.5% per year of age), a 500 year old would be about 8.5x more risk-averse than the average 20 year old today.<label for="sn-12" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-12" class="margin-toggle"/><span class="sidenote">Jianakoplos &amp; Bernasek (2006) found risky asset ratios decline ~62.5% from age 30s to 70s. <a href="https://cepr.org/voxeu/columns/identifying-effect-age-willingness-take-risks">Dohmen et al. (2011)</a> confirm the trend. At ~1.5% per year, a 500-year-old would be 8.5× more risk-averse than a 20-year-old.</span> 92% of the population would be more risk-averse than today’s 80-year-olds. Can you imagine what a pathologically conservative culture we would regress into? That all “young” people would inherit and thus compound?</p>
+<p><input type="checkbox" id="mn-16" class="margin-toggle"/><label for="mn-16" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Risk aversion vs age projected over 500 years</span></p>
 <figure>
 <p><img alt="Risk aversion vs age projected over 500 years" src="../../assets/images/immortalitytrap/risk_aversion_vs_age_500years.png#only-light" width="70%" />
- <img alt="Risk aversion vs age projected over 500 years dark" src="../../assets/images/immortalitytrap/risk_aversion_vs_age_500years_dark.png#only-dark" width="70%" />
- </p>
-<figcaption>Risk aversion vs age projected over 500 years</figcaption>
+ <img alt="Risk aversion vs age projected over 500 years dark" src="../../assets/images/immortalitytrap/risk_aversion_vs_age_500years_dark.png#only-dark" width="70%" /></p>
 </figure>
 <p>This growing risk aversion with age likely already incorporates diminishing marginal utility of additional years - when you have fewer years left, each one is more precious. This only intensifies with radical life extension, making the compounding risk aversion even more severe.</p>
 <p>Consider what drives progress in human society: coordinated overinvestment in ‘uncertain’ outcomes. Our tolerance for risk is everything if our fight against stagnation. Transhumanists want radical life extension, technological acceleration, and human flourishing (which in principle I find lovely), yet this dream contains a fatal contradiction: pursuing the first destroys the second, which destroys the third. <em>More years of existence doesn’t mean more accomplished. It might mean less.</em></p>
 <hr />
 <p>I believe the alternative is quite obvious: rather than drastically extending our lifespan, extend cognative peak within roughly normal lifespans. Extending cognitive peak to age 80 within a 100-year lifespan produces about 52 productive years of output, or 0.52 output per year of life. Extending lifespan to 1000 years with cognitive peak to age 300 produces 152 productive years, sounds better, but that’s only 0.15 output per year. The former is 3.5x more efficient at generating human value.</p>
+<p><input type="checkbox" id="mn-17" class="margin-toggle"/><label for="mn-17" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Cognitive extension vs radical life extension</span></p>
 <figure>
 <p><img alt="Cognitive extension vs radical life extension" src="../../assets/images/immortalitytrap/cognitive_vs_radical_extension.png#only-light" width="70%" />
- <img alt="Cognitive extension vs radical life extension dark" src="../../assets/images/immortalitytrap/cognitive_vs_radical_extension_dark.png#only-dark" width="70%" />
- </p>
-<figcaption>Cognitive extension vs radical life extension</figcaption>
+ <img alt="Cognitive extension vs radical life extension dark" src="../../assets/images/immortalitytrap/cognitive_vs_radical_extension_dark.png#only-dark" width="70%" /></p>
 </figure>
 <p>There’s something quite poetic about this. The obsession with living longer, our quintessential measure of medical progress, may actually hinder us in the long run. Every time I walk to my office, I’m making a bet. With 61 years left, I’ll take that bet. With 980, I’m not so sure. And when enough people stop taking enough bets, civilization stagnates.</p>
 <p>The goal shouldn’t be more years, it should be more productive years. Quality over quantity if you will. </p>
 <hr />
 <p><em>All my projections extend wayyyy beyond biological plausibility - we have emperical data to age ~85 and extrapolating to 500-1000 years require assumptions that may not hold. Nonetheless, the societal implications remain dire.</em></p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>Social Security Administration, Period Life Table, 2011. Life expectancy for 20-year-old males: 81.6 years. https://www.ssa.gov/oact/TR/2011/lr5a4.html&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p><em>Driving risk calculation:</em> NHTSA reported 1.20 deaths per 100 million vehicle miles traveled in 2024 (https://crashstats.nhtsa.dot.gov/). Average trip length is approximately 10 miles (DOE data). Per-trip risk: <span class="arithmatex">\( \frac{1.20}{100,000,000} \times 10 = 1.2 \times 10^{-7} = \)</span> 1 in 8.3 million.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-<li id="fn:3">
-<p><em>Choking risk calculation:</em> Approximately 5,000 choking deaths per year in the US (CDC/Wikipedia, 2024). Of these, roughly 50% (~2,500) are food-related, with the remainder caused by non-food objects such as coins, toys, and other small items. US population consumes roughly 1,095 meals per person per year (3 meals/day × 365 days). Total annual meals: 335M people × 1,095 = ~367 billion meals. Per-meal risk from food-related choking: <span class="arithmatex">\( \frac{2,500}{367,000,000,000} = 6.8 \times 10^{-9} = \)</span> 1 in 147 million.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
-</li>
-<li id="fn:4">
-<p><em>Walking risk calculation:</em> GHSA reported approximately 7,148 pedestrian deaths in 2024. Americans take roughly 39 billion walking trips annually (NHTSA). Per-walk risk: <span class="arithmatex">\( \frac{7,148}{39,000,000,000} = 1.8 \times 10^{-7} = \)</span> 1 in 5.5 million.&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
-</li>
-<li id="fn:5">
-<p><em>Expected loss formula:</em> <span class="arithmatex">\( E[\mathrm{Loss}] = \text{Years}_{\text{at\_stake}} \times P(\text{death} \mid \text{activity}) \times \text{Activity}_{\text{distance}} \)</span>. For a 10-mile car trip at age 20 with 61 years remaining: <span class="arithmatex">\( 61 \times \left(\frac{1.2}{100,000,000}\right) \times 10 = 7.32\times10^{-6} \)</span> years = 3.9 minutes. For 1000-year lifespan with 980 years remaining: <span class="arithmatex">\( 980 \times \left(\frac{1.2}{100,000,000}\right) \times 10 = 1.176\times10^{-4} \)</span> years = 61.9 minutes. Ratio: <span class="arithmatex">\( \frac{61.9}{3.9} = 15.8\times \)</span> larger wager.&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
-</li>
-<li id="fn:6">
-<p>Life expectancy data: 1900 value (47.3 years at birth) from CDC NCHS Historical Data, &ldquo;Death Rates and Life Expectancy at Birth,&rdquo; available at https://www.cdc.gov/nchs/data-visualization/mortality-trends/index.htm and https://blogs.cdc.gov/nchs/2020/11/20/7035/ 2024 value (79.25 years at birth) from Macrotrends, &ldquo;U.S. Life Expectancy 1950-2025,&rdquo; https://www.macrotrends.net/global-metrics/countries/usa/united-states/life-expectancy Increase: 31.95 years = 68% growth.&#160;<a class="footnote-backref" href="#fnref:6" title="Jump back to footnote 6 in the text">&#8617;</a></p>
-</li>
-<li id="fn:7">
-<p>Traffic fatality rates: 1923 value (18.65 deaths per 100 million vehicle miles traveled) from National Safety Council, &ldquo;Historical Car Crash Deaths and Rates,&rdquo; Injury Facts, https://injuryfacts.nsc.org/motor-vehicle/historical-fatality-trends/deaths-and-rates/ 2024 value (1.20 deaths per 100 million VMT) from NHTSA, &ldquo;Early Estimates of Motor Vehicle Traffic Fatalities in 2024,&rdquo; DOT HS 813 710, April 2025, https://www.nhtsa.gov/press-releases/nhtsa-estimates-39345-traffic-fatalities-2024 and https://crashstats.nhtsa.dot.gov/Api/Public/ViewPublication/813710 Improvement factor: 18.65/1.20 = 15.5× safer per mile traveled.&#160;<a class="footnote-backref" href="#fnref:7" title="Jump back to footnote 7 in the text">&#8617;</a></p>
-</li>
-<li id="fn:8">
-<p>Mastroianni, Adam. &ldquo;The Decline of Deviance.&rdquo; Experimental History, 2024. https://www.experimental-history.com/p/the-decline-of-deviance Documents comprehensive behavioral changes from 1990-2024 including: teen alcohol use (-50%), sexual activity (-40%), fighting (-35%), drug use (-20-50%), teenage pregnancy (-67%), geographic mobility (20% → 10% moving annually).&#160;<a class="footnote-backref" href="#fnref:8" title="Jump back to footnote 8 in the text">&#8617;</a></p>
-</li>
-<li id="fn:9">
-<p>Value of Statistical Life data from U.S. Department of Transportation. 1982: $2.5M (inflation-adjusted to 2023 dollars). 2023: $12.5M. Increase: 5x. Source: https://www.transportation.gov/office-policy/transportation-policy/revised-departmental-guidance-on-valuation-of-a-statistical-life-in-economic-analysis&#160;<a class="footnote-backref" href="#fnref:9" title="Jump back to footnote 9 in the text">&#8617;</a></p>
-</li>
-<li id="fn:10">
-<p>Age-based risk aversion from Jianakoplos, N. A., &amp; Bernasek, A. (2006). &ldquo;Financial risk taking by age and birth cohort.&rdquo; <em>Southern Economic Journal</em>, 72(4), 981-1001. Found risky asset ratio declined from 0.65 (age 30s) to 0.40 (age 70s), representing a 62.5% increase in risk aversion over 40 years. Dohmen et al. (2011) confirm risk aversion rises with age using panel data from Netherlands and Germany (https://cepr.org/voxeu/columns/identifying-effect-age-willingness-take-risks). The linear growth model <span class="arithmatex">\( R(\text{age}) = R_0 (1 + 0.015 \times \text{age}) \)</span> is parameterized to match these empirical trends showing roughly 62.5% increase in risk aversion over 40 years, or approximately 1.56% per year. At age 500, this yields <span class="arithmatex">\( R(500) = R_0(1 + 0.015 \times 500) = 8.5 \times R_0 \)</span>.&#160;<a class="footnote-backref" href="#fnref:10" title="Jump back to footnote 10 in the text">&#8617;</a></p>
-</li>
-<li id="fn:12">
-<p>Color &amp; Shape: Using Computer Vision to Explore the Science Museum Group Collection, Science Museum Group, 2020. Changes in the color of objects over time. https://lab.sciencemuseum.org.uk/color-shape-using-computer-vision-to-explore-the-science-museum-c4b4f1cbd72c&#160;<a class="footnote-backref" href="#fnref:12" title="Jump back to footnote 11 in the text">&#8617;</a></p>
-</li>
-<li id="fn:13">
-<p>Indian Boundary Park wooden playground constructed in 1989 with volunteer help from neighborhood residents. Source: Rogers Park/West Ridge Historical Society, https://rpwrhs.org/2014/08/04/indian-boundary-park/&#160;<a class="footnote-backref" href="#fnref:13" title="Jump back to footnote 12 in the text">&#8617;</a></p>
-</li>
-<li id="fn:16">
-<p>San Francisco banned sandboxes from city playgrounds due to bacterial contamination concerns. https://www.sfchronicle.com/bayarea/article/Citing-safety-hygiene-SF-parks-considers-11437854.php?psid=bLEge&#160;<a class="footnote-backref" href="#fnref:16" title="Jump back to footnote 13 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -845,12 +814,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

@@ -182,10 +182,5 @@ class ImageCarousel {
   }
 }
 
-// Initialize carousel when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  const carouselContainer = document.getElementById('photo-carousel');
-  if (carouselContainer) {
-    new ImageCarousel('photo-carousel', '../../assets/images/20/favs');
-  }
-}); 
+// Carousel initialization is handled by page-specific scripts or the
+// tufte_elements.py hook via {.carousel}folder{/.carousel} shorthand.

@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/20/thumb.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -652,7 +655,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Aug 2025 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 9–11 mins</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 8–9 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -667,26 +670,41 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p><link rel="stylesheet" href="../../assets/css/carousel.css"></p>
-<script src="../../assets/js/carousel.js"></script>
-
-<p>Today I turned twenty. Kind of crazy (or at least feels more substantial than the past few years).</p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought">Today I turned twenty</span>. Kind of crazy (or at least feels more substantial than the past few years).</p>
 <p>Three years ago, I had a long think about what I wanted to do with myself, with my future. I was sitting in my high school&rsquo;s woodshop after school and had a few hours to kill while watching a CNC machine hum. I loved engineering (and still do). Yet, I couldn&rsquo;t help but feel as I progressed nearer and nearer to university, the parts of engineering I loved most (tangible building, making, experimenting) would fade away in favor of a more meticulous, tedious commitment to theory.</p>
 <p>Whatever I was to do in the future would probably need to stray from the bliss of publishing my passions to favor a more pragmatic output, and in turn, I would be losing the very thing that I was finally starting to gain recognition for.</p>
 <p>This certainly felt like a dilemma. Everyone I knew, and I always associated myself with engineering, and unsurprisingly, I aspired to continue my pursuit in the field at university. That being said, I&rsquo;ve never been one for dismal work and dreaded the idea of physics class after physics class with less and less opportunity to build and experiment.</p>
 <p>I wasn&rsquo;t quite sure where I&rsquo;d end up or what I&rsquo;d be doing, but this uncertainty never really bothered me much. In fact, for a few months, I thought I might become a YouTuber (and even made a banger video for one of my projects: <a href="https://www.youtube.com/watch?v=ygy8M-QhbSo&amp;t">We Built the Alleged Hans Niemann Chess Cheating Device</a>) as it felt like a good means of financially justifying my continued work on my projects.</p>
-<p>It was around this time in my life that one of my old friends/coworkers told me about this program he was in at USC: the <a href="https://iovine-young.usc.edu/">Iovine and Young Academy</a>. This program was pretty epic, and it looked to address my dilemma exceedingly well: the academy spans engineering, business, and design - a great balance for the aspiring maker. I applied, got in, and moved to California. It was awesome.</p>
+<p><span class="newthought">It was around this time</span> in my life that one of my old friends/coworkers told me about this program he was in at USC: the <a href="https://iovine-young.usc.edu/">Iovine and Young Academy</a>. This program was pretty epic, and it looked to address my dilemma exceedingly well: the academy spans engineering, business, and design - a great balance for the aspiring maker. I applied, got in, and moved to California. It was awesome.</p>
 <p>I loved university, I loved the classes, I loved the people. I met some of my closest friends, worked on my <a href="https://tone.computer">first venture</a>, and then at eighteen landed an early position on the <a href="https://www.midjourney.com/home">Midjourney</a> hardware team. A few months later, I found myself at a crossroads: I loved my work at Midjourney and got to work alongside the most incredible people, yet I had just turned nineteen and felt compelled to spend my next few years doing work of my own. Ultimately, I decided to return to USC.</p>
 <p>Yet after much reflection, I found university an exceedingly high-risk place to be. High risk that I wouldn&rsquo;t leave a profound impact on the world, as the crux of university involves learning/doing the same thing as everyone else. Any means of &ldquo;differentiating&rdquo; myself while in university (clubs/grades/Projects/etc) are trivial compared to the differentiation possible by doing something else altogether.</p>
 <p>Around last Christmas, I floated my theory for Intempus and what I had been up to to my parents for the first time in a cafe in Washington, DC, and again floated the potential of dropping out. Somehow, this time that statement felt much more serious than the prior two. My mom told me something along the lines of &ldquo;you keep telling me you want to drop out and then backing out. It&rsquo;s going to keep digging at you unless you give it a shot.&rdquo;</p>
-<p>So, three days into my fourth semester in college, I rented a U-Haul, packed up all my stuff, and moved to San Francisco to work on Intempus full-time. I had gone from not quite knowing what I wanted to do with myself, to finding a program which somehow solved my dilemma, to leaving that program altogether. I stand by this being one of my all time best decisions and took a considerable amount of mental back and forth, and several late night walks before I built up the courage to pull the trigger (I think talking with my Mom ultimately gave me the final boost of courage needed for this which I couldn&rsquo;t appreciate more. Thanks Mom, I love you!).</p>
+<p><span class="newthought">So, three days</span> into my fourth semester in college, I rented a U-Haul, packed up all my stuff, and moved to San Francisco to work on Intempus full-time. I had gone from not quite knowing what I wanted to do with myself, to finding a program which somehow solved my dilemma, to leaving that program altogether. I stand by this being one of my all time best decisions and took a considerable amount of mental back and forth, and several late night walks before I built up the courage to pull the trigger (I think talking with my Mom ultimately gave me the final boost of courage needed for this which I couldn&rsquo;t appreciate more. Thanks Mom, I love you!).</p>
 <p>For a while, I lived without accolade, sleeping in my buddy&rsquo;s kitchen a few feet from my desk. Nine months after starting Intempus and five months after dropping out, I received the <a href="https://thielfellowship.org/">Thiel Fellowship</a>, a fellowship for young people who want to build new things instead of sitting in a classroom.</p>
 <p>I now run <a href="https://intempus.org">Intempus</a> full-time, and get to profoundly impact the world at my own discretion.</p>
 <p><em>I don&rsquo;t think I could dream of a more wonderful position.</em></p>
 <hr />
 <h3 id="wonderful-blur">Wonderful Blur<a class="headerlink" href="#wonderful-blur" title="Permanent link">&para;</a></h3>
 <p>My final few teenage years have been an absolute blur of wonderful things. I&rsquo;ve captured some favorites below:</p>
-<div id="photo-carousel"></div>
+<div id="carousel-1"></div>
+<script>
+(function() {
+  function init() {
+    if (typeof ImageCarousel === "undefined") return;
+    try { new ImageCarousel("carousel-1", "../../assets/images/20/favs", ['1.JPG', '10.jpg', '11.JPG', '12.JPG', '13.jpg', '14.jpg', '15.JPG', '16.JPG', '17.JPG', '18.JPG', '19.JPG', '2.jpg', '20.JPG', '21.jpg', '22.JPG', '23.JPG', '24.jpg', '25.jpg', '26.jpg', '27.jpeg', '28.jpg', '29.jpg', '3.JPG', '30.jpg', '31.jpg', '32.jpg', '33.jpg', '35.JPG', '37.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg']); }
+    catch(e) { console.error("Carousel error:", e); }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else { init(); }
+})();
+</script>
 
 <hr />
 <h3 id="lessons">Lessons<a class="headerlink" href="#lessons" title="Permanent link">&para;</a></h3>
@@ -718,6 +736,18 @@
 <hr />
 <h3 id="advice">Advice?<a class="headerlink" href="#advice" title="Permanent link">&para;</a></h3>
 <p>It&rsquo;s very important to me that as I progress into the next decade of my life, I do everything in my power to become the best version of myself. Any advice to keep in mind is much appreciated; just drop a comment below.</p>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -835,12 +865,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

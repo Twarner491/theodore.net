@@ -13,8 +13,8 @@
     <language>en</language>
 
     
-    <pubDate>Sat, 07 Mar 2026 00:56:59 -0000</pubDate>
-    <lastBuildDate>Sat, 07 Mar 2026 00:56:59 -0000</lastBuildDate>
+    <pubDate>Wed, 11 Mar 2026 03:41:34 -0000</pubDate>
+    <lastBuildDate>Wed, 11 Mar 2026 03:41:34 -0000</lastBuildDate>
     <ttl>1440</ttl>
 
     
@@ -23,7 +23,7 @@
     
     
     <image>
-      <url>https://theodore.net/assets/images/favicon.gif</url>
+      <url>https://theodore.net/assets/images/favicon.png</url>
       <title>Teddy Warner</title>
       <link>https://theodore.net/</link>
     </image>
@@ -100,6 +100,23 @@
     </item>
     
     <item>
+      <title>Abstracting Death</title>
+      
+      
+      
+      
+        
+      
+      <description>Death as infinite abstraction.</description>
+      <link>https://theodore.net/writings/abstractingdeath/</link>
+      <pubDate>Wed, 01 Oct 2025 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/writings/abstractingdeath/</guid>
+      
+    </item>
+    
+    <item>
       <title>A Case for the Philosopher King(s)</title>
       
       
@@ -113,6 +130,23 @@
       <source url="https://theodore.net/feed.xml">Teddy Warner</source>
       
       <guid isPermaLink="true">https://theodore.net/writings/benevolentfreedom/</guid>
+      
+    </item>
+    
+    <item>
+      <title>A Pink Hat</title>
+      
+      
+      
+      
+        
+      
+      <description>A welcoming thing.</description>
+      <link>https://theodore.net/writings/pinkhat/</link>
+      <pubDate>Wed, 01 Oct 2025 00:00:00 -0400</pubDate>
+      <source url="https://theodore.net/feed.xml">Teddy Warner</source>
+      
+      <guid isPermaLink="true">https://theodore.net/writings/pinkhat/</guid>
       
     </item>
     

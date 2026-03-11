@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/quotes/thumb.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -680,7 +683,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Sep 2025 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 19–24 minutes</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 9–11 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -695,8 +698,13 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p><link rel="stylesheet" href="../../assets/css/projects/vnp.css">
-  <link rel="stylesheet" href="../../assets/css/projects/receipts.css"></p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><link rel="stylesheet" href="../../assets/css/projects/receipts.css"></p>
 <div style="
   width: 100%;
   padding: 2rem 0;
@@ -739,13 +747,15 @@
   ">-Teddy</div>
 </div>
 
-<p>I have some really wonderful friends. They, like I, say many silly things. </p>
+<p><span class="newthought">I have some really wonderful friends.</span> They, like I, say many silly things. </p>
 <p>I wanted some means of capturing all of these quotes for later reference. Or to keep as nice souvenirs of thought.</p>
 <p>My roommate and I have been going all in on the apartment projects (AIPhone, Cathode Ray Doorbell, StairGuitar™, etc. - I&rsquo;ll do write-ups on some of these at some point in the future), and I figured to stay in the same vein that my weekend project should attempt to solve my quote attribution problem. I also happened to have an <a href="https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share">80mm Thermal Receipt Printer</a> lying around from another project I never got around to finishing.</p>
 <p>And boom, I now knew how I would be spending my Saturday morning.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/F5_00bj8dHo" title="Quote Receipt" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -868,10 +878,12 @@
 <a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>sudo<span class="w"> </span>reboot
 </code></pre></div>
 <p>After reboot, http://receipt.local:5000 should be live automatically!</p>
+<p><input type="checkbox" id="mn-1" class="margin-toggle"/><label for="mn-1" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Here&rsquo;s the first print with the Quote Printer</span></p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/sNBxLepgpb0" title="First Quote Receipt" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-<figcaption>Here's the first print with the Quote Printer</figcaption>
+</div></div>
 
 </center>
 
@@ -922,25 +934,30 @@
 <p>Unsurprisingly the internals of this receipt printer hardly fill the printer cavity, so retrofitting with our updated internals should be no problem at all. While the base piece that came on the machine has a suprisingly perfect cut out to fit a Raspberry Pi (almost like they were asking for this quote printer to be built), I opted to redesign the base of the printer entirly to allow for proper mounting of the stock printer mainboard, as well as the Raspberry Pi 5 and the <a href="https://www.amazon.com/dp/B0DBVYP91F?ref=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;ref_=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;social_share=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;titleSource=true&amp;th=1">LM2596 Buck Converter</a> I&rsquo;m using to power it.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b602811b204791807ac66bf?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
 
 </center>
 
 <p>I printed this new base on my Prusa I3 MK3S+, cleaned it up, and then prepared the thermal printer for installation. This primarly involved unmounting and detaching all plugs from the mainboard to prepare to mount it to the new base. Additionally, I used some wire snippers to remove the old mainboard mounts (as pictured below)</p>
-<figure>
-<p><img align="left" alt="" src="../../assets/images/quotes/finishedprint.JPG" width="48%" />
-<img align="right" alt="" src="../../assets/images/quotes/cutpegs.JPG" width="48%" /></p>
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/quotes/finishedprint.JPG" alt="">
+<img src="../../assets/images/quotes/cutpegs.JPG" alt="">
+</div>
+
 <p>Then I started mounting components to the 3D printed baseplate, first the raspberry pi, then the buck converter.</p>
-<figure>
-<p><img align="left" alt="" src="../../assets/images/quotes/mountedPi.JPG" width="48%" />
-<img align="right" alt="" src="../../assets/images/quotes/mountedBuck.JPG" width="48%" /></p>
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/quotes/mountedPi.JPG" alt="">
+<img src="../../assets/images/quotes/mountedBuck.JPG" alt="">
+</div>
+
 <p>Before continuing with the mainboard mounting, I wired the - IN terminal of the buck converter to the 24V in connector on the printer mainboard and the + IN to the printer power switch(note polarity below), and then used the potentiometer on the buck converter to set the output voltage to 5V.</p>
-<figure>
-<p><img align="left" alt="" src="../../assets/images/quotes/solderedBuck.JPG" width="48%" />
-<img align="right" alt="" src="../../assets/images/quotes/buckTuning.JPG" width="48%" /></p>
-</figure>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/quotes/solderedBuck.JPG" alt="">
+<img src="../../assets/images/quotes/buckTuning.JPG" alt="">
+</div>
+
 <p>I wired the +/- 5V output lines from the buck converter to the Raspberry Pi&rsquo;s GPIO, connected the printer mainboard to the Raspberry Pi via USB, and plugged in the printer mainboard&rsquo;s power (don&rsquo;t actually attach this to the wall yet, get everything mounted and closed up first) and then mounted the mainboard to the 3D printed baseplate (you&rsquo;ll need to plug in all the wires before mounting, its a tight fit).</p>
 <figure>
 <p><img alt="" src="../../assets/images/quotes/mountedMainboard.JPG" width="80%" /></p>
@@ -952,12 +969,15 @@
 <p>&hellip; and attached the new base plate to the printer (wiggling all the wires into place to ensure nothing gets caught/clamped), reattached the screws in the paper tray, and finally, the screws under the printer. Amazing - the quote receipt printer is good to go!</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/b8bMIGniOwY" title="First Quote Receipt Printer Test" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
 <h4 id="bom">BOM<a class="headerlink" href="#bom" title="Permanent link">&para;</a></h4>
 <p>Building a quote receipt printer of your own is easy enough. The full project repo is at <a href="https://github.com/Twarner491/quotes">github.com/Twarner491/quotes</a>. Here&rsquo;s all you need:</p>
+<div class="bom-table"><input type="checkbox" id="bom-toggle-5" class="bom-collapse-toggle"><div class="bom-table-inner">
 <table>
 <thead>
 <tr>
@@ -971,48 +991,56 @@
 <tbody>
 <tr>
 <td>1</td>
-<td>miemieyo Thermal Receipt Printer 80mm</td>
+<td>Thermal Receipt Printer 80mm</td>
 <td>$65.99</td>
-<td><a href="https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share">Amazon</a></td>
-<td></td>
+<td><a href="https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share">Link</a></td>
+<td>miemieyo</td>
 </tr>
 <tr>
 <td>1</td>
-<td>MPRT 5 Rolls Thermal Paper 3-1/8&rdquo; x 230&rsquo;</td>
+<td>Thermal Paper 3-1/8&rdquo; x 230&rsquo;</td>
 <td>$15.99</td>
-<td><a href="https://www.amazon.com/dp/B0D14DYMHQ?ref=ppx_pop_mob_ap_share">Amazon</a></td>
-<td></td>
+<td><a href="https://www.amazon.com/dp/B0D14DYMHQ?ref=ppx_pop_mob_ap_share">Link</a></td>
+<td>MPRT, 5 rolls</td>
 </tr>
 <tr>
 <td>1</td>
 <td>LM2596 Buck Converter</td>
 <td>$7.99</td>
-<td><a href="https://www.amazon.com/dp/B0DBVYP91F?ref=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;ref_=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;social_share=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;titleSource=true&amp;th=1">Amazon</a></td>
+<td><a href="https://www.amazon.com/dp/B0DBVYP91F">Link</a></td>
 <td></td>
 </tr>
 <tr>
 <td>1</td>
 <td>Raspberry Pi 5</td>
 <td>$79.95</td>
-<td><a href="https://www.raspberrypi.com/products/raspberry-pi-5/">Raspberry Pi</a></td>
-<td>Any Pi model should work - I happened to have a RPI5 8GB lying around</td>
+<td><a href="https://www.raspberrypi.com/products/raspberry-pi-5/">Link</a></td>
+<td>Any Pi model works</td>
 </tr>
 <tr>
-<td></td>
-<td>Some spare wire</td>
-<td></td>
-<td></td>
+<td>-</td>
+<td>Spare Wire</td>
+<td>-</td>
+<td>-</td>
 <td></td>
 </tr>
 <tr>
 <td>∞</td>
 <td>Friends that say silly things</td>
 <td>Free</td>
-<td><a href="https://apps.apple.com/us/app/find-my-friends/id466122094">Find My Friends</a></td>
+<td><a href="https://apps.apple.com/us/app/find-my-friends/id466122094">Link</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Total</strong></td>
+<td><strong>~$169.92</strong></td>
+<td></td>
 <td></td>
 </tr>
 </tbody>
 </table>
+</div><div class="bom-fade"></div><label for="bom-toggle-5" class="bom-toggle-label"><span class="bom-label-expand">Show all 7 items</span><span class="bom-label-collapse">Collapse</span></label></div>
 <h3 id="quotebook">Quotebook<a class="headerlink" href="#quotebook" title="Permanent link">&para;</a></h3>
 <p>This thing is so awesome. I&rsquo;ve had some great fun printing out quotes this weekend and attached a few favorites below. I&rsquo;ll update this every once in a while as I log more silly things.</p>
 <div class="receipt-carousel-container">
@@ -1071,7 +1099,9 @@
 <p>Also, thermal printers are really wonderful pieces of technology. I was astonished by how quickly these things print, very low latency from silly quote being said to quote receipt in hand. To stress test, I decided to print the entire Bee Movie script.</p>
 <center>
 
+<div class="embed-frame"><div class="embed-inner">
 <iframe width="100%" height="650" src="https://www.youtube.com/embed/d4OV7coOji8" title="Bee Movie" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div></div>
 
 </center>
 
@@ -1137,6 +1167,18 @@
   });
 })();
 </script>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -1254,12 +1296,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

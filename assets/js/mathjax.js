@@ -8,7 +8,7 @@ window.MathJax = {
   },
   options: {
     ignoreHtmlClass: ".*|",
-    processHtmlClass: "arithmatex"
+    processHtmlClass: "arithmatex|sidenote|marginnote|marginfigure"
   }
 };
 

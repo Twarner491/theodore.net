@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/benevolentfreedom/thumb.png">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -652,7 +655,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Oct 2025 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 12–16 mins</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 10–13 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -667,20 +670,23 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <script src="/assets/js/mathjax.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
-<p>In his 2009 essay: <em><a href="https://www.cato-unbound.org/2009/04/13/peter-thiel/education-libertarian/">The Education of a Libertarian</a></em>, Peter Thiel argues freedom and democracy are mutually exclusive.</p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought">In his 2009 essay</span>: <em><a href="https://www.cato-unbound.org/2009/04/13/peter-thiel/education-libertarian/">The Education of a Libertarian</a></em>, Peter Thiel argues freedom and democracy are mutually exclusive.</p>
 <blockquote>
-<p>&ldquo;I no longer believe that freedom and democracy are compatible.&rdquo;<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>&ldquo;I no longer believe that freedom and democracy are compatible.&rdquo;<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">Peter Thiel, <a href="https://www.cato-unbound.org/2009/04/13/peter-thiel/education-libertarian/">The Education of a Libertarian</a>, <em>Cato Unbound</em>, 2009.</span></p>
 </blockquote>
 <p>My American knee-jerk reaction to this is total shutdown. What a ridiculous proposition - after all, it was upon the natural liberties of man that our country was founded, right?</p>
-<p>With a bit of additional consideration, one may recall that America&rsquo;s founding fathers consciously constrained the voter pool to land-owning white men.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> While I am certainly of the belief that Locke&rsquo;s natural rights apply to all humans alike (&ldquo;The poorest he that is in England hath a life to live, as the greatest he.&rdquo;<sup id="fnref:8"><a class="footnote-ref" href="#fn:8">7</a></sup>), this <em>limited</em> democracy with conscious voter constraints is what built our republic. A constrained voter pool established the freedoms so entrenched that we take them for granted some 250 years later. The question is not whether all humans deserve equal rights, but whether all humans are equally positioned to protect those rights through the voting process.</p>
-<p>A constrained voter pool is naturally quite an efficient form of democracy - efficient enough to establish the trial by fire that is the American experiment, and certainly much more efficient than our current government (low bar, admittedly). </p>
+<p>With a bit of additional consideration, one may recall that America&rsquo;s founding fathers consciously constrained the voter pool to land-owning white men.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"><a href="https://www.colonialwilliamsburg.org/discover/civics/who-voted-in-early-america/">Who Voted in Early America?</a> — Colonial Williamsburg Foundation.</span> While I am certainly of the belief that Locke&rsquo;s natural rights apply to all humans alike (&ldquo;The poorest he that is in England hath a life to live, as the greatest he.&rdquo;<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"><a href="https://www.putneydebates.com/">The Putney Debates</a> (1647).</span>), this <em>limited</em> democracy with conscious voter constraints is what built our republic. A constrained voter pool established the freedoms so entrenched that we take them for granted some 250 years later. The question is not whether all humans deserve equal rights, but whether all humans are equally positioned to protect those rights through the voting process.</p>
+<p><span class="newthought">A constrained voter pool</span> is naturally quite an efficient form of democracy - efficient enough to establish the trial by fire that is the American experiment, and certainly much more efficient than our current government (low bar, admittedly). </p>
 <p><em>To optimize for freedoms, we would be better served by having the most proactive, benevolent members of society make up our voter base.</em></p>
 <p>I don&rsquo;t think it&rsquo;s particularly hard for me to argue that efficiency is a good thing. The concern with a constrained voter pool is what they choose to use that efficiency to achieve. If malicious actors attain positions of influence, this becomes particularly problematic. This, in its logical extreme, is what we call a dictatorship.</p>
 <h3 id="the-spectrum-of-governance">The Spectrum of Governance<a class="headerlink" href="#the-spectrum-of-governance" title="Permanent link">&para;</a></h3>
-<p>The prerequisite in our Western definition of &ldquo;dictator&rdquo; is malice. This directly implies an inverse: some benevolent being capable of executing absolute freedom for all individuals under their governance. This is essentially Plato&rsquo;s Philosopher King - the ideal form of a benevolent government.<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup></p>
+<p>The prerequisite in our Western definition of &ldquo;dictator&rdquo; is malice. This directly implies an inverse: some benevolent being capable of executing absolute freedom for all individuals under their governance. This is essentially Plato&rsquo;s Philosopher King - the ideal form of a benevolent government.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">Plato, <em>The Republic</em>, Books V-VII — the philosopher king concept.</span></p>
 <p>You could plot both these governmental structures on a horseshoe of sorts, alongside our current system of semi-popular democracy, which is somewhere between the prior two.</p>
 <div class="arithmatex">\[
 \begin{array}{ccc}
@@ -695,29 +701,29 @@
 &amp; \text{Low Efficiency} &amp;
 \end{array}
 \]</div>
-<p>Yet as Plato himself discovered in his failed attempts to implement this ideal in Syracuse,<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup> finding the MOST benevolent being in human form is an impossible task (as the MOST benevolent form implies the divine). The existence of some MOST benevolent thing directly implies an inverse: some MOST malicious thing (the anti-divine). While contemporary dictators may act like this anti-divine entity, claiming they themselves embody pure evil would be hyperbolic. Nonetheless, we can list qualities of these dictators and hold in our minds some Platonic form of what such concentrated malevolence looks like.</p>
+<p>Yet as Plato himself discovered in his failed attempts to implement this ideal in Syracuse,<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">Plato, <a href="https://classics.mit.edu/Plato/seventh_letter.html"><em>Seventh Letter</em></a>.</span> finding the MOST benevolent being in human form is an impossible task (as the MOST benevolent form implies the divine). The existence of some MOST benevolent thing directly implies an inverse: some MOST malicious thing (the anti-divine). While contemporary dictators may act like this anti-divine entity, claiming they themselves embody pure evil would be hyperbolic. Nonetheless, we can list qualities of these dictators and hold in our minds some Platonic form of what such concentrated malevolence looks like.</p>
 <p>Similarly, we can begin to list objective traits that must be held by the MOST benevolent being, as we must hold in our minds some Platonic form of what we believe to be divine. The most serious challenge to this framework is the recursive problem: who gets to define what &ldquo;benevolent&rdquo; means? The very act of defining it seems to require the benevolent actor themself. </p>
 <p>Fortunately, there exist certain traits viewed as benevolent good that span all cultures, customs, and religions (these are essentially our shared conception of what is divine). A few off the top of mind: Compassion for suffering, Truthfulness, Justice, Wisdom, Temperance, and Courage. There’s some objectivity to be found here, these traits are convergent discoveries across human civilizations. The longest-lasting religious institutions have survived precisely because they encode principles that enable human flourishing, and we can look to them for guidance whilst defining these objectively benevolent traits.</p>
 <p>A true philosopher king must certainly embody all of these divine traits, and while no individual human holds all of these, we can use them as a filter search to begin to find the most benevolent voters.</p>
 <h3 id="the-current-trajectory">The Current Trajectory<a class="headerlink" href="#the-current-trajectory" title="Permanent link">&para;</a></h3>
-<p>Plato argued in his Seventh Letter that states will suffer until either philosophers become rulers or rulers become true philosophers.<sup id="fnref2:4"><a class="footnote-ref" href="#fn:4">4</a></sup> Our society will continuously progress toward disorder, dysfunction, and lack of freedoms by the sole fact that enacting our will to establish freedoms has become - and will continue to become - more convoluted.</p>
-<p>Political systems tend toward increasing entropy (“Cthulhu swims left”), creating more positions of power and complexity that enable coordination failures.<sup id="fnref:9"><a class="footnote-ref" href="#fn:9">8</a></sup> Constraining the voter base would decrease political entropy, reducing the convolution that impedes our ability to enact and preserve freedoms. I propose a thought exercise to satisfy this end: construct a list of the traits you believe the MOST benevolent being must hold, and work backwards from this ideal list into a list of voter requirements that would year the most benevolent, efficient voter pool. I think you’ll be surprised at the ease of objectivity here.</p>
-<p>With such a list of voter requirements in hand, one could refine the voter base into a group of &ldquo;Philosopher King(s)&rdquo; of sorts. This is conceptually similar to Plato&rsquo;s Guardian class, yet notably still constrained by American institution design (which are built to harnesses self-interest rather than relying on virtue alone).<sup id="fnref:7"><a class="footnote-ref" href="#fn:7">6</a></sup></p>
+<p><span class="newthought">Plato argued</span> in his Seventh Letter that states will suffer until either philosophers become rulers or rulers become true philosophers. Our society will continuously progress toward disorder, dysfunction, and lack of freedoms by the sole fact that enacting our will to establish freedoms has become - and will continue to become - more convoluted.</p>
+<p>Political systems tend toward increasing entropy (“Cthulhu swims left”), creating more positions of power and complexity that enable coordination failures.<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">Curtis Yarvin, <a href="https://www.unqualified-reservations.org/pdfs/gentle_introduction_to_ur.pdf">A Gentle Introduction to Unqualified Reservations</a>.</span> Constraining the voter base would decrease political entropy, reducing the convolution that impedes our ability to enact and preserve freedoms. I propose a thought exercise to satisfy this end: construct a list of the traits you believe the MOST benevolent being must hold, and work backwards from this ideal list into a list of voter requirements that would year the most benevolent, efficient voter pool. I think you’ll be surprised at the ease of objectivity here.</p>
+<p>With such a list of voter requirements in hand, one could refine the voter base into a group of &ldquo;Philosopher King(s)&rdquo; of sorts. This is conceptually similar to Plato&rsquo;s Guardian class, yet notably still constrained by American institution design (which are built to harnesses self-interest rather than relying on virtue alone).<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">James Madison, <a href="https://avalon.law.yale.edu/18th_century/fed51.asp">Federalist No. 51</a>, <em>The Federalist Papers</em>, 1788.</span></p>
 <p>Stability in such a system comes from grounding benevolent voter qualifications in the longest-lasting practices. If we constrain the voter base by criteria that have predicted societal flourishing across centuries and cultures, we hedge against contemporary bias. We&rsquo;re not asking &ldquo;what traits do <em>I</em> think are benevolent?&rdquo; but &ldquo;what traits have consistently enabled human thriving?&rdquo;  </p>
-<p>John Stuart Mill attempts to define voters fit for democracy in <em>Considerations on Representative Government</em>: &ldquo;Active, self-helping character types promote progress better than passive ones.&rdquo;<sup id="fnref:5"><a class="footnote-ref" href="#fn:5">5</a></sup> There are two ways forward with this constraint 1) We refine the voter base to only the most active, self-helping voters, or 2) We educate more potential voters into more active, self-helping citizens. </p>
+<p>John Stuart Mill attempts to define voters fit for democracy in <em>Considerations on Representative Government</em>: &ldquo;Active, self-helping character types promote progress better than passive ones.&rdquo;<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote">J.S. Mill, <a href="https://www.gutenberg.org/files/5669/5669-h/5669-h.htm">Considerations on Representative Government</a> (1861).</span> There are two ways forward with this constraint 1) We refine the voter base to only the most active, self-helping voters, or 2) We educate more potential voters into more active, self-helping citizens. </p>
 <ul>
 <li>
 <p>Option 1 is in practice the current American structure, given the majority of active voters are elderly and focused on existential aid for their own benefit (think Social Security and Medicaid, which are certainly important topics but should not dominate the political sphere to the extent that they do). Voters with the greatest interest in self-help often hold antiquated interests that strip attention from our societal drive towards freedom and progress.</p>
 </li>
 <li>
-<p>Option 2 is wonderful in spirit, but pragmatically most of the US voter base is extremely passive (or inactive all together) despite substantial efforts at education of the population. Only 2 in 3 eligible voters exercise their vote, and the other third of the country lives as though we are essentially under a tyranny (with allegiance to one of two political parties).<sup id="fnref:12"><a class="footnote-ref" href="#fn:12">11</a></sup> Very few people are &ldquo;active&rdquo; in self-help, much less the help of all society. Mill noted himself that representative government doesn&rsquo;t work with extremely passive populations accustomed to tyranny.</p>
+<p>Option 2 is wonderful in spirit, but pragmatically most of the US voter base is extremely passive (or inactive all together) despite substantial efforts at education of the population. Only 2 in 3 eligible voters exercise their vote, and the other third of the country lives as though we are essentially under a tyranny (with allegiance to one of two political parties).<label for="sn-9" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-9" class="margin-toggle"/><span class="sidenote"><a href="https://www.census.gov/newsroom/press-releases/2025/2024-presidential-election-voting-registration-tables.html">U.S. Census Bureau — 2024 Election Voting Tables</a>.</span> Very few people are &ldquo;active&rdquo; in self-help, much less the help of all society. Mill noted himself that representative government doesn&rsquo;t work with extremely passive populations accustomed to tyranny.</p>
 </li>
 </ul>
 <p>The &ldquo;active&rdquo; and &ldquo;self-helping&rdquo; character types become much stronger when we start to de-bias the voter base from antiquated and malicious interests with the objective, benevolent traits our longest-lasting practices have held and valued for so long.</p>
 <p>So can freedom and democracy exist alongside each other? Certainly! We&rsquo;ve been running a trial by fire of this experiment for 250 years now. Yet a true popular democracy cannot indefinitely maintain freedom. At best, it is an inefficient means to make adequate progress toward the continuous goal of freedom, and at worst, it empowers malicious actors who hinder our pursuit.</p>
 <p>The question before us is not whether all humans deserve their natural liberties - they do, universally. Rather, it is whether all humans are equally positioned to protect those rights through voting. If we want to continue our Western pursuit of freedom and natural liberties, we would find it best to be prudent with our voter pool: careful not to empower malice, yet instead promote benevolence.</p>
 <h3 id="postscript">Postscript<a class="headerlink" href="#postscript" title="Permanent link">&para;</a></h3>
-<p>I wrote the first draft of this piece while sitting in a courtyard of Gyeongbokgung Palace in Seoul. I (like many others) find it very easy to critique America from oversees, somewhat removed from the confines of our great experiment. Since returning to the states and publishing this piece I&rsquo;ve had quite a few wonderful conversations that have meaningfully shifted my thinking. As I admitted in <a href="https://github.com/Twarner491/theodore.net/discussions/22#discussioncomment-14786375">my exchange with Aidan in the comments</a>, I&rsquo;m now perhaps 2/3 confident in my original analysis - down from where I started. I thought I could outmaneuver the Meno, but no avail on this front lol (yet).</p>
+<p><span class="newthought">I wrote the first draft</span> of this piece while sitting in a courtyard of Gyeongbokgung Palace in Seoul. I (like many others) find it very easy to critique America from oversees, somewhat removed from the confines of our great experiment. Since returning to the states and publishing this piece I&rsquo;ve had quite a few wonderful conversations that have meaningfully shifted my thinking. As I admitted in <a href="https://github.com/Twarner491/theodore.net/discussions/22#discussioncomment-14786375">my exchange with Aidan in the comments</a>, I&rsquo;m now perhaps 2/3 confident in my original analysis - down from where I started. I thought I could outmaneuver the Meno, but no avail on this front lol (yet).</p>
 <p>That said, I remain convinced there&rsquo;s notable tension between unconstrained democracy and individual freedom. What I&rsquo;m less convinced of is that further constraining the voter pool is the right resolution. A more compelling alternative emerged from conversations with <a href="https://x.com/dityprathap">Aditya</a>: rather than constraining <em>who</em> can vote, we should constrain <em>what</em> people can vote on, a neo-federalism of sorts.</p>
 <p>The core insight is that voter incompetence becomes dangerous when it can&rsquo;t be tested against reality. By directing political attention toward what is most personal - the local and state level - incentives align between voter and representative, and greatly reduce barrier to be an informed participant. The voter has to vote well because the stakes are higher and more visible, and the representative has to honor the voter to avoid being tarred and feathered (literally or metaphorically). This addresses both voter incompetence and representative incompetence structurally, without requiring us to define and enforce &ldquo;virtue&rdquo; at the ballot box.</p>
 <p>This approach is more defensible, more aligned with American tradition, and more implementable than my original proposal. It sidesteps the virtue trap entirely while still addressing the efficiency concerns I raised. The question shifts from &ldquo;who is benevolent enough to vote?&rdquo; to &ldquo;what scope of governance allows feedback loops to punish bad policy regardless of who votes?&rdquo;</p>
@@ -727,44 +733,18 @@
 </blockquote>
 <p>This suggests the goal isn&rsquo;t more virtuous voters, but <em>less consequential</em> federal elections - which aligns more closely with the neo-federalist framework than my original proposal. If local governance mattered more and federal governance mattered less, low turnout wouldn&rsquo;t be a crisis but a feature.</p>
 <p>The American experiment may have succeeded not because the founders perfectly constrained the voter pool, but because they perfectly constrained what any government - regardless of who voted - could do to individual liberty.</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>Thiel, Peter. &ldquo;The Education of a Libertarian.&rdquo; <em>Cato Unbound</em>, April 13, 2009. https://www.cato-unbound.org/2009/04/13/peter-thiel/education-libertarian/&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>&ldquo;Who Voted in Early America?&rdquo; Colonial Williamsburg Foundation. Most states required property ownership or taxpaying qualifications for voting until the early 19th century https://www.colonialwilliamsburg.org/discover/civics/who-voted-in-early-america/&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-<li id="fn:3">
-<p>Plato. <em>The Republic</em>. Translated by Benjamin Jowett. Books V-VII discuss the philosopher king concept.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
-</li>
-<li id="fn:4">
-<p>Plato. <em>Seventh Letter</em>. Plato&rsquo;s account of his failed attempts to implement his political philosophy in Syracuse. https://classics.mit.edu/Plato/seventh_letter.html&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
-</li>
-<li id="fn:5">
-<p>Mill, John Stuart. &ldquo;Considerations on Representative Government&rdquo; (1861). https://www.gutenberg.org/files/5669/5669-h/5669-h.htm&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
-</li>
-<li id="fn:7">
-<p>Madison, James. &ldquo;Federalist No. 51.&rdquo; <em>The Federalist Papers</em>, 1788. https://avalon.law.yale.edu/18th_century/fed51.asp&#160;<a class="footnote-backref" href="#fnref:7" title="Jump back to footnote 6 in the text">&#8617;</a></p>
-</li>
-<li id="fn:8">
-<p>The Putney Debates (1647). Inscription at St Mary&rsquo;s Church, Putney. https://www.putneydebates.com/&#160;<a class="footnote-backref" href="#fnref:8" title="Jump back to footnote 7 in the text">&#8617;</a></p>
-</li>
-<li id="fn:9">
-<p>Yarvin, Curtis (Mencius Moldbug). &ldquo;A Gentle Introduction to Unqualified Reservations.&rdquo; https://www.unqualified-reservations.org/pdfs/gentle_introduction_to_ur.pdf&#160;<a class="footnote-backref" href="#fnref:9" title="Jump back to footnote 8 in the text">&#8617;</a></p>
-</li>
-<li id="fn:10">
-<p>Madison, James. &ldquo;Federalist No. 10.&rdquo; <em>The Federalist Papers</em>, 1787. https://avalon.law.yale.edu/18th_century/fed10.asp&#160;<a class="footnote-backref" href="#fnref:10" title="Jump back to footnote 9 in the text">&#8617;</a></p>
-</li>
-<li id="fn:11">
-<p>Popper, Karl. <em>The Open Society and Its Enemies, Vol. I: The Spell of Plato</em> (1945). https://antilogicalism.com/wp-content/uploads/2018/04/open-society-1.pdf&#160;<a class="footnote-backref" href="#fnref:11" title="Jump back to footnote 10 in the text">&#8617;</a></p>
-</li>
-<li id="fn:12">
-<p>U.S. Census Bureau. &ldquo;2024 Presidential Election Voting and Registration Tables.&rdquo; Press Release, 2025. https://www.census.gov/newsroom/press-releases/2025/2024-presidential-election-voting-registration-tables.html&#160;<a class="footnote-backref" href="#fnref:12" title="Jump back to footnote 11 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -882,12 +862,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       

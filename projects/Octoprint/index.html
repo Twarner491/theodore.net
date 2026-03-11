@@ -23,7 +23,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
         <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
       
-      <link rel="icon" href="../../assets/images/favicon.gif">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
@@ -53,6 +53,8 @@
         <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Ubuntu Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../assets/css/tufte.css">
     
       <link rel="stylesheet" href="../../assets/css/extra.css">
     
@@ -104,23 +106,24 @@
   <meta property="twitter:image" content="https://theodore.net/assets/images/Octoprint/laboctoprint.jpg">
 
   <!-- Preconnect hints -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  
+
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" href="/assets/images/index/avatardark.svg" as="image" type="image/svg+xml">
   <link rel="preload" href="/assets/images/index/avatarlight.svg" as="image" type="image/svg+xml">
-  
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
   <link rel="stylesheet" href="https://theodore.net/assets/css/projects/project.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="https://theodore.net/assets/css/carousel.css">
   <link rel="stylesheet" href="https://theodore.net/assets/css/header.css">
+  <script src="https://theodore.net/assets/js/carousel.js"></script>
+  <script src="https://theodore.net/assets/js/mathjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   
 
   <!-- JSON-LD Structured Data -->
@@ -702,7 +705,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| Sep 2021 </span>
-        | <span class="readTime"><i class="far fa-clock"></i> 9-11 minutes</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 9–11 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -717,7 +720,13 @@
   <hr class="article-divider">
 
   <!-- Page Content -->
-  <p><a href="https://octoprint.org/">Octoprint</a> takes 3D printing to new heights, creating a more concise workflow with more accessible machine control. The opensource <a href="https://github.com/OctoPrint/OctoPrint">Octoprint project</a> was created and maintained by <a href="https://octoprint.org/support-octoprint/">Gina Häußge</a>. The software enables a machine with a web interface with full machine controls and a world of community plugins - all of which run on a Raspberry Pi made Server with an octoprint image. I use Octoprint on all of my personal printers, and a special <abbr title="Computerized Numerical Control">CNC</abbr>-focused fork of the software for my <a href="https://www.v1engineering.com/"><abbr title="Mostly Printed Computerized Numerical Control - https://docs.v1engineering.com/mpcnc/intro/">MPCNC</abbr></a>. As mentioned above, web interfacing a machine creates a more concise workflow and thus is great for personal machines. However, an Octoprint setup shines even more in a print farm instance. During the winter months of my sophomore year (2020) I set up secure Octoprint instances on each of my lab&rsquo;s array of 20 <abbr title="Fused Deposition Modeling">FDM</abbr> printers. Each of my setup instances can be read seen under the <a href="https://theodore.net/projects/Octoprint/#my-octoprint-instances">My Octoprint Instances</a> section of this page. </p>
+  
+<style>
+.md-sidebar--secondary { pointer-events: none; }
+.md-sidebar--secondary .md-nav--secondary { visibility: hidden; }
+.md-sidebar--secondary .md-sidebar__scrollwrap { overflow: hidden; }
+</style>
+<p><span class="newthought"><a href="https://octoprint.org/">Octoprint</a> takes 3D printing</span> to new heights, creating a more concise workflow with more accessible machine control. The opensource <a href="https://github.com/OctoPrint/OctoPrint">Octoprint project</a> was created and maintained by <a href="https://octoprint.org/support-octoprint/">Gina Häußge</a>. The software enables a machine with a web interface with full machine controls and a world of community plugins - all of which run on a Raspberry Pi made Server with an octoprint image. I use Octoprint on all of my personal printers, and a special CNC-focused fork of the software for my <a href="https://www.v1engineering.com/">MPCNC</a>. As mentioned above, web interfacing a machine creates a more concise workflow and thus is great for personal machines. However, an Octoprint setup shines even more in a print farm instance. During the winter months of my sophomore year (2020) I set up secure Octoprint instances on each of my lab&rsquo;s array of 20 FDM printers. Each of my setup instances can be read seen under the <a href="https://theodore.net/projects/Octoprint/#my-octoprint-instances">My Octoprint Instances</a> section of this page. </p>
 <h2 id="octoprint-installation">Octoprint Installation<a class="headerlink" href="#octoprint-installation" title="Permanent link">&para;</a></h2>
 <div class="admonition abstract">
 <p class="admonition-title"><a href="https://octoprint.org/">Octoprint</a> Installation Requirements</p>
@@ -751,7 +760,7 @@
 </ol>
 <p>Next, scroll down to the bottom of the document to the section starting <em>&rdquo;# Uncomment the country your Pi is in&hellip;&rdquo;</em>. Here, remove the hashtag in front of your network&rsquo;s country, and add a hashtag in front of all other (non-selected) countries.</p>
 <p>Then, after saving your file and ejecting your SD, you can install your flashed SD in your Pi and boot.</p>
-<p>Next, some basic Pi config. Make sure you are on the same WiFi network you set up your Pi on, and then <abbr title="Secure Shell">SSH</abbr> into your booted Pi at the IP <em>octopi.local</em> with the Pi&rsquo;s default credentials (Username - <em>pi</em> / Password - <em>raspberry</em>). I use <a href="https://www.putty.org/">Putty</a> as my <abbr title="Secure Shell">SSH</abbr> client as again, it&rsquo;s pretty straightforward to use. Once connected to your Pi, run the command &hellip;</p>
+<p>Next, some basic Pi config. Make sure you are on the same WiFi network you set up your Pi on, and then SSH into your booted Pi at the IP <em>octopi.local</em> with the Pi&rsquo;s default credentials (Username - <em>pi</em> / Password - <em>raspberry</em>). I use <a href="https://www.putty.org/">Putty</a> as my SSH client as again, it&rsquo;s pretty straightforward to use. Once connected to your Pi, run the command &hellip;</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">sudo</span> <span class="n">raspi</span><span class="o">-</span><span class="n">config</span>
 </code></pre></div></td></tr></table></div>
 <p>to open the configuration GUI. Here you can change your Pi&rsquo;s credentials (highly recommended), set up your local timezone (to allow for accurate machine ETAs), and change your machine&rsquo;s hostname (thus changing the URL from the default <em>octopi.local</em> to <em>YOURHOSTNAME.local</em>). After all, changes, be sure to reboot your Pi.</p>
@@ -767,14 +776,14 @@
 <p><img alt="Octoprint appearance settings menu" src="../../assets/images/Octoprint/AppearanceSettings.png" width="95%" /></p>
 </figure>
 <h3 id="printer-setup">Printer Setup<a class="headerlink" href="#printer-setup" title="Permanent link">&para;</a></h3>
-<p>To enable Octoprint&rsquo;s main purpose, a machine must be connected to the hardware running Octoprint via serial. This connection can come in the form of a <abbr title="Universal Serial Bus">USB</abbr> cable in the simplest setup, or <abbr title="General-Purpose Input/Output">GPIO</abbr> pins can be used for communication as well. </p>
+<p>To enable Octoprint&rsquo;s main purpose, a machine must be connected to the hardware running Octoprint via serial. This connection can come in the form of a USB cable in the simplest setup, or GPIO pins can be used for communication as well. </p>
 <div class="admonition example">
 <p class="admonition-title">Personal Setup</p>
-<p>In the case of my Prusa I3 MK3S+, I took advantage of this <abbr title="General-Purpose Input/Output">GPIO</abbr> communication setup, to allow for the mounting of my Raspberry Pi directly under my printer&rsquo;s mainboard (via <a href="https://www.prusaprinters.org/prints/24475-remix-of-raspberry-pi-4-case-3030-hanging-mount-fo">this</a> Raspberry Pi 4 Case) without a bulky <abbr title="Universal Serial Bus">USB</abbr> cable connecting them &hellip;
-<figure markdown="1">
-<img alt="Raspberry Pi mounted under printer mainboard using 3030 mount" src="../../assets/images/Octoprint/mountedelectronics.jpg" width="95%" />
-</figure></p>
+<p>In the case of my Prusa I3 MK3S+, I took advantage of this GPIO communication setup, to allow for the mounting of my Raspberry Pi directly under my printer&rsquo;s mainboard (via <a href="https://www.prusaprinters.org/prints/24475-remix-of-raspberry-pi-4-case-3030-hanging-mount-fo">this</a> Raspberry Pi 4 Case) without a bulky USB cable connecting them &hellip;</p>
 </div>
+<figure>
+<p><img alt="Raspberry Pi mounted under printer mainboard using 3030 mount" src="../../assets/images/Octoprint/mountedelectronics.jpg" width="95%" /></p>
+</figure>
 <p>Your serial connection must be set up software side in the <em>Serial Connection</em> menu found under the <em>Printer</em> section of the interface settings. Octoprint can automatically detect your <em>Serial Port</em> and <em>Baudrate</em> when <em>AUTO</em> is selected in these dropdowns, however, you may also specify specifics for each field.</p>
 <figure>
 <p><img alt="Serial connection settings for printer configuration" src="../../assets/images/Octoprint/serialconnection.png" width="95%" /></p>
@@ -783,15 +792,16 @@
 <figure>
 <p><img alt="Printer profiles configuration menu" src="../../assets/images/Octoprint/printerpofiles.png" width="95%" /></p>
 </figure>
-<p>One key feature of Octoprint is its webcam machine stream, allowing for remote supervision of your machine. Anything from <abbr title="Universal Serial Bus">USB</abbr> webcams to Raspberry Pi ribbon cable cameras can be used for this stream &amp; Octoprint will automatically find this attached webcam and will use it to stream your machine (some more exotic cameras or mounting styles may require an additional configuration - discussed below). </p>
+<p>One key feature of Octoprint is its webcam machine stream, allowing for remote supervision of your machine. Anything from USB webcams to Raspberry Pi ribbon cable cameras can be used for this stream &amp; Octoprint will automatically find this attached webcam and will use it to stream your machine (some more exotic cameras or mounting styles may require an additional configuration - discussed below). </p>
 <div class="admonition example">
 <p class="admonition-title">Personal Setup</p>
-<p>On my printer, I&rsquo;ve mounted a Raspberry Pi camera to the X-Axis stepper of my machine (via <a href="https://www.thingiverse.com/thing:3121052">this</a> Raspberry Pi camera mount), yielding a pretty nice side view of prints, shown below.
-<figure markdown="1">
-<img alt="Raspberry Pi camera mounted to X-axis stepper motor" src="../../assets/images/Octoprint/cameramount.png" width="95%" /></p>
-<p><img alt="Octoprint webcam feed showing side view of print" src="../../assets/images/Octoprint/CameraWindow.png" width="95%" />
-</figure></p>
+<p>On my printer, I&rsquo;ve mounted a Raspberry Pi camera to the X-Axis stepper of my machine (via <a href="https://www.thingiverse.com/thing:3121052">this</a> Raspberry Pi camera mount), yielding a pretty nice side view of prints, shown below.</p>
 </div>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/Octoprint/cameramount.png" alt="Raspberry Pi camera mounted to X-axis stepper motor">
+<img src="../../assets/images/Octoprint/CameraWindow.png" alt="Octoprint webcam feed showing side view of print">
+</div>
+
 <p>Due to my printers camera mount, my Raspberry Pi camera is heald in an upsidedown orientation and thus needs to be compensated for on the software side. Luckily, in the <em>Webcam &amp; Timelapse</em> menu under the <em>Features</em> section of the Octorprint interface settings, webcam orientation can be changed. In addition, more advanced webcam options can be found, allowing for the use of almost all cameras connected to the hardware running Octorpint.</p>
 <figure>
 <p><img alt="Webcam and timelapse settings configuration" src="../../assets/images/Octoprint/webcamsettings.png" width="95%" /></p>
@@ -806,127 +816,92 @@
 <p><img alt="Plugin manager showing installed plugins" src="../../assets/images/Octoprint/pluginsettings.png" width="95%" /></p>
 </figure>
 <ul>
-<li>
-<p>Access Anywhere - The Spaghetti Detective<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> - AI-powered failure detection &amp; Remote Octoprint Access </p>
-<p><figure markdown="1">
-<img align="left" alt="The Spaghetti Detective home interface" src="../../assets/images/Octoprint/homescreen.jpg" width="45%" />
-<img align="left" alt="The Spaghetti Detective mobile app interface" src="../../assets/images/Octoprint/tsdapp.jpg" width="46.5%" /></p>
-<p><img align="left" alt="The Spaghetti Detective printer control interface" src="../../assets/images/Octoprint/tsdcontrol.jpg" width="94%" />
-</figure></p>
-</li>
-<li>
-<p>Bed Visualizer<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> - Uses Plotly js library to render a 3D surface of the bed’s reported mesh </p>
-<p><figure markdown="1">
-  <img alt="Bed visualizer showing mesh leveling data in 3D" src="../../assets/images/Octoprint/bedlevlevisualizer.png" width="95%" />
-</figure></p>
-</li>
-<li>
-<p>Custom Background<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> - Change the background image on the temperature graph </p>
-<p><figure markdown="1">
-  <img alt="Custom background image on temperature graph" src="../../assets/images/Octoprint/custombackground.png" width="95%" />
-</figure></p>
-</li>
-<li>
-<p>Exclude Region<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup> - Adds the ability to prevent printing within rectangular or circular regions of the currently active gcode file </p>
-<p><figure markdown="1">
-  <img alt="Exclude region configuration menu" src="../../assets/images/Octoprint/excluderegions.png" width="95%" />
-</figure></p>
-</li>
-<li>
-<p>Floating Navbar<sup id="fnref:5"><a class="footnote-ref" href="#fn:5">5</a></sup> - Make the navbar stick to the top of the page while scrolling</p>
-</li>
-<li>
-<p>GcodeEditor<sup id="fnref:6"><a class="footnote-ref" href="#fn:6">6</a></sup> - Edit gcode that&rsquo;s been uploaded to OctoPrint</p>
-<p><figure markdown="1">
-  <img align="left" alt="Gcode editor interface" src="../../assets/images/Octoprint/edit_gcode.png" width="49%" />
-  <img align="right" alt="Gcode editor interface" src="../../assets/images/Octoprint/edit_gcode2.png" width="45%" />
-</figure></p>
-</li>
-<li>
-<p>Heater Timeout<sup id="fnref:7"><a class="footnote-ref" href="#fn:7">7</a></sup> - Automatically shut off heaters if no print has been started</p>
-</li>
-<li>
-<p>Navbar Temp<sup id="fnref:8"><a class="footnote-ref" href="#fn:8">8</a></sup> - Display temperatures on the navbar</p>
-<p><figure markdown="1">
-  <img alt="Navbar temperature display" src="../../assets/images/Octoprint/navbar.png" width="100%" />
-</figure></p>
-</li>
-<li>
-<p>Octoprint Display <abbr title="Estimated Time of Arrival">ETA</abbr><sup id="fnref:9"><a class="footnote-ref" href="#fn:9">9</a></sup> - Show finish time (<abbr title="Estimated Time of Arrival">ETA</abbr>) for current print</p>
-<p><figure markdown="1">
-  <img alt="" src="../../assets/images/Octoprint/eta.png" />
-</figure></p>
-</li>
-<li>
-<p>PrettyGCode<sup id="fnref:10"><a class="footnote-ref" href="#fn:10">10</a></sup> - adds a 3D GCode visualizer tab in Octoprint</p>
-<p><figure markdown="1">
-  <img alt="PrettyGCode 3D GCode visualizer tab" src="../../assets/images/Octoprint/PrettyGcode-Screen3.jpg" width="75%" />
-</figure></p>
-</li>
-<li>
-<p>Themeify<sup id="fnref:11"><a class="footnote-ref" href="#fn:11">11</a></sup> - Beautiful themes for octoprint</p>
-</li>
-<li>
-<p>ipOnConnect<sup id="fnref:12"><a class="footnote-ref" href="#fn:12">12</a></sup> - Display the ip address of the connected OctoPrint instance on the control panel <em><img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/26a0.svg" title=":warning:" /> MK3S+ specific</em></p>
-<p><figure markdown="1">
-  <img alt="IP address display on control panel" src="../../assets/images/Octoprint/ipdisplay.jpg" width="95%" />
-</figure></p>
-</li>
+<li>Access Anywhere - The Spaghetti Detective<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/thespaghettidetective/">The Spaghetti Detective Plugin</a></span> - AI-powered failure detection &amp; Remote Octoprint Access </li>
 </ul>
+<div class="figure-grid grid-3x1">
+<img src="../../assets/images/Octoprint/homescreen.jpg" alt="The Spaghetti Detective home interface">
+<img src="../../assets/images/Octoprint/tsdapp.jpg" alt="The Spaghetti Detective mobile app interface">
+<img src="../../assets/images/Octoprint/tsdcontrol.jpg" alt="The Spaghetti Detective printer control interface">
+</div>
+
+<ul>
+<li>Bed Visualizer<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/bedlevelvisualizer/">Bed Visualizer Plugin</a></span> - Uses Plotly js library to render a 3D surface of the bed’s reported mesh </li>
+</ul>
+<figure>
+<p><img alt="Bed visualizer showing mesh leveling data in 3D" src="../../assets/images/Octoprint/bedlevlevisualizer.png" width="95%" /></p>
+</figure>
+<ul>
+<li>Custom Background<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/custombackground/">Custom Background Plugin</a></span> - Change the background image on the temperature graph </li>
+</ul>
+<figure>
+<p><img alt="Custom background image on temperature graph" src="../../assets/images/Octoprint/custombackground.png" width="95%" /></p>
+</figure>
+<ul>
+<li>Exclude Region<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/excluderegion/">plugins.octoprint.org: excluderegion</a></span> - Adds the ability to prevent printing within rectangular or circular regions of the currently active gcode file </li>
+</ul>
+<figure>
+<p><img alt="Exclude region configuration menu" src="../../assets/images/Octoprint/excluderegions.png" width="95%" /></p>
+</figure>
+<ul>
+<li>Floating Navbar<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/floatingnavbar/">plugins.octoprint.org: floatingnavbar</a></span> - Make the navbar stick to the top of the page while scrolling</li>
+<li>GcodeEditor<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/GcodeEditor/">plugins.octoprint.org: GcodeEditor</a></span> - Edit gcode that&rsquo;s been uploaded to OctoPrint</li>
+</ul>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/Octoprint/edit_gcode.png" alt="Gcode editor interface">
+<img src="../../assets/images/Octoprint/edit_gcode2.png" alt="Gcode editor interface">
+</div>
+
+<ul>
+<li>Heater Timeout<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/HeaterTimeout/">plugins.octoprint.org: HeaterTimeout</a></span> - Automatically shut off heaters if no print has been started</li>
+<li>Navbar Temp<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/navbartemp/">plugins.octoprint.org: navbartemp</a></span> - Display temperatures on the navbar</li>
+</ul>
+<figure>
+<p><img alt="Navbar temperature display" src="../../assets/images/Octoprint/navbar.png" width="100%" /></p>
+</figure>
+<ul>
+<li>Octoprint Display ETA<label for="sn-9" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-9" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/display_eta/">plugins.octoprint.org: display_eta</a></span> - Show finish time (ETA) for current print</li>
+</ul>
+<figure>
+<p><img alt="" src="../../assets/images/Octoprint/eta.png" /></p>
+</figure>
+<ul>
+<li>PrettyGCode<label for="sn-10" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-10" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/prettygcode/">plugins.octoprint.org: prettygcode</a></span> - adds a 3D GCode visualizer tab in Octoprint</li>
+</ul>
+<figure>
+<p><img alt="PrettyGCode 3D GCode visualizer tab" src="../../assets/images/Octoprint/PrettyGcode-Screen3.jpg" width="75%" /></p>
+</figure>
+<ul>
+<li>Themeify<label for="sn-11" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-11" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/themeify/">plugins.octoprint.org: themeify</a></span> - Beautiful themes for octoprint</li>
+<li>ipOnConnect<label for="sn-12" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-12" class="margin-toggle"/><span class="sidenote"><a href="https://plugins.octoprint.org/plugins/ipOnConnect/">plugins.octoprint.org: ipOnConnect</a></span> - Display the ip address of the connected OctoPrint instance on the control panel <em><img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/26a0.svg" title=":warning:" /> MK3S+ specific</em></li>
+</ul>
+<figure>
+<p><img alt="IP address display on control panel" src="../../assets/images/Octoprint/ipdisplay.jpg" width="95%" /></p>
+</figure>
 <h2 id="octoprint-interface-workflow">Octoprint Interface Workflow<a class="headerlink" href="#octoprint-interface-workflow" title="Permanent link">&para;</a></h2>
 <p>Although the Octoprint web interface is rather intuitive, the number of stock features (not to mention plugin-enabled ones) can be a bit overwhelming without a bit of exploring. Below is a short PowerPoint I put together walking through the basics of the interface for students using my lab print farm, allowing for a bit of knowledge before exploration.</p>
+<div class="embed-frame"><div class="embed-inner">
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vR6_FehCcFtgrH6KYo5DuwZ3WEcFPoPesZBn_naPUVLJ-wylwF8p8eu6KqsSV9Zz71wESnbA-aIAoqa/embed?start=false&loop=false&delayms=5000" frameborder="0" width="100%" height="550" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+</div></div>
 
 <h2 id="my-octoprint-instances">My Octoprint Instances<a class="headerlink" href="#my-octoprint-instances" title="Permanent link">&para;</a></h2>
-<figure>
-<p><img alt="Personal Octoprint enabled Prusa I3 MK3S+" src="../../assets/images/Octoprint/personaloctoprint.jpg" width="95%" />
-  </p>
-<figcaption>My Personal Octoprint Enabled Prusa I3 MK3S+</figcaption>
-<p><img alt="Lab's Octoprint enabled printer farm" src="../../assets/images/Octoprint/laboctoprint.jpg" width="95%" />
-  </p>
-<figcaption>My Lab's Octoprint Enabled Printer Farm</figcaption>
-</figure>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>https://plugins.octoprint.org/plugins/thespaghettidetective/&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>https://plugins.octoprint.org/plugins/bedlevelvisualizer/&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-<li id="fn:3">
-<p>https://plugins.octoprint.org/plugins/custombackground/&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
-</li>
-<li id="fn:4">
-<p>https://plugins.octoprint.org/plugins/excluderegion/&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
-</li>
-<li id="fn:5">
-<p>https://plugins.octoprint.org/plugins/floatingnavbar/&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
-</li>
-<li id="fn:6">
-<p>https://plugins.octoprint.org/plugins/GcodeEditor/&#160;<a class="footnote-backref" href="#fnref:6" title="Jump back to footnote 6 in the text">&#8617;</a></p>
-</li>
-<li id="fn:7">
-<p>https://plugins.octoprint.org/plugins/HeaterTimeout/&#160;<a class="footnote-backref" href="#fnref:7" title="Jump back to footnote 7 in the text">&#8617;</a></p>
-</li>
-<li id="fn:8">
-<p>https://plugins.octoprint.org/plugins/navbartemp/&#160;<a class="footnote-backref" href="#fnref:8" title="Jump back to footnote 8 in the text">&#8617;</a></p>
-</li>
-<li id="fn:9">
-<p>https://plugins.octoprint.org/plugins/display_eta/&#160;<a class="footnote-backref" href="#fnref:9" title="Jump back to footnote 9 in the text">&#8617;</a></p>
-</li>
-<li id="fn:10">
-<p>https://plugins.octoprint.org/plugins/prettygcode/&#160;<a class="footnote-backref" href="#fnref:10" title="Jump back to footnote 10 in the text">&#8617;</a></p>
-</li>
-<li id="fn:11">
-<p>https://plugins.octoprint.org/plugins/themeify/&#160;<a class="footnote-backref" href="#fnref:11" title="Jump back to footnote 11 in the text">&#8617;</a></p>
-</li>
-<li id="fn:12">
-<p>https://plugins.octoprint.org/plugins/ipOnConnect/&#160;<a class="footnote-backref" href="#fnref:12" title="Jump back to footnote 12 in the text">&#8617;</a></p>
-</li>
-</ol>
+<p><input type="checkbox" id="mn-13" class="margin-toggle"/><label for="mn-13" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">My Personal Octoprint Enabled Prusa I3 MK3S+</span></p>
+<p><input type="checkbox" id="mn-14" class="margin-toggle"/><label for="mn-14" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">My Lab&rsquo;s Octoprint Enabled Printer Farm</span></p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/Octoprint/personaloctoprint.jpg" alt="Personal Octoprint enabled Prusa I3 MK3S+">
+<img src="../../assets/images/Octoprint/laboctoprint.jpg" alt="Lab's Octoprint enabled printer farm">
 </div>
+<script>
+(function() {
+  var host = location.hostname;
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+  });
+})();
+</script>
+
 
   <!-- Email Subscription -->
   <section class="subscribe-section">
@@ -1044,12 +1019,16 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.annotate", "search.share", "search.suggest", "search.highlight", "content.tabs.link", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../assets/js/error-suppressor.js"></script>
+      
+        <script src="../../assets/js/grids.js"></script>
+      
+        <script src="../../assets/js/lightbox.js"></script>
       
         <script src="../../assets/js/index.js"></script>
       
