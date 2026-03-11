@@ -1255,9 +1255,14 @@
 <p>&hellip; it worked!! The pizza preparing gcode worked through both of its tool changes, creating spirals of sauce and cheese on our pizza crust. Unfortunately, there were a couple of small issues in the run-through, one being not enough sauce put in our sauce hopper, so upon its tool docking, the hopper wasn’t heavy enough to stay in the holder, and the other being a sticky cheese. We had left our cheese and sauce out in our lab for almost two days before the test, and not only did this cause the cheese to smell, but also left us with a cheese that would not stop sticking to itself, proving an issue when trying to get the cheese to fall from the hopper, however, the cheese fell through the hopper hole with a little convincing, and finally we had prepared a pizza.</p>
 <script>
 (function() {
-  var host = location.hostname;
+  var internal = [
+    location.hostname,
+    'theodore.net',
+    'teddywarner.org', 'teddywarner.com', 'teddywarner.net',
+    'warnerteddy.org', 'warnerteddy.com', 'warnerteddy.net'
+  ];
   document.querySelectorAll('a[href]').forEach(function(a) {
-    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+    if (a.hostname && internal.indexOf(a.hostname) === -1 && !a.getAttribute('target')) {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener');
     }

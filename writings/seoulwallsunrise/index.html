@@ -641,9 +641,14 @@
 <p>I had a moment of clarity after finishing this piece. I wrote this while sitting atop the Seoul Wall<input type="checkbox" id="mn-2" class="margin-toggle"/><label for="mn-2" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginfigure"><img alt="Margin figure" src="../../assets/images/Japan/favs/000061380017_17.jpg" />Atop the Seoul Wall, South Korea.</span> and was certainly favoring my blissfully ignorant thoughts rather than my beautiful surroundings. Clearly, I enter this &lsquo;flow state&rsquo; on occasion, and most notably, this seems to be only possible when I&rsquo;m not trying to. So take this all with a grain of salt.</p>
 <script>
 (function() {
-  var host = location.hostname;
+  var internal = [
+    location.hostname,
+    'theodore.net',
+    'teddywarner.org', 'teddywarner.com', 'teddywarner.net',
+    'warnerteddy.org', 'warnerteddy.com', 'warnerteddy.net'
+  ];
   document.querySelectorAll('a[href]').forEach(function(a) {
-    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+    if (a.hostname && internal.indexOf(a.hostname) === -1 && !a.getAttribute('target')) {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener');
     }

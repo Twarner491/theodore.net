@@ -913,9 +913,14 @@
 <p>With the design and prototyping completed, I headed out to my local strip mall for a photo op, only getting a couple of strange looks from shoppers wondering what the boy in the old-navy pajama pants was doing taking pictures of a miniature in the middle of the parking lot. But it was worth it! As opposed to settling for a diorama background, or just pictures of my model on my workbench, I highlighted a legitimate potential environment for such a product, and I promise you, when Adaptable Aquaponics hits full scale in a parking lot, the shoppers won&rsquo;t be blown away by my magnificent fashion choices, but instead by the wonders of Aquaponics!</p>
 <script>
 (function() {
-  var host = location.hostname;
+  var internal = [
+    location.hostname,
+    'theodore.net',
+    'teddywarner.org', 'teddywarner.com', 'teddywarner.net',
+    'warnerteddy.org', 'warnerteddy.com', 'warnerteddy.net'
+  ];
   document.querySelectorAll('a[href]').forEach(function(a) {
-    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+    if (a.hostname && internal.indexOf(a.hostname) === -1 && !a.getAttribute('target')) {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener');
     }

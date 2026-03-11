@@ -840,9 +840,14 @@
 <p>Most importantly the understanding I’ve gained over meaning and value in our reality has catalyzed my ability to create the conditions in life where what I desire may occur.</p>
 <script>
 (function() {
-  var host = location.hostname;
+  var internal = [
+    location.hostname,
+    'theodore.net',
+    'teddywarner.org', 'teddywarner.com', 'teddywarner.net',
+    'warnerteddy.org', 'warnerteddy.com', 'warnerteddy.net'
+  ];
   document.querySelectorAll('a[href]').forEach(function(a) {
-    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+    if (a.hostname && internal.indexOf(a.hostname) === -1 && !a.getAttribute('target')) {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener');
     }

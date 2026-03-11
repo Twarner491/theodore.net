@@ -642,9 +642,14 @@
 <p>Not only does The Meno depict the process of learning in its text, but the act of undertaking a complex classic in the contemporary day embodies the brave aspirations for the recollection of knowledge as well. </p>
 <script>
 (function() {
-  var host = location.hostname;
+  var internal = [
+    location.hostname,
+    'theodore.net',
+    'teddywarner.org', 'teddywarner.com', 'teddywarner.net',
+    'warnerteddy.org', 'warnerteddy.com', 'warnerteddy.net'
+  ];
   document.querySelectorAll('a[href]').forEach(function(a) {
-    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+    if (a.hostname && internal.indexOf(a.hostname) === -1 && !a.getAttribute('target')) {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener');
     }

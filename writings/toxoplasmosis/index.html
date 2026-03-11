@@ -654,9 +654,14 @@
 <p>If you&rsquo;re already the type of person willing to start ventures, having 1000 years dramatically improves your odds. Yet, given we probably can&rsquo;t expect &ldquo;good&rdquo; risk tolerance to remain the same, while &ldquo;bad&rdquo; risk tolerance is plummets in a 1000-year lifespan society, i think it follows that the percentage of people willing to start ventures in the first place drops quite substantially.</p>
 <script>
 (function() {
-  var host = location.hostname;
+  var internal = [
+    location.hostname,
+    'theodore.net',
+    'teddywarner.org', 'teddywarner.com', 'teddywarner.net',
+    'warnerteddy.org', 'warnerteddy.com', 'warnerteddy.net'
+  ];
   document.querySelectorAll('a[href]').forEach(function(a) {
-    if (a.hostname && a.hostname !== host && !a.getAttribute('target')) {
+    if (a.hostname && internal.indexOf(a.hostname) === -1 && !a.getAttribute('target')) {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener');
     }
