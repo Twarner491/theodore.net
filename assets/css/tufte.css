@@ -461,9 +461,6 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
 }
 
 @media (max-width: 600px) {
-  .md-typeset .figure-grid {
-    flex-direction: column;
-  }
   .md-typeset .figure-grid.grid-2x2 {
     grid-template-columns: 1fr 1fr;
   }
