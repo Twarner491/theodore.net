@@ -45,7 +45,7 @@ search:
   <link rel="preconnect" href="https://kit.fontawesome.com">
   <link rel="preconnect" href="https://ka-f.fontawesome.com">
   <link rel="preconnect" href="https://unpkg.com">
-  <link rel="preconnect" href="https://m.media-amazon.com">
+
 
   <!-- Preload LCP image for faster render -->
   <link rel="preload" as="image" href="/assets/images/index/flowers.jpg">
@@ -149,28 +149,23 @@ search:
                           onmouseenter="this.querySelector('image').setAttribute('style', 'transform:rotate(1deg); transition:transform 0.25s cubic-bezier(0.4,0,0.2,1); transform-origin:523.5px 691px;')"
                           onmouseleave="this.querySelector('image').setAttribute('style', 'transform:none; transition:transform 0.25s cubic-bezier(0.4,0,0.2,1); transform-origin:523.5px 691px;')">
                          <g id="image-card-2" class="project">
-                             <rect x="269.5" y="520" width="508" height="342" rx="26" fill="var(--md-default-fg-color--lightest)" />
+                             <rect id="cork-bg" x="269.5" y="520" width="508" height="342" rx="26" fill="var(--md-default-fg-color--lightest)" />
                              <rect x="270" y="520.5" width="507" height="341" rx="25.5" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                              <image x="277.5" y="527" width="492" height="328" href="assets/images/index/cork.png" clip-path="url(#clipImage2)" preserveAspectRatio="xMidYMid slice" alt="Corkboard project image" loading="eager" fetchpriority="high" />
                              <rect x="278" y="527.5" width="491" height="327" rx="20.5" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                          </g>
                        </a>
-                          <g id="reading-card" class="project">
+                        <a href="https://theodore.net/projects/Quotes/" aria-label="Quotes Project">
+                          <g id="image-card-5" class="project">
                               <rect x="796.5" y="616" width="242" height="288" rx="27" fill="var(--md-default-fg-color--lightest)" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                               <g clip-path="url(#clip0_107_71)">
-                                  <g class="reading-content">
-                                      <rect x="804.5" y="624" width="226" height="272" rx="21" fill="var(--md-default-bg-color)" fill-opacity="0.4" />
-                                      <rect x="843" y="645" width="149" height="31" rx="15.5" fill="var(--md-default-bg-color)" />
-                                      <text x="917.5" y="665" text-anchor="middle" fill="var(--md-default-fg-color)" fill-opacity="0.55" font-family="JetBrains Mono" font-size="12" font-style="normal" font-weight="300" line-height="109.588%">What I'm Reading</text>
-                                      <text x="817" y="705" text-anchor="left" fill="var(--md-default-fg-color)" fill-opacity="0.75" font-family="JetBrains Mono" font-size="14" font-style="normal" font-weight="500" line-height="109.588%">The</text>
-                                      <text x="817" y="725" text-anchor="left" fill="var(--md-default-fg-color)" fill-opacity="0.75" font-family="JetBrains Mono" font-size="14" font-style="normal" font-weight="500" line-height="109.588%">Beginning</text>
-                                      <text x="817" y="745" text-anchor="left" fill="var(--md-default-fg-color)" fill-opacity="0.75" font-family="JetBrains Mono" font-size="14" font-style="normal" font-weight="500" line-height="109.588%">of Infinity</text>
-                                      <text x="817" y="763" text-anchor="left" fill="var(--md-default-fg-color)" fill-opacity="0.75" font-family="JetBrains Mono" font-size="11" font-style="normal" font-weight="400" line-height="109.588%">David Deutsch</text>
-                                  </g>
-                                  <image x="930.473" y="710" width="144.272" height="230.193" transform="rotate(10 930.473 713)" href="https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1341613337i/2006163.jpg" preserveAspectRatio="xMidYMid slice" alt="Book cover of The Beginning of Infinity" loading="lazy" />
+                                  <rect id="quotes-bg" x="804.5" y="624" width="226" height="272" fill="var(--md-default-bg-color)" />
+                                  <image id="quotes-img-dark" x="748" y="488" width="339" height="408" href="assets/images/index/printerDark.gif" clip-path="url(#clip0_107_71)" preserveAspectRatio="xMidYMax slice" alt="Quotes project image" loading="lazy" />
+                                  <image id="quotes-img-light" x="748" y="488" width="339" height="408" href="assets/images/index/printerLight.gif" clip-path="url(#clip0_107_71)" preserveAspectRatio="xMidYMax slice" alt="Quotes project image" loading="lazy" />
                               </g>
                               <rect x="805" y="624.5" width="225" height="271" rx="20.5" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                           </g>
+                        </a>
                         <a target="_blank" href="https://intempus.org" aria-label="Von Niemann Probe Project">
                             <g id="image-card-4" class="project">
                                 <g clip-path="url(#clip1_107_71)">
@@ -273,6 +268,9 @@ search:
     document.addEventListener("DOMContentLoaded", function() {
       const toneImage = document.querySelector('.project .toneimg');
       const polargraphImage = document.getElementById('polargraph-img');
+      const quotesLight = document.getElementById('quotes-img-light');
+      const quotesDark = document.getElementById('quotes-img-dark');
+      const corkBg = document.getElementById('cork-bg');
       const root = document.documentElement;
       function colortheme() {
           const selectedOption = document.querySelector('input[name="__palette"]:checked');
@@ -288,6 +286,13 @@ search:
           }
           if (polargraphImage) {
             polargraphImage.setAttribute('href', currentTheme === 'slate' ? 'assets/images/index/polargraphDark.png' : 'assets/images/index/polargraph.png');
+          }
+          if (quotesLight && quotesDark) {
+            var front = currentTheme === 'slate' ? quotesDark : quotesLight;
+            front.parentNode.appendChild(front);
+          }
+          if (corkBg) {
+            corkBg.setAttribute('fill', currentTheme === 'slate' ? '#2d3032' : 'var(--md-default-fg-color--lightest)');
           }
       }
       function saveTheme() {
