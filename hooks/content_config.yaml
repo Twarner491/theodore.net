@@ -37,6 +37,16 @@ external_projects:
     date: 2021-04-28
     external: true
 
+# External writings that don't have their own markdown files
+# These will be merged with auto-discovered writings from /writings folder
+external_writings:
+  - title: Machines for Conviviality
+    description: About dancing bees, sycophancy, and our need for emotionally intelligent machines.
+    url: https://intempus.org/writings/machines-for-conviviality/
+    date: 2026-05-11
+    readtime: "4–5 mins"
+    external: true
+
 # Settings for content list generation
 settings:
   # Number of items to show on index page

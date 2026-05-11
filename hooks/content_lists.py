@@ -222,13 +222,37 @@ def _get_projects(docs_dir):
 
 
 def _get_writings(docs_dir):
-    """Get all writings sorted by date."""
+    """Get all writings, including external ones, sorted by date."""
     global _writings_cache
     if _writings_cache is not None:
         return _writings_cache
-    
+
     writings = _scan_folder(docs_dir, "writings")
-    
+
+    # Add external writings from config
+    config = _get_config(docs_dir)
+    for ext in config.get('external_writings', []):
+        ext_date = None
+        if ext.get('date'):
+            if isinstance(ext['date'], str):
+                ext_date = _parse_date(ext['date'] + "T00:00:00Z")
+            elif isinstance(ext['date'], datetime):
+                ext_date = ext['date']
+            elif isinstance(ext['date'], date):
+                ext_date = datetime.combine(ext['date'], datetime.min.time())
+
+        writings.append({
+            'title': ext.get('title', ''),
+            'description': ext.get('description', ''),
+            'thumbnail': ext.get('thumbnail', ''),
+            'date': ext_date,
+            'date_str': _format_date(ext_date),
+            'readtime': ext.get('readtime', ''),
+            'url': ext.get('url', ''),
+            'external': ext.get('external', True),
+            'file': None
+        })
+
     # Sort by date (newest first)
     writings.sort(key=lambda x: x['date'] or datetime.min, reverse=True)
     _writings_cache = writings
@@ -258,9 +282,10 @@ def _generate_writings_list(writings, count=None, include_mobileyear=True):
     for i, item in enumerate(items):
         mobileyear_start = '<span class="mobileyear">\n              ' if include_mobileyear else ''
         mobileyear_end = '\n              <span>' if include_mobileyear else ''
-        
+        target = ' target="_blank"' if item.get('external') else ''
+
         html_parts.append(f'''        <div class="writparent">
-          <a href="{item['url']}">
+          <a{target} href="{item['url']}">
             <div class="title-row">
               <p class="projtitle">{item['title']}</p>
               <p class="writeyear">{item['date_str']}</p>
