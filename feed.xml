@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<?xml-stylesheet type="text/xsl" href="rss.xsl"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     
     <title>Teddy Warner</title>
@@ -13,12 +13,12 @@
     <language>en</language>
 
     
-    <pubDate>Wed, 25 Mar 2026 00:25:59 -0000</pubDate>
-    <lastBuildDate>Wed, 25 Mar 2026 00:25:59 -0000</lastBuildDate>
+    <pubDate>Mon, 11 May 2026 18:47:15 -0000</pubDate>
+    <lastBuildDate>Mon, 11 May 2026 18:47:15 -0000</lastBuildDate>
     <ttl>1440</ttl>
 
     
-    <generator>MkDocs RSS plugin - v1.17.9</generator>
+    <generator>MkDocs RSS plugin - v1.19.0</generator>
 
     
     
