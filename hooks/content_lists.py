@@ -36,7 +36,7 @@ def _calculate_readtime(markdown):
     text = re.sub(r'`[^`]+`', '', text)
     words = len(text.split())
     if words < 50:
-        return ''
+        return '~1 min'
     slow = max(1, math.ceil(words / 190))
     fast = max(1, math.ceil(words / 150))
     if slow == fast:

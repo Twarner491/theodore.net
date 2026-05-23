@@ -202,7 +202,7 @@ search:
     <section class="about">
       <div class="content4">
         <h2>About</h2>
-        <p class="abt1">I'm an engineer specialized in rapid prototyping and applied AI. I'm currently based in SF, building <a target="_blank" href="https://intempus.org">emotionally intellegent robots</a>.</p>
+        <p class="abt1">I'm an engineer specialized in rapid prototyping and applied AI. I'm currently based in SF, building <a target="_blank" href="https://intempus.org">emotionally intellegent machines</a>.</p>
         <p class="abt2">I'm a <a target="_blank" style="text-decoration: none;" href="https://thielfellowship.org/">Thiel Fellow</a> and a graduate of the <a target="_blank" style="text-decoration: none;" href="https://fabacademy.org/2021/labs/charlotte/students/theodore-warner/">Fab Academy</a>. I previously worked at <a target="_blank" style="text-decoration: none;" href="https://www.midjourney.com/home">Midjourney</a> where I did research for the internal hardware effort.</p>
         <p class="abt3">This site holds my <a href="https://theodore.net/projects">work</a> and <a href="https://theodore.net/writings">writings</a>.<span class="mobileyear"></br></br></span> Reach out at <a target="_blank" href="https://x.com/intent/follow?screen_name=WarnerTeddy">@WarnerTeddy</a> or at <a  style="text-decoration: none;" href="mailto:teddy@warner.net">teddy [at] warner [dot] net</a>.</p>
     </section>
