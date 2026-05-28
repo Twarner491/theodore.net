@@ -133,3 +133,6 @@ Let us not fall asleep again. Let us stay awake in hope of our salvation.
 
 > *"Come, Lord Jesus!"*
 > - *Revelation* 22:20
+
+
+All too often, we place our hope in unlimited “upgrades,” in forms of progress that exacerbate inequalities, and in immediate solutions incapable of healing people’s wounds. As a result, while some pursue the illusion of unlimited self-assertion, many are deprived of basic necessities. - https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html

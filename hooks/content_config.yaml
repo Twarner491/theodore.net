@@ -2,12 +2,6 @@
 # These will be merged with auto-discovered projects from /projects folder
 
 external_projects:
-  - title: Apartment Birds
-    description: Tracking any avian visitors that may be passing by my place.
-    url: https://bird.onethreenine.net/about
-    thumbnail: https://bird.onethreenine.net/thumb.png
-    date: 2026-05-22
-    external: true
 
   - title: onethreenine.net
     description: A web accessible corkboard for my apartment.

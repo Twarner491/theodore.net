@@ -17,22 +17,14 @@ https://calebkruse.com/ng
 
 https://www.shepherdspacesystems.com/
 
-<figure markdown="1">
-
-![](../assets/images/Stratolink/kicadschematic.png){ width="80%" }
-
+<figure class="fullwidth">
+<img src="../../assets/images/Stratolink/kicadschematic.png" alt="">
 </figure>
 
-<div class="figure-grid grid-2x1">
+<center><div class="figure-grid grid-2x1" style="width:60%">
 <img src="../../assets/images/Stratolink/kicadrenderfront.jpg" alt="">
 <img src="../../assets/images/Stratolink/kicadrenderback.jpg" alt="">
-</div>
-
-<figure markdown="1">
-
-![](../assets/images/Stratolink/bannanamuffins.JPG){ width="80%" }
-
-</figure>
+</div></center>
 
 <div class="figure-grid grid-2x1">
 <img src="../../assets/images/Stratolink/freshoffthepress.JPG" alt="">
@@ -57,11 +49,24 @@ https://www.shepherdspacesystems.com/
 
 </figure>
 
+<center>
+  <br>
+  <div class="tweet-container">
+    <div class="tweet-item single">
+      <span class="lighttweet"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">radio is wild because the first thing humans did after finding a way to communicate via a mystic field is fill it with music</p>&mdash; blue (@cyanopsis) <a href="https://twitter.com/cyanopsis/status/2057371323048116591?ref_src=twsrc%5Etfw">May 21, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></span>
+      <span class="darktweet"><blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">radio is wild because the first thing humans did after finding a way to communicate via a mystic field is fill it with music</p>&mdash; blue (@cyanopsis) <a href="https://twitter.com/cyanopsis/status/2057371323048116591?ref_src=twsrc%5Etfw">May 21, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></span>
+    </div>
+  </div>
+  <br>
+</center>
+
 <figure markdown="1">
 
 ![](../assets/images/Stratolink/supercaps.JPG){ width="80%" }
 
 </figure>
+
+{.marginfigure}![v1 board hanging test](../assets/images/Stratolink/bannanamuffins.JPG)My lovely girlfriend made banana muffins while I asked claude some power dev questions{/.marginfigure}
 
 <figure markdown="1">
 
@@ -75,11 +80,7 @@ https://www.shepherdspacesystems.com/
 
 </figure>
 
-<figure markdown="1">
-
-![](../assets/images/Stratolink/hangingmountedsolarv1.JPG){ width="80%" }
-
-</figure>
+{.marginfigure}![v1 board hanging test](../assets/images/Stratolink/hangingmountedsolarv1.JPG)Played around with some different means of hanging the PCB from its mount points{/.marginfigure}
 
 <figure markdown="1">
 
@@ -89,27 +90,11 @@ https://www.shepherdspacesystems.com/
 
 <figure markdown="1">
 
-![](../assets/images/Stratolink/nightbeforedesk.JPG){ width="80%" }
-
-</figure>
-
-<figure markdown="1">
-
 ![](../assets/images/Stratolink/chargingpanels.JPG){ width="80%" }
 
 </figure>
 
-<figure markdown="1">
-
-![](../assets/images/Stratolink/sutrotower.JPG){ width="80%" }
-
-</figure>
-
-<figure markdown="1">
-
-![](../assets/images/Stratolink/telemetrytest.JPG){ width="80%" }
-
-</figure>
+{.marginfigure}![v1 board hanging test](../assets/images/Stratolink/sutrotower.JPG) Really pretty morning at Dolores Park{/.marginfigure}
 
 <figure markdown="1">
 
@@ -150,16 +135,7 @@ https://www.shepherdspacesystems.com/
 <img src="../../assets/images/Stratolink/tahoefinishingpass.jpg" alt="">
 </div>
 
-<center>
-  <br>
-  <div class="tweet-container">
-    <div class="tweet-item single">
-      <span class="lighttweet"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">radio is wild because the first thing humans did after finding a way to communicate via a mystic field is fill it with music</p>&mdash; blue (@cyanopsis) <a href="https://twitter.com/cyanopsis/status/2057371323048116591?ref_src=twsrc%5Etfw">May 21, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></span>
-      <span class="darktweet"><blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">radio is wild because the first thing humans did after finding a way to communicate via a mystic field is fill it with music</p>&mdash; blue (@cyanopsis) <a href="https://twitter.com/cyanopsis/status/2057371323048116591?ref_src=twsrc%5Etfw">May 21, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></span>
-    </div>
-  </div>
-  <br>
-</center>
+
 
 
 
