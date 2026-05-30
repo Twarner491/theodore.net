@@ -6,7 +6,7 @@ external_projects:
   - title: Stratolink
     description: An upper atmospheric pico balloon network
     url: https://stratolink.org/dashboard-v2
-    thumbnail: /assets/images/stratolink/thumb.jpg
+    thumbnail: /assets/images/Stratolink/thumb.JPG
     date: 2026-05-30
     external: true
 
