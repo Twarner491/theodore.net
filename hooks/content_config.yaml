@@ -3,11 +3,18 @@
 
 external_projects:
 
+  - title: Stratolink
+    description: An upper atmospheric pico balloon network
+    url: https://stratolink.org/dashboard-v2
+    thumbnail: /assets/images/stratolink/thumb.jpg
+    date: 2026-05-30
+    external: true
+
   - title: onethreenine.net
     description: A web accessible corkboard for my apartment.
     url: https://onethreenine.net/about
     thumbnail: /assets/images/index/cork.png
-    date: 2025-06-01
+    date: 2025-08-01
     external: true
 
   - title: Intempus
