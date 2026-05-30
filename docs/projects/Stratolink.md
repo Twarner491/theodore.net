@@ -11,11 +11,30 @@ hide:
 template: comments.html
 ---
 
-{.newthought}Several months ago{/.newthought}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="/assets/css/projects/stratolink.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" defer></script>
+<script src="/assets/js/stratolink.js" defer></script>
 
-https://calebkruse.com/ng
+
+{.newthought}Several months ago{/.newthought}, while standing at the Midjourney ice cream truck near the San Diego bay, [Caleb](https://calebkruse.com), a friend and old coworker of mine sold me on an idea. He wanted to track all the tagged birds in the world 
+
+[explain how tracking birds has workedthus far.]
 
 https://www.shepherdspacesystems.com/
+
+<center>
+  <br>
+  <div class="tweet-container">
+    <div class="tweet-item single">
+      <span class="lighttweet"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">The Midjourney ice cream truck has arrived - at Neurips 2025. Free ice cream, tote bags, and magazines for any researchers that come! Sensitive stomach and mind? Don&#39;t worry we got you with Vegan Midjourney flavors too. <a href="https://t.co/NMTUqVveCF">pic.twitter.com/NMTUqVveCF</a></p>&mdash; Midjourney (@midjourney) <a href="https://x.com/midjourney/status/1996318417859809321?ref_src=twsrc%5Etfw">December 3, 2025</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script> </span>
+      <span class="darktweet"><blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">The Midjourney ice cream truck has arrived - at Neurips 2025. Free ice cream, tote bags, and magazines for any researchers that come! Sensitive stomach and mind? Don&#39;t worry we got you with Vegan Midjourney flavors too. <a href="https://t.co/NMTUqVveCF">pic.twitter.com/NMTUqVveCF</a></p>&mdash; Midjourney (@midjourney) <a href="https://x.com/midjourney/status/1996318417859809321?ref_src=twsrc%5Etfw">December 3, 2025</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script> </span>
+    </div>
+  </div>
+  <br>
+</center>
+
+---
 
 <figure class="fullwidth">
 <img src="../../assets/images/Stratolink/kicadschematic.png" alt="">
@@ -126,25 +145,17 @@ https://www.shepherdspacesystems.com/
 
 </figure>
 
-
-
+<div class="embed-frame" style="--embed-height: 700px;">
+  <iframe
+    src="https://stratolink.org/dashboard-v2"
+    frameborder="0"
+    sandbox="allow-scripts allow-same-origin allow-forms"
+    tabindex="-1"
+  ></iframe>
+</div>
 
 <div class="figure-grid grid-3x1">
 <img src="../../assets/images/Stratolink/tahoestock.jpg" alt="">
 <img src="../../assets/images/Stratolink/tahoeroughingpass.jpg" alt="">
 <img src="../../assets/images/Stratolink/tahoefinishingpass.jpg" alt="">
 </div>
-
-
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<link rel="stylesheet" href="/assets/css/projects/stratolink.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" defer></script>
-<script src="/assets/js/stratolink.js" defer></script>
-
-<div class="embed-frame">
-  <div class="stratolink-widget" id="stratolink-widget"></div>
-</div>
-

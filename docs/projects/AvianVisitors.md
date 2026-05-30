@@ -76,6 +76,8 @@ ssh <your-username>@birdnet.local
 curl -s https://raw.githubusercontent.com/Twarner491/AvianVisitors/avian-visitors/newinstaller.sh | bash
 ```
 
+The installer assumes passwordless sudo (Raspberry Pi OS Lite default - if you've tightened it, run `sudo raspi-config` -> *System Options* -> restore the default first).
+
 This clones the fork, runs BirdNET-Pi's installer (audio capture, model, web UI, all the things), symlinks the AvianVisitors overlay into the Caddy web root, and reboots itself once everything's in place. The whole thing takes 20-40 minutes depending on your Pi model and Wi-Fi speed, and when the Pi comes back up, the collage lives at `http://birdnet.local/` with the stock BirdNET-Pi UI still reachable at `http://birdnet.local/index.php`. The menu drawer in the top right opens an admin overlay with native settings, system, log, and tool panels that hit a small JSON facade on the Pi, so you can tune the analyzer, watch services, and tail logs without leaving the collage.
 
 ??? example "Forward off your LAN (Optional)"
