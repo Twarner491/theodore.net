@@ -791,9 +791,23 @@
 <li>Hostname: <code>birdnet</code></li>
 <li>Enable SSH with password auth</li>
 </ul>
-<p>Plug the USB mic into the Pi and place it in a window or mount it outside. I stuck mine to the screen of a small window facing towards my balcony, keeping the Pi inside and away from the elements. Then boot! Once the Pi&rsquo;s up on your network, SSH in and run the installer:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ssh<span class="w"> </span>&lt;your-username&gt;@birdnet.local
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>https://raw.githubusercontent.com/Twarner491/AvianVisitors/avian-visitors/newinstaller.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+<p>Plug the USB mic into the Pi and place it in a window or mount it outside. I stuck mine to the screen of a small window facing towards my balcony, keeping the Pi inside and away from the elements. Then boot! </p>
+<details class="warning">
+<summary>If using a Raspberry Pi Zero 2 W</summary>
+<p>The RPi Zero 2 W has a few additional pre-reqs to handle low power wifi and low ram. Per the upstream <a href="https://github.com/mcguirepr89/BirdNET-Pi/wiki/RPi0W2-Installation-Guide">BirdNET-Pi RPi0W2 guide</a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>dphys-swapfile
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/CONF_SWAPSIZE=100/CONF_SWAPSIZE=2048/g&#39;</span><span class="w"> </span>/etc/dphys-swapfile
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/#CONF_MAXSWAP=2048/CONF_MAXSWAP=4096/g&#39;</span><span class="w"> </span>/etc/dphys-swapfile
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># wifi power-save defeats long-running connections; disable on every boot</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;/^exit 0/i sudo iw wlan0 set power_save off&#39;</span><span class="w"> </span>/etc/rc.local
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>sudo<span class="w"> </span>reboot
+</code></pre></div>
+</details>
+<p>Once the Pi&rsquo;s up on your network, SSH in and run the installer:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ssh<span class="w"> </span>&lt;your-username&gt;@birdnet.local
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>https://raw.githubusercontent.com/Twarner491/AvianVisitors/avian-visitors/newinstaller.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
 </code></pre></div>
 <p>The installer assumes passwordless sudo (Raspberry Pi OS Lite default - if you&rsquo;ve tightened it, run <code>sudo raspi-config</code> -&gt; <em>System Options</em> -&gt; restore the default first).</p>
 <p>This clones the fork, runs BirdNET-Pi&rsquo;s installer (audio capture, model, web UI, all the things), symlinks the AvianVisitors overlay into the Caddy web root, and reboots itself once everything&rsquo;s in place. The whole thing takes 20-40 minutes depending on your Pi model and Wi-Fi speed, and when the Pi comes back up, the collage lives at <code>http://birdnet.local/</code> with the stock BirdNET-Pi UI still reachable at <code>http://birdnet.local/index.php</code>. The menu drawer in the top right opens an admin overlay with native settings, system, log, and tool panels that hit a small JSON facade on the Pi, so you can tune the analyzer, watch services, and tail logs without leaving the collage.</p>
@@ -802,89 +816,89 @@
 <p>The default install keeps everything on your LAN, but <a href="https://github.com/Twarner491/AvianVisitors/tree/avian-visitors/avian/forwarding"><code>avian/forwarding/</code></a> has three potential alternatives:</p>
 <p><em>Cloudflare Tunnel</em></p>
 <p>This gives you a public HTTPS URL with no port forwarding and no exposed home IP, which is what I&rsquo;m using for <a href="https://bird.onethreenine.net">bird.onethreenine.net</a>. Needs a free Cloudflare account and ~5 minutes to set up. Start by installing <code>cloudflared</code> on the Pi:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>lsb-release
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://pkg.cloudflare.com/cloudflare-main.gpg<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/usr/share/keyrings/cloudflare-main.gpg<span class="w"> </span>&gt;/dev/null
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared </span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span><span class="s2"> main&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/cloudflared.list
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>cloudflared
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>lsb-release
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://pkg.cloudflare.com/cloudflare-main.gpg<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/usr/share/keyrings/cloudflare-main.gpg<span class="w"> </span>&gt;/dev/null
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared </span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span><span class="s2"> main&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/cloudflared.list
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>cloudflared
 </code></pre></div>
 <p>Then authenticate and create the tunnel, pointing it at a hostname on a domain you own:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>login
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>create<span class="w"> </span>birds
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>route<span class="w"> </span>dns<span class="w"> </span>birds<span class="w"> </span>birds.your-domain.com
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>login
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>create<span class="w"> </span>birds
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>route<span class="w"> </span>dns<span class="w"> </span>birds<span class="w"> </span>birds.your-domain.com
 </code></pre></div>
 <p>Drop the bundled config into place, point the <code>tunnel:</code> field at the UUID <code>cloudflared tunnel create</code> printed back, then install + start the service:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>~/BirdNET-Pi/avian/forwarding/cloudflared.yml<span class="w"> </span>/etc/cloudflared/config.yml
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/cloudflared/config.yml
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>sudo<span class="w"> </span>cloudflared<span class="w"> </span>service<span class="w"> </span>install
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>cloudflared
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>~/BirdNET-Pi/avian/forwarding/cloudflared.yml<span class="w"> </span>/etc/cloudflared/config.yml
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/cloudflared/config.yml
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>cloudflared<span class="w"> </span>service<span class="w"> </span>install
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>cloudflared
 </code></pre></div>
 <p>To add a password gate on the public URL, set up Cloudflare Access (free tier covers up to 50 users) and add a policy on the hostname. If you&rsquo;d rather use HTTP Basic auth via Caddy itself, the <a href="https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/forwarding/caddy-auth.caddy"><code>caddy-auth.caddy</code></a> snippet has a working example.</p>
 <p><em>Home Assistant REST sensor</em></p>
 <p>This surfaces the most-recent detection as <code>sensor.latest_bird</code> in Home Assistant, so you can wire it into automations (flash a light when a rare species is heard, push a notification, etc). Add to your <code>configuration.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">rest</span><span class="p">:</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://birdnet.local/avian/api/birdnet-api.php?action=recent&amp;hours=1</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">scan_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">sensor</span><span class="p">:</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Latest</span><span class="nv"> </span><span class="s">Bird&quot;</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">value_template</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">value_json.species[0].com</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">value_json.species</span><span class="nv"> </span><span class="s">else</span><span class="nv"> </span><span class="s">&#39;none&#39;</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">json_attributes_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$.species[0]&quot;</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="nt">json_attributes</span><span class="p">:</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sci</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">n</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">last_seen</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">best_conf</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">rest</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://birdnet.local/avian/api/birdnet-api.php?action=recent&amp;hours=1</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">scan_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">sensor</span><span class="p">:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Latest</span><span class="nv"> </span><span class="s">Bird&quot;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="nt">value_template</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">value_json.species[0].com</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">value_json.species</span><span class="nv"> </span><span class="s">else</span><span class="nv"> </span><span class="s">&#39;none&#39;</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="nt">json_attributes_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$.species[0]&quot;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="nt">json_attributes</span><span class="p">:</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sci</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">n</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">last_seen</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">best_conf</span>
 </code></pre></div>
 <p>The <code>recent</code> endpoint already returns species ordered by count descending, so <code>species[0]</code> gives you the most-frequent bird in the last hour. If you&rsquo;d rather sort by <code>last_seen</code>, swap the <code>value_template</code> accordingly.</p>
 <p><em>MQTT bridge</em></p>
 <p>The MQTT bridge polls the recent-detections endpoint once a minute and publishes new species under <code>birdnet/&lt;slug&gt;</code> as JSON, which is useful if you want detections flowing through your existing MQTT broker into other services. Install paho-mqtt, copy the bridge script + service file, and enable:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>pip3<span class="w"> </span>install<span class="w"> </span>paho-mqtt<span class="w"> </span>--break-system-packages
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>cp<span class="w"> </span>~/BirdNET-Pi/avian/forwarding/mqtt-bridge.py<span class="w"> </span>~/avian-mqtt.py
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>nano<span class="w"> </span>~/avian-mqtt.py<span class="w">    </span><span class="c1"># set broker host, topic prefix, credentials</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>sudo<span class="w"> </span>cp<span class="w"> </span>~/BirdNET-Pi/avian/forwarding/avian-mqtt.service<span class="w"> </span>/etc/systemd/system/
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/systemd/system/avian-mqtt.service<span class="w">   </span><span class="c1"># set User= if not &#39;birdnet&#39;</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>avian-mqtt
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>pip3<span class="w"> </span>install<span class="w"> </span>paho-mqtt<span class="w"> </span>--break-system-packages
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>cp<span class="w"> </span>~/BirdNET-Pi/avian/forwarding/mqtt-bridge.py<span class="w"> </span>~/avian-mqtt.py
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>nano<span class="w"> </span>~/avian-mqtt.py<span class="w">    </span><span class="c1"># set broker host, topic prefix, credentials</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>sudo<span class="w"> </span>cp<span class="w"> </span>~/BirdNET-Pi/avian/forwarding/avian-mqtt.service<span class="w"> </span>/etc/systemd/system/
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/systemd/system/avian-mqtt.service<span class="w">   </span><span class="c1"># set User= if not &#39;birdnet&#39;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>avian-mqtt
 </code></pre></div>
 <p>Dedup is in-memory only, so the bridge re-publishes the last hour of detections every time the service restarts. Downstream consumers should be idempotent.</p>
 </details>
 <h4 id="illustrations-collage">Illustrations + Collage<a class="headerlink" href="#illustrations-collage" title="Permanent link">&para;</a></h4>
 <p>The collage ships with 450 bundled illustrations of the most common North American species, generated via Gemini&rsquo;s <a href="https://ai.google.dev/gemini-api/docs/image-generation"><code>gemini-2.5-flash-image</code></a> model. Each species gets two poses: perched <img src="https://bird.onethreenine.net/api/img?sci=Corvus%20brachyrhynchos&com=American%20Crow" alt="perched American Crow" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;"> and in-flight <img src="https://bird.onethreenine.net/api/sketch?sci=Corvus%20brachyrhynchos&pose=2&com=American%20Crow" alt="American Crow in flight" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;">. The prompt template lives at <a href="https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/prompt.template.md"><code>avian/scripts/prompt.template.md</code></a>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Generate a {pose} {com_name} ({sci_name}) in the style of an
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Edo-period Japanese kachō-e woodblock print. Confident sumi-e ink
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>linework with soft watercolor washes. Earthy, restrained palette:
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>burnt umber, ochre, indigo, vermillion, muted greens. Plumage
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>details rendered with short directional brush strokes; eye, beak,
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>and feet drawn with crisp ink. The bird is the only subject.
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>NO background, NO branch unless the pose requires it (a single
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>sparse twig is fine for perched), NO border or frame, NO text or
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>signature.
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>Anatomy must be biologically accurate for the named species:
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>- Exactly two wings. Two legs. One head. One beak. One tail.
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>- Posture, color, markings, and body proportions matching
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>  {com_name} field-guide references.
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>- For perched poses: one wing folded against the body, the other
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>  tucked behind. For flight: both wings extended in a natural
-<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>  flapping position.
-<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>
-<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>Render at high resolution on a fully transparent background. Cut
-<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>the bird out cleanly. No shadow, no paper texture, no caption.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Generate a {pose} {com_name} ({sci_name}) in the style of an
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Edo-period Japanese kachō-e woodblock print. Confident sumi-e ink
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>linework with soft watercolor washes. Earthy, restrained palette:
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>burnt umber, ochre, indigo, vermillion, muted greens. Plumage
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>details rendered with short directional brush strokes; eye, beak,
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>and feet drawn with crisp ink. The bird is the only subject.
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>NO background, NO branch unless the pose requires it (a single
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>sparse twig is fine for perched), NO border or frame, NO text or
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>signature.
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>Anatomy must be biologically accurate for the named species:
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>- Exactly two wings. Two legs. One head. One beak. One tail.
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>- Posture, color, markings, and body proportions matching
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>  {com_name} field-guide references.
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>- For perched poses: one wing folded against the body, the other
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>  tucked behind. For flight: both wings extended in a natural
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>  flapping position.
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>Render at high resolution on a fully transparent background. Cut
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>the bird out cleanly. No shadow, no paper texture, no caption.
 </code></pre></div>
 <p>Three template variables get substituted per request: scientific name, common name, pose. Restyling the whole image set is a matter of editing this file and re-running the pre-gen script with <code>--force</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">GEMINI_API_KEY</span><span class="o">=</span><span class="s1">&#39;your-key&#39;</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Re-render every species in BirdNET-Pi&#39;s model:</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>python3<span class="w"> </span>~/BirdNET-Pi/avian/scripts/pregen.py<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span>--labels<span class="w"> </span>~/BirdNET-Pi/model/labels.txt<span class="w"> </span>--force
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Or filter to species observed in your eBird region:</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EBIRD_API_KEY</span><span class="o">=</span><span class="s1">&#39;your-key&#39;</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>python3<span class="w"> </span>~/BirdNET-Pi/avian/scripts/pregen.py<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span>--labels<span class="w"> </span>~/BirdNET-Pi/model/labels.txt<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span>--ebird-region<span class="w"> </span>US-CA
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">GEMINI_API_KEY</span><span class="o">=</span><span class="s1">&#39;your-key&#39;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># Re-render every species in BirdNET-Pi&#39;s model:</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>python3<span class="w"> </span>~/BirdNET-Pi/avian/scripts/pregen.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span>--labels<span class="w"> </span>~/BirdNET-Pi/model/labels.txt<span class="w"> </span>--force
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Or filter to species observed in your eBird region:</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EBIRD_API_KEY</span><span class="o">=</span><span class="s1">&#39;your-key&#39;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>python3<span class="w"> </span>~/BirdNET-Pi/avian/scripts/pregen.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span>--labels<span class="w"> </span>~/BirdNET-Pi/model/labels.txt<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span>--ebird-region<span class="w"> </span>US-CA
 </code></pre></div>
 <p>When you pass <code>--ebird-region</code>, the pre-gen script intersects BirdNET&rsquo;s full species list with whatever eBird reports as observed in that region,<input type="checkbox" id="mn-1" class="margin-toggle"/><label for="mn-1" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">eBird region codes are <code>&lt;country&gt;-&lt;state&gt;</code> (e.g. <code>US-CA</code>) for state-level filtering, or <code>&lt;country&gt;-&lt;state&gt;-&lt;county&gt;</code> (e.g. <code>US-CA-085</code> for Santa Clara County) for tighter filtering.</span> which cuts the render count from ~3000 species globally down to whatever&rsquo;s actually flying past your place.</p>
 <p>It&rsquo;s worth flagging that Gemini hallucinates anatomy here with non-trivial frequency, so the repo ships the post-audit image set with extra wings, disembodied feet, and training-image watermarks already removed.<input type="checkbox" id="mn-2" class="margin-toggle"/><label for="mn-2" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">The audit pass that produced the current bundled set caught ~3% anatomical defects on perched poses and ~5% on flight poses. Flight poses are harder because Gemini&rsquo;s strong prior for &ldquo;wings spread&rdquo; reads any feather mass near the body as a candidate wing, so the same chickadee can take five or six regen attempts before producing a clean output.</span></p>
