@@ -69,7 +69,23 @@ Flash the SD card with [Raspberry Pi Imager](https://www.raspberrypi.com/softwar
 - Hostname: `birdnet`
 - Enable SSH with password auth
 
-Plug the USB mic into the Pi and place it in a window or mount it outside. I stuck mine to the screen of a small window facing towards my balcony, keeping the Pi inside and away from the elements. Then boot! Once the Pi's up on your network, SSH in and run the installer:
+Plug the USB mic into the Pi and place it in a window or mount it outside. I stuck mine to the screen of a small window facing towards my balcony, keeping the Pi inside and away from the elements. Then boot! 
+
+??? warning "If using a Raspberry Pi Zero 2 W"
+    The RPi Zero 2 W has a few additional pre-reqs to handle low power wifi and low ram. Per the upstream [BirdNET-Pi RPi0W2 guide](https://github.com/mcguirepr89/BirdNET-Pi/wiki/RPi0W2-Installation-Guide):
+
+    ```bash
+    sudo apt update
+    sudo apt install dphys-swapfile
+    sudo sed -i 's/CONF_SWAPSIZE=100/CONF_SWAPSIZE=2048/g' /etc/dphys-swapfile
+    sudo sed -i 's/#CONF_MAXSWAP=2048/CONF_MAXSWAP=4096/g' /etc/dphys-swapfile
+
+    # wifi power-save defeats long-running connections; disable on every boot
+    sudo sed -i '/^exit 0/i sudo iw wlan0 set power_save off' /etc/rc.local
+    sudo reboot
+    ```
+
+Once the Pi's up on your network, SSH in and run the installer:
 
 ```bash
 ssh <your-username>@birdnet.local
