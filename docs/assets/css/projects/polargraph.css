@@ -29,6 +29,12 @@
 .pg-pen-holder { fill: var(--md-default-bg-color); stroke: var(--md-default-fg-color); }
 .pg-pen-tip { fill: var(--md-default-fg-color); stroke: var(--md-default-fg-color); }
 
+/* --- bipolar (polar) coordinate overlay --- */
+.pg-grid { stroke: var(--md-default-fg-color); stroke-opacity: 0.13; stroke-width: 1; fill: none; }
+.pg-arc { stroke: var(--md-default-fg-color); stroke-opacity: 0.5; stroke-width: 2; fill: none; }
+.pg-radius-label { fill: var(--md-default-fg-color); fill-opacity: 0.85; font-family: "Crimson Pro", Georgia, serif; }
+.pg-pole-label { fill: var(--md-default-fg-color); fill-opacity: 0.5; font-family: "Crimson Pro", Georgia, serif; }
+
 .plot-carousel-container {
   width: 100%;
   overflow: visible;
