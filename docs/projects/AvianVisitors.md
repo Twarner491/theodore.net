@@ -171,30 +171,25 @@ This clones the fork, runs BirdNET-Pi's installer (audio capture, model, web UI,
 
 #### Illustrations + Collage
 
-The collage ships with 450 bundled illustrations of the most common North American species, generated via Gemini's [`gemini-2.5-flash-image`](https://ai.google.dev/gemini-api/docs/image-generation) model. Each species gets two poses: perched <img src="https://bird.onethreenine.net/api/img?sci=Corvus%20brachyrhynchos&com=American%20Crow" alt="perched American Crow" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;"> and in-flight <img src="https://bird.onethreenine.net/api/sketch?sci=Corvus%20brachyrhynchos&pose=2&com=American%20Crow" alt="American Crow in flight" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;">. The prompt template lives at [`avian/scripts/prompt.template.md`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/prompt.template.md):
+The collage ships with 450 bundled illustrations of the most common North American species, generated via Gemini's [`gemini-2.5-flash-image`](https://ai.google.dev/gemini-api/docs/image-generation) model. Each species gets two poses: perched <img src="https://bird.onethreenine.net/avian/api/cutout.php?sci=Corvus%20brachyrhynchos&com=American%20Crow" alt="perched American Crow" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;"> and in-flight <img src="https://bird.onethreenine.net/avian/api/cutout.php?sci=Corvus%20brachyrhynchos&com=American%20Crow&pose=2" alt="American Crow in flight" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;">. The prompt template lives at [`avian/scripts/prompt.template.md`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/prompt.template.md):
 
 ```
 Generate a {pose} {com_name} ({sci_name}) in the style of an
-Edo-period Japanese kachō-e woodblock print. Confident sumi-e ink
-linework with soft watercolor washes. Earthy, restrained palette:
-burnt umber, ochre, indigo, vermillion, muted greens. Plumage
-details rendered with short directional brush strokes; eye, beak,
-and feet drawn with crisp ink. The bird is the only subject.
-NO background, NO branch unless the pose requires it (a single
-sparse twig is fine for perched), NO border or frame, NO text or
-signature.
+Edo-period Japanese kachō-e woodblock print. Render with VERY FEW
+MARKS: the body is 2-4 flat color zones with sharp boundaries, not
+feather-by-feather texture. Confident sumi-e ink linework, soft
+watercolor washes. Earthy palette: burnt umber, ochre, indigo,
+vermillion, muted greens. Eye, beak, and feet in crisp ink.
 
-Anatomy must be biologically accurate for the named species:
+The bird sits on a CONSISTENT WARM CREAM ground (aged mulberry
+paper), filling the frame, identical across every print. This is
+the only background: NO branch, NO twig, NO perch, NO scenery. The
+perch is implied by toe posture, never drawn.
 
-- Exactly two wings. Two legs. One head. One beak. One tail.
-- Posture, color, markings, and body proportions matching
-  {com_name} field-guide references.
-- For perched poses: one wing folded against the body, the other
-  tucked behind. For flight: both wings extended in a natural
-  flapping position.
-
-Render at high resolution on a fully transparent background. Cut
-the bird out cleanly. No shadow, no paper texture, no caption.
+- Exactly two wings, two legs, one head, one beak, one tail.
+- Posture, color, and markings match {com_name} field references.
+- Perched: one wing folded, the other tucked. Flight: both wings
+  fully extended.
 ```
 
 Three template variables get substituted per request: scientific name, common name, pose. Restyling the whole image set is a matter of editing this file and re-running the pre-gen script with `--force`.
@@ -202,15 +197,15 @@ Three template variables get substituted per request: scientific name, common na
 ```bash
 export GEMINI_API_KEY='your-key'
 
-# Re-render every species in BirdNET-Pi's model:
+# render every species on a cream ground
 python3 ~/BirdNET-Pi/avian/scripts/pregen.py \
   --labels ~/BirdNET-Pi/model/labels.txt --force
 
-# Or filter to species observed in your eBird region:
-export EBIRD_API_KEY='your-key'
-python3 ~/BirdNET-Pi/avian/scripts/pregen.py \
-  --labels ~/BirdNET-Pi/model/labels.txt \
-  --ebird-region US-CA
+# strip the ground (BiRefNet) and crop to the bird
+python3 ~/BirdNET-Pi/avian/scripts/cutout.py
+
+# rebuild the collage silhouette masks
+python3 ~/BirdNET-Pi/avian/scripts/build_masks.py
 ```
 
 When you pass `--ebird-region`, the pre-gen script intersects BirdNET's full species list with whatever eBird reports as observed in that region,{.marginnote}eBird region codes are `<country>-<state>` (e.g. `US-CA`) for state-level filtering, or `<country>-<state>-<county>` (e.g. `US-CA-085` for Santa Clara County) for tighter filtering.{/.marginnote} which cuts the render count from ~3000 species globally down to whatever's actually flying past your place.
@@ -223,7 +218,9 @@ It's worth flagging that Gemini hallucinates anatomy here with non-trivial frequ
 
 </figure>
 
-Each species ships with a binary alpha mask{.marginnote}Generated offline by downsampling the illustration to ~93px wide, thresholding the alpha channel, and packing the result into a base64-encoded bit-array. Full mask registry at [`avian/frontend/masks.json`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/frontend/masks.json), ~280KB for 249 species.{/.marginnote} that encodes the bird's silhouette. The frontend uses these masks for two things: tile-packing (so bounding boxes can overlap as long as the silhouettes don't), and hover hit-testing (so the right bird highlights when you mouse over a region where two tiles' bounding boxes overlap).
+Each species ships with a binary alpha mask{.marginnote}Generated offline by downsampling the illustration to ~93px wide, thresholding the alpha channel, and packing the result into a base64-encoded bit-array. The masks are inlined directly in [`avian/frontend/apt.js`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/frontend/apt.js) 498 of them, 249 species × 2 poses, ~590KB, built by [`avian/scripts/build_masks.py`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/build_masks.py).{/.marginnote} that encodes the bird's silhouette. The frontend uses these masks for two things: tile-packing (so bounding boxes can overlap as long as the silhouettes don't), and hover hit-testing (so the right bird highlights when you mouse over a region where two tiles' bounding boxes overlap).
+
+
 
 The packing algorithm itself is a center-out spiral: tiles get sorted by area descending, the largest is placed at the center of mass, and each subsequent tile spirals outward from the center until finding a position where its mask doesn't intersect any already-placed mask. The cost function biases horizontally to produce wider, more landscape-friendly clusters:
 
