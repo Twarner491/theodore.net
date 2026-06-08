@@ -864,48 +864,43 @@
 <p>Dedup is in-memory only, so the bridge re-publishes the last hour of detections every time the service restarts. Downstream consumers should be idempotent.</p>
 </details>
 <h4 id="illustrations-collage">Illustrations + Collage<a class="headerlink" href="#illustrations-collage" title="Permanent link">&para;</a></h4>
-<p>The collage ships with 450 bundled illustrations of the most common North American species, generated via Gemini&rsquo;s <a href="https://ai.google.dev/gemini-api/docs/image-generation"><code>gemini-2.5-flash-image</code></a> model. Each species gets two poses: perched <img src="https://bird.onethreenine.net/api/img?sci=Corvus%20brachyrhynchos&com=American%20Crow" alt="perched American Crow" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;"> and in-flight <img src="https://bird.onethreenine.net/api/sketch?sci=Corvus%20brachyrhynchos&pose=2&com=American%20Crow" alt="American Crow in flight" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;">. The prompt template lives at <a href="https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/prompt.template.md"><code>avian/scripts/prompt.template.md</code></a>:</p>
+<p>The collage ships with 450 bundled illustrations of the most common North American species, generated via Gemini&rsquo;s <a href="https://ai.google.dev/gemini-api/docs/image-generation"><code>gemini-2.5-flash-image</code></a> model. Each species gets two poses: perched <img src="https://bird.onethreenine.net/avian/api/cutout.php?sci=Corvus%20brachyrhynchos&com=American%20Crow" alt="perched American Crow" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;"> and in-flight <img src="https://bird.onethreenine.net/avian/api/cutout.php?sci=Corvus%20brachyrhynchos&com=American%20Crow&pose=2" alt="American Crow in flight" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;">. The prompt template lives at <a href="https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/prompt.template.md"><code>avian/scripts/prompt.template.md</code></a>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Generate a {pose} {com_name} ({sci_name}) in the style of an
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Edo-period Japanese kachō-e woodblock print. Confident sumi-e ink
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>linework with soft watercolor washes. Earthy, restrained palette:
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>burnt umber, ochre, indigo, vermillion, muted greens. Plumage
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>details rendered with short directional brush strokes; eye, beak,
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>and feet drawn with crisp ink. The bird is the only subject.
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>NO background, NO branch unless the pose requires it (a single
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>sparse twig is fine for perched), NO border or frame, NO text or
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>signature.
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>Anatomy must be biologically accurate for the named species:
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Edo-period Japanese kachō-e woodblock print. Render with VERY FEW
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>MARKS: the body is 2-4 flat color zones with sharp boundaries, not
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>feather-by-feather texture. Confident sumi-e ink linework, soft
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>watercolor washes. Earthy palette: burnt umber, ochre, indigo,
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>vermillion, muted greens. Eye, beak, and feet in crisp ink.
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>The bird sits on a CONSISTENT WARM CREAM ground (aged mulberry
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>paper), filling the frame, identical across every print. This is
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>the only background: NO branch, NO twig, NO perch, NO scenery. The
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>perch is implied by toe posture, never drawn.
 <a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>- Exactly two wings. Two legs. One head. One beak. One tail.
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>- Posture, color, markings, and body proportions matching
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>  {com_name} field-guide references.
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>- For perched poses: one wing folded against the body, the other
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>  tucked behind. For flight: both wings extended in a natural
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>  flapping position.
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>Render at high resolution on a fully transparent background. Cut
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>the bird out cleanly. No shadow, no paper texture, no caption.
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>- Exactly two wings, two legs, one head, one beak, one tail.
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>- Posture, color, and markings match {com_name} field references.
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>- Perched: one wing folded, the other tucked. Flight: both wings
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>  fully extended.
 </code></pre></div>
 <p>Three template variables get substituted per request: scientific name, common name, pose. Restyling the whole image set is a matter of editing this file and re-running the pre-gen script with <code>--force</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">GEMINI_API_KEY</span><span class="o">=</span><span class="s1">&#39;your-key&#39;</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># Re-render every species in BirdNET-Pi&#39;s model:</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># render every species on a cream ground</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>python3<span class="w"> </span>~/BirdNET-Pi/avian/scripts/pregen.py<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span>--labels<span class="w"> </span>~/BirdNET-Pi/model/labels.txt<span class="w"> </span>--force
 <a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Or filter to species observed in your eBird region:</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EBIRD_API_KEY</span><span class="o">=</span><span class="s1">&#39;your-key&#39;</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>python3<span class="w"> </span>~/BirdNET-Pi/avian/scripts/pregen.py<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span>--labels<span class="w"> </span>~/BirdNET-Pi/model/labels.txt<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span>--ebird-region<span class="w"> </span>US-CA
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># strip the ground (BiRefNet) and crop to the bird</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>python3<span class="w"> </span>~/BirdNET-Pi/avian/scripts/cutout.py
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># rebuild the collage silhouette masks</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>python3<span class="w"> </span>~/BirdNET-Pi/avian/scripts/build_masks.py
 </code></pre></div>
 <p>When you pass <code>--ebird-region</code>, the pre-gen script intersects BirdNET&rsquo;s full species list with whatever eBird reports as observed in that region,<input type="checkbox" id="mn-1" class="margin-toggle"/><label for="mn-1" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">eBird region codes are <code>&lt;country&gt;-&lt;state&gt;</code> (e.g. <code>US-CA</code>) for state-level filtering, or <code>&lt;country&gt;-&lt;state&gt;-&lt;county&gt;</code> (e.g. <code>US-CA-085</code> for Santa Clara County) for tighter filtering.</span> which cuts the render count from ~3000 species globally down to whatever&rsquo;s actually flying past your place.</p>
 <p>It&rsquo;s worth flagging that Gemini hallucinates anatomy here with non-trivial frequency, so the repo ships the post-audit image set with extra wings, disembodied feet, and training-image watermarks already removed.<input type="checkbox" id="mn-2" class="margin-toggle"/><label for="mn-2" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">The audit pass that produced the current bundled set caught ~3% anatomical defects on perched poses and ~5% on flight poses. Flight poses are harder because Gemini&rsquo;s strong prior for &ldquo;wings spread&rdquo; reads any feather mass near the body as a candidate wing, so the same chickadee can take five or six regen attempts before producing a clean output.</span></p>
 <figure>
 <p><img alt="" src="../../assets/images/AvianVisitors/collage.png" /></p>
 </figure>
-<p>Each species ships with a binary alpha mask<input type="checkbox" id="mn-3" class="margin-toggle"/><label for="mn-3" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Generated offline by downsampling the illustration to ~93px wide, thresholding the alpha channel, and packing the result into a base64-encoded bit-array. Full mask registry at <a href="https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/frontend/masks.json"><code>avian/frontend/masks.json</code></a>, ~280KB for 249 species.</span> that encodes the bird&rsquo;s silhouette. The frontend uses these masks for two things: tile-packing (so bounding boxes can overlap as long as the silhouettes don&rsquo;t), and hover hit-testing (so the right bird highlights when you mouse over a region where two tiles&rsquo; bounding boxes overlap).</p>
+<p>Each species ships with a binary alpha mask<input type="checkbox" id="mn-3" class="margin-toggle"/><label for="mn-3" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Generated offline by downsampling the illustration to ~93px wide, thresholding the alpha channel, and packing the result into a base64-encoded bit-array. The masks are inlined directly in <a href="https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/frontend/apt.js"><code>avian/frontend/apt.js</code></a> 498 of them, 249 species × 2 poses, ~590KB, built by <a href="https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/build_masks.py"><code>avian/scripts/build_masks.py</code></a>.</span> that encodes the bird&rsquo;s silhouette. The frontend uses these masks for two things: tile-packing (so bounding boxes can overlap as long as the silhouettes don&rsquo;t), and hover hit-testing (so the right bird highlights when you mouse over a region where two tiles&rsquo; bounding boxes overlap).</p>
 <p>The packing algorithm itself is a center-out spiral: tiles get sorted by area descending, the largest is placed at the center of mass, and each subsequent tile spirals outward from the center until finding a position where its mask doesn&rsquo;t intersect any already-placed mask. The cost function biases horizontally to produce wider, more landscape-friendly clusters:</p>
 <div class="arithmatex">\[\text{cost}(x, y) = \sqrt{\left(\frac{\Delta x}{b}\right)^2 + \Delta y^2}\]</div>
 <p>where <span class="arithmatex">\(b = 2.1\)</span> is the ellipse aspect bias.</p>
