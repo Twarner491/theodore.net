@@ -1,12 +1,12 @@
 # Teddy Warner
 
-> Thiel Fellow and founder of Intempus, building emotionally intelligent robots. Engineer specializing in rapid prototyping and applied AI, based in San Francisco.
+> Thiel Fellow and founder of Intempus, building machines for conviviality. Engineer specializing in rapid prototyping and PCB design, based in San Francisco.
 
-Teddy Warner is the CEO and Founder of Intempus, a company developing expressive, emotionally intelligent robots. He is a 2025 Thiel Fellow and a graduate of the Fab Academy.
+Teddy Warner is the Founder and CEO of Intempus, a company researching the ways machines may interact with the world. He is a 2025 Thiel Fellow and a graduate of the Fab Academy.
 
 Previously, Teddy worked at Midjourney conducting research for their internal hardware effort. His expertise spans mechatronics engineering, PCB development, CAD design, physical computing, and rapid prototyping.
 
-His technical work includes the Von Niemann Probe (a chess cheating investigation device), Assistive Aquaponics (automated ecosystem monitoring), UPDI Serial Programers, and other fun, more whimsical projects. He writes essays exploring technology, robotics adoption, and philosophy.
+His technical work includes Stratolink (an upper atmospheric pico balloon fleet), the Generative Pen-Trained Transformer (a web accessible, wall-mounted polargraph pen plotter), the Assistive Aquaponics fish tank (Automated aquaponics ecosystem monitoring system for the home), UPDI Serial Programers, and many other fun, more whimsical projects. He writes essays exploring philosophy, social science, art, and the way to live.
 
 ## Key Facts
 - Role: CEO & Founder of Intempus
@@ -20,8 +20,7 @@ His technical work includes the Von Niemann Probe (a chess cheating investigatio
 - [theodore.net](https://theodore.net): Portfolio, projects, and writings
 - [Intempus](https://intempus.org): Company building emotionally intelligent robots
 - [Projects](https://theodore.net/projects): Engineering and fabrication work
-- [Writing](https://theodore.net/writings): Essays on technology and philosophy
-- [Books](https://theodore.net/books): Reading list and recommendations
+- [Writing](https://theodore.net/writings): Essays on philosophy, social science, and the way to live
 
 ## Contact
 - [X/Twitter](https://x.com/WarnerTeddy): @WarnerTeddy
@@ -30,7 +29,7 @@ His technical work includes the Von Niemann Probe (a chess cheating investigatio
 - Email: teddy [at] warner [dot] net
 
 ## Notable Projects
-- [Intempus Research](https://intempus.org/research): Expressive robotics research
+- [Generative Pen-Trained Transformer](https://theodore.net/projects/Polargraph/): a web accessible, wall-mounted polargraph pen plotter
 - [Von Niemann Probe](https://theodore.net/projects/VonNiemannProbe): Chess cheating investigation device
 - [Assistive Aquaponics](https://theodore.net/projects/AssistiveAquaponics): Automated ecosystem monitoring system
 - [UPDI Serial Programming](https://theodore.net/projects/SerialUPDI): Low-cost, high-speed AVR programming
