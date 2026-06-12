@@ -58,7 +58,7 @@ template: comments.html
 
 I wanted some means of capturing all of these quotes for later reference. Or to keep as nice souvenirs of thought.
 
-My roommate and I have been going all in on the apartment projects (AIPhone, Cathode Ray Doorbell, StairGuitar™, etc. - I'll do write-ups on some of these at some point in the future), and I figured to stay in the same vein that my weekend project should attempt to solve my quote attribution problem. I also happened to have an [80mm Thermal Receipt Printer](https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share) lying around from another project I never got around to finishing.
+My roommate and I have been going all in on the apartment projects (AIPhone, Cathode Ray Doorbell, StairGuitar™, etc. - I'll do write-ups on some of these at some point in the future), and I figured to stay in the same vein that my weekend project should attempt to solve my quote attribution problem. I also happened to have an [80mm Thermal Receipt Printer](https://amzn.to/4e7upZx) lying around from another project I never got around to finishing.
 
 And boom, I now knew how I would be spending my Saturday morning.
 
@@ -221,7 +221,7 @@ To get our RPI app up and running with the printer, we need to set some permissi
   sudo reboot
   ```
 
-... and then we can test! Just be sure the printer is plugged into power, 80mm Thermal paper is loaded (I used [MPRT 5 Rolls 3-1/8" x 230](https://www.amazon.com/dp/B0D14DYMHQ?ref=ppx_pop_mob_ap_share)), and the printer is wired to the RPI via USB.
+... and then we can test! Just be sure the printer is plugged into power, 80mm Thermal paper is loaded (I used [MPRT 5 Rolls 3-1/8" x 230](https://amzn.to/4xJaPuD)), and the printer is wired to the RPI via USB.
 
   ```bash
   ssh pi@receipt.local
@@ -371,7 +371,7 @@ A pixel forced to white thus leaves its darkness behind as a debt the next pixel
 
 #### Printer Hacking
 
-What fun is a whimsical apartment project if it doesn't look inconspicuous! To start, I removed the bottom of my [miemieyo Thermal Receipt Printer](https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share) to get a better sense of the space we have to work with by removing the two screws under the printer, as well as the two within the paper tray.
+What fun is a whimsical apartment project if it doesn't look inconspicuous! To start, I removed the bottom of my [miemieyo Thermal Receipt Printer](https://amzn.to/4e7upZx) to get a better sense of the space we have to work with by removing the two screws under the printer, as well as the two within the paper tray.
 
 <figure markdown="1">
 
@@ -379,7 +379,7 @@ What fun is a whimsical apartment project if it doesn't look inconspicuous! To s
 
 </figure>
 
-Unsurprisingly the internals of this receipt printer hardly fill the printer cavity, so retrofitting with our updated internals should be no problem at all. While the base piece that came on the machine has a suprisingly perfect cut out to fit a Raspberry Pi (almost like they were asking for this quote printer to be built), I opted to redesign the base of the printer entirly to allow for proper mounting of the stock printer mainboard, as well as the Raspberry Pi 5 and the [LM2596 Buck Converter](https://www.amazon.com/dp/B0DBVYP91F?ref=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&ref_=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&social_share=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&titleSource=true&th=1) I'm using to power it.
+Unsurprisingly the internals of this receipt printer hardly fill the printer cavity, so retrofitting with our updated internals should be no problem at all. While the base piece that came on the machine has a suprisingly perfect cut out to fit a Raspberry Pi (almost like they were asking for this quote printer to be built), I opted to redesign the base of the printer entirly to allow for proper mounting of the stock printer mainboard, as well as the Raspberry Pi 5 and the [LM2596 Buck Converter](https://amzn.to/4gfCFIj) I'm using to power it.
 
 <center>
 
@@ -444,10 +444,10 @@ Building a quote receipt printer of your own is easy enough. The full project re
 
 | Qty | Description | Price | Link | Notes |
 |-----|-------------|-------|------|-------|
-| 1 | Thermal Receipt Printer 80mm | $65.99 | [Link](https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share) | miemieyo |
-| 1 | Thermal Paper 3-1/8" x 230' | $15.99 | [Link](https://www.amazon.com/dp/B0D14DYMHQ?ref=ppx_pop_mob_ap_share) | MPRT, 5 rolls |
-| 1 | LM2596 Buck Converter | $7.99 | [Link](https://www.amazon.com/dp/B0DBVYP91F) | |
-| 1 | Raspberry Pi 5 | $79.95 | [Link](https://www.raspberrypi.com/products/raspberry-pi-5/) | Any Pi model works |
+| 1 | Thermal Receipt Printer 80mm | $65.99 | [Link](https://amzn.to/4fNSki5) | miemieyo |
+| 1 | Thermal Paper 3-1/8" x 230' | $15.99 | [Link](https://amzn.to/3PZK9EV) | MPRT, 5 rolls |
+| 1 | LM2596 Buck Converter | $7.99 | [Link](https://amzn.to/4gfCFIj) | |
+| 1 | Raspberry Pi 5 | $79.95 | [Link](https://amzn.to/4vGwlhy) | Any Pi model works |
 | - | Spare Wire | - | - | |
 | ∞ | Friends that say silly things | Free | [Link](https://apps.apple.com/us/app/find-my-friends/id466122094) | |
 | | **Total** | **~$169.92** | | |
