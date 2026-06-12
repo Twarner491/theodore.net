@@ -299,8 +299,8 @@ The nesting of the two highest pinout parts on the board's topside inspired my n
 | x1 | 1uf SMD Cap | $0.10 | [link](https://www.digikey.com/en/products/detail/12063C105KAT2A/478-1567-1-ND/564599?utm_campaign=buynow&utm_medium=aggregator&curr=usd&utm_source=octopart) |
 | x1 | DX07S016JA1R1500 | $1.59 | [link](https://www.digikey.com/en/products/detail/DX07S016JA1R1500/670-DX07S016JA1R1500CT-ND/11586676?utm_campaign=buynow&utm_medium=aggregator&curr=usd&utm_source=octopart) |
 | x1 | FT232RL | $4.19 | [link](https://uk.rs-online.com/web/p/multiprotocol-transceivers/0406580?cm_mmc=aff2-_-uk-_-octopart-_-Instock406580) |
-| x11 | Header Pins | $0.14 | [link](https://www.amazon.com/MCIGICM-Header-2-45mm-Arduino-Connector/dp/B07PKKY8BX/ref=sr_1_5?keywords=male+headers&qid=1639060454&sr=8-5) |
-| x1 | Copper PCB Blank | $0.70 | [link](https://www.amazon.com/MCIGICM-Copper-Laminate-Circuit-Single/dp/B01MCVLDDZ/ref=sr_1_1?keywords=copper+pcb+blank&qid=1639060805&sr=8-1) |
+| x11 | Header Pins | $0.14 | [link](https://amzn.to/4vbKyTY) |
+| x1 | Copper PCB Blank | $0.70 | [link](https://amzn.to/3SEqr24) |
 | | **Total** | **$8.99** | |
 
 </div>
@@ -342,8 +342,8 @@ I was compelled to expand on the original shape of an FTDI serial adapter for th
 | x1 | SMD DPDT Switch | $1.50 | [link](https://www.sparkfun.com/products/597) |
 | x1 | CDBM1100-G | $0.39 | [link](https://www.digikey.com/en/products/detail/CDBM1100-G/641-1331-1-ND/2021252?utm_campaign=buynow&utm_medium=aggregator&curr=usd&utm_source=octopart) |
 | x1 | 470 ohm SMD Resistor | $0.10 | [link](https://www.digikey.com/en/products/detail/CRCW1206470RFKEA/541-470FCT-ND/1181722?utm_campaign=buynow&utm_medium=aggregator&curr=usd&utm_source=octopart) |
-| x11 | Header Pins | $0.14 | [link](https://www.amazon.com/MCIGICM-Header-2-45mm-Arduino-Connector/dp/B07PKKY8BX/ref=sr_1_5?keywords=male+headers&qid=1639060454&sr=8-5) |
-| x1 | Copper PCB Blank | $0.70 | [link](https://www.amazon.com/MCIGICM-Copper-Laminate-Circuit-Single/dp/B01MCVLDDZ/ref=sr_1_1?keywords=copper+pcb+blank&qid=1639060805&sr=8-1) |
+| x11 | Header Pins | $0.14 | [link](https://amzn.to/49WH3Iv) |
+| x1 | Copper PCB Blank | $0.70 | [link](https://amzn.to/3QiW5kY) |
 | x1 | FTDI Serial Adapter | $14.95 | [link](https://www.sparkfun.com/products/9716) |
 | | **Total (W/out FTDI)** | **$2.83** | |
 | | **Final Total** | **$17.78** | |

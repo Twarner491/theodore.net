@@ -65,19 +65,19 @@ With the workings of this system in mind, I began to sketch out a design for my 
 
 | Qty | Description | Price | Link | Notes |
 |-----|-------------|-------|------|-------|
-| 1 | Power Supply | $26.95 | [Link](https://www.amazon.com/LRS-200-12-Switching-Supply-Single-Output/dp/B0131UU9E2/ref=bmx_6?pd_rd_w=ZmMKT&pf_rd_p=9e42592e-5816-4d9d-8232-41e9635bb789&pf_rd_r=ZAKQDZ5J1D6SXFTXBEP2&pd_rd_r=e9ec1359-e8c4-4d53-a111-70689e4242d7&pd_rd_wg=Srau5&pd_rd_i=B0131UU9E2&th=1) | AC to 12v DC - Low Height Profile |
-| 1 | AC Power Adapter | $8.99 | [Link](https://www.amazon.com/BIQU-Rocker-Switch-Socket-Module/dp/B07KS2TQ45/ref=sr_1_6?dchild=1&keywords=ac+power+socket+with+switch&qid=1616086668&sr=8-6) | Rocker Switch for Power Control - Inline Fuse |
-| 1 | Water Pump | $24.99 | [Link](https://www.amazon.com/VANSUNA-Submersible-Aquaponics-Agricultural-Irrigation/dp/B08526ZK8B/ref=sr_1_5?dchild=1&keywords=12v%2Baquaponics%2Bpump&qid=1616102210&sr=8-5&th=1) | 12v - 9mm outlet - 130GPH |
-| 2m / 6.6ft | 9mm Silicon Tubing | $10.49 | [Link](https://www.amazon.com/uxcell-Silicone-Flexible-Silicon-Transfer/dp/B07PPWHG1X/ref=sr_1_8?dchild=1&keywords=9mm+clear+tubing&qid=1619642400&refinements=p_85%3A2470955011&rnid=2470954011&rps=1&sr=8-8) | N/A |
-| 5m / 16.4ft | Grow Light Strips | $13.99 | [Link](https://www.amazon.com/Plant-OUEVA-16-4ft-Waterproof-Spectrum/dp/B06XCM28Q8/ref=pd_di_sccai_7?pd_rd_w=rnnYR&pf_rd_p=c9443270-b914-4430-a90b-72e3e7e784e0&pf_rd_r=7G17WNVAM63M69YCB5BW&pd_rd_r=d1fca20a-252d-4c1a-b08a-33cf42dec282&pd_rd_wg=nWsQq&pd_rd_i=B06XCM28Q8&psc=1) | 4 Red : 1 Blue |
-| 5m / 16.4ft | White Light Strips | $11.99 | [Link](https://www.amazon.com/YUNBO-6000-6500K-Waterproof-Flexible-Cuttable/dp/B07QLLMT4T/ref=sr_1_2_sspa?dchild=1&keywords=waterproof+white+led+strip&qid=1618760761&sr=8-2-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUExTjZMRFdWMERWUU0yJmVuY3J5cHRlZElkPUEwMTk3MDI0MkdJMkJXVzQ4T0JVQSZlbmNyeXB0ZWRBZElkPUEwNzk5NzIxMVVRT0FDSjZERExLWSZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU=) | In Lab |
+| 1 | Power Supply | $26.95 | [Link](https://amzn.to/4fEIzmd) | AC to 12v DC - Low Height Profile |
+| 1 | AC Power Adapter | $8.99 | [Link](https://amzn.to/4utiXfH) | Rocker Switch for Power Control - Inline Fuse |
+| 1 | Water Pump | $24.99 | [Link](https://amzn.to/4xvO0dK) | 12v - 9mm outlet - 130GPH |
+| 2m / 6.6ft | 9mm Silicon Tubing | $10.49 | [Link](https://amzn.to/43xPW7K) | N/A |
+| 5m / 16.4ft | Grow Light Strips | $13.99 | [Link](https://amzn.to/43A3UpD) | 4 Red : 1 Blue |
+| 5m / 16.4ft | White Light Strips | $11.99 | [Link](https://amzn.to/43xPTZC) | In Lab |
 | 1 | pH Sensor | $66.99 | [Link](https://atlas-scientific.com/kits/gravity-analog-ph-kit/) | N/A |
 | 1 | Electrical Isolation Board | $16.99 | [Link](https://atlas-scientific.com/carrier-boards/gravity-analog-isolator/) | N/A |
-| 120p | Female to Female Jumper Cables | $13.99 | [Link](https://www.amazon.com/EDGELEC-Optional-Breadboard-Assorted-Multicolored/dp/B07GCZBH51/ref=sr_1_10?dchild=1&keywords=long%2Bfemale%2Bto%2Bfemale%2Bjumper%2Bcables&qid=1620182069&sr=8-10&th=1) | In Lab |
-| 1 Spool | Speaker Wire | $9.95 | [Link](https://www.amazon.com/AmazonBasics-16-Gauge-Audio-Stereo-Speaker/dp/B006LW0WDQ/ref=sr_1_5?dchild=1&keywords=speaker+wire&qid=1623172412&sr=8-5) | In Lab |
-| 1 Pack | 18 Gauge Wire | $15.99 | [Link](https://www.amazon.com/Electrical-Flexible-Silicone-different-automotive/dp/B07G744V5Z/ref=sxin_10?asc_contentid=amzn1.osa.2b65cac5-156d-4cb0-9333-7d3ec365d493.ATVPDKIKX0DER.en_US&asc_contenttype=article&ascsubtag=amzn1.osa.2b65cac5-156d-4cb0-9333-7d3ec365d493.ATVPDKIKX0DER.en_US&creativeASIN=B07G744V5Z&crid=3Y490C9HMOO5&cv_ct_cx=18+gauge+wire&cv_ct_id=amzn1.osa.2b65cac5-156d-4cb0-9333-7d3ec365d493.ATVPDKIKX0DER.en_US&cv_ct_pg=search&cv_ct_we=asin&cv_ct_wn=osp-single-source-earns-comm&dchild=1&keywords=18+gauge+wire&linkCode=oas&pd_rd_i=B07G744V5Z&pd_rd_r=b33b7fa4-44c0-420f-b204-226e7deb1f27&pd_rd_w=EUtiW&pd_rd_wg=nJZgK&pf_rd_p=2a3243ce-188f-426b-9a7c-cd22d207971e&pf_rd_r=6BJ8GTZSFEAZX22PR8VV&qid=1623172461&sprefix=18+gau%2Caps%2C275&sr=1-1-64f3a41a-73ca-403a-923c-8152c45485fe&tag=cb-osp-20) | In Lab |
-| 1.75mm - 1kg | White PETG | $23.99 | [Link](https://www.amazon.com/HATCHBOX-3D-Filament-Dimensional-Accuracy/dp/B014VM9724/ref=sr_1_1_sspa?dchild=1&keywords=hatchbox%2Bpetg&qid=1621011636&sr=8-1-spons&smid=ANPI0LINHGMTA&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEyU1NNMUpVREJHTE9VJmVuY3J5cHRlZElkPUEwMDU5MDYwMVZCRVNDUFFPWExBSyZlbmNyeXB0ZWRBZElkPUEwMzUwNjg2MlZPSzRPR1FHQkhLQyZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU&th=1) | N/A |
-| 2lb | Aquaponics Beads | $11.95 | [Link](https://www.amazon.com/xGarden-LECA-Expanded-Clay-Pebbles/dp/B01LZQBV33/ref=sr_1_2?dchild=1&keywords=aquaponics+beads&qid=1620182933&s=lawn-garden&sr=1-2) | N/A |
+| 120p | Female to Female Jumper Cables | $13.99 | [Link](https://amzn.to/3QlzuV4) | In Lab |
+| 1 Spool | Speaker Wire | $9.95 | [Link](https://amzn.to/4v7LdWi) | In Lab |
+| 1 Pack | 18 Gauge Wire | $15.99 | [Link](https://amzn.to/49VinA1) | In Lab |
+| 1.75mm - 1kg | White PETG | $23.99 | [Link](https://amzn.to/4eGbJQM) | N/A |
+| 2lb | Aquaponics Beads | $11.95 | [Link](https://amzn.to/4eqM2Tf) | N/A |
 | 5oz Tube | WeldOn 16 | $17.90 | [Link](https://www.amazon.com/IPS-Weld-Acrylic-Plastic-Cement/dp/B0149IFA9O/ref=sr_1_1?dchild=1&keywords=weldon+16&qid=1620182756&sr=8-1) | N/A |
 | 10.1oz Caulk Tube | All Purpose Clear Silicone | $5.38 | [Link](https://www.lowes.com/pd/GE-Silicone-1-10-1-oz-Clear-Silicone-Caulk/3070881?cm_mmc=shp-_-c-_-prd-_-pnt-_-google-_-lia-_-221-_-caulk-_-3070881-_-0&placeholder=null&ds_rl=1286981&gclid=Cj0KCQjw16KFBhCgARIsALB0g8KkB85mLHKJt0APusqtejX1NB2LV4j8kdj8Thq93LrLgg1GRvnPE58aAp7JEALw_wcB&gclsrc=aw.ds) | N/A |
 | 6 - 1206 Footprint | SMD LED | $3.00 | [Link](https://www.newark.com/dialight/597-6601-607f/led-blue-1-6mm-180mcd-475nm/dp/06P3508?CMP=AFC-OP#) | In Lab |
@@ -97,9 +97,9 @@ With the workings of this system in mind, I began to sketch out a design for my 
 | 1 | ATTiny 1614 | $0.91 | [Link](https://www.newark.com/microchip/attiny1614-ssfr/mcu-8bit-avr-20mhz-soic-14/dp/72AC4969?CMP=AFC-OP) | In Lab |
 | 2 | ATTiny 412 | $1.40 | [Link](https://www.newark.com/microchip/attiny412-ssnr/mcu-8bit-20mhz-soic-8/dp/07AH6439?CMP=AFC-OP) | In Lab |
 | 1 | ATMega 328p | $2.43 | [Link](https://www.newark.com/microchip/atmega328p-au/microcontroller-mcu-8-bit-atmega/dp/68T2935?CMP=AFC-OP) | In Lab |
-| 1 Pack | Through Hole Male Headers | $7.49 | [Link](https://www.amazon.com/uxcell-Straight-Connector-Arduino-Prototype/dp/B07DK1N2VV/ref=sr_1_17?dchild=1&keywords=Through+Hole+Male+Headers+angled&qid=1623179240&sr=8-17) | In Lab |
+| 1 Pack | Through Hole Male Headers | $7.49 | [Link](https://amzn.to/4xGo0fM) | In Lab |
 | 5 | SMD Male Headers | $4.75 | [Link](https://www.sparkfun.com/products/9015) | In Lab |
-| 3 - Single Sided | Copper PCB Blanks | $9.35 | [Link](https://www.amazon.com/uxcell-200x150mm-Single-Sided-Thickness-Prototyping/dp/B07R78KNMC/ref=sr_1_5?dchild=1&keywords=copper+PCB+blanks&qid=1623178831&sr=8-5) | In Lab |
+| 3 - Single Sided | Copper PCB Blanks | $9.35 | [Link](https://amzn.to/4fD1EFk) | In Lab |
 | | **Total** | **$323.60** | | |
 
 </div>

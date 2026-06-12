@@ -24,12 +24,12 @@ template: comments.html
 
 | Qty | Description | Cost | Link |
 |-----|-------------|------|------|
-| 14 | Breadboard | $112 | [link](https://www.amazon.com/gp/product/B0040Z4QN8/ref=as_li_tl?ie=UTF8&tag=beneater-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=B0040Z4QN8&linkId=32ebed06d70737d48f7dff50892868b2) |
+| 14 | Breadboard | $112 | [link](https://amzn.to/4e7nOyh) |
 | 10 | 1kΩ resistor | | :material-arrow-down-thin: |
 | 9 | 10kΩ resistor | | :material-arrow-down-thin: |
 | 1 | 100kΩ resistor | | :material-arrow-down-thin: |
 | 24 | 470Ω resistor | | :material-arrow-down-thin: |
-| 1 | 1MΩ resistor | $16.99 | [link](https://www.amazon.com/gp/product/B00E3JGGF2/ref=as_li_tl?ie=UTF8&tag=beneater-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=B00E3JGGF2&linkId=37bccc3872a0e7c701200d3f8a46f841) |
+| 1 | 1MΩ resistor | $16.99 | [link](https://amzn.to/4e59YfU) |
 | 1 | 1MΩ potentiometer | $1.39 | [link](https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&langId=-1&catalogId=10001&productId=2161422&avad=234285_b24a928cd&source=Avantlink) |
 | 6 | 0.01µF capacitor | $1.20 | [link](https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&langId=-1&catalogId=10001&productId=15229&avad=234285_e24a83cb1&source=Avantlink) |
 | 16 | 0.1µF capacitor | $3.00 | [link](https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&langId=-1&catalogId=10001&productId=151116&avad=234285_f24a7e1b9&source=Avantlink) |
@@ -59,7 +59,7 @@ template: comments.html
 | 44 | Red LED | | :material-arrow-down-thin: |
 | 8 | Yellow LED | | :material-arrow-down-thin: |
 | 12 | Green LED | | :material-arrow-down-thin: |
-| 21 | Blue LED | $12.99 | [link](https://www.amazon.com/DiCUNO-450pcs-Colors-Emitting-Assorted/dp/B073QMYKDM/ref=sr_1_7?dchild=1&keywords=5mm+LED+pack&qid=1635892042&qsid=143-4488646-5725765&sr=8-7&sres=B07T8H6V37%2CB07PG84V17%2CB07N2H23DC%2CB086JM3WMM%2CB073QMYKDM%2CB01AKPKC84%2CB01AUI4VSI%2CB07PVVL2S6%2CB06XPV4CSH%2CB093GL1FFH%2CB01LX8JVG7%2CB01C3ZZT2I%2CB08L5T37N8%2CB08ZXK5WMZ%2CB07WNMNS9P%2CB097RMK592) |
+| 21 | Blue LED | $12.99 | [link](https://amzn.to/4xs9bNF) |
 | 4 | Common cathode 7-segment display | $4.36 | [link](https://www.jameco.com/z/UA5651-11-R-Jameco-Valuepro-LED-Display-7-Segment-Red-0-56-Inch-Common-Anode-RHDP-0-8mcd_335090.html?CID=MERCH) |
 | 1 | 22 AWG Solid Tinned-Copper Hook-Up Wire | $29.95 | [link](https://www.adafruit.com/product/3174?gclid=Cj0KCQjww4OMBhCUARIsAILndv4TcRmMF-8TiYvh74DqYKzl6-iRXDQZRWgg_geBEG7LG3p2uWDhGiQaAlhYEALw_wcB) |
 | | **Total** | **$228.66** | |
