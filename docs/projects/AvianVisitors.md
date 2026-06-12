@@ -42,8 +42,6 @@ See it running at [bird.onethreenine.net](https://bird.onethreenine.net):
   ></iframe>
 </div>
 
-#### BOM
-
 Building a bird tracking station of your own is easy enough. The full project repo is at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). Here's all you need:
 
 <div class="bom-table" markdown>
@@ -220,8 +218,6 @@ It's worth flagging that Gemini hallucinates anatomy here with non-trivial frequ
 
 Each species ships with a binary alpha mask{.marginnote}Generated offline by downsampling the illustration to ~93px wide, thresholding the alpha channel, and packing the result into a base64-encoded bit-array. The masks are inlined directly in [`avian/frontend/apt.js`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/frontend/apt.js) 498 of them, 249 species × 2 poses, ~590KB, built by [`avian/scripts/build_masks.py`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/build_masks.py).{/.marginnote} that encodes the bird's silhouette. The frontend uses these masks for two things: tile-packing (so bounding boxes can overlap as long as the silhouettes don't), and hover hit-testing (so the right bird highlights when you mouse over a region where two tiles' bounding boxes overlap).
 
-
-
 The packing algorithm itself is a center-out spiral: tiles get sorted by area descending, the largest is placed at the center of mass, and each subsequent tile spirals outward from the center until finding a position where its mask doesn't intersect any already-placed mask. The cost function biases horizontally to produce wider, more landscape-friendly clusters:
 
 $$\text{cost}(x, y) = \sqrt{\left(\frac{\Delta x}{b}\right)^2 + \Delta y^2}$$
@@ -245,6 +241,101 @@ After the initial pack, if any tile lands off-screen, every tile shrinks by 7% a
 The frontend polls the recent-detections endpoint every 30 seconds, and when a new species crosses into the current time window it joins the layout at the next refresh, with the cluster shifting just slightly to make room.{.marginnote}The frontend does a full re-pack rather than incremental insertion. Repacking ~10 species at the current grid stride (4px) takes <20ms in V8 on a Pi 4 client.{/.marginnote} The window picker (`1H / 12H / 24H / 7D / ALL`) refetches with the matching `?hours=N` and re-renders in place, and the whole thing happens quietly enough that I've left the page open for hours at a time without noticing the transitions.
 
 Clicking any tile in the collage (or any card in the atlas view) opens a detail modal that hits a Wikipedia summary endpoint for the species description and offers both perched and flight poses via a toggle. The recordings list pulls the most-recent BirdNET-Pi-archived mp3s for the species, matched on the common name and sourced from `$HOME/BirdSongs/Extracted/By_Date/<date>/<Common_Name>/`, each rendered alongside its spectrogram, with wiki and eBird chips at the bottom for external references.
+
+### Frame-ous
+
+I've been thoroughly enjoying this little weekend build the past few weeks, but now often find myself slipping to check the website instead of actually appreciating the birds that have stopped by! In an attempt to appease my curiosity while remaining distraction-free, I've built out a nice wooden-framed e-ink feed to hang right next to my bird-mic'ed window, dynamically populated with any birds heard over the past 24 hours.
+
+Everything you need to build a frame of your own can be found at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). Bill of materials:
+
+<div class="bom-table" markdown>
+
+| Qty | Description | Price | Link |
+|-----|-------------|-------|------|
+| 1 | Raspberry Pi Zero (2) W | ~$35 | [Raspberry Pi](https://www.raspberrypi.com/products/) |
+| 1 | 13.3" E Ink Display     | $299.99 | [Amazon](https://a.co/d/0eGzAzpD) |
+| 1 | A4 Wood Photo Frame    | $21.99 | [Amazon](https://a.co/d/03lpjhgH) |
+| 1 | Long, Flat Micro USB Cable    | $7.99 | [Amazon](https://a.co/d/0a59rKSk) |
+| 1 | Flat USB Brick    | $7.59 | [Amazon](https://a.co/d/05OLRpvT) |
+| | **Total** | **~$372** | | |
+
+</div>
+
+To start, I flashed an old Raspberry Pi Zero 2 W i had laying around with Raspberry Pi OS Lite (64-bit) via [Raspberry Pi Imager](https://www.raspberrypi.com/software/). In the customisation dialog set:
+
+- Username
+- WiFi SSID + password
+- Hostname: `birdpic`
+- Enable SSH with password auth
+
+Install the SD card in the Pi, and then mount it to the back of the e-ink as shown below. I've already removed the protective film from the plexiglass on the frame, as well as the front of the e-ink, and then installed the e-ink within the frame, underneath the matboard.
+
+{.marginnote}Note that the micro USB cable should be attached to the bottom of the two USB ports, the one closest to the camera connector.{/.marginnote}
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AvianVisitors/framedeink.JPG" alt="">
+<img src="../../assets/images/AvianVisitors/mountedpi.JPG" alt="">
+</div>
+
+Then, just like the previous Pi, once it's up on your network, SSH in, clone the repo, and run the installer:
+
+```bash
+ssh <your-username>@birdpic.local
+git clone https://github.com/Twarner491/AvianVisitors
+cd AvianVisitors/frame && ./install.sh
+```
+
+The installer turns on SPI + I2C (the panel speaks both), pulls in Pillow and Pimoroni's [`inky`](https://github.com/pimoroni/inky) library, registers a `display.py` systemd timer that wakes every 15 minutes, and drops a starter config at `~/.birdframe/config.toml`.
+
+E-ink displays like the Pimoroni one we're using for this build are funky and incredibly cool. These displays are mechanical processes, and physically move pigment around with an electric field to produce an image. This process takes time! The Pimoroni in particular takes a dozen seconds each time we want to refresh it’s content. And we want to be wary of this in our frame, so by default we’ll only attempt a re-render every 15 mins, and only if a new bird has actually been detected.
+
+Because we’re operating at a lower fidelity here, I’ve opted to render our collage on demand and serve it at `/frame.png` with [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/). This allows our Pi Zero to just fetch this finished PNG, rather than render the page itself on edge. And while my frame is cable powered because I had some curtains to tuck the mess behind, no edge-rendering should make it a whole lot easier to go cordless should I like to in the future! `/frame.png` is gated by a shared key so a stray crawler can't burn through the free render budget. Point the config at it:{.marginnote}Staying LAN-only without the Worker? Set `shoot = true` and run the screenshot on any browser-capable box on a cron, copying the PNG over to the Pi. The frame [README](https://github.com/Twarner491/AvianVisitors/tree/avian-visitors/frame) has the snippet.{/.marginnote}
+
+```toml
+base_url  = "https://bird.onethreenine.net"
+image_url = "https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY"
+```
+
+And boom! After a reset, your screen should be live with birds! Once everything's proven working here, we'll want to cover up the back to hold the screen in place and allow us to mount the frame on our wall. The wooden backing that came with the frame doesn't work given the additional contents we've introduced, so I hopped into Fusion and threw together a quick new backplate of my own
+
+<center>
+
+<div class="embed-frame"><div class="embed-inner">
+<iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b60281129365cceadb83d29?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
+
+</center>
+
+My printer's bed was slightly too small for this entire job, so I wound up splitting the model in two. I cleaned up both prints and then used a bit of superglue to tack them together, with a bit of blue tape underneath to prevent any from squeezing out.
+
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AvianVisitors/bothprints.JPG" alt="">
+<img src="../../assets/images/AvianVisitors/gluedprints.JPG" alt="">
+</div>
+
+With the backplate assembled, I moved on to fixing this to the frame itself. I started by routing the power cable through its designated spot
+
+<figure markdown="1">
+
+![](../assets/images/AvianVisitors/routedcable.JPG){ width="80%" }
+
+</figure>
+
+... before mounting the backing to the frame itself with a bead of hot glue around the frame rim. You could also use some double-sided tape here, I imagine.
+
+<figure markdown="1">
+
+![](../assets/images/AvianVisitors/gluedback.jpg){ width="40%" }
+
+</figure>
+
+Then all that's left to do is hang it up and power it on! (and a bit of cable management, ofc)
+
+<figure markdown="1">
+
+![](../assets/images/AvianVisitors/final.jpg){ width="80%" }
+
+</figure>
 
 ---
 
