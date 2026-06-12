@@ -1050,7 +1050,7 @@
 <figure>
 <p><img alt="" src="../../assets/images/SerialUPDI/topstencil.png" width="100%" /></p>
 </figure>
-<div class="bom-table"><input type="checkbox" id="bom-toggle-7" class="bom-collapse-toggle"><div class="bom-table-inner">
+<div class="bom-table"><input type="checkbox" id="bom-toggle-8" class="bom-collapse-toggle"><div class="bom-table-inner">
 <p><strong>Bill of Materials - USB-C UPDI</strong></p>
 <table>
 <thead>
@@ -1130,7 +1130,7 @@
 </tr>
 </tbody>
 </table>
-</div><div class="bom-fade"></div><label for="bom-toggle-7" class="bom-toggle-label"><span class="bom-label-expand">Show all 11 items</span><span class="bom-label-collapse">Collapse</span></label></div>
+</div><div class="bom-fade"></div><label for="bom-toggle-8" class="bom-toggle-label"><span class="bom-label-expand">Show all 11 items</span><span class="bom-label-collapse">Collapse</span></label></div>
 <h3 id="ftdi2updi-design">ftdi2updi Design<a class="headerlink" href="#ftdi2updi-design" title="Permanent link">&para;</a></h3>
 <p>In addition to the prior USB-C UPDI Serial Programmer board, I created an alternative hardware programmer that makes use of a pre-existing FTDI chip, enabling it with the same switching functions feature as the prior board. This provided a workaround to 2021&rsquo;s silicone shortage, as due to backed-up supply chains, I wasn&rsquo;t able to get my hands on the FT232RL right away.</p>
 <p>The board&rsquo;s schematic is a cloned iteration of the prior programmer, but with the USB-C &amp; FT232RL components removed, and replaced with headers for connection to an FTDI adapter, yielding the schematic below.</p>
@@ -1145,7 +1145,7 @@
 <p><img alt="" src="../../assets/images/SerialUPDI/ftdi2updibottom.png" width="100%" /></p>
 <p><img alt="" src="../../assets/images/SerialUPDI/ftdi2updiboard.png" width="100%" /></p>
 </figure>
-<div class="bom-table"><input type="checkbox" id="bom-toggle-8" class="bom-collapse-toggle"><div class="bom-table-inner">
+<div class="bom-table"><input type="checkbox" id="bom-toggle-9" class="bom-collapse-toggle"><div class="bom-table-inner">
 <p><strong>Bill of Materials - ftdi2updi</strong></p>
 <table>
 <thead>
@@ -1207,7 +1207,7 @@
 </tr>
 </tbody>
 </table>
-</div><div class="bom-fade"></div><label for="bom-toggle-8" class="bom-toggle-label"><span class="bom-label-expand">Show all 8 items</span><span class="bom-label-collapse">Collapse</span></label></div>
+</div><div class="bom-fade"></div><label for="bom-toggle-9" class="bom-toggle-label"><span class="bom-label-expand">Show all 8 items</span><span class="bom-label-collapse">Collapse</span></label></div>
 <h3 id="fabrication-testing">Fabrication &amp; Testing<a class="headerlink" href="#fabrication-testing" title="Permanent link">&para;</a></h3>
 <h4 id="ftdi2updi">ftdi2updi<a class="headerlink" href="#ftdi2updi" title="Permanent link">&para;</a></h4>
 <p>I milled my boards with a Bantam PCB mill and its <a href="https://www.bantamtools.com/software-download">Bantam Tools Desktop Milling Machine Software</a>. The software handles all toolpath generation from my Eagle board file, and conveniently, when paired with Bantam&rsquo;s PCB placement bracket, also handles the double-sided board milling process via a toggle switch in the interface. I followed the same milling process I have documented on my <a href="http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/assignments/week04/#blinky-test-board">week 4</a> Fab Academy page, however after the top-side traces and holes were milled, I flipped the copper stock, aligning to the right-hand corner of the PCB alignment bracket as opposed to the left, and toggled the board to its bottom side in the <a href="https://www.bantamtools.com/software-download">Bantam Tools Desktop Milling Machine Software</a>. With the stock realigned, I repeated the same milling process for the bottom side of the board. This whole process is showcased in <a href="https://www.youtube.com/watch?v=DCGLEa2UUaY">this view</a> from Bantam.</p>

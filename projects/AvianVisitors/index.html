@@ -549,23 +549,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Apartment Birds">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#bom" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BOM
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -604,6 +587,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frame-ous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame-ous
+      
+    </span>
+  </a>
   
 </li>
       
@@ -689,7 +683,7 @@
       </a>
       <span class="abt" style="font-weight: 300; padding-left: 6px;">
         <span class="year">| May 2026 </span>
-        <span class="readTime">| <i class="far fa-clock"></i> 9–11 mins</span>
+        <span class="readTime">| <i class="far fa-clock"></i> 10–13 mins</span>
       </span>
     </span>
     <span class="share" style="color: inherit;">
@@ -736,7 +730,6 @@
   ></iframe>
 </div>
 
-<h4 id="bom">BOM<a class="headerlink" href="#bom" title="Permanent link">&para;</a></h4>
 <p>Building a bird tracking station of your own is easy enough. The full project repo is at <a href="https://github.com/Twarner491/AvianVisitors">github.com/Twarner491/AvianVisitors</a>. Here&rsquo;s all you need:</p>
 <div class="bom-table"><input type="checkbox" id="bom-toggle-3" class="bom-collapse-toggle"><div class="bom-table-inner">
 <table>
@@ -913,6 +906,111 @@
 <h4 id="real-time">~ Real Time<a class="headerlink" href="#real-time" title="Permanent link">&para;</a></h4>
 <p>The frontend polls the recent-detections endpoint every 30 seconds, and when a new species crosses into the current time window it joins the layout at the next refresh, with the cluster shifting just slightly to make room.<input type="checkbox" id="mn-4" class="margin-toggle"/><label for="mn-4" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">The frontend does a full re-pack rather than incremental insertion. Repacking ~10 species at the current grid stride (4px) takes &lt;20ms in V8 on a Pi 4 client.</span> The window picker (<code>1H / 12H / 24H / 7D / ALL</code>) refetches with the matching <code>?hours=N</code> and re-renders in place, and the whole thing happens quietly enough that I&rsquo;ve left the page open for hours at a time without noticing the transitions.</p>
 <p>Clicking any tile in the collage (or any card in the atlas view) opens a detail modal that hits a Wikipedia summary endpoint for the species description and offers both perched and flight poses via a toggle. The recordings list pulls the most-recent BirdNET-Pi-archived mp3s for the species, matched on the common name and sourced from <code>$HOME/BirdSongs/Extracted/By_Date/&lt;date&gt;/&lt;Common_Name&gt;/</code>, each rendered alongside its spectrogram, with wiki and eBird chips at the bottom for external references.</p>
+<h3 id="frame-ous">Frame-ous<a class="headerlink" href="#frame-ous" title="Permanent link">&para;</a></h3>
+<p>I&rsquo;ve been thoroughly enjoying this little weekend build the past few weeks, but now often find myself slipping to check the website instead of actually appreciating the birds that have stopped by! In an attempt to appease my curiosity while remaining distraction-free, I&rsquo;ve built out a nice wooden-framed e-ink feed to hang right next to my bird-mic&rsquo;ed window, dynamically populated with any birds heard over the past 24 hours.</p>
+<p>Everything you need to build a frame of your own can be found at <a href="https://github.com/Twarner491/AvianVisitors">github.com/Twarner491/AvianVisitors</a>. Bill of materials:</p>
+<div class="bom-table"><input type="checkbox" id="bom-toggle-4" class="bom-collapse-toggle"><div class="bom-table-inner">
+<table>
+<thead>
+<tr>
+<th>Qty</th>
+<th>Description</th>
+<th>Price</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Raspberry Pi Zero (2) W</td>
+<td>~$35</td>
+<td><a href="https://www.raspberrypi.com/products/">Raspberry Pi</a></td>
+</tr>
+<tr>
+<td>1</td>
+<td>13.3&rdquo; E Ink Display</td>
+<td>$299.99</td>
+<td><a href="https://a.co/d/0eGzAzpD">Amazon</a></td>
+</tr>
+<tr>
+<td>1</td>
+<td>A4 Wood Photo Frame</td>
+<td>$21.99</td>
+<td><a href="https://a.co/d/03lpjhgH">Amazon</a></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Long, Flat Micro USB Cable</td>
+<td>$7.99</td>
+<td><a href="https://a.co/d/0a59rKSk">Amazon</a></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Flat USB Brick</td>
+<td>$7.59</td>
+<td><a href="https://a.co/d/05OLRpvT">Amazon</a></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Total</strong></td>
+<td><strong>~$372</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div><div class="bom-fade"></div><label for="bom-toggle-4" class="bom-toggle-label"><span class="bom-label-expand">Show all 6 items</span><span class="bom-label-collapse">Collapse</span></label></div>
+<p>To start, I flashed an old Raspberry Pi Zero 2 W i had laying around with Raspberry Pi OS Lite (64-bit) via <a href="https://www.raspberrypi.com/software/">Raspberry Pi Imager</a>. In the customisation dialog set:</p>
+<ul>
+<li>Username</li>
+<li>WiFi SSID + password</li>
+<li>Hostname: <code>birdpic</code></li>
+<li>Enable SSH with password auth</li>
+</ul>
+<p>Install the SD card in the Pi, and then mount it to the back of the e-ink as shown below. I&rsquo;ve already removed the protective film from the plexiglass on the frame, as well as the front of the e-ink, and then installed the e-ink within the frame, underneath the matboard.</p>
+<p><input type="checkbox" id="mn-5" class="margin-toggle"/><label for="mn-5" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Note that the micro USB cable should be attached to the bottom of the two USB ports, the one closest to the camera connector.</span></p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AvianVisitors/framedeink.JPG" alt="">
+<img src="../../assets/images/AvianVisitors/mountedpi.JPG" alt="">
+</div>
+
+<p>Then, just like the previous Pi, once it&rsquo;s up on your network, SSH in, clone the repo, and run the installer:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ssh<span class="w"> </span>&lt;your-username&gt;@birdpic.local
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Twarner491/AvianVisitors
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nb">cd</span><span class="w"> </span>AvianVisitors/frame<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./install.sh
+</code></pre></div>
+<p>The installer turns on SPI + I2C (the panel speaks both), pulls in Pillow and Pimoroni&rsquo;s <a href="https://github.com/pimoroni/inky"><code>inky</code></a> library, registers a <code>display.py</code> systemd timer that wakes every 15 minutes, and drops a starter config at <code>~/.birdframe/config.toml</code>.</p>
+<p>E-ink displays like the Pimoroni one we&rsquo;re using for this build are funky and incredibly cool. These displays are mechanical processes, and physically move pigment around with an electric field to produce an image. This process takes time! The Pimoroni in particular takes a dozen seconds each time we want to refresh it’s content. And we want to be wary of this in our frame, so by default we’ll only attempt a re-render every 15 mins, and only if a new bird has actually been detected.</p>
+<p>Because we’re operating at a lower fidelity here, I’ve opted to render our collage on demand and serve it at <code>/frame.png</code> with <a href="https://developers.cloudflare.com/browser-rendering/">Cloudflare Browser Rendering</a>. This allows our Pi Zero to just fetch this finished PNG, rather than render the page itself on edge. And while my frame is cable powered because I had some curtains to tuck the mess behind, no edge-rendering should make it a whole lot easier to go cordless should I like to in the future! <code>/frame.png</code> is gated by a shared key so a stray crawler can&rsquo;t burn through the free render budget. Point the config at it:<input type="checkbox" id="mn-6" class="margin-toggle"/><label for="mn-6" class="margin-toggle"><i class="fa-solid fa-circle-plus"></i></label><span class="marginnote">Staying LAN-only without the Worker? Set <code>shoot = true</code> and run the screenshot on any browser-capable box on a cron, copying the PNG over to the Pi. The frame <a href="https://github.com/Twarner491/AvianVisitors/tree/avian-visitors/frame">README</a> has the snippet.</span></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">base_url</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://bird.onethreenine.net&quot;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">image_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY&quot;</span>
+</code></pre></div>
+<p>And boom! After a reset, your screen should be live with birds! Once everything&rsquo;s proven working here, we&rsquo;ll want to cover up the back to hold the screen in place and allow us to mount the frame on our wall. The wooden backing that came with the frame doesn&rsquo;t work given the additional contents we&rsquo;ve introduced, so I hopped into Fusion and threw together a quick new backplate of my own</p>
+<center>
+
+<div class="embed-frame"><div class="embed-inner">
+<iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b60281129365cceadb83d29?mode=embed" width="100%" height="650" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
+
+</center>
+
+<p>My printer&rsquo;s bed was slightly too small for this entire job, so I wound up splitting the model in two. I cleaned up both prints and then used a bit of superglue to tack them together, with a bit of blue tape underneath to prevent any from squeezing out.</p>
+<div class="figure-grid grid-2x1">
+<img src="../../assets/images/AvianVisitors/bothprints.JPG" alt="">
+<img src="../../assets/images/AvianVisitors/gluedprints.JPG" alt="">
+</div>
+
+<p>With the backplate assembled, I moved on to fixing this to the frame itself. I started by routing the power cable through its designated spot</p>
+<figure>
+<p><img alt="" src="../../assets/images/AvianVisitors/routedcable.JPG" width="80%" /></p>
+</figure>
+<p>&hellip; before mounting the backing to the frame itself with a bead of hot glue around the frame rim. You could also use some double-sided tape here, I imagine.</p>
+<figure>
+<p><img alt="" src="../../assets/images/AvianVisitors/gluedback.jpg" width="40%" /></p>
+</figure>
+<p>Then all that&rsquo;s left to do is hang it up and power it on! (and a bit of cable management, ofc)</p>
+<figure>
+<p><img alt="" src="../../assets/images/AvianVisitors/final.jpg" width="80%" /></p>
+</figure>
 <hr />
 <p>And there you have it, a wonderfuly simple build to keep track of any little guys that may be passing by :)</p>
 <script>
