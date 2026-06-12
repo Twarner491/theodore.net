@@ -760,7 +760,7 @@
 
 <p><span class="newthought">I have some really wonderful friends.</span> They, like I, say many silly things. </p>
 <p>I wanted some means of capturing all of these quotes for later reference. Or to keep as nice souvenirs of thought.</p>
-<p>My roommate and I have been going all in on the apartment projects (AIPhone, Cathode Ray Doorbell, StairGuitar™, etc. - I&rsquo;ll do write-ups on some of these at some point in the future), and I figured to stay in the same vein that my weekend project should attempt to solve my quote attribution problem. I also happened to have an <a href="https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share">80mm Thermal Receipt Printer</a> lying around from another project I never got around to finishing.</p>
+<p>My roommate and I have been going all in on the apartment projects (AIPhone, Cathode Ray Doorbell, StairGuitar™, etc. - I&rsquo;ll do write-ups on some of these at some point in the future), and I figured to stay in the same vein that my weekend project should attempt to solve my quote attribution problem. I also happened to have an <a href="https://amzn.to/4e7upZx">80mm Thermal Receipt Printer</a> lying around from another project I never got around to finishing.</p>
 <p>And boom, I now knew how I would be spending my Saturday morning.</p>
 <center>
 
@@ -874,7 +874,7 @@
 <a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="c1"># Reboot for permissions to take effect</span>
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>sudo<span class="w"> </span>reboot
 </code></pre></div>
-<p>&hellip; and then we can test! Just be sure the printer is plugged into power, 80mm Thermal paper is loaded (I used <a href="https://www.amazon.com/dp/B0D14DYMHQ?ref=ppx_pop_mob_ap_share">MPRT 5 Rolls 3-1/8&rdquo; x 230</a>), and the printer is wired to the RPI via USB.</p>
+<p>&hellip; and then we can test! Just be sure the printer is plugged into power, 80mm Thermal paper is loaded (I used <a href="https://amzn.to/4xJaPuD">MPRT 5 Rolls 3-1/8&rdquo; x 230</a>), and the printer is wired to the RPI via USB.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ssh<span class="w"> </span>pi@receipt.local
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">cd</span><span class="w"> </span>~/quotes
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>sudo<span class="w"> </span>python3<span class="w"> </span>src/app.py
@@ -987,11 +987,11 @@ requestAnimationFrame(fr);
 <div class="arithmatex">\[\frac{1}{16}\begin{bmatrix} &amp; \ast &amp; 7 \\ 3 &amp; 5 &amp; 1 \end{bmatrix}.\]</div>
 <p>A pixel forced to white thus leaves its darkness behind as a debt the next pixels have to settle, tugging them toward black so the local average stays honest. Because the weights sum to one, <span class="arithmatex">\(\tfrac{7 + 3 + 5 + 1}{16} = 1\)</span>, none of that brightness escapes the image; it only gets rearranged into the dot texture above. That small act of conservation is the whole trick, and it&rsquo;s why a couple hundred scattered dots still resolve into a face.</p>
 <h4 id="printer-hacking">Printer Hacking<a class="headerlink" href="#printer-hacking" title="Permanent link">&para;</a></h4>
-<p>What fun is a whimsical apartment project if it doesn&rsquo;t look inconspicuous! To start, I removed the bottom of my <a href="https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share">miemieyo Thermal Receipt Printer</a> to get a better sense of the space we have to work with by removing the two screws under the printer, as well as the two within the paper tray.</p>
+<p>What fun is a whimsical apartment project if it doesn&rsquo;t look inconspicuous! To start, I removed the bottom of my <a href="https://amzn.to/4e7upZx">miemieyo Thermal Receipt Printer</a> to get a better sense of the space we have to work with by removing the two screws under the printer, as well as the two within the paper tray.</p>
 <figure>
 <p><img alt="" src="../../assets/images/quotes/noBackPrinter.JPG" width="80%" /></p>
 </figure>
-<p>Unsurprisingly the internals of this receipt printer hardly fill the printer cavity, so retrofitting with our updated internals should be no problem at all. While the base piece that came on the machine has a suprisingly perfect cut out to fit a Raspberry Pi (almost like they were asking for this quote printer to be built), I opted to redesign the base of the printer entirly to allow for proper mounting of the stock printer mainboard, as well as the Raspberry Pi 5 and the <a href="https://www.amazon.com/dp/B0DBVYP91F?ref=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;ref_=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;social_share=cm_sw_r_cso_cp_apin_dp_3M2S1XQWDF42DGM55ED8&amp;titleSource=true&amp;th=1">LM2596 Buck Converter</a> I&rsquo;m using to power it.</p>
+<p>Unsurprisingly the internals of this receipt printer hardly fill the printer cavity, so retrofitting with our updated internals should be no problem at all. While the base piece that came on the machine has a suprisingly perfect cut out to fit a Raspberry Pi (almost like they were asking for this quote printer to be built), I opted to redesign the base of the printer entirly to allow for proper mounting of the stock printer mainboard, as well as the Raspberry Pi 5 and the <a href="https://amzn.to/4gfCFIj">LM2596 Buck Converter</a> I&rsquo;m using to power it.</p>
 <center>
 
 <div class="embed-frame"><div class="embed-inner">
@@ -1053,28 +1053,28 @@ requestAnimationFrame(fr);
 <td>1</td>
 <td>Thermal Receipt Printer 80mm</td>
 <td>$65.99</td>
-<td><a href="https://www.amazon.com/dp/B0DFB82NPF?ref=ppx_pop_mob_ap_share">Link</a></td>
+<td><a href="https://amzn.to/4fNSki5">Link</a></td>
 <td>miemieyo</td>
 </tr>
 <tr>
 <td>1</td>
 <td>Thermal Paper 3-1/8&rdquo; x 230&rsquo;</td>
 <td>$15.99</td>
-<td><a href="https://www.amazon.com/dp/B0D14DYMHQ?ref=ppx_pop_mob_ap_share">Link</a></td>
+<td><a href="https://amzn.to/3PZK9EV">Link</a></td>
 <td>MPRT, 5 rolls</td>
 </tr>
 <tr>
 <td>1</td>
 <td>LM2596 Buck Converter</td>
 <td>$7.99</td>
-<td><a href="https://www.amazon.com/dp/B0DBVYP91F">Link</a></td>
+<td><a href="https://amzn.to/4gfCFIj">Link</a></td>
 <td></td>
 </tr>
 <tr>
 <td>1</td>
 <td>Raspberry Pi 5</td>
 <td>$79.95</td>
-<td><a href="https://www.raspberrypi.com/products/raspberry-pi-5/">Link</a></td>
+<td><a href="https://amzn.to/4vGwlhy">Link</a></td>
 <td>Any Pi model works</td>
 </tr>
 <tr>
