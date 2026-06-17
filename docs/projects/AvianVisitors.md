@@ -42,7 +42,14 @@ See it running at [bird.onethreenine.net](https://bird.onethreenine.net):
   ></iframe>
 </div>
 
-Building a bird tracking station of your own is easy enough. The full project repo is at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). Here's all you need:
+Building a bird tracking station of your own is easy enough. The full project repo is at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). If you're interested in building one of your own, I offer a [kit that includes all of the components you need](/store/avian-mic/)!
+<a class="kit-card kit-card--margin" href="/store/avian-mic/">
+  <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Avian Mic kit"></span>
+  <span class="kit-card__body">
+    <span class="kit-card__title">Bird Mic</span>
+    <span class="kit-card__price"><span class="from">from</span>$149</span>
+  </span>
+</a> Or, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
 
 <div class="bom-table" markdown>
 
@@ -246,7 +253,14 @@ Clicking any tile in the collage (or any card in the atlas view) opens a detail 
 
 I've been thoroughly enjoying this little weekend build the past few weeks, but now often find myself slipping to check the website instead of actually appreciating the birds that have stopped by! In an attempt to appease my curiosity while remaining distraction-free, I've built out a nice wooden-framed e-ink feed to hang right next to my bird-mic'ed window, dynamically populated with any birds heard over the past 24 hours.
 
-Everything you need to build a frame of your own can be found at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). Bill of materials:
+Everything you need to build a frame of your own can be found at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). If you're interested in building one of your own, I also offer a [kit that includes all of the components you need](/store/avian-visitors/)!
+<a class="kit-card kit-card--margin" href="/store/avian-visitors/">
+  <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/heard-today.png" alt="Avian Visitors kit"></span>
+  <span class="kit-card__body">
+    <span class="kit-card__title">Avian Visitors</span>
+    <span class="kit-card__price"><span class="from">from</span>$189</span>
+  </span>
+</a> Again, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
 
 <div class="bom-table" markdown>
 
