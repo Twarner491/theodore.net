@@ -1,3 +1,24 @@
+/* Project cards (.grid-item) and product cards (.product-card) used the very-faint
+   --md-default-fg-color--lightest for their outline, so the squircle ring barely showed in
+   either mode. Point them at the search cards' visible tone (--tw-line ~17% fg) so the ring
+   reads consistently — corners.js draws the ring from this border colour.
+   (.product-card is the store agent's; overridden here in extra.css rather than store.css.) */
+.grid-item,
+.product-card,
+.store-mini-img { border-color: var(--tw-line, var(--md-default-fg-color--lighter)) !important; }
+
+/* Nav close (X) uses the Font Awesome xmark to match the search bar's close; the hamburger stays
+   the sharp Material glyph. Hold the X box at the hamburger's 24px so swapping menu<->X never
+   resizes the button: a size change there reflows the right cluster and stutters the palette/cart
+   on open. Colour is inherited from .close. */
+.close { width: 24px; justify-content: center; align-items: center; }
+.close i { font-size: 1.05rem; }
+
+/* Match the cart's page overlay to the custom search overlay (.tw-scrim): a plain
+   scheme-adaptive dim, no blur. Overrides store.css's color-mix + backdrop blur. */
+.cart-scrim { background: rgba(18, 19, 22, 0.46) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+[data-md-color-scheme="slate"] .cart-scrim { background: rgba(0, 0, 0, 0.58) !important; }
+
 [data-md-color-scheme="slate"] {
     --md-default-bg-color: hsla(228, 7%, 14%, 1);
     --md-footer-bg-color--dark: hsla(228, 8%, 7%, 0.58);
@@ -15,6 +36,14 @@
     --md-code-hl-comment-color: var(--md-default-fg-color--light);
     --md-code-hl-generic-color: var(--md-code-fg-color);
     --md-code-hl-variable-color: var(--md-code-fg-color);
+}
+
+/* Lighter, Figma-matching type: grayscale antialiasing instead of the browser's
+   default subpixel, which renders type heavier on the web.
+   ref: https://santos.fyi/writing/correcting-subpixel-on-web */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Font display optimization for theme/icon fonts */

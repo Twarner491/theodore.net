@@ -91,6 +91,7 @@ search:
       <li><a class="home" href="https://teddywarner.com"><span class="navnum">01</span> Home</a></li>
       <li><a class="proj" href="/projects"><span class="navnum">02</span> Projects</a></li>
       <li><a class="writ" href="/writings"><span class="navnum">03</span> Writing</a></li>
+      <li><a class="stor" href="/store"><span class="navnum">04</span> Store</a></li>
     </ul>
   </nav>
   
@@ -222,8 +223,24 @@ search:
     </section>
     <section class="press"> 
       <div class="content7">
-        <h2>Friends</h2>
-        <p class="pressentry"><a target="_blank" href="https://andrew.net/">Andrew</a>,  <a target="_blank" href="https://aidanjs.com/">Aidan</a>,  <a target="_blank" href="https://www.harrysanders.xyz/">Harry</a>,  <a target="_blank" href="https://spikeadams.com/">Tom</a>,  <a target="_blank" href="https://tongfei.xyz/about.html">Tongfei</a></p>
+        <a href="https://theodore.net/store" style="text-decoration: none;"><h2>Store <i class="fa-solid fa-arrow-right" style="float: right;"></i></h2></a>
+        <div class="store-mini">
+          <a class="store-mini-card" href="/store/avian-visitors/">
+            <div class="store-mini-img"><img src="/assets/images/AvianVisitors/heard-today.png" alt="Avian Visitors"></div>
+            <p class="store-mini-title">Avian Visitors</p>
+            <p class="store-mini-price"><span class="from">from</span>$189</p>
+          </a>
+          <a class="store-mini-card" href="/store/avian-mic/">
+            <div class="store-mini-img"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Bird Mic"></div>
+            <p class="store-mini-title">Bird Mic</p>
+            <p class="store-mini-price"><span class="from">from</span>$149</p>
+          </a>
+          <a class="store-mini-card" href="/store/polargraph/">
+            <div class="store-mini-img"><img src="/assets/images/Polargraph/kit.png" alt="Polargraph Plotter"></div>
+            <p class="store-mini-title">Polargraph Plotter</p>
+            <p class="store-mini-price"><span class="from">from</span>$329</p>
+          </a>
+        </div>
     </section>
     <section class="footer">
       <div class="content8">
@@ -238,13 +255,14 @@ search:
           </a>
         </div>
         <div class="socialpar"> 
-          <a target="_blank" href="mailto:teddy@warner.net" aria-label="Send Email">
-            <i class="fa-solid fa-paper-plane"></i>
+          <a target="_blank" rel="noopener" href="https://www.instagram.com/teddymakesstuff/" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
           </a>
         </div>
         <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
           <p class="copyright">Copyright © 2026 Teddy Warner</p>
         </a>
+        <p class="footer-links"><a href="/privacy">Privacy</a> <a href="mailto:press@theodore.net">Press</a> <a href="/store">Store</a></p>
     </section>
     <h1 style="display:none;">Teddy Warner - Digital Fabrication Engineer & Designer</h1>
   </div>

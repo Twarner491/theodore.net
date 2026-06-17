@@ -193,7 +193,7 @@
       {% include ".icons/material/menu" ~ ".svg" %}
      </span>
      <span class="close">
-      {% include ".icons/material/close" ~ ".svg" %}
+      <i class="fa-solid fa-xmark"></i>
      </span>
     </label>
 
@@ -326,7 +326,7 @@
           required
           autocomplete="email"
         />
-        <button type="submit">Subscribe</button>
+        <button type="submit" aria-label="Subscribe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </form>
     </div>
   </section>
@@ -360,7 +360,7 @@
     if (palette && typeof palette.color === "object")
       if (palette.color.scheme === "slate") {
         var giscus = document.querySelector("script[src*=giscus]")
-        giscus.setAttribute("data-theme", "transparent_dark") 
+        giscus.setAttribute("data-theme", "transparent_dark")
       }
 
     /* Register event handlers after documented loaded */
@@ -397,13 +397,14 @@
       </a>
     </div>
     <div class="socialpar">
-      <a target="_blank" href="mailto:teddy@warner.net">
-        <i class="fa-solid fa-paper-plane"></i>
+      <a target="_blank" rel="noopener" href="https://www.instagram.com/teddymakesstuff/" aria-label="Instagram">
+        <i class="fa-brands fa-instagram"></i>
       </a>
     </div>
   </div>
     <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
       <p class="copyright">Copyright © {{ current_year }} Teddy Warner</p>
     </a>
+    <p class="footer-links"><a href="/privacy">Privacy</a> <a href="mailto:press@theodore.net">Press</a> <a href="/store">Store</a></p>
 </section>
 {% endblock %}

@@ -62,6 +62,7 @@ search:
       <li><a class="home" href="https://teddywarner.com"><span class="navnum">01</span> Home</a></li>
       <li><a class="proj" href="/projects"><span class="navnum">02</span> Projects</a></li>
       <li><a class="writ" href="/writings"><span class="navnum">03</span> Writing</a></li>
+      <li><a class="stor" href="/store"><span class="navnum">04</span> Store</a></li>
     </ul>
   </nav>
   
@@ -96,13 +97,14 @@ search:
           </a>
         </div>
         <div class="socialpar">
-          <a target="_blank" href="mailto:teddy@warner.net">
-            <i class="fa-solid fa-paper-plane"></i>
+          <a target="_blank" rel="noopener" href="https://www.instagram.com/teddymakesstuff/" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
           </a>
         </div>
         <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
           <p class="copyright">Copyright © 2026 Teddy Warner</p>
         </a>
+        <p class="footer-links"><a href="/privacy">Privacy</a> <a href="mailto:press@theodore.net">Press</a> <a href="/store">Store</a></p>
     </section>
     <h1 style="display:none;">Writing Portfolio - Engineering Essays & Technical Documentation</h1>
   </div>

@@ -98,6 +98,12 @@
   color: var(--md-default-bg-color);
 }
 
+.md-header__option { transition: opacity 0.25s ease; }
+.toggle .md-header__option {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .md-header[data-md-state=shadow] {
   box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0);
 }
@@ -505,11 +511,6 @@
   transition: all 0.3s ease;
 }
 
-.fa-github:hover, .fa-twitter:hover, .fa-paper-plane:hover {
-  transform: scale(0.92);
-  opacity: 0.8;
-}
-
 .copyright {
   margin-top: 0.5em;
   margin-bottom: 10em;
@@ -649,54 +650,63 @@
   line-height: 1.6;
 }
 
+/* single inline field with a submit arrow, matching the store waitlist field */
 .subscribe-form {
   display: flex;
-  gap: 0.6em;
-  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  border: 1.2px solid var(--md-default-fg-color--lighter);
+  border-radius: 16px;
+  background: var(--md-default-bg-color);
+  transition: border-color 0.3s ease;
+}
+
+.subscribe-form:focus-within {
+  border-color: var(--md-default-fg-color--light);
 }
 
 .subscribe-form input[type="email"] {
   flex: 1;
-  min-width: 200px;
-  padding: 0.7em 0.9em;
+  min-width: 0;
+  padding: 1em 0.4em 1em 1.3em;
   font-family: "JetBrains Mono", monospace;
   font-size: 0.8em;
   font-weight: 400;
   color: var(--md-default-fg-color);
-  background: transparent;
-  border: 1px solid var(--md-default-fg-color--lighter);
-  border-radius: 6px;
+  background: none;
+  border: 0;
   outline: none;
-  transition: border-color 0.2s ease;
 }
 
 .subscribe-form input[type="email"]::placeholder {
   color: var(--md-default-fg-color--light);
 }
 
-.subscribe-form input[type="email"]:focus {
-  border-color: var(--md-default-fg-color--light);
-}
-
 .subscribe-form button {
-  padding: 0.7em 1.5em;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.8em;
-  font-weight: 400;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  margin-right: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: none;
   color: var(--md-default-fg-color);
-  background: transparent;
-  border: 1px solid var(--md-default-fg-color--lighter);
-  border-radius: 6px;
   cursor: pointer;
-  transition: border-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
 }
 
 .subscribe-form button:hover {
-  border-color: var(--md-default-fg-color--light);
+  opacity: 1;
 }
 
-.subscribe-form button:active {
-  opacity: 0.8;
+.subscribe-form button svg {
+  width: 17px;
+  height: 17px;
+  display: block;
 }
 
 .subscribe-note {
@@ -714,6 +724,55 @@
 
 .subscribe-note a:hover {
   color: var(--md-default-fg-color);
+}
+
+/* ===== Product / kit cards (embeddable: margin, inline, wide) ===== */
+.md-typeset .kit-card {
+  display: block;
+  text-decoration: none !important;
+  color: var(--md-default-fg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 12px;
+  background: var(--md-default-bg-color);
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.md-typeset .kit-card:hover { transform: scale(0.99); border-color: var(--md-default-fg-color--lighter); }
+.kit-card__imgwrap { display: block; background: #fff; overflow: hidden; }
+.md-typeset .kit-card img { display: block; width: 100%; height: 100%; margin: 0; border: 0; border-radius: 0; object-fit: contain; }
+.kit-card__body { padding: 0.75em 0.95em 0.85em; }
+.kit-card__title { display: block; font-family: "JetBrains Mono", monospace; font-weight: 400; font-size: 0.82em; line-height: 1.35; opacity: 0.9; }
+.kit-card__price { display: block; font-family: "JetBrains Mono", monospace; font-weight: 300; font-size: 0.74em; opacity: 0.55; margin-top: 0.25em; }
+.kit-card__price .from { opacity: 0.7; margin-right: 0.3em; }
+.kit-card__cta { display: inline-block; margin-top: 0.65em; font-family: "JetBrains Mono", monospace; font-size: 0.7em; opacity: 0.5; transition: opacity 0.2s ease; }
+.md-typeset .kit-card:hover .kit-card__cta { opacity: 0.85; }
+
+/* margin variant: a small matted, framed card (outer + inner outline, like the index cards) that floats into the right margin */
+.md-typeset .kit-card--margin { float: right; clear: right; width: 20%; margin: 0.4rem -25% 1.4rem 1.4rem; background: var(--md-default-fg-color--lightest); border-radius: 14px; padding: 7px; }
+.kit-card--margin .kit-card__imgwrap { aspect-ratio: 1 / 1; border: 1px solid var(--md-default-fg-color--lightest); border-radius: 8px; }
+.kit-card--margin .kit-card__body { display: block; padding: 0.5em 0 0.15em; }
+
+/* inline variant: compact horizontal card in the body */
+.md-typeset .kit-card--inline { display: flex; max-width: 30rem; margin: 1.6em 0; }
+.kit-card--inline .kit-card__imgwrap { width: 40%; flex-shrink: 0; aspect-ratio: 1 / 1; border-right: 1px solid var(--md-default-fg-color--lightest); }
+.kit-card--inline .kit-card__body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 1em 1.3em; }
+
+/* wide variant: larger horizontal card spanning the column */
+.md-typeset .kit-card--wide { display: flex; width: 100%; margin: 1.8em 0; }
+.kit-card--wide .kit-card__imgwrap { width: 36%; flex-shrink: 0; aspect-ratio: 4 / 3; border-right: 1px solid var(--md-default-fg-color--lightest); }
+.kit-card--wide .kit-card__body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 1.4em 1.7em; }
+.kit-card--wide .kit-card__title { font-size: 1.05em; }
+.kit-card--wide .kit-card__price { font-size: 0.85em; }
+
+/* the margin card stays visible on mobile (not collapsed): becomes a compact horizontal note inline with the body */
+@media (max-width: 1100px) {
+  .md-typeset .kit-card--margin { float: none !important; clear: both !important; display: flex !important; width: 100% !important; max-width: 24rem; margin: 1.6em auto !important; padding: 6px; }
+  .kit-card--margin .kit-card__imgwrap { width: 34%; flex-shrink: 0; aspect-ratio: 1 / 1; border: 1px solid var(--md-default-fg-color--lightest); border-radius: 8px; }
+  .kit-card--margin .kit-card__body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0.4em 0.9em; }
+}
+@media (max-width: 600px) {
+  .md-typeset .kit-card--inline, .md-typeset .kit-card--wide { display: block; max-width: 22rem; margin-left: auto; margin-right: auto; }
+  .kit-card--inline .kit-card__imgwrap, .kit-card--wide .kit-card__imgwrap { width: 100%; aspect-ratio: 16 / 9; border-right: 0; border-bottom: 1px solid var(--md-default-fg-color--lightest); }
 }
 
 @media (max-width: 600px) {

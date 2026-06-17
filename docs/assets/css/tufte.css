@@ -612,8 +612,8 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
 
 /* ===== BOM tables: collapsible with gradient fade ===== */
 .md-typeset .bom-table {
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 4px;
+  border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lighter));   /* 1.2px @ --tw-line = the same visible squircle line as the cards/search (corners.js draws the ring from this) */
+  border-radius: 14px;                                        /* semi-rounded → reads as a proper squircle */
   margin: 1.5em 0;
   position: relative;
   width: fit-content;
@@ -880,8 +880,17 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
 /* ===== Admonitions: monochromatic, no accent colors ===== */
 .md-typeset .admonition,
 .md-typeset details {
-  border-color: var(--md-default-fg-color--lightest) !important;
+  border-color: var(--tw-line, var(--md-default-fg-color--lighter)) !important;
+  border-width: 1.2px;          /* consistent squircle line width */
+  border-radius: 14px;          /* semi-rounded → corners.js renders a proper squircle ring */
   box-shadow: none;
+}
+/* Tweet: give it the same squircle frame as everything else — a consistent 1.2px line in the
+   theme-adaptive --lightest tone (so colour + opacity match in both light and dark mode).
+   corners.js puts the ring on this wrapper and clips the Twitter iframe to the squircle. */
+.md-typeset .twitter-tweet {
+  border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lighter)) !important;
+  border-radius: 14px !important;
 }
 
 .md-typeset .admonition .admonition-title,
@@ -925,7 +934,7 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
 .md-typeset details.bug,
 .md-typeset details.example,
 .md-typeset details.quote {
-  border-color: var(--md-default-fg-color--lightest) !important;
+  border-color: var(--tw-line, var(--md-default-fg-color--lighter)) !important;
 }
 
 .md-typeset .admonition.note .admonition-title,
@@ -995,8 +1004,14 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
   box-shadow: none !important;
 }
 
+/* no focus/click glow on collapsible admonitions — just the open/close, nothing else */
 .md-typeset details:focus-within {
-  box-shadow: 0 0 0 0.1rem var(--md-default-fg-color--lightest) !important;
+  box-shadow: none !important;
+}
+/* when collapsed, hide the title's bottom rule (the title/content separator from the open
+   state) — otherwise it reads as a stray HR under the closed box */
+.md-typeset details:not([open]) > summary {
+  border-bottom: none !important;
 }
 
 /* Collapsible marker */
@@ -1007,7 +1022,7 @@ input.margin-toggle:checked + label.margin-toggle .fa-circle-plus {
 /* Inline admonitions */
 .md-typeset .admonition.inline,
 .md-typeset .admonition.inline.end {
-  border-color: var(--md-default-fg-color--lightest) !important;
+  border-color: var(--tw-line, var(--md-default-fg-color--lighter)) !important;
 }
 
 /* ===== Section spacing ===== */

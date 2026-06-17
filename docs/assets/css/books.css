@@ -532,11 +532,6 @@
   transition: all 0.3s ease;
 }
 
-.fa-github:hover, .fa-x-twitter:hover, .fa-paper-plane:hover {
-  scale: 0.92;
-  opacity: 0.8;
-}
-
 .copyright {
   margin-top: 0.5em;
   margin-bottom: 10em;

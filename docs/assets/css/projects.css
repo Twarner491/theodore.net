@@ -116,6 +116,12 @@
   color: var(--md-default-bg-color);
 }
 
+.md-header__option { transition: opacity 0.25s ease; }
+.toggle .md-header__option {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .md-header[data-md-state=shadow] {
   box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0);
 }
@@ -291,6 +297,14 @@
 }
 
 .home:hover, .proj:hover, .writ:hover {
+  font-style: italic;
+}
+
+.stor {
+  transition: all 0.3s ease;
+}
+
+.stor:hover {
   font-style: italic;
 }
 
@@ -562,11 +576,6 @@
   color: var(--md-default-fg-color);
   opacity: 0.9;
   transition: all 0.3s ease;
-}
-
-.fa-github:hover, .fa-x-twitter:hover, .fa-paper-plane:hover {
-  scale: 0.92;
-  opacity: 0.8;
 }
 
 .copyright {

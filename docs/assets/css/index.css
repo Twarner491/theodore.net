@@ -159,6 +159,19 @@ header {
   color: var(--md-default-bg-color);
 }
 
+/* nav menu open: hide the theme, search, and cart controls; show only the close X */
+.md-header__option,
+.md-header__button.md-icon[for="__search"],
+.md-search,
+.store-cart-btn { transition: opacity 0.25s ease; }
+.toggle .md-header__option,
+.toggle .md-header__button.md-icon[for="__search"],
+.toggle .md-search,
+.toggle .store-cart-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .md-header[data-md-state=shadow] {
   box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0);
 }
@@ -308,6 +321,14 @@ header {
 }
 
 .home:hover, .proj:hover, .writ:hover {
+  font-style: italic;
+}
+
+.stor {
+  transition: all 0.3s ease;
+}
+
+.stor:hover {
   font-style: italic;
 }
 
@@ -756,7 +777,7 @@ header {
   margin-bottom: 0.75em;
 }
 
-.content6 h2 i, .content5 h2 i {
+.content6 h2 i, .content5 h2 i, .content7 h2 i {
   font-size: 0.5em;
   opacity: 0.3;
   transition: opacity 0.3s ease;
@@ -766,7 +787,7 @@ header {
   top: 1.1em;
 }
 
-.content6 h2:hover i, .content5 h2:hover i {
+.content6 h2:hover i, .content5 h2:hover i, .content7 h2:hover i {
   opacity: 0.6;
 }
 
@@ -926,6 +947,16 @@ header {
   width: 100%;
 }
 
+/* home store teaser: three small product cards linking to product pages */
+.press .store-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4em; }
+.press .store-mini-card { display: block; text-decoration: none; color: inherit; transition: transform 0.3s ease; }
+.press .store-mini-card:hover { transform: scale(0.97); }
+.press .store-mini-img { width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 18px; border: 1.2px solid var(--md-default-fg-color--lightest); background: #fff; }
+.press .store-mini-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.press .store-mini-title { font-family: "JetBrains Mono"; font-weight: 300; font-size: 0.85em; opacity: 0.85; margin: 0.7em 0 0.15em; text-align: left; }
+.press .store-mini-price { font-family: "JetBrains Mono"; font-weight: 300; font-size: 0.75em; opacity: 0.5; margin: 0; text-align: left; }
+.press .store-mini-price .from { opacity: 0.7; margin-right: 0.35em; }
+
 .hiddentext {
   color: var(--md-default-bg-color);
   -webkit-user-select: none;
@@ -960,11 +991,6 @@ header {
   color: var(--md-default-fg-color);
   opacity: 0.9;
   transition: all 0.3s ease;
-}
-
-.fa-github:hover, .fa-x-twitter:hover, .fa-paper-plane:hover {
-  scale: 0.92;
-  opacity: 0.8;
 }
 
 .copyright {
