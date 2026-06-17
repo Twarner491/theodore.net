@@ -1,0 +1,3 @@
+/* Superseded by search.css — Material's search is hidden there (gated on
+   body.tw-has-search, added by search.js) and replaced by the custom component.
+   Kept as a no-op so the search behaves as a clean fallback if search.js fails. */

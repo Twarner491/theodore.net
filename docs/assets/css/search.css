@@ -1,0 +1,248 @@
+/* Custom search. Our icon sits in the header where Material's was (hidden). On
+   open the bar lifts out into the body (above a single page-wide scrim, so the
+   whole page incl. the header dims uniformly), expands in place, then the panel
+   drops. Frames follow the site: a sleek 1.2px line, no drop shadow, single-line
+   ellipsis text, JetBrains Mono / weight 300. Squircle corners come from corners.js. */
+
+:root { --tw-line: var(--md-default-fg-color--lightest); }   /* fallback for engines without color-mix (adapts to theme, just fainter) */
+/* Declare on [data-md-color-scheme] too — Material puts the scheme on <body> while
+   --md-default-fg-color is redefined per scheme. A custom prop bakes its inner var()
+   at its DECLARING element, so a :root-only definition freezes <html>'s fg (which can
+   lag the body's scheme), leaving card lines dark in dark mode. Re-declaring it on the
+   scheme-carrying element makes the body's (visible) scheme win for the cards. */
+@supports (color: color-mix(in srgb, red, blue)) {
+  :root, [data-md-color-scheme] { --tw-line: color-mix(in srgb, var(--md-default-fg-color) 17%, transparent); }
+}
+
+body.tw-has-search .md-search,
+body.tw-has-search label.md-header__button.md-icon[for="__search"] { display: none !important; }
+
+/* ---- header slot + bar ---- */
+/* the slot itself animates width (bar fills it) — avoids the absolute-element
+   width-transition bug, and keeps the magnifying glass fixed at the right edge */
+.tw-search { position: relative; display: inline-flex; align-items: center; justify-content: flex-end; width: 40px; height: 44px; vertical-align: middle; pointer-events: auto; transition: width 0.3s cubic-bezier(0.22, 0.72, 0.2, 1); }
+.tw-search.tw-open { width: 412px; max-width: calc(100vw - 32px); }
+.tw-search.tw-float { position: fixed; z-index: 2003; margin: 0; }   /* lifted into the body above the scrim while open */
+
+.tw-bar {
+  position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%);
+  display: flex; align-items: center; justify-content: flex-end; height: 44px; box-sizing: border-box; overflow: hidden;
+  border-radius: 19px; border: 1.2px solid transparent; background: transparent;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.tw-search.tw-open .tw-bar {
+  background: var(--md-default-bg-color); border-color: var(--tw-line);
+}
+.tw-input {
+  flex: 1; min-width: 0; width: 0; opacity: 0; padding: 0;
+  border: 0; background: none; outline: none; color: var(--md-default-fg-color);
+  font-family: "JetBrains Mono", monospace; font-size: 0.7rem; font-weight: 300; letter-spacing: -0.01em;
+  transition: opacity 0.18s ease 0.08s;
+}
+.tw-search.tw-open .tw-input { opacity: 1; padding: 0 6px 0 18px; }
+/* rotating hint: "try '…'" — the quoted phrase (quotes + word) cross-fades, "try" stays */
+.tw-hint {
+  position: absolute; left: 18px; top: 50%; transform: translateY(-50%); pointer-events: none;
+  font-family: "JetBrains Mono", monospace; font-size: 0.7rem; font-weight: 300; letter-spacing: -0.01em;
+  color: var(--md-default-fg-color); opacity: 0; transition: opacity 0.3s ease; white-space: nowrap;
+}
+.tw-search.tw-open .tw-hint.tw-hint-on { opacity: 0.36; }
+.tw-hint-word { transition: opacity 0.45s ease; }
+.tw-hint-word.tw-fade { opacity: 0; }
+.tw-icon, .tw-clear, .tw-close { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; height: 44px; border: 0; background: none; padding: 0; color: var(--md-default-fg-color); cursor: pointer; }
+.tw-icon { width: 40px; box-sizing: border-box; }
+/* The glass sits centred in its own 40px slot: no right-pad, no resting nudge, so the slot is
+   symmetric and lines up evenly with the palette and hamburger, with no rightward overhang. */
+.tw-icon i { font-size: 0.85rem; opacity: 0.85; transition: opacity 0.25s ease; }   /* sized to the visible weight of the nav icons — stays at this foreground tone when open too (no dimming) */
+.tw-clear { width: 26px; margin-right: 8px; opacity: 0.4; display: none; }   /* gap from the magnifying glass so the two don't read as one cluster */
+.tw-clear i { font-size: 0.8rem; }
+.tw-clear:hover { opacity: 0.8; }
+.tw-close { width: 44px; display: none; opacity: 0.55; }   /* obvious exit — full-page only; solid ✕ at the magnifier's weight (just smaller than the old 1.1rem that read heavy) */
+.tw-close i { font-size: 0.9rem; }
+.tw-close:hover { opacity: 0.9; }
+
+/* lock page scroll while open (matches the nav menu) */
+html:has(body.tw-search-open) { overflow: hidden; }
+
+/* slide the theme toggle out from under the expanding bar, in step with it (desktop only;
+   the full-page modes below cover the header entirely, so the nudge is irrelevant there).
+   The transition lives on the element itself so it animates BOTH ways — out on expand,
+   back in on collapse — driven by .tw-search-expanded (toggled with the bar). */
+@media (min-width: 1025px) {
+  body.tw-has-search .md-header__option[data-md-component="palette"] { transition: transform 0.3s cubic-bezier(0.22, 0.72, 0.2, 1), opacity 0.25s ease; }   /* keep the opacity transition the nav-menu fade relies on — else the toggle snaps back visible while the menu is still closing */
+  body.tw-search-expanded .md-header__option[data-md-component="palette"] { transform: translateX(var(--tw-pal-shift, -376px)); }
+}
+
+/* ---- one scrim over the whole page (header included); only bar + panel sit above it ---- */
+.tw-scrim { position: fixed; inset: 0; z-index: 2000; background: rgba(18, 19, 22, 0.46); opacity: 0; visibility: hidden; transition: opacity 0.32s ease, visibility 0s linear 0.32s; }
+.tw-scrim.tw-shown { opacity: 1; visibility: visible; transition: opacity 0.28s ease; }
+[data-md-color-scheme="slate"] .tw-scrim { background: rgba(0, 0, 0, 0.58); }
+
+/* ---- dropdown ---- */
+.tw-panel {
+  position: fixed; width: 552px; max-width: calc(100vw - 24px); height: auto; max-height: min(536px, calc(100vh - 120px));
+  border-radius: 24px; overflow: hidden; background: var(--md-default-bg-color);
+  border: 1.2px solid var(--tw-line);   /* crisp gray line, right on the edge */
+  z-index: 2001; opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-7px) scale(0.99);
+  transition: opacity 0.16s ease, transform 0.24s cubic-bezier(0.22, 0.72, 0.2, 1), height 0.32s cubic-bezier(0.22, 0.72, 0.2, 1), visibility 0s linear 0.24s;
+}
+.tw-panel.tw-shown { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition: opacity 0.16s ease, transform 0.24s cubic-bezier(0.22, 0.72, 0.2, 1), height 0.32s cubic-bezier(0.22, 0.72, 0.2, 1); }
+/* height adapts to content: 3 browse rows, a single filtered section, or a results
+   list (which scrolls once it would exceed max-height). White space all around. */
+/* browse is a fixed view — only the card rows scroll (horizontally). Vertical scroll
+   (and its rubber-band) is enabled ONLY once there are results to scroll through. */
+.tw-panel-scroll { max-height: min(536px, calc(100vh - 120px)); overflow-y: hidden; overscroll-behavior: contain; padding: 22px 0 36px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.tw-panel.tw-results .tw-panel-scroll { overflow-y: auto; padding: 22px 0 26px; }
+.tw-panel-scroll::-webkit-scrollbar { display: none; }
+
+/* subtle fade at the very bottom of the scrolling list — full width, short, and
+   gentle (just enough to soften content scrolling off the bottom edge). Only shown
+   when the list actually overflows. The panel's overflow:hidden + radius clip it. */
+.tw-fade-b { position: absolute; left: 0; right: 0; bottom: 0; height: 26px; pointer-events: none; z-index: 4; opacity: 0; transition: opacity 0.2s ease; }
+.tw-panel.tw-scrollable .tw-fade-b { opacity: 1; }
+.tw-blur-layer { position: absolute; inset: 0; }
+.tw-blur-layer:nth-child(1) { backdrop-filter: blur(0.4px); -webkit-backdrop-filter: blur(0.4px); -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 80%); mask-image: linear-gradient(to top, #000 0%, transparent 80%); }
+.tw-blur-layer:nth-child(2) { backdrop-filter: blur(1.1px); -webkit-backdrop-filter: blur(1.1px); -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 42%); mask-image: linear-gradient(to top, #000 0%, transparent 42%); }
+.tw-fade-b::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--md-default-bg-color) 0%, var(--md-default-bg-color) 20%, transparent 100%); }
+
+/* ---- section headings (clickable scope filters) ---- */
+.tw-sec { margin-bottom: 16px; }
+.tw-sec:last-child { margin-bottom: 0; }
+.tw-sec-h { display: inline-flex; align-items: center; gap: 5px; margin: 0 0 9px 30px; padding: 1px 0; font-family: "JetBrains Mono", monospace; font-size: 0.68rem; font-weight: 300; letter-spacing: 0.02em; opacity: 0.4; background: none; border: 0; color: inherit; cursor: pointer; transition: opacity 0.18s ease; }
+.tw-sec-h:hover { opacity: 0.72; }
+.tw-sec-active .tw-sec-h { opacity: 0.9; }
+.tw-sec-active .tw-sec-h::after { content: "×"; font-size: 1.1em; opacity: 0.5; margin-left: 1px; }
+
+/* ---- horizontal card rows; clean gradient edge-fades set in from the panel edge ---- */
+.tw-scroll-wrap { position: relative; }
+.tw-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 4px 30px 6px; scrollbar-width: none; cursor: grab; }
+.tw-scroll::-webkit-scrollbar { display: none; }
+.tw-scroll.tw-dragging, .tw-scroll.tw-dragging * { cursor: grabbing; user-select: none; }
+.tw-scroll img { -webkit-user-drag: none; }   /* don't ghost-drag thumbnails while drag-scrolling */
+/* 60px wide: solid bg for the first 30px (the content inset = white padding) then a
+   30px fade. So the fade is INSET to where the cards/titles start (30px), with white
+   padding between it and the panel edge — cards blur right at the edge of the text. */
+.tw-scroll-wrap::before, .tw-scroll-wrap::after { content: ""; position: absolute; top: 0; bottom: 0; width: 60px; pointer-events: none; z-index: 2; opacity: 1; transition: opacity 0.2s ease; }
+.tw-scroll-wrap::before { left: 0; background: linear-gradient(to right, var(--md-default-bg-color) 30px, transparent 60px); }
+.tw-scroll-wrap::after { right: 0; background: linear-gradient(to left, var(--md-default-bg-color) 30px, transparent 60px); }
+/* left fade stays off until the row is scrolled (so the first card sits crisp at the start);
+   right fade drops at the end. classes are set from scroll position in JS. */
+.tw-scroll-wrap.tw-scroll-start::before { opacity: 0; }
+.tw-scroll-wrap.tw-scroll-end::after { opacity: 0; }
+
+/* ---- cards: site frame style (1.2px line, no shadow, scale hover) ---- */
+.tw-card { flex: 0 0 auto; display: flex; box-sizing: border-box; border: 1.2px solid var(--tw-line); border-radius: 18px; background: var(--md-default-bg-color); text-decoration: none !important; color: var(--md-default-fg-color); transition: transform 0.25s ease; transform-origin: center; opacity: 0; }
+.tw-panel.tw-shown .tw-card { animation: tw-card-in 0.4s ease both; }   /* staggered, left→right reveal (delay set per-card in JS) */
+@keyframes tw-card-in { from { opacity: 0; } to { opacity: 1; } }
+.tw-card:hover { transform: scale(0.97); }   /* opacity-only entrance keeps the scale-hover working */
+.tw-card-body { display: flex; flex-direction: column; justify-content: center; gap: 3px; min-width: 0; }
+.tw-card-title { font-family: "JetBrains Mono", monospace; font-size: 0.76rem; font-weight: 300; opacity: 0.78; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tw-card-desc { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; font-weight: 300; opacity: 0.5; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tw-card-price { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; font-weight: 300; opacity: 0.5; }
+/* nested-frame thumbnail (mirrors .imgparent on the projects page) */
+.tw-card-thumb { flex: 0 0 auto; display: block; box-sizing: border-box; padding: 4px; border: 1.2px solid var(--tw-line); border-radius: 14px; }
+.tw-card-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 1.2px solid var(--tw-line); box-sizing: border-box; }
+
+/* project: framed image left + title + one-line description */
+.tw-card-project { width: 300px; height: 70px; padding: 9px; gap: 10px; align-items: center; }
+.tw-card-project .tw-card-thumb { width: 52px; height: 52px; }
+.tw-card-project .tw-card-body { flex: 1; }
+/* writing: title only — thin + long so more of the title shows (frees vertical room for store) */
+.tw-card-writing { width: 244px; height: 46px; padding: 0 16px; align-items: center; }
+.tw-card-writing .tw-card-body { flex: 1; justify-content: center; }
+/* product: taller card → more vertical image; height auto so the bottom padding below the price equals the top padding above the image (a fixed height let the body flex-fill and crammed the price against the edge) */
+.tw-card-product { width: 150px; height: auto; flex-direction: column; padding: 9px; gap: 7px; }
+.tw-card-product .tw-card-thumb { width: 100%; height: 138px; padding: 3px; }
+.tw-card-product .tw-card-body { gap: 3px; padding: 0 2px; }
+
+/* ---- results: writings-index style (title + date; desc + readtime; no rules) ---- */
+.tw-list { display: flex; flex-direction: column; padding: 0 30px; }
+.tw-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; text-decoration: none !important; color: var(--md-default-fg-color); transition: transform 0.25s ease; transform-origin: left center; }
+.tw-row:hover, .tw-row.tw-active { transform: scale(0.99); }
+.tw-row-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+/* products carry a small inline thumbnail; projects + writings stay text-only */
+.tw-row-thumb { flex: 0 0 auto; width: 40px; height: 40px; box-sizing: border-box; padding: 3px; border: 1.2px solid var(--tw-line); border-radius: 11px; }
+.tw-row-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.tw-row-top { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+.tw-row-title { font-family: "JetBrains Mono", monospace; font-size: 0.84rem; font-weight: 300; opacity: 0.78; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tw-row-aside { flex: 0 0 auto; font-family: "JetBrains Mono", monospace; font-size: 0.72rem; font-weight: 300; opacity: 0.38; }
+.tw-row-sub { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-top: 1px; }
+.tw-row-desc { font-family: "JetBrains Mono", monospace; font-size: 0.75rem; font-weight: 300; opacity: 0.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tw-row-aside2 { flex: 0 0 auto; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; font-weight: 300; opacity: 0.28; }
+
+.tw-empty { padding: 46px 30px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 0.76rem; font-weight: 300; opacity: 0.4; }
+
+/* ---- iPad / tablet / phone: a full-page white search interface (bar pinned at the
+   top, results filling the page). Desktop keeps the floating dropdown. The coarse-
+   pointer clause catches iPad *landscape* (≤1366) while mouse laptops stay dropdown. ---- */
+@media (max-width: 1024px), (pointer: coarse) and (max-width: 1366px) {
+  /* OPEN/CLOSE is a clip-path circle wipe of the white page, centered on the search icon
+     (origin set in JS as --tw-wipe-x/y). It opens FROM the icon and the close is the exact
+     inverse, shrinking back to it. Opaque takeover in every state (incl. mid-close) so the
+     close reads as a white circle shrinking, not the dim overlay returning. (0,2,0) beats
+     the slate dim rule by source order. */
+  [data-md-color-scheme] .tw-scrim { background: var(--md-default-bg-color); }
+  .tw-scrim { opacity: 1; visibility: visible; pointer-events: none;
+    clip-path: circle(0% at var(--tw-wipe-x, 100%) var(--tw-wipe-y, 0%)); transition: clip-path 0.24s cubic-bezier(0.4, 0, 0.2, 1); }
+  .tw-scrim.tw-shown { pointer-events: auto;
+    clip-path: circle(150% at var(--tw-wipe-x, 100%) var(--tw-wipe-y, 0%)); transition: clip-path 0.24s cubic-bezier(0.4, 0, 0.2, 1); }
+  /* the floated container is a full-width flex row at the nav line: [rounded bar] [close] */
+  .tw-search.tw-open { width: 100%; max-width: none; }
+  .tw-search.tw-float { left: 0 !important; right: 0 !important; width: 100% !important; max-width: none !important;
+    height: 44px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 0 12px; box-sizing: border-box; }
+  .tw-bar { position: relative; top: auto; left: auto; right: auto; transform: none; flex: 0 0 auto; height: 44px; }
+  /* the bar EXPANDS from its right edge (the icon) by animating width, like desktop: from the
+     icon (40px) out to fill, growing leftward (the row is flex-end so the icon edge stays put).
+     STAGGER: the open width waits 0.16s so the bar expands after the white wipe takes over;
+     collapse leads with no delay, then the white follows (the JS defers the wipe-out). */
+  /* --tw-bar-pad-r (JS, full-page only) = how far the resting nav icon sits left of the full-width
+     expanded spot. margin-right on the bar holds its right edge at the resting spot so the icon does
+     NOT move on open (it expands leftward). --tw-bar-pad-r-open is the open offset: the same pad off
+     the store page (icon stays put), or 0 on it (the icon glides right to clear the cart). The open
+     bar then extends 6px FURTHER right (margin-right -6, width +6) with a matching 6px padding-right,
+     so its right edge sits a bit beyond the icon — giving the icon proper right breathing room to
+     match the left text inset — while the icon itself stays put. (Padding transitions too, so the
+     icon doesn't flicker as the bar grows.) */
+  .tw-search.tw-float .tw-bar { width: 40px; margin-right: var(--tw-bar-pad-r, 0px); padding-right: 0; transition: width 0.3s cubic-bezier(0.22, 0.72, 0.2, 1) 0s, margin-right 0.3s cubic-bezier(0.22, 0.72, 0.2, 1) 0s, padding-right 0.3s cubic-bezier(0.22, 0.72, 0.2, 1) 0s, background 0.2s ease, border-color 0.2s ease; }
+  .tw-search.tw-float.tw-open .tw-bar { width: calc(100% - 48px - var(--tw-bar-pad-r-open, 0px) + 6px); margin-right: calc(var(--tw-bar-pad-r-open, 0px) - 6px); padding-right: 6px; transition: width 0.3s cubic-bezier(0.22, 0.72, 0.2, 1) 0.16s, margin-right 0.3s cubic-bezier(0.22, 0.72, 0.2, 1) 0.16s, padding-right 0.3s cubic-bezier(0.22, 0.72, 0.2, 1) 0.16s, background 0.2s ease, border-color 0.2s ease; }
+  .tw-icon, .tw-clear { height: 44px; }
+  .tw-search.tw-open .tw-icon { display: inline-flex; }       /* keep the search icon inside the bar (full foreground tone — no dimming) */
+  .tw-input, .tw-hint { font-size: 0.7rem; }   /* match the desktop bar's text size */
+  /* TEXT STAGGER: hold the input + hint hidden until the bar has fully expanded (its width
+     finishes at the 0.16s delay + 0.3s = 0.46s), then fade them in; on close they leave first
+     (no delay), before the bar collapses. */
+  .tw-search.tw-float .tw-input, .tw-search.tw-float .tw-hint { transition: opacity 0.12s ease 0s; }
+  .tw-search.tw-float.tw-open .tw-input { transition: opacity 0.2s ease 0.44s; }
+  .tw-search.tw-float.tw-open .tw-hint.tw-hint-on { transition: opacity 0.28s ease 0.44s; }
+  /* the close sits to the RIGHT of the bar. Its slot is reserved the whole time the bar is
+     floated (only opacity animates), so collapsing never frees space and shoves the icon to
+     the edge. It fades in just after the bar. */
+  .tw-close { width: 40px; height: 44px; opacity: 0; transition: opacity 0.22s ease 0.18s; }
+  .tw-search.tw-float .tw-close { display: inline-flex; }
+  .tw-search.tw-float.tw-open .tw-close { opacity: 1; }
+  /* panel fills from just below the bar (position() sets its top) to the bottom — fades in with the wipe */
+  .tw-panel {
+    left: 0 !important; right: 0 !important; bottom: 0 !important;
+    width: auto !important; max-width: none !important; height: auto !important; max-height: none !important;
+    border: 0 !important; border-radius: 0 !important; transform: none !important;
+    transition: opacity 0.22s ease 0.05s, visibility 0s linear 0.27s;
+  }
+  .tw-panel.tw-shown { transition: opacity 0.22s ease 0.05s; }
+  .tw-panel-scroll { height: 100%; max-height: none; padding: 24px 0 28px; }   /* browse stays locked (base); the .tw-results rule re-enables vertical scroll */
+  .tw-fade-b { left: 0; right: 0; }
+}
+
+/* phones: tighten the inner padding so cards/rows aren't cramped */
+@media (max-width: 560px) {
+  .tw-sec-h { margin-left: 22px; }
+  .tw-scroll { padding-left: 22px; padding-right: 22px; }
+  .tw-list { padding: 0 22px; }
+  .tw-fade-b { left: 0; right: 0; }   /* full width, even though the content column is inset */
+}
+
+/* ---- respect reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .tw-search, .tw-bar, .tw-input, .tw-hint, .tw-hint-word, .tw-icon i, .tw-panel, .tw-scrim, .tw-card, .tw-row, .tw-fade-b,
+  body.tw-has-search .md-header__option[data-md-component="palette"] { transition-duration: 0.01ms !important; }
+  .tw-card, .tw-panel.tw-shown .tw-card { opacity: 1 !important; animation: none !important; }
+}
