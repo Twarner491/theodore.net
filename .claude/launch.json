@@ -6,6 +6,12 @@
       "runtimeExecutable": "mkdocs",
       "runtimeArgs": ["serve", "--dev-addr", "127.0.0.1:8000"],
       "port": 8000
+    },
+    {
+      "name": "mkdocs-verify",
+      "runtimeExecutable": "mkdocs",
+      "runtimeArgs": ["serve", "--dev-addr", "127.0.0.1:8001"],
+      "port": 8001
     }
   ]
 }

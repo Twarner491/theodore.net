@@ -91,6 +91,7 @@ hooks:
   - hooks/content_lists.py
   - hooks/case_redirects.py
   - hooks/tufte_elements.py
+  - hooks/search_data.py
 
 watch:
   - docs
@@ -139,6 +140,9 @@ markdown_extensions:
 extra_css:
   - assets/css/tufte.css
   - assets/css/extra.css
+  - assets/css/header-search.css
+  - assets/css/code-copy.css
+  - assets/css/search.css
 
 extra:
   analytics:
@@ -150,6 +154,11 @@ extra_javascript:
   - assets/js/grids.js
   - assets/js/lightbox.js
   - assets/js/index.js
+  - assets/js/corners.js
+  - assets/js/header-search.js
+  - assets/js/code-copy.js
+  - assets/js/footer-social.js
+  - assets/js/search.js
 
 nav:
   - Home: https://teddywarner.com
