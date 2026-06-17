@@ -1,0 +1,49 @@
+/* Code blocks on article pages: hover reveals a clipboard button, and clicking
+   anywhere in the block copies its contents. Sleek and minimal. */
+
+.md-content__inner.md-typeset .highlight {
+  position: relative;
+}
+
+/* whole block reads as clickable on hover (text selection still works) */
+.md-content__inner.md-typeset .highlight:hover { cursor: pointer; }
+.md-content__inner.md-typeset .highlight:hover pre,
+.md-content__inner.md-typeset .highlight:hover code { cursor: pointer; }
+
+.cc-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--md-default-fg-color) 7%, transparent);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--md-default-fg-color) 3%, var(--md-default-bg-color));
+  color: var(--md-default-fg-color--light);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.18s ease, transform 0.18s ease, color 0.18s ease;
+  z-index: 3;
+}
+
+.md-content__inner.md-typeset .highlight:hover .cc-copy {
+  opacity: 0.55;
+  transform: translateY(0);
+}
+
+.cc-copy:hover { opacity: 1 !important; }
+
+.cc-icon {
+  width: 15px;
+  height: 15px;
+  stroke-opacity: 0.7;
+}
+
+.highlight.cc-copied .cc-copy {
+  opacity: 1 !important;
+  color: var(--md-default-fg-color--light);
+}
