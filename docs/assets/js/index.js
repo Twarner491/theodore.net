@@ -78,11 +78,10 @@ var supportsCssVars = function() {
 };
 supportsCssVars() || alert("Please view this page in a modern browser that supports CSS Variables :).");
 
-function togglemenu() {
-  var element = document.body;
-  element.classList.toggle("toggle");
-  element.classList.add("scrollUp");
-}
+// togglemenu() intentionally lives in header.js (the full version: scroll-position compensation +
+// the injected nav close button). index.js loads globally via extra_javascript, so defining
+// togglemenu here would OVERRIDE header.js's on any page where header.js isn't deferred — which is
+// what dropped the close X and the jitter fix on the projects / writings / article pages.
 
 // Circle text rotation - smooth reverse on hover
 (function() {

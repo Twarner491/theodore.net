@@ -42,3 +42,70 @@
   font-family: 'Font Awesome 6 Regular';
   font-display: swap;
 }
+
+/* --- Nav menu open: cover the header, don't fade/shift the icons --------------------------------
+   The slide-in overlay (.main-navigation) used to sit BEHIND the sticky header (z-index 3 < 4), so
+   the logo + right-side icons stayed on top and had to be faded/recoloured to get out of the way —
+   which read as a "separate disappearance" and never truly covered them. Raise the overlay ABOVE
+   the header so it simply covers them the way it covers the page. The icons then need no fade or
+   recolour on open: they stay exactly where they are and the overlay sweeps over them. (Neutralised
+   here in one place rather than across every per-page stylesheet that duplicates these toggle
+   rules.) */
+body .main-navigation {
+  z-index: 50;
+  /* Opaque cover in the proper FOREGROUND colour: = --md-default-fg-color at full opacity. (The fg
+     var carries ~0.13-0.18 alpha; left translucent it lets the icons bleed through, and composited
+     over the page it greys out — both wrong. So pin the fg's own colour, solid.) Light = black fg. */
+  background-color: #000;
+}
+body[data-md-color-scheme="slate"] .main-navigation {
+  background-color: hsl(225, 15%, 90%); /* slate = the lighter fg, opaque */
+}
+.toggle .logo,
+.toggle .md-header__option,
+.toggle .md-header__button.md-icon[for="__search"],
+.toggle .md-search,
+.toggle .tw-search,
+.toggle .store-cart-btn {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.toggle .md-header__option,
+.toggle .md-header__button.md-icon[for="__search"],
+.toggle .store-cart-btn {
+  color: var(--md-default-fg-color) !important;
+}
+
+/* The overlay covers the header's toggle button when open, so the close X is a BODY-LEVEL fixed
+   element ABOVE the overlay (z-index 60), pinned by header.js over the hamburger's exact spot. The
+   hamburger stays visible until the overlay slides over it, then the X is revealed in its place: the
+   icon swaps AT the cover, already in its final colour, so there's no early change and no
+   colour-transition flash. Sized to the other close icons. */
+#nav-close {
+  position: fixed;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  color: var(--md-default-bg-color);
+}
+#nav-close.show {
+  opacity: 1;
+  pointer-events: auto;
+  /* reveal once the overlay has slid OVER the hamburger (it sits near the right edge, so it's
+     covered at ~0.7 of the slide), not when the whole slide finishes settling */
+  transition: opacity 0s calc(var(--nav-duration, 0.25s) * 0.7);
+}
+#nav-close i { font-size: 1.05rem; }
+
+/* Keep the hamburger visible while the overlay slides in (it's covered when the overlay arrives);
+   #nav-close is the X, so the header's own .close stays hidden the whole time. */
+.toggle .menu { display: inline !important; }
+.toggle .close { display: none !important; }
