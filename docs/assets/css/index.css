@@ -1054,6 +1054,18 @@ header {
   .copyright {
     font-size: 0.8em;
   }
+  /* Card "go to page" icon on super-wide screens: cap the glyph at its regular-desktop size, and
+     pin it with absolute top/right so its top + right padding stay EQUAL at ANY width. (A floated,
+     em-offset icon drifts down by a varying amount as the scaled card content grows, so a fixed
+     nudge isn't robust; absolute positioning is. The card is position:relative.) */
+  .fa-arrow-up-right-from-square {
+    font-size: 16px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    float: none;
+    margin: 0;
+  }
 }
 
 @media (max-width: 1200px) { /* Laptop */
