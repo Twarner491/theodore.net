@@ -47,6 +47,7 @@ Building a bird tracking station of your own is easy enough. The full project re
   <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Avian Mic kit"></span>
   <span class="kit-card__body">
     <span class="kit-card__title">Bird Mic</span>
+    <span class="kit-card__desc">A tiny mic that feeds your bird screen the calls it hears.</span>
     <span class="kit-card__price"><span class="from">from</span>$149</span>
   </span>
 </a> Or, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
@@ -63,7 +64,7 @@ Building a bird tracking station of your own is easy enough. The full project re
 
 </div>
 
-While you're at it, grab a [Gemini API key](https://aistudio.google.com/apikey) to restyle illustrations (free-tier is fine), an [eBird API key](https://ebird.org/api/keygen) to filter species by region.
+While you're at it, grab a [Gemini API key](https://aistudio.google.com/apikey) to restyle illustrations, an [eBird API key](https://ebird.org/api/keygen) to filter species by region.
 
 ### Birdnet [dot] local
 
@@ -258,6 +259,7 @@ Everything you need to build a frame of your own can be found at [github.com/Twa
   <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/heard-today.png" alt="Avian Visitors kit"></span>
   <span class="kit-card__body">
     <span class="kit-card__title">Avian Visitors</span>
+    <span class="kit-card__desc">A framed e-ink that collages the birds heard nearby.</span>
     <span class="kit-card__price"><span class="from">from</span>$189</span>
   </span>
 </a> Again, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}

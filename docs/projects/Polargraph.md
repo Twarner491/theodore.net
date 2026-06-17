@@ -339,7 +339,15 @@ I used some felt pads on the back corners of the machine to be sure it didn't ma
 
 #### BOM
 
-The full project repo is at [github.com/Twarner491/polargraph](https://github.com/Twarner491/polargraph). Here's all you need:
+The full project repo is at [github.com/Twarner491/polargraph](https://github.com/Twarner491/polargraph). If you're interested in building one of your own, I offer a [kit that includes all of the components you need](/store/polargraph/)!
+<a class="kit-card kit-card--margin" href="/store/polargraph/">
+  <span class="kit-card__imgwrap"><img src="/assets/images/Polargraph/kit.png" alt="Polargraph Pen Plotter"></span>
+  <span class="kit-card__body">
+    <span class="kit-card__title">GPENT Kit</span>
+    <span class="kit-card__desc">A wall-hung machine that draws generative art.</span>
+    <span class="kit-card__price"><span class="from">from</span>$329</span>
+  </span>
+</a> Or, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
 
 <div class="bom-table" markdown>
 

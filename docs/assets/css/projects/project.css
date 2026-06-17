@@ -726,53 +726,48 @@
   color: var(--md-default-fg-color);
 }
 
-/* ===== Product / kit cards (embeddable: margin, inline, wide) ===== */
+/* ===== Product / kit cards (embeddable: margin, inline, wide) — match the search-result product card (.tw-card-product): white card, nested squircle-framed thumb, JetBrains Mono title/desc/price, scale(0.97) hover ===== */
 .md-typeset .kit-card {
-  display: block;
   text-decoration: none !important;
   color: var(--md-default-fg-color);
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 12px;
+  box-sizing: border-box;
+  border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest));
+  border-radius: 18px;
   background: var(--md-default-bg-color);
-  overflow: hidden;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s ease;
+  transform-origin: center;
 }
-.md-typeset .kit-card:hover { transform: scale(0.99); border-color: var(--md-default-fg-color--lighter); }
-.kit-card__imgwrap { display: block; background: #fff; overflow: hidden; }
-.md-typeset .kit-card img { display: block; width: 100%; height: 100%; margin: 0; border: 0; border-radius: 0; object-fit: contain; }
-.kit-card__body { padding: 0.75em 0.95em 0.85em; }
-.kit-card__title { display: block; font-family: "JetBrains Mono", monospace; font-weight: 400; font-size: 0.82em; line-height: 1.35; opacity: 0.9; }
-.kit-card__price { display: block; font-family: "JetBrains Mono", monospace; font-weight: 300; font-size: 0.74em; opacity: 0.55; margin-top: 0.25em; }
+.md-typeset .kit-card:hover { transform: scale(0.98); }
+/* the card is an <a> markdown wraps in a <p>, so tufte's link rule (.md-content .md-typeset p a, 0-0-2-2) out-specifies .kit-card and overrides `transition` with text-decoration-color — which makes the hover transform jump instantly instead of easing. re-assert the transform transition at higher specificity so it eases like the store/index cards. */
+.md-content .md-typeset .kit-card { transition: transform 0.3s ease; }
+/* framed thumbnail: nested frames (outer thumb border + inner image border, both squircled by corners.js), mirroring .tw-card-thumb */
+.kit-card__imgwrap { display: block; box-sizing: border-box; padding: 3px; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 14px; }
+.md-typeset .kit-card img { display: block; width: 100%; height: 100%; margin: 0; box-sizing: border-box; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 10px; object-fit: cover; }
+.kit-card__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.kit-card__title { font-family: "JetBrains Mono", monospace; font-weight: 300; font-size: 0.76rem; line-height: 1.2; opacity: 0.78; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kit-card__desc { display: none; font-family: "JetBrains Mono", monospace; font-weight: 300; font-size: 0.72rem; line-height: 1.25; opacity: 0.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kit-card__price { font-family: "JetBrains Mono", monospace; font-weight: 300; font-size: 0.7rem; opacity: 0.5; }
 .kit-card__price .from { opacity: 0.7; margin-right: 0.3em; }
-.kit-card__cta { display: inline-block; margin-top: 0.65em; font-family: "JetBrains Mono", monospace; font-size: 0.7em; opacity: 0.5; transition: opacity 0.2s ease; }
-.md-typeset .kit-card:hover .kit-card__cta { opacity: 0.85; }
 
-/* margin variant: a small matted, framed card (outer + inner outline, like the index cards) that floats into the right margin */
-.md-typeset .kit-card--margin { float: right; clear: right; width: 20%; margin: 0.4rem -25% 1.4rem 1.4rem; background: var(--md-default-fg-color--lightest); border-radius: 14px; padding: 7px; }
-.kit-card--margin .kit-card__imgwrap { aspect-ratio: 1 / 1; border: 1px solid var(--md-default-fg-color--lightest); border-radius: 8px; }
-.kit-card--margin .kit-card__body { display: block; padding: 0.5em 0 0.15em; }
+/* margin variant: a vertical product card (like .tw-card-product) floated into the right-margin note column. desc stays hidden here (compact); it appears when the card drops inline (below). */
+.md-typeset .kit-card--margin { float: right; clear: right; width: 22%; margin: 0.3rem -25% 1rem 1.4rem; padding: 9px; }
+.kit-card--margin .kit-card__imgwrap { aspect-ratio: 1 / 1; margin-bottom: 7px; }
+.kit-card--margin .kit-card__body { padding: 0 2px; }
 
-/* inline variant: compact horizontal card in the body */
-.md-typeset .kit-card--inline { display: flex; max-width: 30rem; margin: 1.6em 0; }
-.kit-card--inline .kit-card__imgwrap { width: 40%; flex-shrink: 0; aspect-ratio: 1 / 1; border-right: 1px solid var(--md-default-fg-color--lightest); }
-.kit-card--inline .kit-card__body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 1em 1.3em; }
+/* inline + wide variants: horizontal product cards on a grid (framed thumb + title/desc/price) */
+.md-typeset .kit-card--inline { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; max-width: 30rem; margin: 1.6em 0; padding: 9px; }
+.kit-card--inline .kit-card__imgwrap { width: 92px; height: 92px; }
+.md-typeset .kit-card--wide { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 16px; width: 100%; margin: 1.8em 0; padding: 11px; }
+.kit-card--wide .kit-card__imgwrap { width: 120px; height: 120px; }
+.kit-card--wide .kit-card__title { font-size: 0.86rem; }
+.md-typeset .kit-card--inline .kit-card__desc, .md-typeset .kit-card--wide .kit-card__desc { display: block; }
 
-/* wide variant: larger horizontal card spanning the column */
-.md-typeset .kit-card--wide { display: flex; width: 100%; margin: 1.8em 0; }
-.kit-card--wide .kit-card__imgwrap { width: 36%; flex-shrink: 0; aspect-ratio: 4 / 3; border-right: 1px solid var(--md-default-fg-color--lightest); }
-.kit-card--wide .kit-card__body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 1.4em 1.7em; }
-.kit-card--wide .kit-card__title { font-size: 1.05em; }
-.kit-card--wide .kit-card__price { font-size: 0.85em; }
-
-/* the margin card stays visible on mobile (not collapsed): becomes a compact horizontal note inline with the body */
+/* margin card on narrow screens: drops inline as a horizontal product card on a grid, the description filling the freed horizontal space (between title and price) */
 @media (max-width: 1100px) {
-  .md-typeset .kit-card--margin { float: none !important; clear: both !important; display: flex !important; width: 100% !important; max-width: 24rem; margin: 1.6em auto !important; padding: 6px; }
-  .kit-card--margin .kit-card__imgwrap { width: 34%; flex-shrink: 0; aspect-ratio: 1 / 1; border: 1px solid var(--md-default-fg-color--lightest); border-radius: 8px; }
-  .kit-card--margin .kit-card__body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0.4em 0.9em; }
-}
-@media (max-width: 600px) {
-  .md-typeset .kit-card--inline, .md-typeset .kit-card--wide { display: block; max-width: 22rem; margin-left: auto; margin-right: auto; }
-  .kit-card--inline .kit-card__imgwrap, .kit-card--wide .kit-card__imgwrap { width: 100%; aspect-ratio: 16 / 9; border-right: 0; border-bottom: 1px solid var(--md-default-fg-color--lightest); }
+  .md-typeset .kit-card--margin { float: none !important; clear: both !important; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; width: 100% !important; max-width: 24rem; margin: 1.6em 0 !important; padding: 9px; }
+  .kit-card--margin .kit-card__imgwrap { width: 84px; height: 84px; aspect-ratio: 1 / 1; margin-bottom: 0; }
+  .kit-card--margin .kit-card__body { padding: 0; }
+  .kit-card--margin .kit-card__desc { display: block; }
 }
 
 @media (max-width: 600px) {
