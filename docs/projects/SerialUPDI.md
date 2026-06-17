@@ -285,9 +285,11 @@ The nesting of the two highest pinout parts on the board's topside inspired my n
 
 </figure>
 
-<div class="bom-table" markdown>
-
 **Bill of Materials - USB-C UPDI**
+
+{.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
+
+<div class="bom-table" markdown>
 
 | Qty. | Part | Cost | URL |
 |------|------|------|-----|
@@ -333,9 +335,11 @@ I was compelled to expand on the original shape of an FTDI serial adapter for th
 
 </figure>
 
-<div class="bom-table" markdown>
-
 **Bill of Materials - ftdi2updi**
+
+{.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
+
+<div class="bom-table" markdown>
 
 | Qty. | Part | Cost | URL |
 |------|------|------|-----|

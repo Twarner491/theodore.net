@@ -20,6 +20,8 @@ template: comments.html
 
 ## Bill of Materials
 
+{.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
+
 <div class="bom-table" markdown>
 
 | Qty | Description | Cost | Link |
