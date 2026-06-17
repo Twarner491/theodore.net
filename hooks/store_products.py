@@ -59,4 +59,12 @@ def on_files(files, config):
                "window.STORE_PRODUCTS = "
                + json.dumps(products, ensure_ascii=False) + ";\n")
     files.append(File.generated(config, 'assets/js/store-data.js', content=content))
+    # trusted product -> variant -> Stripe Price id map, read server-side by the checkout Function
+    catalog = {}
+    for p in products:
+        m = {v.get('id'): v['stripePrice'] for v in (p.get('variants') or [])
+             if isinstance(v, dict) and v.get('stripePrice')}
+        if m:
+            catalog[p['id']] = m
+    files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
     return files

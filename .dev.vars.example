@@ -1,0 +1,4 @@
+# Copy this file to .dev.vars (which is gitignored) and fill in your Stripe TEST
+# secret key for local development. Never commit a real key.
+# Test keys: https://dashboard.stripe.com/test/apikeys
+STRIPE_SECRET_KEY=sk_test_replace_me

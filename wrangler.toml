@@ -1,0 +1,6 @@
+# Cloudflare Pages config. Local dev: `mkdocs build` then `wrangler pages dev`
+# (serves the built site/ and runs functions/, auto-loading .dev.vars).
+# `name` is the Cloudflare Pages project name; set it when you create the project.
+name = "theodore-net"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "site"

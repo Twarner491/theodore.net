@@ -31,6 +31,7 @@ variants:
   - id: electronics
     label: Electronics Kit
     price: 189
+    stripePrice: "price_1TjOgmRPSNpqisAPbkGro7wZ"
     desc: Pi, colour e-ink panel, and driver. Bring your own frame and mat.
     contents:
       - Raspberry Pi Zero 2 W
@@ -40,6 +41,7 @@ variants:
   - id: electronics-printed
     label: "+ Frame & Parts"
     price: 249
+    stripePrice: "price_1TjOgnRPSNpqisAPE9usMMr0"
     desc: Electronics plus the printed backplate and a finished wood frame with mat.
     contents:
       - Everything in the Electronics Kit

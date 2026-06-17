@@ -8,5 +8,9 @@ __pycache__
 # Build output
 site/
 
-# Environment variables
+# Environment variables and secrets
 .env
+.dev.vars
+
+# Cloudflare wrangler local cache
+.wrangler/
