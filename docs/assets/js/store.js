@@ -13,78 +13,8 @@
   const ICON_CLOSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 6 18 18M18 6 6 18"/></svg>';
   const ICON_BAG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6h-2c0-2.8-2.2-5-5-5S7 3.2 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m-7-3c1.7 0 3 1.3 3 3H9c0-1.7 1.3-3 3-3m7 17H5V8h14zm-7-8c-1.7 0-3-1.3-3-3H7c0 2.8 2.2 5 5 5s5-2.2 5-5h-2c0 1.7-1.3 3-3 3"/></svg>';
 
-  const PRODUCTS = [
-    {
-      id: "avian-visitors", published: true, title: "Avian Visitors",
-      teaser: "A framed e-ink that displays the birds heard nearby.",
-      sub: "A wood-framed colorful e-ink display that collages the birds heard nearby.",
-      imageBase: "/assets/images/AvianVisitors/",
-      images: ["heard-today.png", "framedeink.JPG", "raweink.JPG"],
-      defaultBuild: "electronics",
-      variants: [
-        { id: "assembled", label: "Assembled", price: null, comingSoon: true,
-          desc: "Finished, framed, ready to hang. In redesign around a smaller colour panel.",
-          contents: ["Framed colour e-ink display", "Pre-configured Pi", "Ready to hang"] },
-        { id: "electronics", label: "Electronics Kit", price: 189,
-          desc: "Pi, colour e-ink panel, and driver. Bring your own frame and mat.",
-          contents: ["Raspberry Pi Zero 2 W", "Colour e-ink panel", "microSD card", "Power and cabling"] },
-        { id: "electronics-printed", label: "+ Frame & Parts", price: 249,
-          desc: "Electronics plus the printed backplate and a finished wood frame with mat.",
-          contents: ["Everything in the Electronics Kit", "Printed backplate", "Wood frame and mat"] }
-      ],
-      softwareNote: "Hardware only. You install the open-source software on your own device at first setup.",
-      sections: [
-        { label: "Technical specs", items: ["Raspberry Pi Zero 2 W", "Colour e-ink panel", "USB-C power", "Wi-Fi, set up from your phone"] },
-        { label: "Dimensions", items: ["Frame and shipping sizes listed here"] }
-      ],
-      colophon: 'Sold as hardware. The open-source BirdNET software and Cornell’s model install onto your own device on first setup, for personal use; they are not pre-loaded or resold. Bird ID by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, Cornell Lab of Ornithology (CC BY-NC-SA 4.0).'
-    },
-
-    {
-      id: "avian-mic", published: false, title: "Bird Mic",
-      teaser: "A tiny microphone that feeds your own bird screen.",
-      sub: "A small microphone setup that listens at your window and feeds your Avian Visitors screen with the birds you hear.",
-      imageBase: "/assets/images/AvianVisitors/",
-      images: ["bird-mic.png", "mountedpi.JPG", "collage.png"],
-      defaultBuild: "electronics",
-      variants: [
-        { id: "electronics", label: "Electronics Kit", price: 149,
-          desc: "Raspberry Pi, a curated USB microphone, and a pre-flashed card.",
-          contents: ["Raspberry Pi", "Curated USB microphone", "microSD card", "Power and cabling"] },
-        { id: "electronics-printed", label: "+ 3D Printed", price: 179,
-          desc: "The electronics kit plus a printed mount.",
-          contents: ["Everything in the Electronics Kit", "3D-printed mount"] }
-      ],
-      softwareNote: "Hardware only. You install the open-source software on your own device at first setup.",
-      sections: [
-        { label: "Technical specs", items: ["Raspberry Pi", "Curated USB microphone", "USB-C power"] },
-        { label: "Dimensions", items: ["Mount and shipping sizes listed here"] }
-      ],
-      colophon: 'Sold as hardware. BirdNET software and Cornell’s model install on your own device for personal use. Bird ID by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, Cornell Lab of Ornithology (CC BY-NC-SA 4.0).'
-    },
-
-    {
-      id: "polargraph", published: false, title: "Polargraph Plotter",
-      teaser: "A wall-hung machine that draws generative art in ink.",
-      sub: "A wall-mounted drawing machine that plots generative art straight onto paper.",
-      imageBase: "/assets/images/Polargraph/",
-      images: ["kit.png", "mountedPoalrgraph.JPG", "wall.jpg", "firstPlotResult.JPG"],
-      defaultBuild: "electronics",
-      variants: [
-        { id: "electronics", label: "Electronics Kit", price: 329,
-          desc: "The motors, drivers, controller, and gondola. The hard-to-source mechatronics.",
-          contents: ["2× NEMA-17 motors + drivers", "Controller board", "Gondola + servo pen-lift", "Belts, pulleys, hardware"] },
-        { id: "electronics-printed", label: "+ 3D Printed Parts", price: 399,
-          desc: "Add every printed part. You source the lumber locally.",
-          contents: ["Everything in the Electronics Kit", "All printed parts", "Pen holders + counterweights"] }
-      ],
-      sections: [
-        { label: "Technical specs", items: ["2× NEMA-17 motors and drivers", "Controller board", "Servo pen-lift gondola"] },
-        { label: "Dimensions", items: ["Plot area and shipping sizes listed here"] }
-      ],
-      colophon: ""
-    }
-  ];
+  /* product data is generated from docs/store/*.md frontmatter by hooks/store_products.py and loaded as window.STORE_PRODUCTS; populated in init() */
+  let PRODUCTS = [];
 
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
@@ -360,6 +290,7 @@
   /* keep the cart in sync if it changes in another tab */
   window.addEventListener("storage", (e) => { if (e.key === CART_KEY) { loadCart(); renderCart(); } });
   function init() {
+    PRODUCTS = (typeof window !== "undefined" && Array.isArray(window.STORE_PRODUCTS)) ? window.STORE_PRODUCTS : [];
     injectHeaderCart(); loadCart(); ensureDrawer(); renderCart();
     if ($("#store-grid")) renderGrid();
     else if ($("#product-detail")) { const p = getProduct($("#product-detail").dataset.product); if (p) renderDetail(p); reveal(); }

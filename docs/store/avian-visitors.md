@@ -6,6 +6,57 @@ hide:
 template: index.html
 search:
   exclude: true
+title: Avian Visitors
+product: true
+order: 1
+id: avian-visitors
+published: true
+teaser: A framed e-ink that displays the birds heard nearby.
+sub: A wood-framed colorful e-ink display that collages the birds heard nearby.
+imageBase: /assets/images/AvianVisitors/
+images:
+  - heard-today.png
+  - framedeink.JPG
+  - raweink.JPG
+defaultBuild: electronics
+variants:
+  - id: assembled
+    label: Assembled
+    comingSoon: true
+    desc: Finished, framed, ready to hang. In redesign around a smaller colour panel.
+    contents:
+      - Framed colour e-ink display
+      - Pre-configured Pi
+      - Ready to hang
+  - id: electronics
+    label: Electronics Kit
+    price: 189
+    desc: Pi, colour e-ink panel, and driver. Bring your own frame and mat.
+    contents:
+      - Raspberry Pi Zero 2 W
+      - Colour e-ink panel
+      - microSD card
+      - Power and cabling
+  - id: electronics-printed
+    label: "+ Frame & Parts"
+    price: 249
+    desc: Electronics plus the printed backplate and a finished wood frame with mat.
+    contents:
+      - Everything in the Electronics Kit
+      - Printed backplate
+      - Wood frame and mat
+softwareNote: Hardware only. You install the open-source software on your own device at first setup.
+sections:
+  - label: Technical specs
+    items:
+      - Raspberry Pi Zero 2 W
+      - Colour e-ink panel
+      - USB-C power
+      - Wi-Fi, set up from your phone
+  - label: Dimensions
+    items:
+      - Frame and shipping sizes listed here
+colophon: 'Sold as hardware. The open-source BirdNET software and Cornell’s model install onto your own device on first setup, for personal use; they are not pre-loaded or resold. Bird ID by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, Cornell Lab of Ornithology (CC BY-NC-SA 4.0).'
 ---
 
 <head>

@@ -6,6 +6,48 @@ hide:
 template: index.html
 search:
   exclude: true
+title: Polargraph Plotter
+product: true
+order: 3
+id: polargraph
+published: false
+teaser: A wall-hung machine that draws generative art in ink.
+sub: A wall-mounted drawing machine that plots generative art straight onto paper.
+imageBase: /assets/images/Polargraph/
+images:
+  - kit.png
+  - mountedPoalrgraph.JPG
+  - wall.jpg
+  - firstPlotResult.JPG
+defaultBuild: electronics
+variants:
+  - id: electronics
+    label: Electronics Kit
+    price: 329
+    desc: The motors, drivers, controller, and gondola. The hard-to-source mechatronics.
+    contents:
+      - 2× NEMA-17 motors + drivers
+      - Controller board
+      - Gondola + servo pen-lift
+      - Belts, pulleys, hardware
+  - id: electronics-printed
+    label: "+ 3D Printed Parts"
+    price: 399
+    desc: Add every printed part. You source the lumber locally.
+    contents:
+      - Everything in the Electronics Kit
+      - All printed parts
+      - Pen holders + counterweights
+sections:
+  - label: Technical specs
+    items:
+      - 2× NEMA-17 motors and drivers
+      - Controller board
+      - Servo pen-lift gondola
+  - label: Dimensions
+    items:
+      - Plot area and shipping sizes listed here
+colophon: ""
 ---
 
 <head>

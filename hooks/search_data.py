@@ -64,95 +64,42 @@ def _date_strs(fm):
 
 
 def _scan_store(docs_dir):
-    """Parse the PRODUCTS array out of the store's source (store.js) at build
-    time so products are searchable on every page, not only where store.js runs.
-    Read-only: we never modify the store's files."""
+    """Read product definitions from docs/store/*.md frontmatter so products are
+    searchable on every page. The frontmatter is the single source of truth
+    (hooks/store_products.py builds the store's runtime data from the same
+    files), so there is no JS parsing that could silently drift."""
     out = []
-    js = Path(docs_dir) / 'assets' / 'js' / 'store.js'
-    if not js.exists():
+    store = Path(docs_dir) / 'store'
+    if not store.exists():
         return out
-    try:
-        src = js.read_text(encoding='utf-8')
-    except Exception:
-        return out
-    m = re.search(r'const\s+PRODUCTS\s*=\s*\[', src)
-    if not m:
-        return out
-    # walk from the opening '[' to its matching ']' (string-aware)
-    i = src.index('[', m.start())
-    depth, end, instr, esc = 0, None, None, False
-    for j in range(i, len(src)):
-        c = src[j]
-        if instr:
-            if esc:
-                esc = False
-            elif c == '\\':
-                esc = True
-            elif c == instr:
-                instr = None
+    for md in sorted(store.glob('*.md')):
+        try:
+            fm, _ = _frontmatter(md.read_text(encoding='utf-8'))
+        except Exception:
             continue
-        if c in ('"', "'", '`'):
-            instr = c
-        elif c == '[':
-            depth += 1
-        elif c == ']':
-            depth -= 1
-            if depth == 0:
-                end = j
-                break
-    if end is None:
-        return out
-    arr = src[i + 1:end]
-    # split top-level product objects ({...} at brace-depth 0 within the array)
-    objs, depth, start, instr, esc = [], 0, None, None, False
-    for k, c in enumerate(arr):
-        if instr:
-            if esc:
-                esc = False
-            elif c == '\\':
-                esc = True
-            elif c == instr:
-                instr = None
+        if not isinstance(fm, dict) or not fm.get('product'):
             continue
-        if c in ('"', "'", '`'):
-            instr = c
-        elif c == '{':
-            if depth == 0:
-                start = k
-            depth += 1
-        elif c == '}':
-            depth -= 1
-            if depth == 0 and start is not None:
-                objs.append(arr[start:k + 1])
-                start = None
-    seen = set()
-    for blk in objs:
-        def field(pat):
-            mm = re.search(pat, blk)
-            return mm.group(1) if mm else None
-        pid = field(r'\bid:\s*"([^"]*)"')              # product id is the first id: in the block
-        if not pid or pid in seen:
-            continue                                    # every store product is searchable; de-dupe by id
-        seen.add(pid)
-        img = re.search(r'\bimages:\s*\[\s*"([^"]*)"', blk)
-        base = field(r'\bimageBase:\s*"([^"]*)"') or ''
-        prices = [int(x) for x in re.findall(r'\bprice:\s*(\d+)', blk)]
-        out.append({
+        pid = fm.get('id') or md.stem
+        variants = fm.get('variants') if isinstance(fm.get('variants'), list) else []
+        prices = [v.get('price') for v in variants
+                  if isinstance(v, dict) and isinstance(v.get('price'), (int, float))]
+        images = fm.get('images') if isinstance(fm.get('images'), list) else []
+        base = fm.get('imageBase') or ''
+        out.append((fm.get('order', 999), {
             'type': 'product',
             'url': f"/store/{pid}/",
-            'title': field(r'\btitle:\s*"([^"]*)"') or '',
-            'description': field(r'\bteaser:\s*"([^"]*)"') or '',
-            'thumbnail': (base + img.group(1)) if (base and img) else '',
+            'title': fm.get('title', '') or '',
+            'description': fm.get('teaser', '') or '',
+            'thumbnail': (base + images[0]) if (base and images) else '',
             'date': '',
             'dateISO': '',
             'readtime': '',
-            'price': min(prices) if prices else None,
-            'keywords': field(r'\bteaser:\s*"([^"]*)"') or '',
-            'text': field(r'\bsub:\s*"([^"]*)"') or '',
-        })
-    if objs and not out:   # PRODUCTS block found but nothing parsed — store.js format likely changed
-        print("search_data: store.js PRODUCTS matched but yielded 0 products (format may have changed)")
-    return out
+            'price': int(min(prices)) if prices else None,
+            'keywords': fm.get('teaser', '') or '',
+            'text': fm.get('sub', '') or '',
+        }))
+    out.sort(key=lambda t: (t[0], t[1].get('title', '')))   # frontmatter `order` keeps products consistent with the store grid
+    return [e for _, e in out]
 
 
 def _scan(docs_dir, folder, type_):

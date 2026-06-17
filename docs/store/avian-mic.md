@@ -6,6 +6,47 @@ hide:
 template: index.html
 search:
   exclude: true
+title: Bird Mic
+product: true
+order: 2
+id: avian-mic
+published: false
+teaser: A tiny microphone that feeds your own bird screen.
+sub: A small microphone setup that listens at your window and feeds your Avian Visitors screen with the birds you hear.
+imageBase: /assets/images/AvianVisitors/
+images:
+  - bird-mic.png
+  - mountedpi.JPG
+  - collage.png
+defaultBuild: electronics
+variants:
+  - id: electronics
+    label: Electronics Kit
+    price: 149
+    desc: Raspberry Pi, a curated USB microphone, and a pre-flashed card.
+    contents:
+      - Raspberry Pi
+      - Curated USB microphone
+      - microSD card
+      - Power and cabling
+  - id: electronics-printed
+    label: "+ 3D Printed"
+    price: 179
+    desc: The electronics kit plus a printed mount.
+    contents:
+      - Everything in the Electronics Kit
+      - 3D-printed mount
+softwareNote: Hardware only. You install the open-source software on your own device at first setup.
+sections:
+  - label: Technical specs
+    items:
+      - Raspberry Pi
+      - Curated USB microphone
+      - USB-C power
+  - label: Dimensions
+    items:
+      - Mount and shipping sizes listed here
+colophon: 'Sold as hardware. BirdNET software and Cornell’s model install on your own device for personal use. Bird ID by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, Cornell Lab of Ornithology (CC BY-NC-SA 4.0).'
 ---
 
 <head>
