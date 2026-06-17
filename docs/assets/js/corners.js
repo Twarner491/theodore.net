@@ -10,6 +10,7 @@
   var SELECTOR = [
     '.imgparent', '.imgparent img', '.grid-item',
     '.product-card', '.pe-frame', '.cart-line-img', '.store-mini-img',
+    '.md-typeset .kit-card', '.md-typeset .kit-card__imgwrap', '.md-typeset .kit-card__imgwrap img', '.cart-drawer',   // embeddable product card (outer card + thumb frame + image, squircled) + the cart drawer's rounded left edge
     '.md-typeset .embed-frame',
     '.md-typeset .embed-frame iframe',
     '.md-typeset .embed-frame .embed-inner',
