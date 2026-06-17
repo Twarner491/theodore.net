@@ -264,8 +264,14 @@ search:
         loop: true
       });
     });
-    // Theme switching for tone image
+    // Swap the theme-variant images (polargraph, printer, cork fill, tone) to match the page scheme.
+    // Source of truth is the scheme Material actually applied to <body> — NOT the palette radio (which
+    // can lag on a fresh load) and NOT a separate localStorage key (which desyncs from Material's own
+    // persistence). A MutationObserver re-runs the swap on every scheme change, so the images can't
+    // get stuck on the wrong variant through any refresh or toggle path: Material owns the scheme and
+    // its persistence, this only mirrors it onto the images.
     document.addEventListener("DOMContentLoaded", function() {
+      localStorage.removeItem('theme'); // retire the old custom key that used to fight Material's persistence
       const toneImage = document.querySelector('.project .toneimg');
       const polargraphImage = document.getElementById('polargraph-img');
       const quotesLight = document.getElementById('quotes-img-light');
@@ -273,54 +279,26 @@ search:
       const corkBg = document.getElementById('cork-bg');
       const root = document.documentElement;
       function colortheme() {
-          const selectedOption = document.querySelector('input[name="__palette"]:checked');
-          const currentTheme = selectedOption ? selectedOption.getAttribute('data-md-color-scheme') : 'light';
-          let toneUrl;
-          if (currentTheme === 'slate') {
-              toneUrl = getComputedStyle(root).getPropertyValue('--tone-url-slate').trim().replace(/^"(.*)"$/, '$1');
-          } else {
-              toneUrl = getComputedStyle(root).getPropertyValue('--tone-url-light').trim().replace(/^"(.*)"$/, '$1');
-          }
+          const isDark = document.body.getAttribute('data-md-color-scheme') === 'slate';
           if (toneImage) {
+            const toneUrl = getComputedStyle(root).getPropertyValue(isDark ? '--tone-url-slate' : '--tone-url-light').trim().replace(/^"(.*)"$/, '$1');
             toneImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', toneUrl);
           }
           if (polargraphImage) {
-            polargraphImage.setAttribute('href', currentTheme === 'slate' ? 'assets/images/index/polargraphDark.png' : 'assets/images/index/polargraph.png');
+            polargraphImage.setAttribute('href', isDark ? 'assets/images/index/polargraphDark.png' : 'assets/images/index/polargraph.png');
           }
           if (quotesLight && quotesDark) {
-            var front = currentTheme === 'slate' ? quotesDark : quotesLight;
+            const front = isDark ? quotesDark : quotesLight;
             front.parentNode.appendChild(front);
           }
           if (corkBg) {
-            corkBg.setAttribute('fill', currentTheme === 'slate' ? '#2d3032' : 'var(--md-default-fg-color--lightest)');
+            corkBg.setAttribute('fill', isDark ? '#2d3032' : 'var(--md-default-fg-color--lightest)');
           }
       }
-      function saveTheme() {
-        const selectedOption = document.querySelector('input[name="__palette"]:checked');
-        if (selectedOption) {
-          const currentTheme = selectedOption.getAttribute('data-md-color-scheme');
-          localStorage.setItem('theme', currentTheme);
-        }
-      }
-      function applySavedTheme() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-          const themeOption = document.querySelector(`input[name="__palette"][data-md-color-scheme="${savedTheme}"]`);
-          if (themeOption) {
-            themeOption.checked = true;
-            root.setAttribute('data-md-color-scheme', savedTheme);
-            colortheme();
-          }
-        }
-      }
-      applySavedTheme();
-      colortheme(); 
-      document.querySelectorAll('input[name="__palette"]').forEach((input) => {
-          input.addEventListener('change', () => {
-              colortheme();
-              saveTheme();
-          });
-      });
+      // Observe first so no scheme change slips through between the initial read and attaching,
+      // then run once for whatever scheme is already on <body>.
+      new MutationObserver(colortheme).observe(document.body, { attributes: true, attributeFilter: ['data-md-color-scheme'] });
+      colortheme();
       window.colortheme = colortheme;
     });
   </script>
