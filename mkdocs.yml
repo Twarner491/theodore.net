@@ -21,13 +21,17 @@ theme:
   custom_dir: overrides
 
   palette:
-    - scheme: default
+    # First visit follows the OS/browser theme (prefers-color-scheme); after that the
+    # user's toggle choice is remembered (Material persists it in localStorage).
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: black
       accent: black
       toggle:
-        icon: material/weather-night
+        icon: material/weather-sunny-off
         name: Switch to dark mode
-    - scheme: slate
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       primary: black
       accent: white
       toggle:
