@@ -85,3 +85,7 @@ html:has(body.toggle) { overflow: hidden; }
 .footer-links { margin: 0 0 10em; font-family: "JetBrains Mono"; font-size: 0.7em; font-weight: 300; opacity: 0.4; }
 .footer-links a { color: inherit; text-decoration: none !important; margin-right: 0.7em; transition: opacity 0.2s ease; }
 .footer-links a:hover { opacity: 0.7; }
+/* article pages (.md-container) render this footer outside .md-typeset, where the body base varies, which shrinks the em-sized footer pieces; pin all three to the index footer's scale via the stable root rem (icons 16px, copyright 12.8px, links 11.2px) so every footer matches */
+.md-container .footer-links { font-size: 0.56rem; }
+.md-container .socialpar { font-size: 0.8rem; }
+.md-container .copyright { font-size: 0.64rem; }
