@@ -518,6 +518,7 @@
     loadCart();
     if (!cart.length) { host.innerHTML = '<div class="co-empty"><p>Your cart is empty.</p><a class="cart-shop-link" href="/store">Go to store</a></div>'; return; }
     host.innerHTML =
+      '<div class="conf-back-top"><a href="/store/?cart=open" class="co-tocart"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Cart</a></div>' +
       '<div class="co-grid">' +
         '<aside class="co-summary">' + coSummaryHTML() + "</aside>" +
         '<div class="co-detail">' +

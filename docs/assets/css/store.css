@@ -243,7 +243,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .cart-line-qty button:hover { opacity: 1; }
 .cart-line-qty span { font-family: "JetBrains Mono"; font-size: 0.75em; min-width: 1em; text-align: center; opacity: 0.8; }
 .cart-line-price { font-family: "JetBrains Mono"; font-size: 0.85em; font-weight: 300; opacity: 0.8; text-align: right; white-space: nowrap; }
-.cart-line-remove { display: block; margin-top: 0; border: 0; background: transparent; font-family: "JetBrains Mono"; font-size: 0.62em; font-weight: 300; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.35; cursor: pointer; text-align: right; transition: opacity 0.2s ease; }
+.cart-line-remove { display: block; margin-top: 0; border: 0; background: transparent; color: var(--md-default-fg-color); -webkit-tap-highlight-color: transparent; font-family: "JetBrains Mono"; font-size: 0.62em; font-weight: 300; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.35; cursor: pointer; text-align: right; transition: opacity 0.2s ease; }
 .cart-line-remove:hover { opacity: 0.7; }
 .cart-foot { padding: 1.2em 1.7em 1.7em; border-top: 1px solid var(--md-default-fg-color--lightest); }
 .cart-subtotal { display: flex; justify-content: space-between; align-items: baseline; font-family: "JetBrains Mono"; font-size: 0.95em; font-weight: 300; opacity: 0.85; margin-bottom: 4px; }
@@ -385,7 +385,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .conf-back-top { display: none; }
 @media (max-width: 819px) {
   .conf-back-top { display: block; margin-bottom: 1.4em; }        /* narrow: move the back arrow to the very top, above "Order confirmed" */
-  #confirmation .co-detail .return2feed { display: none; }
+  #confirmation .co-detail .return2feed, #checkout .co-detail .return2feed { display: none; }
 }
 .conf-title { margin: 0 0 0.35em; }
 .conf-order { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; opacity: 0.45; margin: 0 0 1.5em; }
