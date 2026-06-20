@@ -53,3 +53,22 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}'
         continue-on-error: true
+
+      # New posts -> a Buttondown DRAFT + a one-click approval email to
+      # test@theodore.net. Nothing reaches the list until you click Approve and
+      # confirm (functions/api/newsletter-approve.js). No-ops if secrets are
+      # unset, so this can't break a deploy.
+      # NOTE: the only OTHER thing that can email the list is Buttondown's UI
+      # RSS-to-email setting (Settings > Basic). Keep it paused/draft.
+      - name: Newsletter (draft + approval email)
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          NEWSLETTER_APPROVE_SECRET: ${{ secrets.NEWSLETTER_APPROVE_SECRET }}
+        run: |
+          if [ -n "$BUTTONDOWN_API_KEY" ] && [ -n "$NEWSLETTER_APPROVE_SECRET" ]; then
+            python tools/newsletter.py --approve-to test@theodore.net \
+              || echo "::warning::newsletter step failed (deploy unaffected)"
+          else
+            echo "newsletter secrets not set; skipping."
+          fi
+        continue-on-error: true
