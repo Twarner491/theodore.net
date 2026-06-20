@@ -35,10 +35,16 @@
   }
 
   function apply(el) {
-    // Measure the BORDER box directly. L.getLayoutSize() reads getComputedStyle().height,
-    // which resolves to the CONTENT box for auto-height border-box elements (e.g. admonitions),
-    // leaving the ring short by the vertical padding+border. offsetWidth/Height is the border box.
-    var w = el.offsetWidth, h = el.offsetHeight;
+    // Measure the BORDER box with sub-pixel precision. getComputedStyle().height is the CONTENT box
+    // (the ring ends up short on auto-height boxes like admonitions); offsetWidth/Height is the border
+    // box but ROUNDS to whole px. That rounding (e.g. 592 for a card that actually renders 591.5)
+    // misaligns the clip-path + ring against the card by up to ~0.5px, which squeezes the thin bottom
+    // border into a sub-pixel sliver that anti-aliases away on non-retina / fractional-DPR monitors
+    // (it survives at 2x). getBoundingClientRect() is the fractional border box, so the clip + ring land
+    // exactly on the card's real edges at any DPR. (It reads the untransformed box: apply() only runs
+    // from load/resize/mutation/font scans, never mid-hover, so the :hover scale never skews it.)
+    var rect = el.getBoundingClientRect();
+    var w = rect.width, h = rect.height;
     if (!w || !h) return;
     var radius = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
     if (radius <= 1 || radius >= Math.min(w, h) / 2) { release(el); return; }
@@ -64,6 +70,11 @@
     // the host already clips its content to the squircle, so overflow:hidden is redundant —
     // force it visible so the ring shows. (Restored in release().)
     el.style.setProperty('overflow', 'visible', 'important');
+    // Promote the ringed host to its own compositing layer so the clip-path's bottom band paints at
+    // rest. Without this, Chrome can drop the outline's bottom edge on large cards until a hover
+    // transform forces a repaint. will-change (not an inline transform) keeps the host's own :hover
+    // scale working. Cleared in release().
+    el.style.willChange = 'transform';
     var rec = mgmt.get(el);
     if (!rec) {
       rec = {};
@@ -94,6 +105,7 @@
     el.style.clipPath = '';
     el.style.removeProperty('border-color');
     el.style.removeProperty('overflow');   // restore the host's own overflow (we forced it visible for the ring)
+    el.style.removeProperty('will-change');
     dropRing(el);
   }
 
@@ -111,6 +123,11 @@
     L = mod;
     ready(scan);
     window.addEventListener('load', scan);
+    // Re-fit on viewport resize. The per-element resize observer can miss viewport-driven reflows
+    // (e.g. moving the window from a laptop to a large monitor), leaving the ring + clip-path sized
+    // for the old dimensions — which cut off the card's bottom edge until a repaint. Debounced.
+    var resizeT;
+    window.addEventListener('resize', function () { clearTimeout(resizeT); resizeT = setTimeout(scan, 150); });
     // re-fit once web fonts finish loading: text-driven boxes (admonitions, etc.) reflow
     // taller after fonts swap in, and the initial ring would otherwise stay at the short size.
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(scan);
