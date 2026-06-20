@@ -47,7 +47,7 @@ jobs:
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES }}
           accountId: 557e541291a977fc1683c53376eb56a0
           # The project's production branch is "site-updates", so deploying with that
           # branch name lands as Production and the custom domain serves it. If you ever
