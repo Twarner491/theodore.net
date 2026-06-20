@@ -47,42 +47,36 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Working draft. Effective [DATE].</p>
+          <p class="draft">Effective June 20, 2026.</p>
 
-          <p>This policy explains what we collect and what we do with it, and is written to comply with the California Online Privacy Protection Act (CalOPPA). We keep data collection lean and explain all of it below.</p>
+          <p>This policy explains what we collect, what we do with it, and the choices you have. It is written to comply with the California Online Privacy Protection Act (CalOPPA). We keep collection to a minimum, and all of it is described below.</p>
 
           <h3>What we collect</h3>
-          <p>To fulfil an order, we collect your name, email, and shipping and billing address. There are no accounts; checkout is guest-only. We also collect basic site-usage data through analytics, described below.</p>
-
-          <h3>Payments</h3>
-          <p>Card payments are processed by Stripe. Your card details go directly to Stripe, and we never store your card number. Stripe handles that data under its own policy, at <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a>.</p>
+          <p>To fulfill an order, we collect your name, email, and shipping and billing address. There are no accounts; checkout is guest-only. We also collect basic site-usage data through analytics, described below. Card payments are processed by Stripe: your card details go directly to Stripe, and we never see or store your card number. Stripe handles that data under its own policy, at <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a>.</p>
 
           <h3>How we share</h3>
           <p>We share only what's needed to run the store and the site:</p>
           <ul>
             <li><strong>Shipping carrier.</strong> Your name and address go to USPS or UPS to deliver your package.</li>
-            <li><strong>Hosting and site provider.</strong> Our site and order infrastructure runs on a third-party provider.</li>
-            <li><strong>Google Analytics.</strong> Standard site-usage data, used to understand how the site is used. See below.</li>
+            <li><strong>Hosting and site provider.</strong> Our site and orders run on a third-party hosting provider.</li>
+            <li><strong>Google Analytics.</strong> Standard site-usage data. See below.</li>
           </ul>
           <p>We do not sell or share your personal information for anyone else's purposes.</p>
 
           <h3>Cookies, analytics, and Do Not Track</h3>
-          <p>We use Google Analytics to understand how the site is used. It sets cookies and collects standard usage data, such as the pages you visit, approximate location, and your device and browser, under an identifier rather than your name. Google processes this under its own <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">privacy policy</a>. You can opt out with Google's browser add-on at <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">tools.google.com/dlpage/gaoptout</a>, or by blocking cookies in your browser. We do not respond to Do Not Track signals, as there is no agreed standard for them.</p>
+          <p>We use Google Analytics to understand how the site is used. It sets cookies and collects standard usage data, such as the pages you visit, your approximate location, and your device and browser, under an identifier rather than your name. Google processes this under its own <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">privacy policy</a>. You can opt out with Google's browser add-on at <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">tools.google.com/dlpage/gaoptout</a>, or by blocking cookies in your browser. We do not respond to Do Not Track signals, because there is no agreed standard for them.</p>
 
           <h3>How long we keep your data</h3>
           <ul>
-            <li><strong>Order records.</strong> Kept about 7 years, for tax compliance.</li>
-            <li><strong>Server logs.</strong> Deleted after about 60 days.</li>
+            <li><strong>Order records.</strong> Kept 7 years, for tax compliance.</li>
+            <li><strong>Server logs.</strong> Deleted after 60 days.</li>
           </ul>
 
           <h3>Your choices</h3>
           <p>To access, correct, or delete your information, email <a href="mailto:support@theodore.net">support@theodore.net</a> and we will take care of it.</p>
 
-          <h3>Changes to this policy</h3>
-          <p>If we change this policy, we will post the updated version here with a new effective date. Material changes will be reflected at the top of this page.</p>
-
-          <h3>Contact</h3>
-          <p>Privacy questions: <a href="mailto:support@theodore.net">support@theodore.net</a>.</p>
+          <h3>Changes and contact</h3>
+          <p>If we change this policy, we will post the updated version here with a new effective date, and note any material change at the top of this page. Privacy questions: <a href="mailto:support@theodore.net">support@theodore.net</a>.</p>
         </div>
       </div>
     </section>

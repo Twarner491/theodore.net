@@ -47,52 +47,26 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Working draft. Effective [DATE].</p>
+          <p class="draft">Effective June 20, 2026.</p>
 
-          <h3>The short version</h3>
-          <p>Unopened kits in original packaging can come back within 30 days. Once a kit is opened, assembled, soldered, or modified, it is no longer returnable. If something arrives defective or dead on arrival, we cover it.</p>
+          <p>Unopened kits in their original packaging can come back within 30 days. Once a kit is opened, assembled, soldered, or modified, it is no longer returnable. If something arrives damaged or fails out of the box, we replace it or refund you.</p>
 
-          <h3>Made to order</h3>
-          <p>Each kit is built to order, so allow about a week for us to build yours before it ships. You can cancel for a full refund any time before your order ships, no questions asked. Check your order status any time on the <a href="/store/confirmation/">order lookup</a> page.</p>
+          <h3>Returns</h3>
+          <p>You have 30 days from delivery to start a return. To qualify, the item must be unopened and in its original packaging, with all parts and materials intact. Opened, assembled, soldered, or modified kits cannot be returned; these are hands-on electronics, and once a kit is touched we cannot resell it as new. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> before sending anything back, with your order number and the reason, and we will reply with instructions. Items sent back without authorization cannot be processed.</p>
 
-          <h3>Return window</h3>
-          <p>You have 30 days from delivery to start a return.</p>
+          <h3>Defective or damaged items</h3>
+          <p>If your item arrives damaged or fails out of the box, email <a href="mailto:returns@theodore.net">returns@theodore.net</a> within 30 days and we will replace it or refund you, your choice. A couple of photos help us sort it quickly. Separately, a 90-day limited warranty covers manufacturing defects from the date of delivery; it does not cover misuse, incorrect assembly, or damage from static discharge. See the <a href="/terms">Terms of Sale</a> for the full warranty.</p>
 
-          <h3>Condition</h3>
-          <p>To qualify for a change-of-mind return, the item must be unopened and in its original packaging, with all parts and materials intact. Opened, assembled, soldered, or modified kits cannot be returned. These are hands-on electronics, and once a kit is touched we cannot resell it as new.</p>
-
-          <h3>Get authorization first</h3>
-          <p>Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> before sending anything back. Include your order number and the reason, and we will reply with return instructions. Items shipped back without authorization cannot be processed.</p>
-
-          <h3>Defective or dead on arrival</h3>
-          <p>If your item arrives defective or fails out of the box, email <a href="mailto:returns@theodore.net">returns@theodore.net</a> within 30 days and we will provide a replacement or a refund, your choice. A couple of photos help us sort it quickly.</p>
-          <p>A 90-day limited warranty covers manufacturing defects from the date of delivery. It does not cover misuse, incorrect assembly, or damage from static discharge.</p>
-
-          <h3>Who pays shipping</h3>
-          <p>For change-of-mind returns, you pay return shipping. For verified defective items, we cover shipping both ways. There is no restocking fee.</p>
-
-          <h3>Refunds</h3>
-          <p>Approved refunds go back to your original payment method within 10 business days of us receiving the return.</p>
+          <h3>Shipping and refunds</h3>
+          <p>For change-of-mind returns, you pay return shipping; for verified defective items, we cover shipping both ways. There is no restocking fee. Use a tracked service, since we can only refund a return we actually receive. Approved refunds go to your original payment method within 10 business days of the return reaching us.</p>
 
           <h3>Non-returnable items</h3>
           <ul>
             <li>Opened, assembled, soldered, or modified kits</li>
-            <li>Custom or made-to-order 3D-printed items</li>
+            <li>Custom or personalized items made to your spec</li>
             <li>Sale items</li>
-            <li>Gift cards</li>
           </ul>
-
-          <h3>California refund terms</h3>
-          <p>This section sets out our policy under California Civil Code section 1723.</p>
-          <ul>
-            <li><strong>Refund, credit, or exchange.</strong> Eligible returns are refunded to the original payment method. Defective items may be replaced or refunded at your choice.</li>
-            <li><strong>Time period.</strong> Returns must be started within 30 days of delivery.</li>
-            <li><strong>Merchandise covered.</strong> Unopened hardware kits and parts in original packaging. The non-returnable items listed above are excluded.</li>
-            <li><strong>Conditions.</strong> Items must be unopened and in original packaging, with prior return authorization. Opened, assembled, soldered, or modified kits do not qualify.</li>
-          </ul>
-
-          <h3>If we cannot ship on time</h3>
-          <p>If we cannot ship within our stated time, or within 30 days where no time is stated, we will contact you to offer a choice: agree to a delay, or cancel the order for a full refund.</p>
+          <p>This page is our posted return policy under California Civil Code section 1723.</p>
 
           <h3>Contact</h3>
           <p>Returns: <a href="mailto:returns@theodore.net">returns@theodore.net</a>. Everything else: <a href="mailto:support@theodore.net">support@theodore.net</a>.</p>

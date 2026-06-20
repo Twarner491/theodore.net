@@ -47,7 +47,7 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Working draft. Effective [DATE].</p>
+          <p class="draft">Effective June 20, 2026.</p>
 
           <p>These terms cover purchases from the theodore.net store. Placing an order means you agree to them.</p>
 
@@ -57,14 +57,8 @@ search:
           <h3>Made to order</h3>
           <p>Every kit is built to order, so allow about a week for us to build yours before it ships. Because nothing ships until we build it, you can cancel for a full refund any time before your order ships. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> with your order number, or check your status on the <a href="/store/confirmation/">order lookup</a> page.</p>
 
-          <h3>Orders</h3>
-          <p>We may refuse or cancel any order at our discretion, including after it is placed. If we cancel an order you already paid for, we refund it in full.</p>
-
-          <h3>Pricing</h3>
-          <p>Prices can change without notice. We may correct pricing or product errors and cancel affected orders even after they are placed. If we cancel a paid order for this reason, you get a full refund.</p>
-
-          <h3>Payments</h3>
-          <p>Card payments are handled by Stripe. Card details go directly to Stripe; we never see or store your card number. See our <a href="/privacy">Privacy Policy</a> for more.</p>
+          <h3>Orders, pricing, and payment</h3>
+          <p>We may refuse or cancel any order at our discretion; if we cancel one you have already paid for, we refund it in full. Prices can change without notice, and we may correct pricing or product errors and cancel any affected orders, refunding what you paid in full. Card payments are handled by Stripe: your card details go directly to Stripe, and we never see or store your card number. See our <a href="/privacy">Privacy Policy</a> for more.</p>
 
           <h3>Shipping</h3>
           <p>We ship from California to US addresses only. Kits are made to order, so most ship within about a week as we build them, and you will get tracking when yours does. Risk of loss passes to you once the carrier takes possession of the package.</p>
@@ -91,11 +85,8 @@ search:
           <h3>Governing law</h3>
           <p>These terms are governed by the laws of the State of California, without regard to its conflict-of-law rules. Any dispute will be resolved in the state or federal courts located in California.</p>
 
-          <h3>Changes</h3>
-          <p>We may update these terms. The version posted at the time of your order applies to that order. Continued purchases after an update mean you accept the revised terms.</p>
-
-          <h3>Contact</h3>
-          <p><a href="mailto:support@theodore.net">support@theodore.net</a>.</p>
+          <h3>Changes and contact</h3>
+          <p>We may update these terms. The version posted when you order applies to that order, and continued purchases after an update mean you accept the revised terms. Questions: <a href="mailto:support@theodore.net">support@theodore.net</a>.</p>
         </div>
       </div>
     </section>
