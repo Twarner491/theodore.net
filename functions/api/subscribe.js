@@ -58,10 +58,15 @@ export async function onRequestPost({ request, env }) {
   const { ids: wantIds, map: tagMap } = tags.length ? await resolveTags(tags) : { ids: [], map: {} };
 
   // Create the subscriber, or find the existing one. The response is the same {ok:true} either way,
-  // so this can't be used to probe who is on the list.
+  // so this can't be used to probe who is on the list. Pass the VISITOR's real IP so Buttondown's
+  // firewall scores them, not our shared Cloudflare edge IP (which it flags as a datacenter address
+  // and blocks). https://docs.buttondown.com/firewall
+  const clientIp = request.headers.get("CF-Connecting-IP") || (request.headers.get("X-Forwarded-For") || "").split(",")[0].trim();
+  const createBody = { email_address: email };
+  if (clientIp) createBody.ip_address = clientIp;
   let r, d, sid;
   try {
-    r = await fetch(`${API}/subscribers`, { method: "POST", headers, body: JSON.stringify({ email_address: email }) });
+    r = await fetch(`${API}/subscribers`, { method: "POST", headers, body: JSON.stringify(createBody) });
     d = await r.json().catch(() => ({}));
   } catch (e) { return reply({ error: "Could not reach the mailing list. Try again." }, 502); }
   if (r.ok) {
