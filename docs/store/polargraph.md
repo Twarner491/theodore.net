@@ -47,6 +47,9 @@ variants:
       - Everything in the Electronics Kit
       - All 3D printed parts
 sections:
+  - label: Open Source
+    items:
+      - This work, like all <a href="/projects/">my other projects</a>, is open source and usually in a state of continuous revision and development. Expect things to change, and (hopefully) get sleeker and easier to use over time. If any features or tweaks or fixes to this product would make your life easier, <a href="mailto:support@theodore.net">please do let me know</a>. And if you haven't already, check out the <a href="/projects/Polargraph/">Polargraph project writeup</a>!
   - label: Lumber
     items:
       - Provide your own lumber or backing material for this build! You can get all stock material from your local hardware store for a whole lot cheaper than I can ship it to you.

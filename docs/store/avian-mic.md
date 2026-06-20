@@ -47,6 +47,9 @@ variants:
       - 3D-printed mount
 softwareNote: Hardware only. You install the open-source software on your own device at first setup.
 sections:
+  - label: Open Source
+    items:
+      - This work, like all <a href="/projects/">my other projects</a>, is open source and usually in a state of continuous revision and development. Expect things to change, and (hopefully) get sleeker and easier to use over time. If any features or tweaks or fixes to this product would make your life easier, <a href="mailto:support@theodore.net">please do let me know</a>. And if you haven't already, check out the <a href="/projects/AvianVisitors/">Bird Mic project writeup</a>!
   - label: Technical specs
     items:
       - Bird Mic hosts an atlas of all birds it's heard on a website local to your network. You can see the atlas anytime you're on your home WiFi at `birdnet.local`

@@ -59,6 +59,9 @@ sections:
   - label: Pairs with
     items:
       - Pair with a <a href="/store/avian-mic/">Bird Mic</a> to fill the display with birds captured right at your home.
+  - label: Open Source
+    items:
+      - This work, like all <a href="/projects/">my other projects</a>, is open source and usually in a state of continuous revision and development. Expect things to change, and (hopefully) get sleeker and easier to use over time. If any features or tweaks or fixes to this product would make your life easier, <a href="mailto:support@theodore.net">please do let me know</a>. And if you haven't already, check out the <a href="/projects/AvianVisitors/">Avian Visitors project writeup</a>!
   - label: Dimensions
     items:
       - Assembled variant comes in 11"x14" oak wood frame
