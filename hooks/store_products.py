@@ -17,12 +17,40 @@ import yaml
 from pathlib import Path
 from mkdocs.structure.files import File
 
+try:
+    from PIL import Image
+    _PIL_OK = True
+except Exception:
+    _PIL_OK = False
+
 # keys copied verbatim from frontmatter into the runtime product object
 KEYS = ['id', 'published', 'title', 'teaser', 'sub', 'imageBase', 'images',
         'defaultBuild', 'variants', 'softwareNote', 'sections', 'colophon', 'weight',
-        'accessory', 'parentId', 'icon', 'related', 'project', 'imageFit', 'imageBg']
+        'accessory', 'parentId', 'icon', 'related', 'project']
 
-DEFAULT_WEIGHT_LB = 2.0   # shipping weight used when a product/variant sets none
+DEFAULT_WEIGHT_LB = 2.0
+
+
+def _bg_color(path):
+    """Average a product image's four corners into an #rrggbb so store.js can letterbox a
+    contained image with a background matching that image's own. None if Pillow is missing or
+    the file is unreadable (store.js then just uses no background)."""
+    if not _PIL_OK:
+        return None
+    try:
+        im = Image.open(path).convert('RGB')
+        w, h = im.size
+        if w < 2 or h < 2:
+            return None
+        pts = [(1, 1), (w - 2, 1), (1, h - 2), (w - 2, h - 2)]
+        rs = gs = bs = 0
+        for x, y in pts:
+            r, g, b = im.getpixel((x, y))
+            rs += r; gs += g; bs += b
+        n = len(pts)
+        return '#%02x%02x%02x' % (round(rs / n), round(gs / n), round(bs / n))
+    except Exception:
+        return None   # shipping weight used when a product/variant sets none
 
 
 def _frontmatter(text):
@@ -71,18 +99,29 @@ def on_files(files, config):
     # swaps to it in dark mode and leaves the rest as-is (no broken requests)
     docs = Path(config['docs_dir'])
     dark = []
+    image_bg = {}   # per-image letterbox color (light URL + DARK sibling), sampled from the file
     for p in products:
         base = p.get('imageBase', '') or ''
         for f in (p.get('images') or []):
+            url = base + f
+            c = _bg_color(docs / url.lstrip('/'))
+            if c:
+                image_bg[url] = c
             stem, dot, ext = str(f).rpartition('.')
-            if dot and (docs / (base.lstrip('/') + stem + 'DARK.' + ext)).exists():
-                dark.append(base + f)
+            dark_rel = base.lstrip('/') + stem + 'DARK.' + ext
+            if dot and (docs / dark_rel).exists():
+                dark.append(url)
+                dc = _bg_color(docs / dark_rel)
+                if dc:
+                    image_bg[base + stem + 'DARK.' + ext] = dc
     content = ("/* generated from docs/store/*.md frontmatter by "
                "hooks/store_products.py. do not edit by hand. */\n"
                "window.STORE_PRODUCTS = "
                + json.dumps(products, ensure_ascii=False) + ";\n"
                "window.STORE_DARK_IMAGES = "
-               + json.dumps(dark, ensure_ascii=False) + ";\n")
+               + json.dumps(dark, ensure_ascii=False) + ";\n"
+               "window.STORE_IMAGE_BG = "
+               + json.dumps(image_bg, ensure_ascii=False) + ";\n")
     files.append(File.generated(config, 'assets/js/store-data.js', content=content))
     # trusted catalog read server-side by the checkout Function: per variant, the
     # Stripe Price id (amount) and the shipping weight (lb). Variant `weight`
@@ -98,6 +137,8 @@ def on_files(files, config):
     catalog = {}
     missing = []
     for p in products:
+        if not p.get('published'):
+            continue   # hidden products are never sellable, even by a direct URL
         def _w(v):
             w = v.get('weight', p.get('weight'))
             try:

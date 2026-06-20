@@ -56,6 +56,10 @@
   const toLight = (u) => u.replace(/DARK(\.[A-Za-z0-9]+)(\?.*)?$/, "$1$2");
   const toDark = (u) => u.replace(/(\.[A-Za-z0-9]+)(\?.*)?$/, "DARK$1$2");
   const themedUrl = (u) => { const light = toLight(u); return isDark() && DARK_IMAGES[light] ? toDark(light) : light; };
+  /* per-image letterbox color (sampled at build, keyed by URL incl. DARK variants) so a contained
+     product image fills its frame with a background matching that image's own, in either theme. */
+  let IMAGE_BG = {};
+  const bgFor = (u) => IMAGE_BG[u] || "";
   const carouselUrls = (p) => (p.images || []).map((f) => themedUrl(p.imageBase + f));
   const minPrice = (p) => { const ps = p.variants.filter(buyable).map((v) => v.price); return ps.length ? Math.min.apply(null, ps) : null; };
   const defaultBuyBuild = (p) => { const d = p.variants.find((v) => v.id === p.defaultBuild); if (buyable(d)) return d.id; const b = p.variants.find(buyable); return b ? b.id : null; };
@@ -107,7 +111,7 @@
       card.className = "product-card";
       card.innerHTML =
         '<a class="pc-stretch" href="/store/' + p.id + '/" aria-label="' + p.title + '"></a>' +
-        '<div class="pc-imgwrap">' + (hero ? '<img class="pc-img" src="' + hero + '" alt="' + p.title + '" loading="lazy">' : '<span class="pc-img"></span>') + "</div>" +
+        '<div class="pc-imgwrap"' + (hero && bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' + (hero ? '<img class="pc-img" src="' + hero + '" alt="' + escapeHtml(p.title) + '" loading="lazy">' : '<span class="pc-img"></span>') + "</div>" +
         '<div class="pc-body">' + (buyBuild ? '<button class="pc-add" type="button" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>' : "") +
           '<p class="pc-title">' + p.title + '</p><p class="pc-desc">' + p.teaser + '</p>' +
           '<p class="pc-price">' + (mp != null ? '<span class="from">from</span>' + money(mp) : productStatus(p)) + "</p></div>";
@@ -196,7 +200,7 @@
   /* ---- accessory add-ons: standalone one-variant products (accessory:true) shown as small
      cards on their parent product page. The card links to the accessory's own page; the +
      adds to the cart and becomes a live quantity counter (reads/writes the cart line). ---- */
-  const accessoriesFor = (p) => PRODUCTS.filter((a) => a.accessory && a.parentId === p.id);
+  const accessoriesFor = (p) => PRODUCTS.filter((a) => a.accessory && a.parentId === p.id && (a.published || DEV_SHOW_UNPUBLISHED));
   const cartQtyOf = (id, b) => { const l = cart.find((x) => x.id === id && x.build === b); return l ? l.qty : 0; };
   function setCartQty(id, b, q) {
     q = Math.max(0, Math.min(MAX_QTY, Math.floor(q)));
@@ -224,7 +228,7 @@
       : (mp != null ? '<span class="from">from</span>' + money(mp) : productStatus(a));
     return '<div class="product-card product-card--mini" data-acc="' + escapeHtml(a.id) + '">' +
       '<a class="pc-stretch" href="/store/' + encodeURIComponent(a.id) + '/" aria-label="' + escapeHtml(a.title) + '"></a>' +
-      '<div class="pc-imgwrap">' + media + "</div>" +
+      '<div class="pc-imgwrap"' + (hero && bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' + media + "</div>" +
       '<div class="pc-body"><div class="pc-tophead"><p class="pc-title">' + escapeHtml(a.title) + '</p><span class="pc-addwrap">' + accAddHTML(a) + "</span></div>" +
         '<p class="pc-price">' + priceHTML + "</p></div></div>";
   }
@@ -260,22 +264,13 @@
   function renderCarousel() {
     const urls = carouselUrls(P);
     slide = 0;
-    // per-product image fit: a product can opt into "contain" (whole image fits the frame,
-    // no crop) with a matching letterbox background, instead of the default "cover".
-    const _cEl = $(".pe-carousel", root);
-    if (_cEl) {
-      const _fit = P.imageFit === "contain";
-      _cEl.classList.toggle("fit-contain", _fit);
-      const _fEl = $(".pe-frame", root);
-      if (_fEl) _fEl.style.background = (_fit && /^#[0-9a-fA-F]{3,8}$/.test(P.imageBg || "")) ? P.imageBg : "";
-    }
     if (!urls.length) {
       $(".pe-slides", root).innerHTML = '<div class="pe-slide active"><span class="pe-ph"><i class="' + (P.icon || "fa-solid fa-cube") + '" aria-hidden="true"></i></span></div>';
       $(".pe-dots", root).innerHTML = "";
       $(".pe-carousel", root).classList.add("is-single");
       return;
     }
-    $(".pe-slides", root).innerHTML = urls.map((u, i) => '<div class="pe-slide' + (i ? "" : " active") + '"><img src="' + u + '" alt="' + escapeHtml(P.title) + ' photo ' + (i + 1) + '"></div>').join("");
+    $(".pe-slides", root).innerHTML = urls.map((u, i) => '<div class="pe-slide' + (i ? "" : " active") + '"' + (bgFor(u) ? ' style="background:' + bgFor(u) + '"' : '') + '><img src="' + u + '" alt="' + escapeHtml(P.title) + ' photo ' + (i + 1) + '"></div>').join("");
     $(".pe-dots", root).innerHTML = urls.length > 1 ? urls.map((_, i) => '<button class="pe-dot' + (i ? "" : " active") + '" type="button" data-i="' + i + '" aria-label="image ' + (i + 1) + '"></button>').join("") : "";
     const multi = urls.length > 1;
     $(".pe-carousel", root).classList.toggle("is-single", !multi);
@@ -652,6 +647,8 @@
       const cur = img.getAttribute("src"); if (!cur) return;
       const want = themedUrl(cur);
       if (cur !== want) img.setAttribute("src", want);
+      const holder = img.closest(".pe-slide, .pc-imgwrap");   // keep the letterbox color matched to the themed image
+      if (holder) { const bg = bgFor(want); if (bg) holder.style.background = bg; }
     });
   }
   let themeObserved = false;
@@ -815,6 +812,7 @@
     PRODUCTS = (typeof window !== "undefined" && Array.isArray(window.STORE_PRODUCTS)) ? window.STORE_PRODUCTS : [];
     DARK_IMAGES = {};
     (Array.isArray(window.STORE_DARK_IMAGES) ? window.STORE_DARK_IMAGES : []).forEach((u) => { DARK_IMAGES[u] = true; });
+    IMAGE_BG = (window.STORE_IMAGE_BG && typeof window.STORE_IMAGE_BG === "object") ? window.STORE_IMAGE_BG : {};
     injectHeaderCart(); loadCart(); ensureDrawer(); renderCart();
     if ($("#store-grid")) renderGrid();
     else if ($("#product-detail")) { const p = getProduct($("#product-detail").dataset.product); if (p) renderDetail(p); reveal(); }

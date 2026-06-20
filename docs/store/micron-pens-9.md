@@ -19,8 +19,6 @@ sub: A pack of nine Sakura Pigma Micron 05 fineliners, archival ink, 0.45 mm, fo
 imageBase: /assets/images/Polargraph/
 images:
   - pens.png
-imageFit: contain
-imageBg: "#f3f3f4"
 defaultBuild: default
 weight: 0.2
 variants:

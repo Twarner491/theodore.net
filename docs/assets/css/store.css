@@ -65,7 +65,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pc-stretch:focus:not(:focus-visible) { outline: none; }
 .pc-stretch { position: absolute; inset: 0; z-index: 1; }
 .pc-imgwrap { position: relative; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background: var(--md-default-fg-color--lightest); }
-.pc-imgwrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pc-imgwrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .pc-body { position: relative; padding: 1em 1.25em 1.25em; display: flex; flex-direction: column; flex: 1; }
 .pc-add {
   position: absolute; top: 0.9em; right: 1.1em; z-index: 2;
@@ -125,8 +125,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pe-slides { position: absolute; inset: 0; }
 .pe-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.5s ease-in-out; }
 .pe-slide.active { opacity: 1; }
-.pe-slide img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; -webkit-user-drag: none; }
-.pe-carousel.fit-contain .pe-slide img { object-fit: contain; }   /* product opted into contain: whole image fits, frame bg (set inline to imageBg) fills the letterbox */
+.pe-slide img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; -webkit-user-drag: none; }
 .pe-dots { display: flex; justify-content: center; gap: 7px; margin-top: 14px; }
 .pe-dot { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 999px; background: var(--md-default-fg-color); opacity: 0.2; cursor: pointer; transition: opacity 0.2s ease; }
 .pe-dot:hover { opacity: 0.5; }
