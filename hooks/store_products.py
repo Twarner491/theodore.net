@@ -163,3 +163,27 @@ def on_files(files, config):
               'stripePriceLive and were dropped from store-catalog.json: ' + ', '.join(missing))
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
     return files
+
+
+# --- kit cards on project/writing pages get the same letterbox treatment as the store grid:
+# the image is `object-fit: contain`, and the wrap's background is sampled from the image so the
+# fill matches the photo's own background instead of a fixed white. Sampled at build (PIL); a
+# missing/unreadable image just keeps the CSS default. ---
+_KIT_BG_CACHE = {}
+_KIT_RX = re.compile(r'(<span class="kit-card__imgwrap")(>\s*<img\b[^>]*?\bsrc="([^"]+)")')
+
+
+def on_post_page(output, page, config):
+    if 'kit-card__imgwrap' not in output:
+        return output
+    docs = Path(config['docs_dir'])
+
+    def repl(m):
+        src = m.group(3)
+        if src not in _KIT_BG_CACHE:
+            rel = src.split('?', 1)[0].split('#', 1)[0]
+            _KIT_BG_CACHE[src] = _bg_color(docs / rel.lstrip('/')) if rel.startswith('/') else None
+        color = _KIT_BG_CACHE[src]
+        return m.group(0) if not color else (m.group(1) + ' style="background:' + color + '"' + m.group(2))
+
+    return _KIT_RX.sub(repl, output)
