@@ -16,8 +16,8 @@ sub: A tiny microphone that listens out your window for any birds passing by, an
 imageBase: /assets/images/AvianVisitors/
 images:
   - bird-mic.png
-  - mountedpi.JPG
-  - collage.png
+  - birdMicElectronics.png
+  - birdMic3D.png
 defaultBuild: electronics
 weight: 0.4  
 project: /projects/AvianVisitors/
@@ -25,6 +25,7 @@ related:
   - avian-visitors
 variants:
   - id: electronics
+    image: birdMicElectronics.png
     label: Electronics Kit
     price: 180
     stripePrice: "price_1TkCtvRPSNpqisAPIZwrcXYN"
@@ -36,6 +37,7 @@ variants:
       - microSD card
       - Power cable & brick
   - id: electronics-printed
+    image: birdMic3D.png
     label: "+ 3D Printed"
     price: 210
     stripePrice: "price_1TkCtwRPSNpqisAPNx2Q6qnQ"

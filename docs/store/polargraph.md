@@ -16,14 +16,15 @@ sub: A wall-mounted pen plotter with a web-accessible control interface.
 imageBase: /assets/images/Polargraph/
 images:
   - kit.png
-  - mountedPoalrgraph.JPG
-  - wall.jpg
-  - firstPlotResult.JPG
+  - polargraphElectronics.png
+  - polargraphWiringHardware.png
+  - polargrapg3dprints.png
 defaultBuild: electronics
 weight: 3.1   
 project: /projects/Polargraph/
 variants:
   - id: electronics
+    image: polargraphElectronics.png
     label: Electronics Kit
     price: 430
     stripePrice: "price_1TkCtxRPSNpqisAPCqVQCdz5"
@@ -37,6 +38,7 @@ variants:
       - Cabling + PSU + Power cord
       - Belts, pulleys, bearings, and other hardware
   - id: electronics-printed
+    image: polargrapg3dprints.png
     label: "+ 3D Printed Parts"
     price: 520
     stripePrice: "price_1TkCtxRPSNpqisAPfnljWfZA"

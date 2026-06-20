@@ -17,8 +17,8 @@ description: A wood-framed colorful e-ink display that collages the birds heard 
 imageBase: /assets/images/AvianVisitors/
 images:
   - heard-today.png
-  - framedeink.JPG
-  - raweink.JPG
+  - avianElectronics.png
+  - frameAndBacking.png
 defaultBuild: electronics
 weight: 0.9  
 project: /projects/AvianVisitors/
@@ -26,6 +26,7 @@ related:
   - avian-mic
 variants:
   - id: assembled
+    image: heard-today.png
     label: Assembled
     comingSoon: true
     desc: Finished, framed, and ready to hang.
@@ -33,6 +34,7 @@ variants:
       - 13.3" Spectra 6 E-ink, matted in an oak wood frame
       - Charging cable & brick
   - id: electronics
+    image: avianElectronics.png
     label: Electronics Kit
     price: 450
     stripePrice: "price_1TkB7KRPSNpqisAPzs2xr9zO"
@@ -44,6 +46,7 @@ variants:
       - microSD card
       - Power cable & brick
   - id: electronics-printed
+    image: frameAndBacking.png
     label: "+ Frame & Parts"
     price: 520
     weight: 2.2  
