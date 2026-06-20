@@ -52,7 +52,10 @@ search:
           <p>These terms cover purchases from the theodore.net store. Placing an order means you agree to them.</p>
 
           <h3>About the shop</h3>
-          <p>We are a one-person shop in California building Raspberry Pi based electronics kits and 3D-printed parts kits. We sell hardware only. Checkout is guest-only; we do not create accounts.</p>
+          <p>We are a one-person shop in California building electronics kits and 3D-printed parts kits. We sell hardware only. Checkout is guest-only; we do not create accounts.</p>
+
+          <h3>Made to order</h3>
+          <p>Every kit is built to order, so allow about a week for us to build yours before it ships. Because nothing ships until we build it, you can cancel for a full refund any time before your order ships. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> with your order number, or check your status on the <a href="/store/confirmation/">order lookup</a> page.</p>
 
           <h3>Orders</h3>
           <p>We may refuse or cancel any order at our discretion, including after it is placed. If we cancel an order you already paid for, we refund it in full.</p>
@@ -64,7 +67,7 @@ search:
           <p>Card payments are handled by Stripe. Card details go directly to Stripe; we never see or store your card number. See our <a href="/privacy">Privacy Policy</a> for more.</p>
 
           <h3>Shipping</h3>
-          <p>We ship from California to US addresses only. Most orders ship within a few business days, and you will get tracking when yours does. Risk of loss passes to you once the carrier takes possession of the package.</p>
+          <p>We ship from California to US addresses only. Kits are made to order, so most ship within about a week as we build them, and you will get tracking when yours does. Risk of loss passes to you once the carrier takes possession of the package.</p>
           <p>If we cannot ship within a stated time, or within 30 days where no time is stated, we will contact you to offer a delay or a full-refund cancellation.</p>
 
           <h3>Warranty</h3>
@@ -78,9 +81,9 @@ search:
           <h3>Limitation of liability</h3>
           <p>To the fullest extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising from your purchase or use of our products. Our total liability for any claim is capped at the amount you paid for the product. Nothing in these terms limits liability that cannot lawfully be limited, including liability for personal injury caused by our negligence.</p>
 
-          <h3>Open-source software and BirdNET</h3>
-          <p>We sell hardware only. We do not preload, bundle, or resell BirdNET. After setup, you install BirdNET on your own device, for your personal, non-commercial use.</p>
-          <p>BirdNET source code is released under the MIT License, and its models are released under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0) license. We are not affiliated with or endorsed by the Cornell Lab of Ornithology. The software is provided by its authors "as is," with no warranty or support from us. Designed to run <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, by the K. Lisa Yang Center for Conservation Bioacoustics at the Cornell Lab of Ornithology and Chemnitz University of Technology.</p>
+          <h3>Open-source software and hardware</h3>
+          <p>We sell hardware only. The hardware designs and software we write are open source, and we intend to keep open-sourcing what we make.</p>
+          <p>Some kits are designed to run third-party open-source software. We do not preload, bundle, or resell it. After setup you install it on your own device, under its own license, for your personal, non-commercial use. We are not affiliated with or endorsed by those projects, and their software is provided by its authors "as is," with no warranty or support from us. Per-project attributions and license details are on each product page.</p>
 
           <h3>Affiliate links</h3>
           <p>Some pages on this site include affiliate links to products on Amazon. As an Amazon Associate, we earn from qualifying purchases, at no extra cost to you.</p>

@@ -52,6 +52,9 @@ search:
           <h3>The short version</h3>
           <p>Unopened kits in original packaging can come back within 30 days. Once a kit is opened, assembled, soldered, or modified, it is no longer returnable. If something arrives defective or dead on arrival, we cover it.</p>
 
+          <h3>Made to order</h3>
+          <p>Each kit is built to order, so allow about a week for us to build yours before it ships. You can cancel for a full refund any time before your order ships, no questions asked. Check your order status any time on the <a href="/store/confirmation/">order lookup</a> page.</p>
+
           <h3>Return window</h3>
           <p>You have 30 days from delivery to start a return.</p>
 
