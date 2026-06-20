@@ -324,7 +324,15 @@ base_url  = "https://bird.onethreenine.net"
 image_url = "https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY"
 ```
 
-And boom! After a reset, your screen should be live with birds! Once everything's proven working here, we'll want to cover up the back to hold the screen in place and allow us to mount the frame on our wall. The wooden backing that came with the frame doesn't work given the additional contents we've introduced, so I hopped into Fusion and threw together a quick new backplate of my own
+And boom! After a reset, your screen should be live with birds!
+
+Building a frame without the mic? If you grabbed a frame kit but skipped the bird microphone, install with `--bird-weather` and your ZIP code instead. It pulls the top recently-heard birds near you from [BirdWeather](https://app.birdweather.com) and renders the same collage on the Pi, no mic and no website needed, with cutouts pulled straight from this repo's illustrations on GitHub.
+
+```bash
+cd AvianVisitors/frame && ./install.sh --bird-weather --zip 94107
+```
+
+Once everything's proven working here, we'll want to cover up the back to hold the screen in place and allow us to mount the frame on our wall. The wooden backing that came with the frame doesn't work given the additional contents we've introduced, so I hopped into Fusion and threw together a quick new backplate of my own
 
 <center>
 
