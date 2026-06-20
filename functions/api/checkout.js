@@ -26,8 +26,9 @@ export async function onRequestPost({ request, env }) {
   for (const l of cart) {
     const id = l && typeof l.id === "string" ? l.id : "";
     const build = l && typeof l.build === "string" ? l.build : "";
-    const variants = id && Object.prototype.hasOwnProperty.call(catalog, id) ? catalog[id] : null;
-    const price = variants && typeof variants[build] === "string" ? variants[build] : "";
+    const entry = id && Object.prototype.hasOwnProperty.call(catalog, id) ? catalog[id] : null;
+    const variant = entry && entry.variants && Object.prototype.hasOwnProperty.call(entry.variants, build) ? entry.variants[build] : null;
+    const price = variant && typeof variant.price === "string" ? variant.price : "";
     const qty = Math.min(Math.max(1, Math.floor(Number(l && l.qty)) || 1), MAX_QTY);
     if (!price.startsWith("price_")) return reply({ error: "An item in your cart is unavailable." }, 400);
     items.push([price, qty]);
