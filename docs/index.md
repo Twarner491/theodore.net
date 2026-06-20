@@ -224,21 +224,22 @@ search:
     <section class="press"> 
       <div class="content7">
         <a href="https://theodore.net/store" style="text-decoration: none;"><h2>Store <i class="fa-solid fa-arrow-right" style="float: right;"></i></h2></a>
+        <!-- prices mirror the cheapest buyable variant in each docs/store/*.md (keep in sync if you change Stripe pricing) -->
         <div class="store-mini">
           <a class="store-mini-card" href="/store/avian-visitors/">
             <div class="store-mini-img"><img src="/assets/images/AvianVisitors/heard-today.png" alt="Avian Visitors"></div>
             <p class="store-mini-title">Avian Visitors</p>
-            <p class="store-mini-price"><span class="from">from</span>$189</p>
+            <p class="store-mini-price"><span class="from">from</span>$450</p>
           </a>
           <a class="store-mini-card" href="/store/avian-mic/">
             <div class="store-mini-img"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Bird Mic"></div>
             <p class="store-mini-title">Bird Mic</p>
-            <p class="store-mini-price"><span class="from">from</span>$149</p>
+            <p class="store-mini-price"><span class="from">from</span>$180</p>
           </a>
           <a class="store-mini-card" href="/store/polargraph/">
             <div class="store-mini-img"><img src="/assets/images/Polargraph/kit.png" alt="Polargraph Plotter"></div>
             <p class="store-mini-title">Polargraph Plotter</p>
-            <p class="store-mini-price"><span class="from">from</span>$329</p>
+            <p class="store-mini-price"><span class="from">from</span>$430</p>
           </a>
         </div>
     </section>
