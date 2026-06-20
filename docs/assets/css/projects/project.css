@@ -750,7 +750,7 @@
 .kit-card__price .from { opacity: 0.7; margin-right: 0.3em; }
 
 /* margin variant: a vertical product card (like .tw-card-product) floated into the right-margin note column. desc stays hidden here (compact); it appears when the card drops inline (below). */
-.md-typeset .kit-card--margin { float: right; clear: right; width: 22%; margin: 0.3rem -25% 1rem 1.4rem; padding: 9px; background: var(--md-default-fg-color--lightest); }
+.md-typeset .kit-card--margin { float: right; clear: right; width: 22%; margin: 0.3rem -25% 1rem 1.4rem; padding: 9px; }
 .kit-card--margin .kit-card__imgwrap { aspect-ratio: 1 / 1; margin-bottom: 7px; }
 .kit-card--margin .kit-card__body { padding: 0 2px; }
 
