@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
+{# Product (and accessory) pages get a "Buy " tab title so they don't collide with a
+   project page of the same name. Everything else keeps Material's default title. #}
+{% block htmltitle %}
+  {%- if page and page.meta and page.meta.product -%}
+    <title>Buy {{ page.title | striptags }} - {{ config.site_name }}</title>
+  {%- else -%}
+    {{ super() }}
+  {%- endif -%}
+{% endblock %}
+
 {% block extrahead %}
   <!-- Critical CSS to prevent flash of unstyled header -->
   <style>
@@ -7,7 +17,12 @@
     .md-header[data-md-state=shadow] { box-shadow: none !important; }
     .md-tabs { display: none !important; }
   </style>
-  
+
+  <!-- Hide Material's native search before first paint so it never flashes before search.js swaps
+       in the custom component; no-JS leaves it unset, so native search stays as a fallback (paired
+       with the .tw-has-search rules in search.css). -->
+  <script>document.documentElement.classList.add("tw-has-search")</script>
+
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com" crossorigin>
@@ -18,6 +33,33 @@
   <!-- Preload header avatars for instant theme switching -->
   <link rel="preload" as="image" type="image/svg+xml" href="/assets/images/index/avatardark.svg">
   <link rel="preload" as="image" type="image/svg+xml" href="/assets/images/index/avatarlight.svg">
+
+  {# Social-share + SEO meta in the REAL <head>. These pages declare their own <head> in
+     the markdown body, where OG tags are not reliably read by crawlers, so they are emitted
+     here from frontmatter. Gated so non-store pages are untouched. #}
+  {%- if page and page.meta and (page.meta.product or page.meta.og_image) -%}
+    {%- set _site = (config.site_url or '') | trim -%}
+    {%- if _site.endswith('/') %}{% set _site = _site[:-1] %}{% endif -%}
+    {%- set _ogtitle = (page.title ~ ' - ' ~ config.site_name) if page.title else config.site_name -%}
+    {%- set _ogdesc = page.meta.description or page.meta.sub or page.meta.teaser or config.site_description -%}
+    {%- if page.meta.og_image -%}{% set _img = page.meta.og_image %}
+    {%- elif page.meta.images and page.meta.images[0] -%}{% set _img = (page.meta.imageBase or '') ~ page.meta.images[0] %}
+    {%- else -%}{% set _img = '/assets/images/thumb.png' %}{%- endif -%}
+    {%- if _img.startswith('/') %}{% set _img = _site ~ _img %}{% endif -%}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:title" content="{{ _ogtitle | striptags }}">
+  <meta property="og:description" content="{{ _ogdesc | striptags }}">
+  <meta property="og:image" content="{{ _img }}">
+  <meta property="og:url" content="{{ page.canonical_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ _ogtitle | striptags }}">
+  <meta name="twitter:description" content="{{ _ogdesc | striptags }}">
+  <meta name="twitter:image" content="{{ _img }}">
+  {%- endif -%}
+  {%- if page and page.meta and page.meta.robots -%}
+  <meta name="robots" content="{{ page.meta.robots | striptags }}">
+  {%- endif -%}
 {% endblock %}
 
 {% block announce %}{% endblock %}
