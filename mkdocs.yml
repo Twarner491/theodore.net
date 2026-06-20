@@ -3,7 +3,7 @@ site_author: Teddy Warner
 site_description: >-
     i make machines. // @WarnerTeddy
 
-site_url: https://theodore.net/
+site_url: !ENV [SITE_URL, 'https://theodore.net/']
 
 repo_url: https://github.com/Twarner491/theodore.net
 repo_name: Twarner491/theodore.net

@@ -9,8 +9,10 @@
 {% set page_date = page.meta.date | default("") %}
 {% set page_date_display = page.meta.date_display | default("") %}
 {% set page_type = "writings" if "writings" in page.url else "Projects" %}
-{% set page_full_url = "https://theodore.net" ~ page.url %}
-{% set page_full_thumbnail = "https://theodore.net" ~ page_thumbnail %}
+{% set site_base = (config.site_url or "https://theodore.net/") | trim %}
+{% if site_base.endswith("/") %}{% set site_base = site_base[:-1] %}{% endif %}
+{% set page_full_url = site_base ~ page.url %}
+{% set page_full_thumbnail = page_thumbnail if page_thumbnail.startswith("http") else site_base ~ page_thumbnail %}
 
 {% block extrahead %}
   <!-- Critical CSS to prevent flash of unstyled header -->
@@ -64,15 +66,15 @@
   <!-- Fonts served locally via tufte.css -->
   
   <!-- Page Styles -->
-  <link rel="stylesheet" href="{{ config.site_url }}assets/css/projects/project.css">
-  <link rel="stylesheet" href="{{ config.site_url }}assets/css/projects/vnp.css">
-  <link rel="stylesheet" href="{{ config.site_url }}assets/css/carousel.css">
-  <link rel="stylesheet" href="{{ config.site_url }}assets/css/header.css">
-  <script src="{{ config.site_url }}assets/js/carousel.js"></script>
-  <script src="{{ config.site_url }}assets/js/mathjax.js"></script>
+  <link rel="stylesheet" href="/assets/css/projects/project.css">
+  <link rel="stylesheet" href="/assets/css/projects/vnp.css">
+  <link rel="stylesheet" href="/assets/css/carousel.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <script src="/assets/js/carousel.js"></script>
+  <script src="/assets/js/mathjax.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   {% if page.meta and page.meta.draft and config.extra.draft_password_hash %}
-  <link rel="stylesheet" href="{{ config.site_url }}assets/css/draft-auth.css">
+  <link rel="stylesheet" href="/assets/css/draft-auth.css">
   {% endif %}
 
   <!-- JSON-LD Structured Data -->
@@ -223,7 +225,7 @@
   <div class="blur-overlay"></div>
 
   <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous"></script>
-  <script src="{{ config.site_url }}assets/js/header.js"></script>
+  <script src="/assets/js/header.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       initializeHeader();
@@ -360,7 +362,7 @@
 </script>
 
   {% if page.meta and page.meta.draft and config.extra.draft_password_hash %}
-  <script src="{{ config.site_url }}assets/js/draft-auth.js"></script>
+  <script src="/assets/js/draft-auth.js"></script>
   {% endif %}
 
   <!-- Reload on palette change -->
