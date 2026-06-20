@@ -248,3 +248,29 @@ supportsCssVars() || alert("Please view this page in a modern browser that suppo
     waitForDocumentObservable();
   }
 })();
+
+/* index store-section product images follow the Material theme (swap to "<name>DARK.<ext>" in dark mode) */
+(function () {
+  function swap() {
+    var dark = (document.body.getAttribute("data-md-color-scheme") || document.documentElement.getAttribute("data-md-color-scheme")) === "slate";
+    var imgs = document.querySelectorAll(".store-mini-img img");
+    for (var i = 0; i < imgs.length; i++) {
+      var img = imgs[i], cur = img.getAttribute("src");
+      if (!cur) continue;
+      var light = cur.replace(/DARK(\.[A-Za-z0-9]+)$/, "$1");
+      var want = dark ? light.replace(/(\.[A-Za-z0-9]+)$/, "DARK$1") : light;
+      if (cur === want) continue;
+      img.onerror = dark ? function () { this.onerror = null; this.src = this.src.replace(/DARK(\.[A-Za-z0-9]+)$/, "$1"); } : null;
+      img.setAttribute("src", want);
+    }
+  }
+  function start() {
+    if (!document.querySelector(".store-mini-img img")) return;
+    swap();
+    var obs = new MutationObserver(swap);
+    obs.observe(document.body, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
+  }
+  if (document.readyState !== "loading") start();
+  else document.addEventListener("DOMContentLoaded", start);
+})();
