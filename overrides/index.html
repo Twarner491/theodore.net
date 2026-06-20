@@ -16,6 +16,9 @@
     .md-header { background: transparent !important; box-shadow: none !important; }
     .md-header[data-md-state=shadow] { box-shadow: none !important; }
     .md-tabs { display: none !important; }
+    /* Keep the slide-in nav menu off-screen and transition-free until index.css loads (it isn't
+       render-blocking), so it never swipes across the page on a cold or uncached load. */
+    .main-navigation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; transform: translateX(-100%); transition: none; }
   </style>
 
   <!-- Hide Material's native search before first paint so it never flashes before search.js swaps
