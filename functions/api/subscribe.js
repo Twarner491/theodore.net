@@ -60,10 +60,12 @@ export async function onRequestPost({ request, env }) {
   // Create the subscriber, or find the existing one. The response is the same {ok:true} either way,
   // so this can't be used to probe who is on the list. Pass the VISITOR's real IP so Buttondown's
   // firewall scores them, not our shared Cloudflare edge IP (which it flags as a datacenter address
-  // and blocks). https://docs.buttondown.com/firewall
-  const clientIp = request.headers.get("CF-Connecting-IP") || (request.headers.get("X-Forwarded-For") || "").split(",")[0].trim();
+  // and blocks). https://docs.buttondown.com/firewall  Only forward a PUBLIC IP from CF-Connecting-IP
+  // (Cloudflare-set, unspoofable); skip loopback/private ranges (local `wrangler dev` uses 127.0.0.1,
+  // which the firewall would reject) and never trust the client-spoofable X-Forwarded-For.
+  const clientIp = request.headers.get("CF-Connecting-IP") || "";
   const createBody = { email_address: email };
-  if (clientIp) createBody.ip_address = clientIp;
+  if (clientIp && !/^(127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|::1|f[cd]|fe80)/i.test(clientIp)) createBody.ip_address = clientIp;
   let r, d, sid;
   try {
     r = await fetch(`${API}/subscribers`, { method: "POST", headers, body: JSON.stringify(createBody) });
