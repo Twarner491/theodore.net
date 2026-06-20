@@ -14,3 +14,9 @@ site/
 
 # Cloudflare wrangler local cache
 .wrangler/
+
+# macOS metadata + local agent / skills tooling
+.DS_Store
+.claude/
+.agents/
+skills-lock.json
