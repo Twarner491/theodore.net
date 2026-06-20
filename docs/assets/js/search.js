@@ -22,6 +22,15 @@
   // only ever navigate to same-origin paths from the (build-time) index
   function safeHref(u) { return (typeof u === 'string' && /^\/(?!\/)/.test(u)) ? u : '#'; }
   function price(p) { return typeof p === 'number' && isFinite(p) ? 'from $' + p : ''; }
+  function isDark() { return (document.body.getAttribute('data-md-color-scheme') || document.documentElement.getAttribute('data-md-color-scheme')) === 'slate'; }
+  // a thumbnail follows the Material theme: use the DARK sibling (only when the build found one) in dark mode
+  function thumbImg(it, cls) {
+    if (!it.thumbnail) return '';
+    var d = it.thumbnailDark || '';
+    var src = (d && isDark()) ? d : it.thumbnail;
+    var data = d ? ' data-light="' + esc(it.thumbnail) + '" data-dark="' + esc(d) + '"' : '';
+    return '<span class="' + cls + '"><img src="' + esc(src) + '" alt="" loading="lazy"' + data + '></span>';
+  }
 
   // ---------- data ----------
   function load() {
@@ -54,7 +63,7 @@
   // ---------- browse cards ----------
   function cardEl(it) {
     var a = document.createElement('a'); a.className = 'tw-card tw-card-' + it.type; a.href = safeHref(it.url);
-    var thumb = it.thumbnail ? '<span class="tw-card-thumb"><img src="' + esc(it.thumbnail) + '" alt="" loading="lazy"></span>' : '';
+    var thumb = thumbImg(it, 'tw-card-thumb');
     if (it.type === 'writing') {
       a.innerHTML = '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span></span>';   // title only
     } else if (it.type === 'product') {
@@ -101,7 +110,7 @@
     var a = document.createElement('a'); a.className = 'tw-row' + (it.type === 'product' ? ' tw-row-product' : ''); a.href = safeHref(it.url); a.setAttribute('role', 'option');
     var aside = it.type === 'product' ? price(it.price) : esc(it.date || '');
     var sub = it.type === 'writing' ? esc(it.readtime || '') : '';
-    var thumb = (it.type === 'product' && it.thumbnail) ? '<span class="tw-row-thumb"><img src="' + esc(it.thumbnail) + '" alt="" loading="lazy"></span>' : '';   // products get an inline graphic; projects/writings stay text-only
+    var thumb = (it.type === 'product') ? thumbImg(it, 'tw-row-thumb') : '';   // products get an inline graphic; projects/writings stay text-only
     a.innerHTML = thumb +
       '<span class="tw-row-main">' +
         '<span class="tw-row-top"><span class="tw-row-title">' + esc(it.title) + '</span><span class="tw-row-aside">' + aside + '</span></span>' +
@@ -380,6 +389,17 @@
   function ready(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
   ready(inject);
   var sub = setInterval(function () { if (typeof document$ !== 'undefined') { clearInterval(sub); document$.subscribe(function () { inject(); }); } }, 100);
+
+  // keep already-rendered search thumbnails matched to the theme on a live toggle
+  function swapThumbs() {
+    var dark = isDark(), imgs = document.querySelectorAll('.tw-card-thumb img[data-dark], .tw-row-thumb img[data-dark]');
+    for (var i = 0; i < imgs.length; i++) imgs[i].src = dark ? imgs[i].getAttribute('data-dark') : imgs[i].getAttribute('data-light');
+  }
+  ready(function () {
+    var o = new MutationObserver(swapThumbs);
+    o.observe(document.body, { attributes: true, attributeFilter: ['data-md-color-scheme'] });
+    o.observe(document.documentElement, { attributes: true, attributeFilter: ['data-md-color-scheme'] });
+  });
 
   document.addEventListener('mousedown', function (e) { if (openState && root && !root.contains(e.target) && !panel.contains(e.target)) close(); });
   document.addEventListener('keydown', function (e) {

@@ -63,6 +63,18 @@ def _date_strs(fm):
     return (d.strftime('%b %Y') if d else ''), (d.isoformat() if d else '')
 
 
+def _dark_sibling(docs_dir, url):
+    """Return the '<name>DARK.<ext>' URL when that file exists on disk, else ''.
+    Lets search.js swap a thumbnail to its dark variant in dark mode."""
+    if not url:
+        return ''
+    stem, dot, ext = url.rpartition('.')
+    if not dot:
+        return ''
+    dark = stem + 'DARK.' + ext
+    return dark if (Path(docs_dir) / dark.lstrip('/')).exists() else ''
+
+
 def _scan_store(docs_dir):
     """Read product definitions from docs/store/*.md frontmatter so products are
     searchable on every page. The frontmatter is the single source of truth
@@ -77,20 +89,22 @@ def _scan_store(docs_dir):
             fm, _ = _frontmatter(md.read_text(encoding='utf-8'))
         except Exception:
             continue
-        if not isinstance(fm, dict) or not fm.get('product'):
-            continue
+        if not isinstance(fm, dict) or not fm.get('product') or fm.get('accessory'):
+            continue                          # accessories are add-ons, shown only on their parent page
         pid = fm.get('id') or md.stem
         variants = fm.get('variants') if isinstance(fm.get('variants'), list) else []
         prices = [v.get('price') for v in variants
                   if isinstance(v, dict) and isinstance(v.get('price'), (int, float))]
         images = fm.get('images') if isinstance(fm.get('images'), list) else []
         base = fm.get('imageBase') or ''
+        thumb = (base + images[0]) if (base and images) else ''
         out.append((fm.get('order', 999), {
             'type': 'product',
             'url': f"/store/{pid}/",
             'title': fm.get('title', '') or '',
             'description': fm.get('teaser', '') or '',
-            'thumbnail': (base + images[0]) if (base and images) else '',
+            'thumbnail': thumb,
+            'thumbnailDark': _dark_sibling(docs_dir, thumb),
             'date': '',
             'dateISO': '',
             'readtime': '',
@@ -121,12 +135,14 @@ def _scan(docs_dir, folder, type_):
         date_str, date_iso = _date_strs(fm)
         kw = fm.get('keywords', '') or ''
         text = _plain(body)
+        thumb = fm.get('thumbnail', '')
         out.append({
             'type': type_,
             'url': f"/{folder}/{md.stem}/",
             'title': fm.get('title', ''),
             'description': fm.get('description', ''),
-            'thumbnail': fm.get('thumbnail', ''),
+            'thumbnail': thumb,
+            'thumbnailDark': _dark_sibling(docs_dir, thumb),
             'date': date_str,
             'dateISO': date_iso,
             'readtime': _readtime(body),

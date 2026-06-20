@@ -14,7 +14,14 @@
   :root, [data-md-color-scheme] { --tw-line: color-mix(in srgb, var(--md-default-fg-color) 17%, transparent); }
 }
 
-body.tw-has-search .md-search,
+/* Material's native search is replaced by the custom component (search.js). Hide it from the FIRST
+   PAINT, not just after search.js adds .tw-has-search, so it never flashes before the swap on load.
+   The extrahead inline script marks <html>.tw-has-search before the header paints; the icon label is
+   only made INVISIBLE then (kept as a 40px slot-holder) so nothing shifts sideways, and is collapsed
+   for good once search.js builds the custom icon and marks <body>.tw-has-search. With no JS at all,
+   .tw-has-search is never set, so the native search stays as a fallback. */
+.tw-has-search .md-search { display: none !important; }
+.tw-has-search label.md-header__button.md-icon[for="__search"] { visibility: hidden; }
 body.tw-has-search label.md-header__button.md-icon[for="__search"] { display: none !important; }
 
 /* ---- header slot + bar ---- */

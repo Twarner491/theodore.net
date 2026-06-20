@@ -20,6 +20,11 @@
     .md-tabs { display: none !important; }
   </style>
 
+  <!-- Hide Material's native search before first paint so it never flashes before search.js swaps
+       in the custom component; no-JS leaves it unset, so native search stays as a fallback (paired
+       with the .tw-has-search rules in search.css). -->
+  <script>document.documentElement.classList.add("tw-has-search")</script>
+
   <!-- Primary Meta Tags -->
   <meta name="title" content="{{ page_title }} - Teddy Warner">
   <meta name="description" content="{{ page_description }}">
