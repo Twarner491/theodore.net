@@ -284,7 +284,7 @@ search:
       });
     });
     // Swap the theme-variant images (polargraph, printer, cork fill, tone) to match the page scheme.
-    // Source of truth is the scheme Material actually applied to <body> — NOT the palette radio (which
+    // Source of truth is the scheme Material actually applied to <body>, NOT the palette radio (which
     // can lag on a fresh load) and NOT a separate localStorage key (which desyncs from Material's own
     // persistence). A MutationObserver re-runs the swap on every scheme change, so the images can't
     // get stuck on the wrong variant through any refresh or toggle path: Material owns the scheme and
