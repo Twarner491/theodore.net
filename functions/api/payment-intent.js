@@ -171,7 +171,7 @@ export async function onRequestPost({ request, env }) {
   form.set("metadata[weight]", String(Math.round(totalLb * 10) / 10));   // lb, for the operator's carrier call
   if (calcId) form.set("metadata[tax_calculation]", calcId);   // the webhook records the tax transaction from this
   if (taxStatus) form.set("metadata[tax_status]", taxStatus);   // flags a tax-calc failure so it's visible to the operator, not silently $0
-  if (email) form.set("receipt_email", email);
+  if (email) form.set("metadata[email]", email);   // our own receipt + order lookup use this; NOT receipt_email, which makes Stripe ALSO send its own receipt
   // NB: we deliberately do NOT set shipping[...] here. confirmPayment() sets the PI's
   // shipping from the Address Element (publishable key); a secret-key shipping set
   // would then block that client update. The address above is still used for tax.
@@ -187,7 +187,8 @@ export async function onRequestPost({ request, env }) {
   }
 
   form.set("currency", currency);
-  form.set("payment_method_types[0]", "card");   // card + Apple Pay/Google Pay wallets; excludes Link ("save info"), Affirm, Klarna
+  form.set("automatic_payment_methods[enabled]", "true");          // dynamic methods so Apple Pay / Google Pay surface; curate which appear in the Stripe Dashboard
+  form.set("automatic_payment_methods[allow_redirects]", "never"); // keep checkout to immediate methods (card + wallets), no redirect/BNPL flows
   form.set("description", "theodore.net store order");
   const res = await fetch("https://api.stripe.com/v1/payment_intents", { method: "POST", headers, body: form });
   if (!res.ok) { console.log("payment_intent failed:", res.status); return reply({ error: "Could not start checkout." }, 502); }

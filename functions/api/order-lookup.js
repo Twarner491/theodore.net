@@ -28,7 +28,7 @@ export async function onRequestPost({ request, env }) {
     data = await res.json();
   } catch (e) { return reply({ error: "Lookup is unavailable. Please try again." }, 502); }
 
-  const pi = (data.data || []).find((p) => p.status === "succeeded" && (p.receipt_email || "").toLowerCase() === email);
+  const pi = (data.data || []).find((p) => p.status === "succeeded" && (((p.metadata && p.metadata.email) || p.receipt_email) || "").toLowerCase() === email);
   if (!pi) return notFound();
   return reply(orderView(pi));
 }
