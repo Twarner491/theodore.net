@@ -322,12 +322,11 @@
   <section class="subscribe-section">
     <div class="subscribe-inner">
       <p>Enter your email to receive the occasional update.</p>
-      <form 
+      <form
         class="subscribe-form"
+        id="bd-subscribe"
         action="https://buttondown.com/api/emails/embed-subscribe/teddywarner"
         method="post"
-        target="popupwindow"
-        onsubmit="window.open('https://buttondown.com/teddywarner', 'popupwindow')"
       >
         <input 
           type="email" 
@@ -341,6 +340,36 @@
       </form>
     </div>
   </section>
+  <script>
+  /* Wire the newsletter form to our own /api/subscribe so it confirms inline (no Buttondown popup)
+     and rides the same fast, IP-proxied path as the rest of the site. A single delegated listener on
+     document (guarded so it attaches once) handles the form however the page was loaded; the form
+     keeps its Buttondown action as a no-JS fallback. Buttondown still sends the double opt-in email,
+     so we point the reader there. */
+  (function () {
+    if (window.__bdSubscribeWired) return;
+    window.__bdSubscribeWired = true;
+    document.addEventListener("submit", function (e) {
+      var form = e.target;
+      if (!form || form.id !== "bd-subscribe") return;
+      e.preventDefault();
+      var input = form.querySelector('input[type="email"]');
+      var inner = form.closest(".subscribe-inner");
+      var email = ((input && input.value) || "").trim();
+      if (!email || email.indexOf("@") < 1) { if (input) input.focus(); return; }
+      var btn = form.querySelector("button"); if (btn) btn.disabled = true;
+      if (input) input.disabled = true;
+      var done = function (msg) { if (inner) inner.innerHTML = "<p>" + msg + "</p>"; };
+      fetch("/api/subscribe", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: email, tags: ["newsletter"] }), keepalive: true })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) {
+          done((r.ok && d && d.ok)
+            ? "Thanks. Check your inbox to confirm your subscription."
+            : 'That did not go through. Email <a href="mailto:support@theodore.net">support@theodore.net</a> and I will add you.');
+        }); })
+        .catch(function () { done('Network hiccup. Email <a href="mailto:support@theodore.net">support@theodore.net</a> and I will add you.'); });
+    });
+  })();
+  </script>
 
   <!-- Giscus Comments -->
   <h2 id="__comments">{{ lang.t("meta.comments") }}</h2>

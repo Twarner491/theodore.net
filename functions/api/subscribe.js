@@ -9,7 +9,8 @@
 //   BUTTONDOWN_API_KEY   same key newsletter-approve.js uses
 const API = "https://api.buttondown.email/v1";
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost(context) {
+  const { request, env } = context;
   const reply = (o, s = 200) =>
     new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json" } });
 
@@ -55,41 +56,50 @@ export async function onRequestPost({ request, env }) {
     return { ids, map };
   }
 
-  const { ids: wantIds, map: tagMap } = tags.length ? await resolveTags(tags) : { ids: [], map: {} };
+  // The Buttondown work is slow (up to four sequential round-trips, slower still when their firewall
+  // is scoring the IP), so don't make the visitor wait on it. Validation above already gated the
+  // response, the contract is a uniform {ok:true} either way, and Buttondown's double opt-in email is
+  // the real confirmation, so a rare upstream failure is logged rather than surfaced. waitUntil keeps
+  // the Function alive to finish the work after the response has been sent.
+  async function enroll() {
+    const { ids: wantIds, map: tagMap } = tags.length ? await resolveTags(tags) : { ids: [], map: {} };
 
-  // Create the subscriber, or find the existing one. The response is the same {ok:true} either way,
-  // so this can't be used to probe who is on the list. Pass the VISITOR's real IP so Buttondown's
-  // firewall scores them, not our shared Cloudflare edge IP (which it flags as a datacenter address
-  // and blocks). https://docs.buttondown.com/firewall  Only forward a PUBLIC IP from CF-Connecting-IP
-  // (Cloudflare-set, unspoofable); skip loopback/private ranges (local `wrangler dev` uses 127.0.0.1,
-  // which the firewall would reject) and never trust the client-spoofable X-Forwarded-For.
-  const clientIp = request.headers.get("CF-Connecting-IP") || "";
-  const createBody = { email_address: email };
-  if (clientIp && !/^(127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|::1|f[cd]|fe80)/i.test(clientIp)) createBody.ip_address = clientIp;
-  let r, d, sid;
-  try {
-    r = await fetch(`${API}/subscribers`, { method: "POST", headers, body: JSON.stringify(createBody) });
-    d = await r.json().catch(() => ({}));
-  } catch (e) { return reply({ error: "Could not reach the mailing list. Try again." }, 502); }
-  if (r.ok) {
-    sid = d && d.id;
-  } else if (d && d.code === "email_already_exists") {
-    sid = (d.metadata && d.metadata.subscriber_id) || null;
-    if (!sid) { try { const f = await fetch(`${API}/subscribers/${encodeURIComponent(email)}`, { headers }).then((x) => x.json()); sid = f && f.id; } catch (e) {} }
-  } else {
-    console.log("subscribe failed:", r.status, (d && d.code) || "", String((d && d.detail) || "").slice(0, 200));
-    return reply({ error: "Could not add you to the list right now." }, 502);
-  }
-
-  // Apply the tags by id, merged with whatever the subscriber already has (existing tags read back
-  // as names, so translate them through the catalog). PATCH is the call Buttondown actually honors.
-  if (wantIds.length && sid) {
+    // Create the subscriber, or find the existing one. Pass the VISITOR's real IP so Buttondown's
+    // firewall scores them, not our shared Cloudflare edge IP (which it flags as a datacenter address
+    // and blocks). https://docs.buttondown.com/firewall  Only forward a PUBLIC IP from CF-Connecting-IP
+    // (Cloudflare-set, unspoofable); skip loopback/private ranges (local `wrangler dev` uses 127.0.0.1,
+    // which the firewall would reject) and never trust the client-spoofable X-Forwarded-For.
+    const clientIp = request.headers.get("CF-Connecting-IP") || "";
+    const createBody = { email_address: email };
+    if (clientIp && !/^(127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|::1|f[cd]|fe80)/i.test(clientIp)) createBody.ip_address = clientIp;
+    let r, d, sid;
     try {
-      const cur = await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { headers }).then((x) => x.json()).catch(() => ({}));
-      const curIds = (Array.isArray(cur.tags) ? cur.tags : []).map((n) => tagMap[String(n).toLowerCase()]).filter(Boolean);
-      const merged = Array.from(new Set(curIds.concat(wantIds)));
-      await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { method: "PATCH", headers, body: JSON.stringify({ tags: merged }) });
-    } catch (e) { console.log("tag apply error:", e && e.message); }
+      r = await fetch(`${API}/subscribers`, { method: "POST", headers, body: JSON.stringify(createBody) });
+      d = await r.json().catch(() => ({}));
+    } catch (e) { console.log("subscribe unreachable:", e && e.message); return; }
+    if (r.ok) {
+      sid = d && d.id;
+    } else if (d && d.code === "email_already_exists") {
+      sid = (d.metadata && d.metadata.subscriber_id) || null;
+      if (!sid) { try { const f = await fetch(`${API}/subscribers/${encodeURIComponent(email)}`, { headers }).then((x) => x.json()); sid = f && f.id; } catch (e) {} }
+    } else {
+      console.log("subscribe failed:", r.status, (d && d.code) || "", String((d && d.detail) || "").slice(0, 200));
+      return;
+    }
+
+    // Apply the tags by id, merged with whatever the subscriber already has (existing tags read back
+    // as names, so translate them through the catalog). PATCH is the call Buttondown actually honors.
+    if (wantIds.length && sid) {
+      try {
+        const cur = await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { headers }).then((x) => x.json()).catch(() => ({}));
+        const curIds = (Array.isArray(cur.tags) ? cur.tags : []).map((n) => tagMap[String(n).toLowerCase()]).filter(Boolean);
+        const merged = Array.from(new Set(curIds.concat(wantIds)));
+        await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { method: "PATCH", headers, body: JSON.stringify({ tags: merged }) });
+      } catch (e) { console.log("tag apply error:", e && e.message); }
+    }
   }
+
+  if (typeof context.waitUntil === "function") context.waitUntil(enroll());
+  else await enroll();
   return reply({ ok: true });
 }

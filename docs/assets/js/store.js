@@ -365,11 +365,11 @@
     $("input", wl).focus();
     $(".pe-wl-form", wl).addEventListener("submit", (e) => {
       e.preventDefault();
-      const input = $("input", wl), email = (input.value || "").trim(), btn = $("button", wl);
+      const input = $("input", wl), email = (input.value || "").trim();
       if (!email || email.indexOf("@") < 1) { input.focus(); return; }
-      btn.disabled = true;
+      wl.innerHTML = '<p class="pe-wl-done">Adding you to the list…</p>';   // instant feedback; the request finishes in the background
       // tag with `waitlist` + the product id so this list can be emailed on its own when the kit goes live
-      fetch("/api/subscribe", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, tags: ["waitlist", P.id] }) })
+      fetch("/api/subscribe", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, tags: ["waitlist", P.id] }), keepalive: true })
         .then((r) => r.json().catch(() => ({})).then((d) => {
           wl.innerHTML = (r.ok && d && d.ok)
             ? '<p class="pe-wl-done">Thanks, you’re on the list. We’ll email you when it’s ready.</p>'
