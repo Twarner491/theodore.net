@@ -240,7 +240,11 @@
     clearTimeout(openT); clearTimeout(closeT); clearTimeout(closeT2);
     setPaletteShift();                           // compute the final gap from the resting layout (before floating) — one move, no shake
     floatOut();
+    // Reserve the scrollbar's width before the scroll-lock (html:has(.tw-search-open){overflow:hidden})
+    // removes it, so the page content doesn't shift sideways on open. 0 on overlay-scrollbar systems.
+    var sbw = window.innerWidth - document.documentElement.clientWidth;
     document.body.classList.add('tw-search-open');
+    document.documentElement.style.paddingRight = sbw + 'px';
     scrim.classList.add('tw-shown');
     root.querySelector('.tw-icon').setAttribute('aria-expanded', 'true');
     input.value = ''; clearBtn.style.display = 'none'; scope = null;
@@ -273,6 +277,7 @@
         scrim.classList.remove('tw-shown');      // now the white wipes out, back to the icon
         floatBack();
         document.body.classList.remove('tw-search-open');
+        document.documentElement.style.paddingRight = '';   // release the reserved scrollbar width
         if (icon && icon.isConnected) icon.focus();
       }, 200);
       return;
@@ -283,6 +288,7 @@
       if (openState) return;
       floatBack();
       document.body.classList.remove('tw-search-open');
+      document.documentElement.style.paddingRight = '';   // release the reserved scrollbar width
       if (icon && icon.isConnected) icon.focus();   // restore focus to the trigger for keyboard users
     }, 410);
   }
