@@ -192,7 +192,7 @@
     P = p; build = p.defaultBuild || p.variants[0].id; qty = 1;
     navTrail = reconcileTrail(p);
     root.innerHTML = detailHTML(p);
-    renderCarousel(); wireDetail(); updateVariant();
+    renderCarousel(); wireDetail(); updateVariant(false);
     renderAccessories(p);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncPill);
   }
@@ -301,13 +301,13 @@
     pill.style.transform = "translateX(" + active.offsetLeft + "px)";
   }
   window.addEventListener("resize", () => { if (document.getElementById("product-detail")) syncPill(); });
-  function updateVariant() {
+  function updateVariant(jump = true) {
     const v = variantById(P, build);
     $$(".opt-seg button", root).forEach((b) => b.setAttribute("aria-current", b.dataset.opt === build ? "true" : "false"));
     syncPill();
     // jump the carousel to this variant's photo (frontmatter variant `image:`), then the user can still swipe
     const vslide = (v.image && Array.isArray(P.images)) ? P.images.indexOf(v.image) : -1;
-    if (vslide >= 0) goto(vslide);
+    if (jump && vslide >= 0) goto(vslide);
     $(".pe-variant-desc", root).textContent = v.desc || "";
     $(".pe-box-contents", root).innerHTML = (v.contents || []).map((c) => "<li>" + c + "</li>").join("");
     $(".pe-qty span", root).textContent = String(qty);
