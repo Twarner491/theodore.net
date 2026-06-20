@@ -71,7 +71,7 @@ async function verify(body, header, secret) {
   const t = (parts.find((p) => p[0] === "t") || [])[1];
   const sigs = parts.filter((p) => p[0] === "v1").map((p) => p[1]);
   if (!t || sigs.length === 0) return null;
-  if (Math.abs(Date.now() / 1000 - Number(t)) > TOLERANCE) return null;
+  const ts = Number(t); if (!Number.isFinite(ts) || Math.abs(Date.now() / 1000 - ts) > TOLERANCE) return null;
 
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
