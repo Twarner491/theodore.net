@@ -741,8 +741,8 @@
 /* the card is an <a> markdown wraps in a <p>, so tufte's link rule (.md-content .md-typeset p a, 0-0-2-2) out-specifies .kit-card and overrides `transition` with text-decoration-color — which makes the hover transform jump instantly instead of easing. re-assert the transform transition at higher specificity so it eases like the store/index cards. */
 .md-content .md-typeset .kit-card { transition: transform 0.3s ease; }
 /* framed thumbnail: nested frames (outer thumb border + inner image border, both squircled by corners.js), mirroring .tw-card-thumb */
-.kit-card__imgwrap { display: block; box-sizing: border-box; padding: 3px; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 14px; }
-.md-typeset .kit-card img { display: block; width: 100%; height: 100%; margin: 0; box-sizing: border-box; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 10px; object-fit: cover; }
+.kit-card__imgwrap { display: block; box-sizing: border-box; padding: 3px; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 14px; background: #fff; }
+.md-typeset .kit-card img { display: block; width: 100%; height: 100%; margin: 0; box-sizing: border-box; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 10px; object-fit: contain; }
 .kit-card__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .kit-card__title { font-family: "JetBrains Mono", monospace; font-weight: 300; font-size: 0.76rem; line-height: 1.2; opacity: 0.78; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kit-card__desc { display: none; font-family: "JetBrains Mono", monospace; font-weight: 300; font-size: 0.72rem; line-height: 1.25; opacity: 0.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -750,7 +750,7 @@
 .kit-card__price .from { opacity: 0.7; margin-right: 0.3em; }
 
 /* margin variant: a vertical product card (like .tw-card-product) floated into the right-margin note column. desc stays hidden here (compact); it appears when the card drops inline (below). */
-.md-typeset .kit-card--margin { float: right; clear: right; width: 22%; margin: 0.3rem -25% 1rem 1.4rem; padding: 9px; }
+.md-typeset .kit-card--margin { float: right; clear: right; width: 22%; margin: 0.3rem -25% 1rem 1.4rem; padding: 9px; background: var(--md-default-fg-color--lightest); }
 .kit-card--margin .kit-card__imgwrap { aspect-ratio: 1 / 1; margin-bottom: 7px; }
 .kit-card--margin .kit-card__body { padding: 0 2px; }
 

@@ -48,9 +48,9 @@ Building a bird tracking station of your own is easy enough. The full project re
   <span class="kit-card__body">
     <span class="kit-card__title">Bird Mic</span>
     <span class="kit-card__desc">A tiny mic that feeds your bird screen the calls it hears.</span>
-    <span class="kit-card__price"><span class="from">from</span>$149</span>
+    <span class="kit-card__price"><span class="from">from</span>$180</span>
   </span>
-</a> Or, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
+</a> Or, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. [As an Amazon Associate I earn from qualifying purchases.](../../terms){/.marginnote}
 
 <div class="bom-table" markdown>
 
@@ -75,7 +75,13 @@ Flash the SD card with [Raspberry Pi Imager](https://www.raspberrypi.com/softwar
 - Hostname: `birdnet`
 - Enable SSH with password auth
 
-Plug the USB mic into the Pi and place it in a window or mount it outside. I stuck mine to the screen of a small window facing towards my balcony, keeping the Pi inside and away from the elements. Then boot! 
+Plug the USB mic into the Pi and place it in a window or mount it outside. I threw together a simple base for the PI
+
+<div class="embed-frame"><div class="embed-inner">
+<iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b60281100553a23a2b222f7?mode=embed" width="98%" height="520" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
+
+... and then stuck my mine to the screen of a small window facing towards my balcony, keeping the Pi inside and away from the elements. Then boot! 
 
 ??? warning "If using a Raspberry Pi Zero 2 W"
     The RPi Zero 2 W has a few additional pre-reqs to handle low power wifi and low ram. Per the upstream [BirdNET-Pi RPi0W2 guide](https://github.com/mcguirepr89/BirdNET-Pi/wiki/RPi0W2-Installation-Guide):
@@ -260,9 +266,9 @@ Everything you need to build a frame of your own can be found at [github.com/Twa
   <span class="kit-card__body">
     <span class="kit-card__title">Avian Visitors</span>
     <span class="kit-card__desc">A framed e-ink that collages the birds heard nearby.</span>
-    <span class="kit-card__price"><span class="from">from</span>$189</span>
+    <span class="kit-card__price"><span class="from">from</span>$450</span>
   </span>
-</a> Again, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
+</a> Again, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. [As an Amazon Associate I earn from qualifying purchases.](../../terms){/.marginnote}
 
 <div class="bom-table" markdown>
 

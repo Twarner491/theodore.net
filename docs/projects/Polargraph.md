@@ -345,9 +345,9 @@ The full project repo is at [github.com/Twarner491/polargraph](https://github.co
   <span class="kit-card__body">
     <span class="kit-card__title">GPENT Kit</span>
     <span class="kit-card__desc">A wall-hung machine that draws generative art.</span>
-    <span class="kit-card__price"><span class="from">from</span>$329</span>
+    <span class="kit-card__price"><span class="from">from</span>$430</span>
   </span>
-</a> Or, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. As an Amazon Associate I earn from qualifying purchases.{/.marginnote}
+</a> Or, if you prefer to source parts yourself, here's the BOM: {.marginnote}Some links in this BOM are to products sold by Amazon. [As an Amazon Associate I earn from qualifying purchases.](../terms){/.marginnote}
 
 <div class="bom-table" markdown>
 
@@ -356,6 +356,7 @@ The full project repo is at [github.com/Twarner491/polargraph](https://github.co
 | 1 | Raspberry Pi 5 | $89.94 | [Link](https://amzn.to/4vjlhqI) | 8GB |
 | 1 | Raspberry Pi 5 Active Cooler | $9.90 | [Link](https://amzn.to/4va5XNp) | |
 | 1 | Micro SD Card | $16.68 | [Link](https://amzn.to/3SCuewS) | ≥32GB |
+| 1 | Arduino Mega + USB-B Cable | $22.99 | [Link](https://amzn.to/4vaJUGa) | |
 | 1 | RAMPS 1.4 Shield | $9.39 | [Link](https://amzn.to/4uwKVak) | |
 | 2 | A4988 Stepper Drivers | $9.98 | [Link](https://amzn.to/4uupO8D) | |
 | 2 | Nema 17 Pancake Stepper | $21.00 | [Link](https://amzn.to/3QmylfZ) | 42mm x 23mm |
@@ -380,7 +381,7 @@ The full project repo is at [github.com/Twarner491/polargraph](https://github.co
 | 1 | Felt Pads | $9.97 | [Link](https://www.homedepot.com/p/Everbilt-Assorted-Beige-Self-Adhesive-Round-Furniture-Sliders-Furniture-Pads-for-Hard-Floors-Surface-Bumpers-Value-Pack-108-Pc-49032/206855255) | Assorted Pack |
 | - | M2 and M3 Hardware | - | - | Misc nuts and bolts |
 | - | Jumper Wires | - | - | Misc |
-| | **Total** | **~$595.82** | | |
+| | **Total** | **~$618.81** | | |
 
 </div>
 
