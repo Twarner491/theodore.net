@@ -11,7 +11,7 @@ product: true
 accessory: true
 parentId: avian-mic
 order: 3
-published: true
+published: false
 id: mic-mount-magnet
 robots: "noindex, follow"
 icon: fa-solid fa-magnet

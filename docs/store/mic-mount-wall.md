@@ -11,7 +11,7 @@ product: true
 accessory: true
 parentId: avian-mic
 order: 1
-published: true
+published: false
 id: mic-mount-wall
 robots: "noindex, follow"
 icon: fa-solid fa-screwdriver-wrench
