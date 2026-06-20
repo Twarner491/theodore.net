@@ -19,6 +19,12 @@
 .cart-scrim { background: rgba(18, 19, 22, 0.46) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 [data-md-color-scheme="slate"] .cart-scrim { background: rgba(0, 0, 0, 0.58) !important; }
 
+/* Store landing title "theodore.net Store": dim the lowercase brand mark to ~80% so it reads as a
+   brand mark beside the capitalised "Store". The .brand span is injected at build time by
+   hooks/store_title_brand.py (docs/store/index.md is store-agent-owned, so it isn't edited
+   directly). Reset the italic that index.css's ".introabt h2 span" rule would otherwise apply. */
+.introabt h2 .brand { opacity: 0.65; font-style: normal; }
+
 [data-md-color-scheme="slate"] {
     --md-default-bg-color: hsla(228, 7%, 14%, 1);
     --md-footer-bg-color--dark: hsla(228, 8%, 7%, 0.58);

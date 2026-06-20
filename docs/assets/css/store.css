@@ -52,7 +52,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 }
 
 /* product grid: cards are links */
-.store-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5em; align-items: start; }
+.store-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5em; align-items: stretch; }
 .product-card {
   position: relative;
   display: flex; flex-direction: column; text-align: left;
@@ -66,7 +66,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pc-stretch { position: absolute; inset: 0; z-index: 1; }
 .pc-imgwrap { position: relative; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background: var(--md-default-fg-color--lightest); }
 .pc-imgwrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.pc-body { position: relative; padding: 1em 1.25em 1.25em; }
+.pc-body { position: relative; padding: 1em 1.25em 1.25em; display: flex; flex-direction: column; flex: 1; }
 .pc-add {
   position: absolute; top: 0.9em; right: 1.1em; z-index: 2;
   width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
@@ -77,12 +77,37 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pc-add svg { width: 14px; height: 14px; display: block; }
 .pc-add:hover { opacity: 1; background: var(--md-default-fg-color--lightest); transform: scale(0.94); }
 .pc-title { color: var(--md-default-fg-color); opacity: 0.75; font-family: "JetBrains Mono"; font-size: 1.125em; font-weight: 300; margin: 0 0 0.2em; padding-right: 2em; }
-.pc-desc { color: var(--md-default-fg-color); opacity: 0.55; font-family: "JetBrains Mono"; font-size: 0.9em; font-weight: 300; line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.pc-price { color: var(--md-default-fg-color); opacity: 0.5; font-family: "JetBrains Mono"; font-size: 0.85em; font-weight: 300; margin: 0.7em 0 0; }
+.pc-desc { color: var(--md-default-fg-color); opacity: 0.55; font-family: "JetBrains Mono"; font-size: 0.9em; font-weight: 300; line-height: 1.5; margin: 0; min-height: 2.7em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pc-price { color: var(--md-default-fg-color); opacity: 0.5; font-family: "JetBrains Mono"; font-size: 0.85em; font-weight: 300; margin: auto 0 0; padding-top: 0.7em; }
 .pc-price .from { margin-right: 0.4em; opacity: 0.7; }
 
+/* accessory add-ons: small product-card-style cards on the parent product page. The +
+   (top-right of the text) toggles into a live quantity counter; clicking the card opens it. */
+.pd-accessories { max-width: 1000px; margin: 2.8em auto 0; }
+.acc-heading { font-family: "Crimson Pro"; font-size: 1.4em; font-weight: 400; margin: 0 0 1em; color: var(--md-default-fg-color); }
+.acc-grid { display: grid; gap: 1em; grid-template-columns: repeat(var(--acc-cols, 4), minmax(0, 200px)); }
+.product-card--mini { border-radius: 20px; }
+.product-card--mini .pc-imgwrap { aspect-ratio: 6 / 5; }
+.product-card--mini .pc-imgwrap img { object-fit: contain; }   /* whole thumbnail fits; imgwrap bg fills the rest */
+.pc-ph { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.pc-ph i { font-size: 1.8em; color: var(--md-default-fg-color); opacity: 0.2; }
+.product-card--mini .pc-body { padding: 0.7em 0.95em 0.8em; }
+.pc-tophead { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5em; }
+.product-card--mini .pc-title { flex: 1; min-width: 0; font-size: 0.92em; line-height: 1.35; margin: 0; padding: 0; opacity: 0.78; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.product-card--mini .pc-price { font-size: 0.8em; padding-top: 0.12em; margin: 0; opacity: 0.5; }
+.pc-addwrap { position: relative; z-index: 2; flex: none; }
+.pc-addwrap .pc-add { position: static; top: auto; right: auto; width: 26px; height: 26px; }
+.pc-qty { display: inline-flex; align-items: center; border: 1.2px solid var(--md-default-fg-color--lightest); border-radius: 999px; background: var(--md-default-bg-color); }
+.pc-qty button { width: 26px; height: 26px; border: 0; border-radius: 999px; background: transparent; color: var(--md-default-fg-color); font-size: 0.9em; line-height: 1; cursor: pointer; opacity: 0.65; transition: opacity 0.2s ease; }
+.pc-qty button:hover { opacity: 1; }
+.pc-qty span { min-width: 18px; text-align: center; font-family: "JetBrains Mono"; font-size: 0.76em; opacity: 0.85; }
+/* carousel placeholder for a product with no photos yet (uses the frontmatter icon) */
+.pe-ph { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.pe-ph i { font-size: 2.4em; color: var(--md-default-fg-color); opacity: 0.18; }
+@media (max-width: 760px) { .acc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
 /* product detail page: image carousel + info, two columns */
-#product-detail { display: grid; grid-template-columns: 1.02fr 1fr; grid-template-areas: "media back" "media info"; column-gap: 3em; row-gap: 0; align-items: start; max-width: 1000px; margin-top: 1.2em; }
+#product-detail { display: grid; grid-template-columns: 1.02fr 1fr; grid-template-areas: "media back" "media info"; grid-template-rows: min-content 1fr; column-gap: 3em; row-gap: 0; align-items: start; max-width: 1000px; margin-top: 1.2em; }
 #product-detail > .return2feed { grid-area: back; }
 .pd-media { grid-area: media; display: flex; flex-direction: column; }
 .pe-carousel { display: flex; align-items: stretch; gap: 8px; }
@@ -96,10 +121,12 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pe-frame { flex: 1; min-width: 0; position: relative; aspect-ratio: 3 / 4; border: 1px solid var(--md-default-fg-color--lightest); border-radius: 18px; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
 .pe-frame:active { cursor: grabbing; }
 .pe-carousel.is-single .pe-frame { cursor: default; }
+.pe-carousel.is-single .pe-arrow { display: none; }   /* single image: no prev/next arrows on desktop */
 .pe-slides { position: absolute; inset: 0; }
 .pe-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.5s ease-in-out; }
 .pe-slide.active { opacity: 1; }
 .pe-slide img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; -webkit-user-drag: none; }
+.pe-carousel.fit-contain .pe-slide img { object-fit: contain; }   /* product opted into contain: whole image fits, frame bg (set inline to imageBg) fills the letterbox */
 .pe-dots { display: flex; justify-content: center; gap: 7px; margin-top: 14px; }
 .pe-dot { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 999px; background: var(--md-default-fg-color); opacity: 0.2; cursor: pointer; transition: opacity 0.2s ease; }
 .pe-dot:hover { opacity: 0.5; }
@@ -207,7 +234,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .cart-shop-link:hover { opacity: 0.85; }
 .cart-empty + .cart-shop-link { margin-top: 0.6em; }
 .cart-line { display: grid; grid-template-columns: 60px 1fr auto; gap: 0.85em; align-items: stretch; padding: 1em 0; border-bottom: 1px solid var(--md-default-fg-color--lightest); }
-.cart-line-img { width: 60px; height: 60px; align-self: start; border-radius: 14px; object-fit: cover; border: 1px solid var(--md-default-fg-color--lightest); }
+.cart-line-img { width: 60px; height: 68px; align-self: start; border-radius: 14px; object-fit: cover; border: 1px solid var(--md-default-fg-color--lightest); }   /* taller than 60 so the meta column's space-between opens up the variant -> qty gap */
 .cart-line-meta { min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
 .cart-line-side { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; }
 .cart-line-title { font-family: "JetBrains Mono"; font-size: 0.85em; font-weight: 300; opacity: 0.85; margin: 0 0 2px; }
@@ -225,6 +252,12 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .cart-checkout { width: 100%; border: 1.2px solid var(--md-default-fg-color); border-radius: 16px; background: var(--md-default-fg-color); color: var(--md-default-bg-color); font-family: "JetBrains Mono"; font-size: 0.84em; font-weight: 500; letter-spacing: 0.04em; padding: 1.05em; cursor: pointer; transition: transform 0.3s ease; }
 .cart-checkout:hover { transform: scale(0.98); }
 .cart-checkout:disabled { opacity: 0.4; cursor: default; }
+/* availability tags + checkout error banner (status system) */
+.cart-error { font-family: "JetBrains Mono"; font-size: 0.72em; font-weight: 300; line-height: 1.4; color: #d64545; margin: 0 0 0.9em; }
+.cart-line-warn { color: #d64545; font-size: 0.92em; }
+.cart-line-gone .cart-line-img, .cart-line-gone .cart-line-price { opacity: 0.4; }
+.pe-status { font-size: 0.66em; opacity: 0.55; }
+.pe-tag { font-family: "JetBrains Mono"; font-weight: 400; font-size: 0.4em; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.5; vertical-align: middle; }
 
 /* footer legal links */
 .content8 .copyright { margin-bottom: 0.3em; }
@@ -264,10 +297,124 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 @media (max-width: 695px) {
   .store-grid { grid-template-columns: 1fr; gap: 1.4em; }
   .cart-drawer { right: 0; width: 100%; max-width: 100vw; padding-right: 0; border-radius: 0; }
-  .cart-head { padding-top: 80px; }
+  .cart-head { padding-top: 109px; }   /* drop "Cart" + close X in line with the header icon row on narrow screens */
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .product-card, .opt-pill, .cart-drawer, .cart-scrim, .pe-buy, .cart-checkout, .store-cart-count, .pe-slide { transition: none !important; }
+  .product-card, .opt-pill, .cart-drawer, .cart-scrim, .pe-buy, .cart-checkout, .co-submit, .store-cart-count, .pe-slide { transition: none !important; }
   .store-feed, .product-card { opacity: 1; animation: none !important; }
 }
+
+/* on-site checkout page (Stripe Payment Element): cart left, details right, like a product page */
+#checkout { max-width: 1040px; margin: 0 auto; }
+.co-grid { display: grid; grid-template-columns: 1fr; gap: 2.6em; align-items: start; }
+@media (min-width: 820px) { .co-grid { grid-template-columns: 1fr 1.05fr; gap: 3.2em; } }
+
+/* ---- cart -> checkout morph (cross-document View Transitions) ----
+   The open cart drawer and the checkout summary share a transition name, so the
+   drawer expands into the left column as the page navigates -- and morphs back on
+   return. Browsers without support (e.g. Firefox) just navigate normally. */
+@view-transition { navigation: auto; }
+.cart-drawer.is-open { view-transition-name: co-surface; }   /* only when open, so it never clashes with .co-summary on the checkout page */
+.co-summary { view-transition-name: co-surface; }
+/* the checkout column must be fully painted (store.js boots eagerly), not mid fade-in, when the snapshot is taken */
+.store-feed:has(#checkout) { opacity: 1; }
+.store-feed:has(#checkout).visible { animation: none; }
+::view-transition-group(co-surface) { animation-duration: 0.46s; animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.34s; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(co-surface), ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 1ms !important; }
+}
+
+/* left: cart summary */
+.co-line { display: flex; align-items: stretch; gap: 0.9em; padding: 1em 0; border-bottom: 1px solid var(--md-default-fg-color--lightest); }
+.co-line:first-child { padding-top: 0; }
+.co-line:last-child { border-bottom: 0; padding-bottom: 0; }
+.co-line-img { width: 64px; align-self: stretch; min-height: 64px; flex: none; border-radius: 12px; object-fit: cover; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); background: var(--md-default-bg-color); }
+.co-line-mid { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; align-self: stretch; }
+.co-line-title { font-family: "JetBrains Mono"; font-size: 0.86em; font-weight: 300; opacity: 0.88; margin: 0; }
+.co-line-variant { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; opacity: 0.5; margin: 0.15em 0 0.5em; }
+.co-line-remove { margin-top: auto; border: 0; background: none; padding: 0; cursor: pointer; font-family: "JetBrains Mono"; font-size: 0.68em; font-weight: 300; opacity: 0.45; color: var(--md-default-fg-color); text-decoration: underline; }
+.co-line-remove:hover { opacity: 0.8; }
+.co-line-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25em; }
+.co-line-price { font-family: "JetBrains Mono"; font-size: 0.86em; font-weight: 300; opacity: 0.85; white-space: nowrap; }
+.co-line-unit { font-family: "JetBrains Mono"; font-size: 0.68em; font-weight: 300; opacity: 0.45; white-space: nowrap; }
+.co-line-qty { display: inline-flex; align-items: center; border: 1.2px solid var(--md-default-fg-color--lightest); border-radius: 12px; margin-top: 0.2em; }
+.co-line-qty button { border: 0; background: none; cursor: pointer; color: var(--md-default-fg-color); font-family: "JetBrains Mono"; width: 2em; height: 1.9em; opacity: 0.7; }
+.co-line-qty button:hover { opacity: 1; }
+.co-line-qty span { min-width: 1.5em; text-align: center; font-family: "JetBrains Mono"; font-size: 0.78em; opacity: 0.85; }
+.co-line-gone { opacity: 0.55; }
+
+.co-rule { border: none; border-top: 1px solid var(--md-default-fg-color--lightest); height: 0; margin: 1.3em 0; }
+.co-voucher { display: flex; align-items: center; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 14px; overflow: hidden; }
+.co-voucher input { flex: 1; min-width: 0; border: 0; background: none; outline: none; color: var(--md-default-fg-color); font-family: "JetBrains Mono"; font-size: 0.8em; font-weight: 300; padding: 0.95em 0.4em 0.95em 1.2em; }
+.co-voucher button { flex: none; border: 0; background: none; cursor: pointer; color: var(--md-default-fg-color); opacity: 0.6; padding: 0 1.1em; display: flex; align-items: center; }
+.co-voucher button:hover { opacity: 1; }
+.co-voucher button svg { width: 17px; height: 17px; }
+.co-voucher-msg { font-family: "JetBrains Mono"; font-size: 0.7em; font-weight: 300; opacity: 0.55; margin: 0.6em 0 0; }
+.co-row { display: flex; justify-content: space-between; font-family: "JetBrains Mono"; font-size: 0.82em; font-weight: 300; opacity: 0.85; margin: 0.55em 0; }
+.co-row.co-muted { opacity: 0.5; }
+.co-row.co-total-row { font-size: 1em; font-weight: 400; opacity: 1; }
+
+/* right: details + section accordion (one open at a time) */
+.co-detail { min-width: 0; }
+.co-section { border-bottom: 1px solid var(--md-default-fg-color--lightest); }
+.co-section:last-of-type { border-bottom: 0; }
+.co-section-head { width: 100%; display: flex; align-items: center; justify-content: space-between; background: none; border: 0; cursor: pointer; padding: 1.1em 0; color: var(--md-default-fg-color); }
+.co-h { font-family: "Crimson Pro", serif; font-size: 1.4em; font-weight: 500; opacity: 0.9; margin: 0; line-height: 1; }
+.co-chev { font-size: 0.7em; opacity: 0.4; transition: transform 0.3s ease; }
+.co-section.is-open .co-chev { transform: rotate(180deg); }
+.co-section-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.co-section.is-open .co-section-body { max-height: 1600px; padding-bottom: 1.5em; }
+#address-element, #payment-element { padding: 0 4px; }   /* keep Stripe Elements off the section's overflow-clip edge (the leftmost payment tab was getting cut off) */
+
+.co-field-label { display: block; font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; opacity: 0.6; margin: 0 0 0.5em; }
+.co-email { width: 100%; box-sizing: border-box; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 14px; background: var(--md-default-bg-color); color: var(--md-default-fg-color); font-family: "JetBrains Mono"; font-size: 0.84em; font-weight: 300; padding: 0.95em 1.1em; outline: none; margin-bottom: 1em; }
+.co-email:focus { border-color: var(--md-default-fg-color); }
+.co-check { display: flex; align-items: center; gap: 0.6em; font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; opacity: 0.7; margin-bottom: 1.4em; cursor: pointer; }
+.co-check input { accent-color: var(--md-default-fg-color); flex: none; }
+
+.co-submit { width: 100%; margin-top: 1.4em; border: 1.2px solid var(--md-default-fg-color); border-radius: 16px; background: var(--md-default-fg-color); color: var(--md-default-bg-color); font-family: "JetBrains Mono"; font-size: 0.84em; font-weight: 500; letter-spacing: 0.04em; padding: 1.05em; cursor: pointer; transition: transform 0.3s ease; }
+.co-submit:hover:not(:disabled) { transform: scale(0.99); }
+.co-submit:disabled { opacity: 0.4; cursor: default; }
+.co-error { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; line-height: 1.4; color: #d64545; margin: 1em 0 0; }
+.co-terms { font-family: "JetBrains Mono"; font-size: min(0.68em, 12px); font-weight: 300; line-height: 1.5; opacity: 0.45; text-align: center; margin: 1.1em 0 0; }   /* cap growth so it can't outgrow the width-capped column on very wide monitors */
+.co-terms a { color: var(--md-default-fg-color); text-decoration: underline; }
+
+/* ---- order confirmation page (two columns like checkout: receipt left, details right) ---- */
+#confirmation .co-detail .return2feed { margin-bottom: 1.4em; }   /* desktop: back arrow at the top of the right column */
+.conf-back-top { display: none; }
+@media (max-width: 819px) {
+  .conf-back-top { display: block; margin-bottom: 1.4em; }        /* narrow: move the back arrow to the very top, above "Order confirmed" */
+  #confirmation .co-detail .return2feed { display: none; }
+}
+.conf-title { margin: 0 0 0.35em; }
+.conf-order { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; opacity: 0.45; margin: 0 0 1.5em; }
+.conf-block { margin: 0 0 1.7em; }
+.conf-block-h { font-family: "JetBrains Mono"; font-size: 0.68em; font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.45; margin: 0 0 0.55em; }
+.conf-addr { font-family: "JetBrains Mono"; font-size: 0.8em; font-weight: 300; line-height: 1.6; opacity: 0.72; margin: 0; }
+.conf-row2 { font-family: "JetBrains Mono"; font-size: 0.8em; font-weight: 300; opacity: 0.72; margin: 0 0 0.25em; }
+.conf-note { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; line-height: 1.55; opacity: 0.5; margin: 0.7em 0 0; }
+.conf-help { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; opacity: 0.45; margin: 1.7em 0 0; }
+.conf-note a, .conf-help a { color: var(--md-default-fg-color); text-decoration: underline; }
+
+/* order status timeline (horizontal stepper, vibe of the product selection sliders) */
+.conf-timeline-h { display: flex; margin: 0; padding: 0.4em 0 0; }
+.conf-timeline-h .tl-step { flex: 1; position: relative; text-align: center; padding-top: 18px; min-width: 0; }
+.conf-timeline-h .tl-step::before { content: ""; position: absolute; top: 4px; left: -50%; width: 100%; height: 1.5px; background: var(--md-default-fg-color--lightest); }
+.conf-timeline-h .tl-step:first-child::before { display: none; }
+.conf-timeline-h .tl-step.tl-done::before, .conf-timeline-h .tl-step.tl-current::before { background: var(--md-default-fg-color); }
+.conf-timeline-h .tl-dot { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 999px; border: 1.5px solid var(--md-default-fg-color--lighter); background: var(--md-default-bg-color); box-sizing: border-box; }
+.conf-timeline-h .tl-done .tl-dot, .conf-timeline-h .tl-current .tl-dot { background: var(--md-default-fg-color); border-color: var(--md-default-fg-color); }
+.conf-timeline-h .tl-current .tl-dot { box-shadow: 0 0 0 3px var(--md-default-fg-color--lightest); }
+.conf-timeline-h .tl-label { display: block; font-family: "JetBrains Mono"; font-size: 0.7em; font-weight: 300; letter-spacing: 0.01em; opacity: 0.45; white-space: nowrap; }
+.conf-timeline-h .tl-done .tl-label { opacity: 0.6; }
+.conf-timeline-h .tl-current .tl-label { opacity: 0.95; font-weight: 400; }
+.tl-track { font-family: "JetBrains Mono"; font-size: 0.78em; font-weight: 300; opacity: 0.75; margin: 1.1em 0 0; }
+.tl-track a { color: var(--md-default-fg-color); text-decoration: underline; }
+
+/* order lookup form (full-width: reuses the .co-grid two-column layout) */
+.conf-lookup-form { margin-top: 1.4em; }
+.conf-lookup-form .co-email { margin-bottom: 1em; }
+
+.co-empty { text-align: center; padding: 3em 0; font-family: "JetBrains Mono"; font-weight: 300; opacity: 0.6; }

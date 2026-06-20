@@ -1,5 +1,7 @@
 ---
 title: Store
+og_image: /assets/images/thumb.png
+description: Kits and preassembled hardware projects from theodore.net.
 hide:
   - navigation
   - toc
@@ -12,12 +14,6 @@ search:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="title" content="Store - Teddy Warner">
-  <meta name="description" content="Kits and preassembled projects.">
-  <meta name="robots" content="noindex, follow">
-  <meta property="og:title" content="Store - Teddy Warner">
-  <meta property="og:description" content="Kits and preassembled projects.">
-  <meta property="og:image" content="https://theodore.net/assets/images/thumb.png">
   <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous" defer></script>
   <link rel="stylesheet" href="/assets/css/index.css">
   <link rel="stylesheet" href="/assets/css/store.css">

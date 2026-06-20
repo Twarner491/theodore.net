@@ -11,6 +11,7 @@ frontmatter. Read-only: this never writes into the source tree.
 """
 
 import json
+import os
 import re
 import yaml
 from pathlib import Path
@@ -18,7 +19,10 @@ from mkdocs.structure.files import File
 
 # keys copied verbatim from frontmatter into the runtime product object
 KEYS = ['id', 'published', 'title', 'teaser', 'sub', 'imageBase', 'images',
-        'defaultBuild', 'variants', 'softwareNote', 'sections', 'colophon']
+        'defaultBuild', 'variants', 'softwareNote', 'sections', 'colophon', 'weight',
+        'accessory', 'parentId', 'icon', 'related', 'project', 'imageFit', 'imageBg']
+
+DEFAULT_WEIGHT_LB = 2.0   # shipping weight used when a product/variant sets none
 
 
 def _frontmatter(text):
@@ -52,19 +56,69 @@ def _products(docs_dir):
     return [p for _, p in out]
 
 
+def _sellable(v):
+    """A variant can be sold unless its status (or legacy comingSoon) is soldout/comingSoon.
+    Non-sellable variants are dropped from the catalog so the checkout Function refuses them."""
+    if not isinstance(v, dict):
+        return False
+    s = v.get('status') or ('comingSoon' if v.get('comingSoon') else 'available')
+    return s in ('available', 'backorder', 'preorder')
+
+
 def on_files(files, config):
     products = _products(config['docs_dir'])
+    # product image URLs that have a "<name>DARK.<ext>" sibling on disk; store.js
+    # swaps to it in dark mode and leaves the rest as-is (no broken requests)
+    docs = Path(config['docs_dir'])
+    dark = []
+    for p in products:
+        base = p.get('imageBase', '') or ''
+        for f in (p.get('images') or []):
+            stem, dot, ext = str(f).rpartition('.')
+            if dot and (docs / (base.lstrip('/') + stem + 'DARK.' + ext)).exists():
+                dark.append(base + f)
     content = ("/* generated from docs/store/*.md frontmatter by "
                "hooks/store_products.py. do not edit by hand. */\n"
                "window.STORE_PRODUCTS = "
-               + json.dumps(products, ensure_ascii=False) + ";\n")
+               + json.dumps(products, ensure_ascii=False) + ";\n"
+               "window.STORE_DARK_IMAGES = "
+               + json.dumps(dark, ensure_ascii=False) + ";\n")
     files.append(File.generated(config, 'assets/js/store-data.js', content=content))
-    # trusted product -> variant -> Stripe Price id map, read server-side by the checkout Function
+    # trusted catalog read server-side by the checkout Function: per variant, the
+    # Stripe Price id (amount) and the shipping weight (lb). Variant `weight`
+    # overrides the product `weight`, which falls back to DEFAULT_WEIGHT_LB.
+    #
+    # Test vs live: local/preview builds use each variant's `stripePrice` (a test Price id);
+    # the production build sets STRIPE_MODE=live and uses `stripePriceLive` instead, so the
+    # same source tree serves test ids locally and live ids in prod with no manual swapping.
+    # In live mode a sellable variant missing its live id is dropped from the catalog (the
+    # backend then refuses it) rather than ever shipping a test id to a real customer.
+    mode = os.environ.get('STRIPE_MODE', 'test').strip().lower()
+    price_field = 'stripePriceLive' if mode == 'live' else 'stripePrice'
     catalog = {}
+    missing = []
     for p in products:
-        m = {v.get('id'): v['stripePrice'] for v in (p.get('variants') or [])
-             if isinstance(v, dict) and v.get('stripePrice')}
-        if m:
-            catalog[p['id']] = m
+        def _w(v):
+            w = v.get('weight', p.get('weight'))
+            try:
+                return float(w) if w is not None else DEFAULT_WEIGHT_LB
+            except (TypeError, ValueError):
+                return DEFAULT_WEIGHT_LB
+        variants = {}
+        for v in (p.get('variants') or []):
+            if not (isinstance(v, dict) and _sellable(v)):
+                continue
+            price_id = v.get(price_field)
+            if not price_id:
+                if v.get('stripePrice'):   # configured to sell, just missing the id for THIS mode
+                    missing.append(p['id'] + '/' + str(v.get('id')))
+                continue
+            variants[v.get('id')] = {'price': price_id, 'weightLb': _w(v),
+                                     'label': v.get('label', v.get('id')), 'priceUsd': v.get('price')}
+        if variants:
+            catalog[p['id']] = {'title': p.get('title', p['id']), 'variants': variants}
+    if mode == 'live' and missing:
+        print('WARNING [store_products]: STRIPE_MODE=live but these sellable variants have no '
+              'stripePriceLive and were dropped from store-catalog.json: ' + ', '.join(missing))
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
     return files

@@ -28,7 +28,7 @@ theme:
       primary: black
       accent: black
       toggle:
-        icon: material/weather-sunny-off
+        icon: custom/weather-night
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
@@ -89,6 +89,7 @@ hooks:
   - hooks/draft_auth.py
   - hooks/rss_dates.py
   - hooks/content_lists.py
+  - hooks/store_title_brand.py
   - hooks/case_redirects.py
   - hooks/tufte_elements.py
   - hooks/store_products.py
