@@ -1,52 +1,60 @@
-name: Publish Docs
+name: Deploy to Cloudflare Pages
+
+# Production deploy. On every push to main, build the site in LIVE Stripe mode with
+# apex canonical URLs, then upload the built site/ + functions/ to the theodore-net
+# Cloudflare Pages project. The runtime secrets (Stripe secret/webhook, Resend,
+# Buttondown) live as Cloudflare Pages secrets and are read by the Functions at
+# request time, so they are NOT needed here. The build only needs STRIPE_MODE (to
+# pick each variant's live Price id) and SITE_URL (canonical + Open Graph URLs).
 env:
   GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
   DRAFT_PASSWORD: ${{ secrets.DRAFT_PASSWORD }}
+  STRIPE_MODE: live
+  SITE_URL: https://theodore.net/
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      
+          fetch-depth: 0   # the rss plugin reads git history for post dates
+
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
-      
+
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
           key: mkdocs-${{ hashFiles('.github/requirements.txt') }}
           path: ~/.cache/pip
-      
+
       - name: Install dependencies
         run: |
           pip install -r .github/requirements.txt
-          pip install pillow cairosvg
-      
-      - name: Debug folder structure
-        run: |
-          echo "=== Listing docs folder ==="
-          ls -la docs/
-          echo "=== Listing docs/projects folder ==="
-          ls -la docs/projects/ || echo "projects folder not found"
-          echo "=== Listing docs/writings folder ==="
-          ls -la docs/writings/ || echo "writings folder not found"
-      
-      - name: Build and deploy
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          mkdocs gh-deploy --force --verbose --clean
-      
-      - name: Purge Cloudflare Cache
+          pip install cairosvg
+
+      - name: Build (live Stripe prices, apex URLs)
+        run: mkdocs build --clean
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 557e541291a977fc1683c53376eb56a0
+          # The project's production branch is "site-updates", so deploying with that
+          # branch name lands as Production and the custom domain serves it. If you ever
+          # rename the production branch in the Cloudflare dashboard, update this flag.
+          command: pages deploy site --project-name=theodore-net --branch=site-updates
+
+      - name: Purge Cloudflare cache
         run: |
           curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
             -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
@@ -54,12 +62,11 @@ jobs:
             --data '{"purge_everything":true}'
         continue-on-error: true
 
-      # New posts -> a Buttondown DRAFT + a one-click approval email to
-      # test@theodore.net. Nothing reaches the list until you click Approve and
-      # confirm (functions/api/newsletter-approve.js). No-ops if secrets are
-      # unset, so this can't break a deploy.
-      # NOTE: the only OTHER thing that can email the list is Buttondown's UI
-      # RSS-to-email setting (Settings > Basic). Keep it paused/draft.
+      # New posts -> a Buttondown DRAFT + a one-click approval email to test@theodore.net.
+      # Nothing reaches the list until you click Approve and confirm
+      # (functions/api/newsletter-approve.js). No-ops if the secrets are unset, so it
+      # can never break a deploy. The only OTHER thing that can email the list is
+      # Buttondown's own RSS-to-email setting (Settings > Basic); keep it paused/draft.
       - name: Newsletter (draft + approval email)
         env:
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
