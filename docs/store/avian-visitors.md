@@ -13,63 +13,62 @@ id: avian-visitors
 published: true
 teaser: A framed e-ink that displays the birds heard nearby.
 sub: A wood-framed colorful e-ink display that collages the birds heard nearby.
+description: A wood-framed colorful e-ink display that collages the birds heard nearby. A buildable kit or a finished, framed piece.
 imageBase: /assets/images/AvianVisitors/
 images:
   - heard-today.png
   - framedeink.JPG
   - raweink.JPG
 defaultBuild: electronics
+weight: 0.9  
+project: /projects/AvianVisitors/
+related:
+  - avian-mic
 variants:
   - id: assembled
     label: Assembled
     comingSoon: true
-    desc: Finished, framed, ready to hang. In redesign around a smaller colour panel.
+    desc: Finished, framed, and ready to hang.
     contents:
-      - Framed colour e-ink display
-      - Pre-configured Pi
-      - Ready to hang
+      - 13.3" Spectra 6 E-ink, matted in an oak wood frame
+      - Charging cable & brick
   - id: electronics
     label: Electronics Kit
-    price: 189
-    stripePrice: "price_1TjOgmRPSNpqisAPbkGro7wZ"
-    desc: Pi, colour e-ink panel, and driver. Bring your own frame and mat.
+    price: 450
+    stripePrice: "price_1TkB7KRPSNpqisAPzs2xr9zO"
+    stripePriceLive: "price_1TkCJcRPSNpqisAP3ee3eytM"
+    desc: All electronics needed for the build, you provide the frame and backing.
     contents:
       - Raspberry Pi Zero 2 W
-      - Colour e-ink panel
+      - 13.3" Spectra 6 E-ink panel
       - microSD card
-      - Power and cabling
+      - Power cable & brick
   - id: electronics-printed
     label: "+ Frame & Parts"
-    price: 249
-    stripePrice: "price_1TjOgnRPSNpqisAPE9usMMr0"
-    desc: Electronics plus the printed backplate and a finished wood frame with mat.
+    price: 520
+    weight: 2.2  
+    stripePrice: "price_1TkB7KRPSNpqisAPHfB4WxjI"
+    stripePriceLive: "price_1TkCJdRPSNpqisAP6IenR74C"
+    desc: All electronics + a 3D printed backplate and a finished wood frame with mat.
     contents:
       - Everything in the Electronics Kit
-      - Printed backplate
-      - Wood frame and mat
+      - 3D Printed backplate
+      - Oak wood frame and mat
 softwareNote: Hardware only. You install the open-source software on your own device at first setup.
 sections:
-  - label: Technical specs
+  - label: Pairs with
     items:
-      - Raspberry Pi Zero 2 W
-      - Colour e-ink panel
-      - USB-C power
-      - Wi-Fi, set up from your phone
+      - Pair with a <a href="/store/avian-mic/">Bird Mic</a> to fill the display with birds captured right at your home.
   - label: Dimensions
     items:
-      - Frame and shipping sizes listed here
+      - Assembled variant comes in 11"x14" oak wood frame
+      - Frame & Parts kit ships with an A4 (8.27" x 11.69") oak wood frame
 colophon: 'Sold as hardware. The open-source BirdNET software and Cornell’s model install onto your own device on first setup, for personal use; they are not pre-loaded or resold. Bird ID by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, Cornell Lab of Ornithology (CC BY-NC-SA 4.0).'
 ---
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="title" content="Avian Visitors - Teddy Warner">
-  <meta name="description" content="A wood-framed colorful e-ink display that collages the birds heard nearby.">
-  <meta name="robots" content="noindex, follow">
-  <meta property="og:title" content="Avian Visitors - Teddy Warner">
-  <meta property="og:description" content="A wood-framed colorful e-ink display that collages the birds heard nearby.">
-  <meta property="og:image" content="https://theodore.net/assets/images/AvianVisitors/heard-today.png">
   <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous" defer></script>
   <link rel="stylesheet" href="/assets/css/index.css">
   <link rel="stylesheet" href="/assets/css/store.css">

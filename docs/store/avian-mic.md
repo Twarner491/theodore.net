@@ -10,29 +10,38 @@ title: Bird Mic
 product: true
 order: 2
 id: avian-mic
-published: false
-teaser: A tiny microphone that feeds your own bird screen.
-sub: A small microphone setup that listens at your window and feeds your Avian Visitors screen with the birds you hear.
+published: true
+teaser: A tiny microphone that listens out your window for any birds passing by.
+sub: A tiny microphone that listens out your window for any birds passing by, and collages them on a local website accessible in your home.
 imageBase: /assets/images/AvianVisitors/
 images:
   - bird-mic.png
   - mountedpi.JPG
   - collage.png
 defaultBuild: electronics
+weight: 0.4  
+project: /projects/AvianVisitors/
+related:
+  - avian-visitors
 variants:
   - id: electronics
     label: Electronics Kit
-    price: 149
-    desc: Raspberry Pi, a curated USB microphone, and a pre-flashed card.
+    price: 180
+    stripePrice: "price_1TkCtvRPSNpqisAPIZwrcXYN"
+    stripePriceLive: "price_1TkD4vRPSNpqisAP3P4gBDiF"
+    desc: All electronics you need to start capturing avian visitors passing by your home.
     contents:
-      - Raspberry Pi
-      - Curated USB microphone
+      - Raspberry Pi 4
+      - USB microphone
       - microSD card
-      - Power and cabling
+      - Power cable & brick
   - id: electronics-printed
     label: "+ 3D Printed"
-    price: 179
-    desc: The electronics kit plus a printed mount.
+    price: 210
+    stripePrice: "price_1TkCtwRPSNpqisAPNx2Q6qnQ"
+    stripePriceLive: "price_1TkD4vRPSNpqisAPXdZHZgwA"
+    weight: 0.5   
+    desc: All electronics plus a printed mount.
     contents:
       - Everything in the Electronics Kit
       - 3D-printed mount
@@ -40,24 +49,18 @@ softwareNote: Hardware only. You install the open-source software on your own de
 sections:
   - label: Technical specs
     items:
-      - Raspberry Pi
-      - Curated USB microphone
-      - USB-C power
+      - Bird Mic hosts an atlas of all birds it's heard on a website local to your network. You can see the atlas anytime you're on your home WiFi at `birdnet.local`
+      - Add an <a href="/store/avian-visitors/">Avian Visitors</a> display to see all the birds you've heard framed on your wall.
   - label: Dimensions
     items:
-      - Mount and shipping sizes listed here
+      - 3D printed case is 5.62"x2.70"
+      - Mic cable runs 20ft, allowing you to place your Pi somewhere discrete, away from your window. 
 colophon: 'Sold as hardware. BirdNET software and Cornell’s model install on your own device for personal use. Bird ID by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, Cornell Lab of Ornithology (CC BY-NC-SA 4.0).'
 ---
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="title" content="Bird Mic - Teddy Warner">
-  <meta name="description" content="A small microphone setup that feeds your Avian Visitors screen with the birds you hear.">
-  <meta name="robots" content="noindex, follow">
-  <meta property="og:title" content="Bird Mic - Teddy Warner">
-  <meta property="og:description" content="A small microphone setup that feeds your Avian Visitors screen with the birds you hear.">
-  <meta property="og:image" content="https://theodore.net/assets/images/AvianVisitors/bird-mic.png">
   <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous" defer></script>
   <link rel="stylesheet" href="/assets/css/index.css">
   <link rel="stylesheet" href="/assets/css/store.css">

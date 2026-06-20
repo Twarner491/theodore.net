@@ -10,9 +10,9 @@ title: Polargraph Plotter
 product: true
 order: 3
 id: polargraph
-published: false
-teaser: A wall-hung machine that draws generative art in ink.
-sub: A wall-mounted drawing machine that plots generative art straight onto paper.
+published: true
+teaser: A wall-mounted drawing machine.
+sub: A wall-mounted pen plotter with a web-accessible control interface.
 imageBase: /assets/images/Polargraph/
 images:
   - kit.png
@@ -20,45 +20,45 @@ images:
   - wall.jpg
   - firstPlotResult.JPG
 defaultBuild: electronics
+weight: 3.1   
+project: /projects/Polargraph/
 variants:
   - id: electronics
     label: Electronics Kit
-    price: 329
-    desc: The motors, drivers, controller, and gondola. The hard-to-source mechatronics.
+    price: 430
+    stripePrice: "price_1TkCtxRPSNpqisAPCqVQCdz5"
+    stripePriceLive: "price_1TkD4wRPSNpqisAP9uWspmjK"
+    desc: All electronics, motors, and hardware needed for the build.
     contents:
-      - 2× NEMA-17 motors + drivers
-      - Controller board
-      - Gondola + servo pen-lift
-      - Belts, pulleys, hardware
+      - 2× NEMA-17 steppers + drivers
+      - MG90S Micro Servo
+      - RAMPS 1.4 Controller board + Arduino Mega
+      - Raspberry Pi 4 + cooling fan
+      - Cabling + PSU + Power cord
+      - Belts, pulleys, bearings, and other hardware
   - id: electronics-printed
     label: "+ 3D Printed Parts"
-    price: 399
-    desc: Add every printed part. You source the lumber locally.
+    price: 520
+    stripePrice: "price_1TkCtxRPSNpqisAPfnljWfZA"
+    stripePriceLive: "price_1TkD4wRPSNpqisAPViFLyO2k"
+    weight: 4.5   # 
+    desc: All electronics plus all 3D printed parts
     contents:
       - Everything in the Electronics Kit
-      - All printed parts
-      - Pen holders + counterweights
+      - All 3D printed parts
 sections:
-  - label: Technical specs
+  - label: Lumber
     items:
-      - 2× NEMA-17 motors and drivers
-      - Controller board
-      - Servo pen-lift gondola
+      - Provide your own lumber or backing material for this build! You can get all stock material from your local hardware store for a whole lot cheaper than I can ship it to you.
   - label: Dimensions
     items:
-      - Plot area and shipping sizes listed here
+      - If you're following my build exactly, the final frame is ~48"x60”. However you can resize your machine to fit your space and simply update the machine dimensions in your web
 colophon: ""
 ---
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="title" content="Polargraph Plotter - Teddy Warner">
-  <meta name="description" content="A wall-mounted drawing machine that plots generative art straight onto paper.">
-  <meta name="robots" content="noindex, follow">
-  <meta property="og:title" content="Polargraph Plotter - Teddy Warner">
-  <meta property="og:description" content="A wall-mounted drawing machine that plots generative art straight onto paper.">
-  <meta property="og:image" content="https://theodore.net/assets/images/Polargraph/kit.png">
   <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous" defer></script>
   <link rel="stylesheet" href="/assets/css/index.css">
   <link rel="stylesheet" href="/assets/css/store.css">
