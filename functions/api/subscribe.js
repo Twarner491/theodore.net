@@ -33,34 +33,56 @@ export async function onRequestPost({ request, env }) {
   // No key configured (e.g. local without it): don't hard-fail the UX; report a no-op success.
   if (!env.BUTTONDOWN_API_KEY) { console.log("subscribe skipped (no BUTTONDOWN_API_KEY):", email, tags.join(",")); return reply({ ok: true, skipped: true }); }
 
-  let r, d;
+  const headers = { Authorization: `Token ${env.BUTTONDOWN_API_KEY}`, "content-type": "application/json" };
+
+  // Buttondown associates tags by ID, not name (passing a name silently no-ops), so resolve each
+  // requested name to its id, creating any that don't exist yet. Returns the ids to apply plus a
+  // name->id map of the whole tag catalog (used to translate the subscriber's existing tags).
+  async function resolveTags(names) {
+    const map = {};
+    try {
+      const list = await fetch(`${API}/tags`, { headers }).then((x) => x.json());
+      for (const t of (list && list.results) || []) if (t && t.name) map[String(t.name).toLowerCase()] = t.id;
+    } catch (e) {}
+    const ids = [];
+    for (const n of names) {
+      let id = map[n.toLowerCase()];
+      if (!id) {
+        try { const m = await fetch(`${API}/tags`, { method: "POST", headers, body: JSON.stringify({ name: n }) }).then((x) => x.json()); id = m && m.id; if (id) map[n.toLowerCase()] = id; } catch (e) {}
+      }
+      if (id) ids.push(id);
+    }
+    return { ids, map };
+  }
+
+  const { ids: wantIds, map: tagMap } = tags.length ? await resolveTags(tags) : { ids: [], map: {} };
+
+  // Create the subscriber, or find the existing one. The response is the same {ok:true} either way,
+  // so this can't be used to probe who is on the list.
+  let r, d, sid;
   try {
-    r = await fetch(`${API}/subscribers`, {
-      method: "POST",
-      headers: { Authorization: `Token ${env.BUTTONDOWN_API_KEY}`, "content-type": "application/json" },
-      body: JSON.stringify({ email_address: email, tags }),
-    });
+    r = await fetch(`${API}/subscribers`, { method: "POST", headers, body: JSON.stringify({ email_address: email }) });
     d = await r.json().catch(() => ({}));
   } catch (e) { return reply({ error: "Could not reach the mailing list. Try again." }, 502); }
-
-  if (r.ok) return reply({ ok: true });
-  // Already on the list: success. If we have tags (e.g. the waitlist), merge them onto the
-  // existing subscriber so they're still segmentable, without dropping their other tags.
-  if (d && d.code === "email_already_exists") {
-    const sid = d.metadata && d.metadata.subscriber_id;
-    if (tags.length && sid) {
-      try {
-        const cur = await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { headers: { Authorization: `Token ${env.BUTTONDOWN_API_KEY}` } }).then((x) => x.json()).catch(() => ({}));
-        const merged = Array.from(new Set((Array.isArray(cur.tags) ? cur.tags : []).concat(tags)));
-        await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, {
-          method: "PATCH",
-          headers: { Authorization: `Token ${env.BUTTONDOWN_API_KEY}`, "content-type": "application/json" },
-          body: JSON.stringify({ tags: merged }),
-        });
-      } catch (e) { console.log("tag merge error:", e && e.message); }
-    }
-    return reply({ ok: true });   // identical to a fresh signup so this can't be used to test list membership
+  if (r.ok) {
+    sid = d && d.id;
+  } else if (d && d.code === "email_already_exists") {
+    sid = (d.metadata && d.metadata.subscriber_id) || null;
+    if (!sid) { try { const f = await fetch(`${API}/subscribers/${encodeURIComponent(email)}`, { headers }).then((x) => x.json()); sid = f && f.id; } catch (e) {} }
+  } else {
+    console.log("subscribe failed:", r.status, (d && d.code) || "", String((d && d.detail) || "").slice(0, 200));
+    return reply({ error: "Could not add you to the list right now." }, 502);
   }
-  console.log("subscribe failed:", r.status, (d && d.code) || "", String((d && d.detail) || "").slice(0, 200));
-  return reply({ error: "Could not add you to the list right now." }, 502);
+
+  // Apply the tags by id, merged with whatever the subscriber already has (existing tags read back
+  // as names, so translate them through the catalog). PATCH is the call Buttondown actually honors.
+  if (wantIds.length && sid) {
+    try {
+      const cur = await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { headers }).then((x) => x.json()).catch(() => ({}));
+      const curIds = (Array.isArray(cur.tags) ? cur.tags : []).map((n) => tagMap[String(n).toLowerCase()]).filter(Boolean);
+      const merged = Array.from(new Set(curIds.concat(wantIds)));
+      await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { method: "PATCH", headers, body: JSON.stringify({ tags: merged }) });
+    } catch (e) { console.log("tag apply error:", e && e.message); }
+  }
+  return reply({ ok: true });
 }
