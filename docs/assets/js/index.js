@@ -216,31 +216,52 @@ supportsCssVars() || alert("Please view this page in a modern browser that suppo
   });
 })();
 
-// Scroll to top on instant navigation
+// On load (and on Material navigation) honor a deep link to a heading permalink (#hash) by jumping to
+// it; otherwise reset to the top (the original behavior for plain navigation). Without the hash check,
+// scrollToTop() defeated the browser's native #anchor jump, so a permalinked heading opened directly in
+// a new tab never scrolled into view.
 (function() {
   function scrollToTop() {
     window.scrollTo(0, 0);
   }
-  
+
+  function jumpToHash() {
+    var h = window.location.hash;
+    if (!h || h.length < 2) return false;
+    var id; try { id = decodeURIComponent(h.slice(1)); } catch (e) { id = h.slice(1); }
+    var el = document.getElementById(id);
+    if (!el) return false;
+    el.scrollIntoView();
+    return true;
+  }
+
+  function onDocument() {
+    if (jumpToHash()) {
+      // Re-assert after late layout settles: images/fonts above the target can shift it after the
+      // first jump, leaving the heading off-screen. rAF catches the immediate reflow; load covers images.
+      requestAnimationFrame(jumpToHash);
+      window.addEventListener('load', jumpToHash, { once: true });
+    } else {
+      scrollToTop();
+    }
+  }
+
   // Wait for document$ to be available (MkDocs Material instant navigation)
   function setupScrollReset() {
     if (typeof document$ !== 'undefined' && document$.subscribe) {
-      document$.subscribe(function() {
-        // Scroll to top after navigation
-        scrollToTop();
-      });
+      document$.subscribe(onDocument);
       return true;
     }
     return false;
   }
-  
+
   // Poll for document$ availability
   function waitForDocumentObservable() {
     if (!setupScrollReset()) {
       setTimeout(waitForDocumentObservable, 100);
     }
   }
-  
+
   // Start polling after DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', waitForDocumentObservable);
