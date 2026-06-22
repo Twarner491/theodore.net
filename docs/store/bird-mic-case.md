@@ -6,35 +6,37 @@ hide:
 template: index.html
 search:
   exclude: true
-title: Magnet Mount
+title: Bird Mic Case
 product: true
 accessory: true
 parentId: avian-mic
-order: 3
-published: false
-id: mic-mount-magnet
-robots: "noindex, follow"
-icon: fa-solid fa-magnet
-teaser: 3D-printed magnetic mount for any steel surface, no tools.
-sub: A 3D-printed mount with embedded magnets that sticks to any steel surface, no tools.
+order: 2
+published: true
+id: bird-mic-case
+icon: fa-solid fa-cube
+teaser: The 3D-printed case for your Bird Mic.
+sub: The 3D-printed enclosure that houses your Bird Mic electronics.
 imageBase: /assets/images/AvianVisitors/
-images: []
+images:
+  - birdMic3D.png
 defaultBuild: default
 weight: 0.2
 variants:
   - id: default
-    label: Magnet Mount
-    price: 20
-    stripePrice: "price_1TjqtARPSNpqisAPUeysOXfM"
-    stripePriceLive: "price_1TkCJfRPSNpqisAPbuvtE0Tv"
-    desc: 3D-printed in durable PLA with embedded magnets. Sticks to any steel surface.
+    label: Bird Mic Case
+    price: 30
+    stripePrice: "price_1Tl03VRPSNpqisAPPlYp1Dxm"
+    stripePriceLive: "price_1Tl0o7RPSNpqisAP4CRU5gET"
     contents:
-      - 3D-printed magnet mount
-      - Embedded magnets
+      - 3D-printed Bird Mic case
 sections:
-  - label: Fit
+  - label: Technical specs
     items:
-      - Made for the Bird Mic. Pairs with the Bird Mic electronics kit.
+      - Pairs with the Bird Mic electronics kit.
+      - The bird mic case is dialed for california weather and thus really isn't meant for anything besides clear blue skies. So if you live in a place with four seasons be somewhat wary of where you mount this mic for the time being, and stay tuned for an all-weather case for both the pi and the mic soon!
+  - label: Dimensions
+    items:
+      - 3D printed case is 5.62" tall, 2.70" wide, and 1.15" thick
 colophon: ""
 ---
 
@@ -64,7 +66,7 @@ colophon: ""
   <div class="content-container">
     <section class="intro-section">
       <div class="content1">
-        <div id="product-detail" data-product="mic-mount-magnet"><!-- rendered by store.js --></div>
+        <div id="product-detail" data-product="bird-mic-case"><!-- rendered by store.js --></div>
       </div>
     </section>
 
@@ -78,7 +80,7 @@ colophon: ""
       </div>
     </section>
   </div>
-  <h1 style="display:none;">Magnet Mount - Teddy Warner</h1>
+  <h1 style="display:none;">Bird Mic Case - Teddy Warner</h1>
   </main>
 
   <script src="/assets/js/store.js" defer></script>

@@ -6,44 +6,32 @@ hide:
 template: index.html
 search:
   exclude: true
-title: Sakura Micron 05 (9-pack)
+title: Polargraph 3D Printed Parts
 product: true
 accessory: true
 parentId: polargraph
+order: 2
 published: true
-id: micron-pens-9
-robots: "noindex, follow"
-icon: fa-solid fa-pen-nib
-teaser: Nine archival-ink fineliners, 0.45 mm, for plotting in color.
-sub: A pack of nine Sakura Pigma Micron 05 fineliners, archival ink, 0.45 mm, for plotting in color.
+id: polargraph-parts
+icon: fa-solid fa-cubes
+teaser: The full set of 3D-printed parts for the Polargraph plotter.
+sub: Every 3D-printed part for the Polargraph plotter build.
 imageBase: /assets/images/Polargraph/
 images:
-  - pens.png
-  - penMountsandCaps.png
+  - polargrapg3dprints.png
 defaultBuild: default
-weight: 0.2
+weight: 1.4
 variants:
   - id: default
-    image: pens.png
-    label: 9-pack
-    price: 28
-    stripePrice: "price_1TkB7LRPSNpqisAPmfGuCIzh"
-    stripePriceLive: "price_1TkCJfRPSNpqisAPPz9Lc7ut"
-    desc: Nine Sakura Pigma Micron 05 pens, archival pigment ink, 0.45 mm line.
+    label: 3D Printed Parts
+    price: 90
+    stripePrice: "price_1TkzoJRPSNpqisAPVlfZTzg2"
+    stripePriceLive: "price_1Tl0o8RPSNpqisAPnCC3CyOi"
     contents:
-      - 9 pens, one each in Black, Orange, Brown, Red, Pink, Green, Purple, Blue, and Sepia
-  - id: with-mounts
-    image: penMountsandCaps.png
-    label: "+ 9 Mounts & Caps"
-    price: 48
-    stripePrice: "price_1TkzoKRPSNpqisAPEQSKciDr"
-    stripePriceLive: "price_1Tl0o9RPSNpqisAPlKRkfPHP"
-    weight: 0.5
-    desc: All pens plus nine pen mounts and caps, so you can keep every color loaded and swap quickly.
-    contents:
-      - 9 Sakura Pigma Micron 05 pens (Black, Orange, Brown, Red, Pink, Green, Purple, Blue, Sepia)
-      - 9 3D-printed pen mounts
-      - 9 3D-printed pen caps
+sections:
+  - label: Fit
+    items:
+      - Pairs with the Polargraph electronics kit.
 colophon: ""
 ---
 
@@ -73,7 +61,7 @@ colophon: ""
   <div class="content-container">
     <section class="intro-section">
       <div class="content1">
-        <div id="product-detail" data-product="micron-pens-9"><!-- rendered by store.js --></div>
+        <div id="product-detail" data-product="polargraph-parts"><!-- rendered by store.js --></div>
       </div>
     </section>
 
@@ -87,7 +75,7 @@ colophon: ""
       </div>
     </section>
   </div>
-  <h1 style="display:none;">Sakura Micron 05 (9-pack) - Teddy Warner</h1>
+  <h1 style="display:none;">Polargraph 3D Printed Parts - Teddy Warner</h1>
   </main>
 
   <script src="/assets/js/store.js" defer></script>

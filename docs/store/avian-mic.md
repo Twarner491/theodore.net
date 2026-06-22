@@ -38,15 +38,15 @@ variants:
       - Power cable & brick
   - id: electronics-printed
     image: birdMic3D.png
-    label: "+ 3D Printed"
+    label: "+ 3D Printed Case"
     price: 210
     stripePrice: "price_1TkCtwRPSNpqisAPNx2Q6qnQ"
     stripePriceLive: "price_1TkD4vRPSNpqisAPXdZHZgwA"
     weight: 0.5   
-    desc: All electronics plus a printed mount.
+    desc: All electronics plus the 3D-printed case.
     contents:
       - Everything in the Electronics Kit
-      - 3D-printed mount
+      - 3D-printed case
 softwareNote: Hardware only. You install the open-source software on your own device at first setup.
 sections:
   - label: Open Source
@@ -56,9 +56,10 @@ sections:
     items:
       - Bird Mic hosts an atlas of all birds it's heard on a website local to your network. You can see the atlas anytime you're on your home WiFi at `birdnet.local`
       - Add an <a href="/store/avian-visitors/">Avian Visitors</a> display to see all the birds you've heard framed on your wall.
+      - The bird mic case is dialed for california weather and thus really isn't meant for anything besides clear blue skies. So if you live in a place with four seasons be somewhat wary of where you mount this mic for the time being, and stay tuned for an all-weather case for both the pi and the mic soon!
   - label: Dimensions
     items:
-      - 3D printed case is 5.62"x2.70"
+      - 3D printed case is 5.62" tall, 2.70" wide, and 1.15" thick
       - Mic cable runs 20ft, allowing you to place your Pi somewhere discrete, away from your window. 
 colophon: 'Sold as hardware. BirdNET software and Cornell’s model install on your own device for personal use. Bird ID by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, Cornell Lab of Ornithology (CC BY-NC-SA 4.0).'
 ---

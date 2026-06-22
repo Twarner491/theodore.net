@@ -6,35 +6,34 @@ hide:
 template: index.html
 search:
   exclude: true
-title: Wall Mount
+title: Avian Visitors Frame & Parts
 product: true
 accessory: true
-parentId: avian-mic
-order: 1
-published: false
-id: mic-mount-wall
-robots: "noindex, follow"
-icon: fa-solid fa-screwdriver-wrench
-teaser: 3D-printed bracket to mount the mic flat against a wall.
-sub: A simple 3D-printed bracket that holds your Bird Mic flat against a wall.
+parentId: avian-visitors
+order: 2
+published: true
+id: avian-visitors-parts
+icon: fa-solid fa-image
+teaser: An oak frame, mat, and 3D-printed backplate for your Avian Visitors display.
+sub: An oak frame and mat plus the 3D-printed backplate for your Avian Visitors display.
 imageBase: /assets/images/AvianVisitors/
-images: []
+images:
+  - frameAndBacking.png
 defaultBuild: default
-weight: 0.15
+weight: 1.4
 variants:
   - id: default
-    label: Wall Mount
-    price: 15
-    stripePrice: "price_1TjqtARPSNpqisAPa7xOkyti"
-    stripePriceLive: "price_1TkCJdRPSNpqisAP9Qp8UifQ"
-    desc: 3D-printed in durable PLA. Holds the Bird Mic flat against a wall.
+    label: Frame & Parts
+    price: 70
+    stripePrice: "price_1TkzoIRPSNpqisAPDPnAXPOe"
+    stripePriceLive: "price_1Tl0o8RPSNpqisAPRb2aJpEV"
     contents:
-      - 3D-printed wall mount
-      - Mounting hardware
+      - A4 (8.27" x 11.69") oak wood frame and mat
+      - 3D-printed backplate
 sections:
   - label: Fit
     items:
-      - Made for the Bird Mic. Pairs with the Bird Mic electronics kit.
+      - Pairs with the Avian Visitors electronics kit.
 colophon: ""
 ---
 
@@ -64,7 +63,7 @@ colophon: ""
   <div class="content-container">
     <section class="intro-section">
       <div class="content1">
-        <div id="product-detail" data-product="mic-mount-wall"><!-- rendered by store.js --></div>
+        <div id="product-detail" data-product="avian-visitors-parts"><!-- rendered by store.js --></div>
       </div>
     </section>
 
@@ -78,7 +77,7 @@ colophon: ""
       </div>
     </section>
   </div>
-  <h1 style="display:none;">Wall Mount - Teddy Warner</h1>
+  <h1 style="display:none;">Avian Visitors Frame & Parts - Teddy Warner</h1>
   </main>
 
   <script src="/assets/js/store.js" defer></script>

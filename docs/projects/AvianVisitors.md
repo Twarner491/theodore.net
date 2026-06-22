@@ -83,7 +83,15 @@ Plug the USB mic into the Pi and place it in a window or mount it outside. I thr
 
 ... and then stuck my mine to the screen of a small window facing towards my balcony, keeping the Pi inside and away from the elements. Then boot! 
 
-I also threw together this little mount for the mic itself should you want to stick it up on your wall near our outside a window. 
+I also threw together this little [mount for the mic](/store/mic-mount/) should you want to stick it up near a wall or outside a window.
+<a class="kit-card kit-card--margin" href="/store/mic-mount/">
+  <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/micmount.png" alt="Mic Mount"></span>
+  <span class="kit-card__body">
+    <span class="kit-card__title">Mic Mount</span>
+    <span class="kit-card__desc">A small covered mount for your bird mic.</span>
+    <span class="kit-card__price"><span class="from">from</span>$15</span>
+  </span>
+</a>
 
 <div class="embed-frame"><div class="embed-inner">
 <iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b602811ebba325ffbdc7362?mode=embed" width="98%" height="520" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>

@@ -6,34 +6,38 @@ hide:
 template: index.html
 search:
   exclude: true
-title: Window Mount
+title: Mic Mount
 product: true
 accessory: true
 parentId: avian-mic
-order: 2
-published: false
-id: mic-mount-window
-robots: "noindex, follow"
-icon: fa-solid fa-window-maximize
-teaser: 3D-printed clip that grips a window frame or sill.
-sub: A 3D-printed clip that grips a window frame or sill to aim the Bird Mic outside.
+order: 1
+published: true
+id: mic-mount
+icon: fa-solid fa-screwdriver-wrench
+teaser: A clean 3D-printed mount for your Bird Mic.
+sub: A simple, 3D-printed mount that holds your Bird Mic steady right where you want it.
 imageBase: /assets/images/AvianVisitors/
-images: []
+images:
+  - micmount.png
 defaultBuild: default
 weight: 0.15
 variants:
   - id: default
-    label: Window Mount
-    price: 12
-    stripePrice: "price_1TjqtARPSNpqisAPVSJjGBNg"
-    stripePriceLive: "price_1TkCJeRPSNpqisAP4vDsh0Ir"
-    desc: 3D-printed in durable PLA. Clips to a window frame or sill.
+    label: Mic Mount
+    price: 15
+    stripePrice: "price_1TjqtARPSNpqisAPa7xOkyti"
+    stripePriceLive: "price_1TkCJdRPSNpqisAP9Qp8UifQ"
     contents:
-      - 3D-printed window clip
+      - 3D-printed mic mount
+      - Mounting hardware
 sections:
-  - label: Fit
+  - label: Technical specs
     items:
-      - Made for the Bird Mic. Pairs with the Bird Mic electronics kit.
+      - Pairs with any Bird Mic kit.
+      - The bird mic mount is dialed for california weather and thus really isn't meant for anything besides clear blue skies. So if you live in a place with four seasons be somewhat wary of where you mount this mic for the time being, and stay tuned for an all-weather case for both the pi and the mic soon!
+  - label: Dimensions
+    items:
+      - 3D printed mount is 2.96" tall, 1.17" wide, and 1.25" thick
 colophon: ""
 ---
 
@@ -63,7 +67,7 @@ colophon: ""
   <div class="content-container">
     <section class="intro-section">
       <div class="content1">
-        <div id="product-detail" data-product="mic-mount-window"><!-- rendered by store.js --></div>
+        <div id="product-detail" data-product="mic-mount"><!-- rendered by store.js --></div>
       </div>
     </section>
 
@@ -77,7 +81,7 @@ colophon: ""
       </div>
     </section>
   </div>
-  <h1 style="display:none;">Window Mount - Teddy Warner</h1>
+  <h1 style="display:none;">Mic Mount - Teddy Warner</h1>
   </main>
 
   <script src="/assets/js/store.js" defer></script>
