@@ -681,3 +681,10 @@ git push # (3)
 ![](../assets/images/PortfolioSite/600commit.png){ width="100%" }
 
 </figure>
+
+**... and 700 Commits :heart_hands:** - 6/21/2026!
+<figure markdown="1">
+
+![](../assets/images/PortfolioSite/700commit.png){ width="100%" }
+
+</figure>
