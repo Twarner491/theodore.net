@@ -46,7 +46,7 @@ Building a bird tracking station of your own is easy enough. The full project re
 <a class="kit-card kit-card--margin" href="/store/avian-mic/">
   <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Avian Mic kit"></span>
   <span class="kit-card__body">
-    <span class="kit-card__title">Bird Mic</span>
+    <span class="kit-card__title">Bird Mic Kit</span>
     <span class="kit-card__desc">A tiny mic that feeds your bird screen the calls it hears.</span>
     <span class="kit-card__price"><span class="from">from</span>$180</span>
   </span>
@@ -82,6 +82,14 @@ Plug the USB mic into the Pi and place it in a window or mount it outside. I thr
 </div></div>
 
 ... and then stuck my mine to the screen of a small window facing towards my balcony, keeping the Pi inside and away from the elements. Then boot! 
+
+I also threw together this little mount for the mic itself should you want to stick it up on your wall near our outside a window. 
+
+<div class="embed-frame"><div class="embed-inner">
+<iframe src="https://gmail5303747.autodesk360.com/shares/public/SH90d2dQT28d5b602811ebba325ffbdc7362?mode=embed" width="98%" height="520" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+</div></div>
+
+It is, of course, worth noting that these two prints are 'california weather grade' (lol) for now and really aren't meant for any weather besides clear blue skys. So if you live in a place with four seasons be somewhat weary of where you mount this mic for the time being, and at some point I'll throw together an all-weather case for both the pi and the mic.
 
 ??? warning "If using a Raspberry Pi Zero 2 W"
     The RPi Zero 2 W has a few additional pre-reqs to handle low power wifi and low ram. Per the upstream [BirdNET-Pi RPi0W2 guide](https://github.com/mcguirepr89/BirdNET-Pi/wiki/RPi0W2-Installation-Guide):
@@ -307,7 +315,7 @@ git clone https://github.com/Twarner491/AvianVisitors
 cd AvianVisitors/frame && ./install.sh
 ```
 
-The installer turns on SPI + I2C (the panel speaks both), pulls in Pillow and Pimoroni's [`inky`](https://github.com/pimoroni/inky) library, registers a `display.py` systemd timer that wakes every 15 minutes, and drops a starter config at `~/.birdframe/config.toml`.
+The installer turns on SPI + I2C (the panel speaks both), pulls in Pillow and Pimoroni's [`inky`](https://github.com/pimoroni/inky) library, registers a `display.py` systemd timer that wakes every 15 minutes, and drops a starter config at `~/.birdframe/config.toml`. By default it points the frame at your bird mic on the same network (`birdnet.local`), so if you built the mic too, there's nothing else to set up.
 
 E-ink displays like the Pimoroni one we're using for this build are funky and incredibly cool. These displays are mechanical processes, and physically move pigment around with an electric field to produce an image. 
 
@@ -317,11 +325,10 @@ E-ink displays like the Pimoroni one we're using for this build are funky and in
 
 This process takes time! The Pimoroni in particular takes a dozen seconds each time we want to refresh it’s content. And we want to be wary of this in our frame, so by default we’ll only attempt a re-render every 15 mins, and only if a new bird has actually been detected.
 
-Because we’re operating at a lower fidelity here, I’ve opted to render our collage on demand and serve it at `/frame.png` with [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/). This allows our Pi Zero to just fetch this finished PNG, rather than render the page itself on edge. And while my frame is cable powered because I had some curtains to tuck the mess behind, no edge-rendering should make it a whole lot easier to go cordless should I like to in the future! `/frame.png` is gated by a shared key so a stray crawler can't burn through the free render budget. Point the config at it:{.marginnote}Staying LAN-only without the Worker? Set `shoot = true` and run the screenshot on any browser-capable box on a cron, copying the PNG over to the Pi. The frame [README](https://github.com/Twarner491/AvianVisitors/tree/avian-visitors/frame) has the snippet.{/.marginnote}
+Because we’re operating at a lower fidelity here, I’ve opted to render our collage on demand and serve it at `/frame.png` with [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/). This allows our Pi Zero to just fetch this finished PNG, rather than render the page itself on edge. And while my frame is cable powered because I had some curtains to tuck the mess behind, no edge-rendering should make it a whole lot easier to go cordless should I like to in the future! `/frame.png` is gated by a shared key so a stray crawler can't burn through the free render budget. Rather than the `birdnet.local` default, I point my frame straight at it with one flag at install:
 
-```toml
-base_url  = "https://bird.onethreenine.net"
-image_url = "https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY"
+```bash
+cd AvianVisitors/frame && ./install.sh --image-url "https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY"
 ```
 
 And boom! After a reset, your screen should be live with birds!
