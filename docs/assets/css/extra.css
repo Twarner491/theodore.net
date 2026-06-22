@@ -154,3 +154,26 @@ body[data-md-color-scheme="slate"] .main-navigation {
    #nav-close is the X, so the header's own .close stays hidden the whole time. */
 .toggle .menu { display: inline !important; }
 .toggle .close { display: none !important; }
+
+/* --- Order-confirmation status timeline: sweep the fill in on load -------------------------------
+   The timeline (.conf-timeline-h, store.js-rendered) shows Ordered -> Building -> Shipped -> Delivered,
+   with the connectors + dots up to the current stage drawn solid. On first render (incl. a refresh) the
+   filled track sweeps in left-to-right and settles on the current stage. Only the filled (done/current)
+   connectors + dots animate, so the sweep naturally stops where the order is; the faint upcoming track
+   stays put. Staggered per stage. Added here, not in store.css. Honors reduced-motion. */
+@keyframes tl-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes tl-dot-in { from { opacity: 0; transform: translateX(-50%) scale(0.4); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+@media (prefers-reduced-motion: no-preference) {
+  .conf-timeline-h .tl-step::before { transform-origin: left center; }
+  .conf-timeline-h .tl-done::before,
+  .conf-timeline-h .tl-current::before { animation: tl-fill 0.4s cubic-bezier(0.22, 0.72, 0.2, 1) both; }
+  .conf-timeline-h .tl-done .tl-dot,
+  .conf-timeline-h .tl-current .tl-dot { animation: tl-dot-in 0.28s cubic-bezier(0.22, 0.72, 0.2, 1) both; }
+  .conf-timeline-h .tl-step:nth-child(1) .tl-dot { animation-delay: 0s; }
+  .conf-timeline-h .tl-step:nth-child(2)::before { animation-delay: 0.18s; }
+  .conf-timeline-h .tl-step:nth-child(2) .tl-dot { animation-delay: 0.40s; }
+  .conf-timeline-h .tl-step:nth-child(3)::before { animation-delay: 0.58s; }
+  .conf-timeline-h .tl-step:nth-child(3) .tl-dot { animation-delay: 0.80s; }
+  .conf-timeline-h .tl-step:nth-child(4)::before { animation-delay: 0.98s; }
+  .conf-timeline-h .tl-step:nth-child(4) .tl-dot { animation-delay: 1.20s; }
+}
