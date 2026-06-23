@@ -331,13 +331,23 @@ Then pick how the frame gets populated with birds.
 ./install.sh
 
 # No microphone: draw the collage from BirdWeather for any ZIP code.
-./install.sh --bird-weather --zip 94107
+./install.sh --bird-weather --zip <ZIPCODE>
 
 # Bird mic hosted at a public URL: point the frame straight at it.
 ./install.sh --image-url https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY
 ```
 
-By default running `./install.sh` will sync your frame with your bird mic via birdnet.local on your network. Building just the frame without a mic? Install with the `--bird-weather` flag and your ZIP code instead. It pulls the top recently-heard birds near you from [BirdWeather](https://app.birdweather.com) and renders the same collage on the Pi, no mic and no website needed, with cutouts pulled straight from this repo's illustrations on GitHub. Or if your like me and host your bird mic data on a public url, you can also point the frame straight at that with the `--image-url` flag and your public URL!
+By default running `./install.sh` will sync your frame with your bird mic via birdnet.local on your network.
+
+Building just the frame without a mic? Install with the `--bird-weather` flag and your ZIP code instead. It pulls the top recently-heard birds near you from [BirdWeather](https://app.birdweather.com) and renders the same collage on the Pi, no mic and no website needed, with cutouts pulled straight from this repo's illustrations on GitHub. 
+
+???+ note "Remote Zipcode" 
+    If there are no birdweather stations near you ([check the map](https://app.birdweather.com/)), you can setup your frame to fall back to eBird data with the `--ebird-key` flag and a free [eBird API key](https://ebird.org/api/keygen). 
+    ```
+    ./install.sh --bird-weather --zip <ZIPCODE> --ebird-key <KEY>
+    ```
+
+Or if your like me and host your bird mic data on a public url, you can also point the frame straight at that with the `--image-url` flag and your public URL!
 
 ??? note "Public URL hosting" 
     I’ve opted to render my collage on demand and serve it at `/frame.png` with [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/). This allows our Pi Zero to just fetch this finished PNG, rather than render the page itself on edge, and is easy as I've already opted to host my bird mic data publicly (at bird.onethreenine.net!) via cloudflare anyway. 
