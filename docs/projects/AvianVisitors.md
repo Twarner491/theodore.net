@@ -319,9 +319,28 @@ Then, just like the previous Pi, once it's up on your network, SSH in, clone the
 
 ```bash
 ssh <your-username>@birdpic.local
+sudo apt update && sudo apt install -y git
 git clone https://github.com/Twarner491/AvianVisitors
-cd AvianVisitors/frame && ./install.sh
+cd AvianVisitors/frame
 ```
+
+Then pick how the frame gets populated with birds. 
+
+```
+# Pair with your bird mic on the same network (birdnet.local). The default.
+./install.sh
+
+# No microphone: draw the collage from BirdWeather for any ZIP code.
+./install.sh --bird-weather --zip 94107
+
+# Bird mic hosted at a public URL: point the frame straight at it.
+./install.sh --image-url https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY
+```
+
+By default running `./install.sh` will sync your frame with your bird mic via birdnet.local on your network. Building just the frame without a mic? Install with the `--bird-weather` flag and your ZIP code instead. It pulls the top recently-heard birds near you from [BirdWeather](https://app.birdweather.com) and renders the same collage on the Pi, no mic and no website needed, with cutouts pulled straight from this repo's illustrations on GitHub. Or if your like me and host your bird mic data on a public url, you can also point the frame straight at that with the `--image-url` flag and your public URL!
+
+??? note "Public URL hosting" 
+    I’ve opted to render my collage on demand and serve it at `/frame.png` with [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/). This allows our Pi Zero to just fetch this finished PNG, rather than render the page itself on edge, and is easy as I've already opted to host my bird mic data publicly (at bird.onethreenine.net!) via cloudflare anyway. 
 
 The installer turns on SPI + I2C (the panel speaks both), pulls in Pillow and Pimoroni's [`inky`](https://github.com/pimoroni/inky) library, registers a `display.py` systemd timer that wakes every 15 minutes, and drops a starter config at `~/.birdframe/config.toml`. By default it points the frame at your bird mic on the same network (`birdnet.local`), so if you built the mic too, there's nothing else to set up.
 
@@ -333,19 +352,7 @@ E-ink displays like the Pimoroni one we're using for this build are funky and in
 
 This process takes time! The Pimoroni in particular takes a dozen seconds each time we want to refresh it’s content. And we want to be wary of this in our frame, so by default we’ll only attempt a re-render every 15 mins, and only if a new bird has actually been detected.
 
-Because we’re operating at a lower fidelity here, I’ve opted to render our collage on demand and serve it at `/frame.png` with [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/). This allows our Pi Zero to just fetch this finished PNG, rather than render the page itself on edge. And while my frame is cable powered because I had some curtains to tuck the mess behind, no edge-rendering should make it a whole lot easier to go cordless should I like to in the future! `/frame.png` is gated by a shared key so a stray crawler can't burn through the free render budget. Rather than the `birdnet.local` default, I point my frame straight at it with one flag at install:
-
-```bash
-cd AvianVisitors/frame && ./install.sh --image-url "https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY"
-```
-
 And boom! After a reset, your screen should be live with birds!
-
-Building a frame without the mic? If you grabbed a frame kit but skipped the bird microphone, install with `--bird-weather` and your ZIP code instead. It pulls the top recently-heard birds near you from [BirdWeather](https://app.birdweather.com) and renders the same collage on the Pi, no mic and no website needed, with cutouts pulled straight from this repo's illustrations on GitHub.
-
-```bash
-cd AvianVisitors/frame && ./install.sh --bird-weather --zip 94107
-```
 
 Once everything's proven working here, we'll want to cover up the back to hold the screen in place and allow us to mount the frame on our wall. The wooden backing that came with the frame doesn't work given the additional contents we've introduced, so I hopped into Fusion and threw together a quick new backplate of my own
 
