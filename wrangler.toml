@@ -4,3 +4,6 @@
 name = "theodore-net"
 compatibility_date = "2024-11-01"
 pages_build_output_dir = "site"
+# Funnel analytics deliberately does NOT bind D1 here: a Pages wrangler.toml becomes the source of truth and
+# would drop dashboard-set plain vars (a live-checkout risk). The dedicated theodore-events Worker owns all
+# D1 writes; the store only sends a same-origin beacon (POST /api/ev) + stamps anon/source onto the PI.

@@ -95,8 +95,61 @@
     const ex = cart.find((l) => l.id === id && l.build === build);
     if (ex) ex.qty = Math.min(ex.qty + qty, MAX_QTY); else cart.push({ id, build, qty: Math.min(qty, MAX_QTY) });
     saveCart(); renderCart(); updateBadge(true); openCart();
+    var atcUnit = evItemValue(getProduct(id), build); track("add_to_cart", { product: id, build: build, qty: qty, value: atcUnit != null ? atcUnit * qty : null });
   }
   function setLineQty(i, qty) { if (!cart[i]) return; if (qty <= 0) cart.splice(i, 1); else cart[i].qty = Math.min(Math.floor(qty), MAX_QTY); saveCart(); renderCart(); }
+
+  /* ---- first-party funnel beacon: no PII, no consent surface, fire-and-forget. Records buyer-journey
+     steps (view_item / view_item_list / add_to_cart / view_cart / begin_checkout) to our own theodore-events
+     Worker at theodore.net/api/ev. Identity is a random visitor id (localStorage) + a per-tab session id
+     (sessionStorage) + a first-touch channel (referrer host or a ?go=<slug> short-link) -- never an email,
+     name, or IP. Purchases are NOT sent here; they're authoritative from Stripe. sendBeacon never blocks the
+     page, and it silently no-ops anywhere /api/ev isn't routed (local dev), so it can't affect checkout. ---- */
+  const EV_URL = "/api/ev", EV_AID = "tev_aid", EV_SID = "tev_sid", EV_SRC = "tev_src", EV_LAND = "tev_land";
+  const ssg = (k) => { try { return sessionStorage.getItem(k); } catch (e) { return null; } };
+  const sss = (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} };
+  const evClean = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9_.-]/g, "").slice(0, 24);
+  function evRid() { try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g, "").slice(0, 32); } catch (e) {} return Date.now().toString(36) + Math.random().toString(36).slice(2, 12); }
+  function evAnon() { try { let a = localStorage.getItem(EV_AID); if (!a) { a = evRid(); localStorage.setItem(EV_AID, a); } return a; } catch (e) { return evSess(); } }
+  function evSess() { let s = ssg(EV_SID); if (!s) { s = evRid(); sss(EV_SID, s); } return s; }
+  // First-touch channel for the session: a clean ?go=<slug> short-link wins, else the referrer host maps to a
+  // canonical token. Locked in on the first page of the session so later internal hops stay attributed.
+  function evSource() {
+    let src = ssg(EV_SRC);
+    if (src != null) return src;
+    let go = null; try { go = new URLSearchParams(location.search).get("go"); } catch (e) {}
+    if (go) src = evClean(go) || "direct";
+    else {
+      let host = ""; try { host = new URL(document.referrer).hostname.toLowerCase(); } catch (e) {}
+      if (!host || /(^|\.)theodore\.net$/.test(host)) src = "direct";
+      else if (/(^|\.)(x\.com|twitter\.com|t\.co)$/.test(host)) src = "x";
+      else if (/(^|\.)instagram\.com$/.test(host)) src = "instagram";
+      else if (/(^|\.)(facebook\.com|fb\.com|fb\.me)$/.test(host) || /^[lm]\.facebook\.com$/.test(host)) src = "facebook";
+      else if (/(^|\.)(youtube\.com|youtu\.be)$/.test(host)) src = "youtube";
+      else if (/(^|\.)reddit\.com$/.test(host)) src = "reddit";
+      else if (/(^|\.)news\.ycombinator\.com$/.test(host)) src = "hn";
+      else if (/(^|\.)(google\.|bing\.|duckduckgo\.)/.test(host)) src = "search";
+      else src = evClean(host.replace(/^www\./, "")) || "direct";
+    }
+    sss(EV_SRC, src);
+    return src;
+  }
+  function evInit() { try { if (ssg(EV_LAND) == null) sss(EV_LAND, location.pathname.slice(0, 256)); evSource(); } catch (e) {} }
+  // expose the session's first-party identity so checkout can stamp it onto the order (attribution join)
+  function evAttribution() { try { return { anon: evAnon(), source: evSource() }; } catch (e) { return {}; } }
+  function evItemValue(p, b) { try { const v = variantById(p, b || (p.defaultBuild || (p.variants[0] || {}).id)); return v && v.price ? v.price * 100 : null; } catch (e) { return null; } }
+  function track(type, ex) {
+    try {
+      const ev = { t: type, a: evAnon(), s: evSess(), src: evSource() };
+      const land = ssg(EV_LAND); if (land) ev.l = land;
+      let host = ""; try { host = new URL(document.referrer).hostname; } catch (e) {}
+      if (host) ev.r = host.slice(0, 128);
+      if (ex) { if (ex.product) ev.p = String(ex.product).slice(0, 64); if (ex.build) ev.b = String(ex.build).slice(0, 40); if (ex.qty != null) ev.q = ex.qty; if (ex.value != null && isFinite(ex.value)) ev.v = Math.round(ex.value); }
+      const body = JSON.stringify(ev);
+      if (navigator.sendBeacon) navigator.sendBeacon(EV_URL, body);
+      else fetch(EV_URL, { method: "POST", headers: { "content-type": "text/plain" }, body: body, keepalive: true }).catch(() => {});
+    } catch (e) { /* analytics never breaks the page */ }
+  }
 
   /* ---- store index grid: cards link to /store/<id>/ ---- */
   function renderGrid() {
@@ -120,6 +173,7 @@
       grid.appendChild(card);
     });
     reveal();
+    track("view_item_list");
   }
 
   /* ---- product detail page ---- */
@@ -194,6 +248,7 @@
     root.innerHTML = detailHTML(p);
     renderCarousel(); wireDetail(); updateVariant(false);
     renderAccessories(p);
+    track("view_item", { product: p.id, build: build, value: evItemValue(p, build) });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncPill);
   }
 
@@ -253,7 +308,7 @@
       const card = e.target.closest(".product-card--mini"); if (!card) return;
       const a = getProduct(card.dataset.acc); if (!a) return;
       const b = defaultBuyBuild(a);
-      if (b && e.target.closest(".pc-add")) { e.preventDefault(); setCartQty(a.id, b, 1); }
+      if (b && e.target.closest(".pc-add")) { e.preventDefault(); setCartQty(a.id, b, 1); track("add_to_cart", { product: a.id, build: b, qty: 1, value: evItemValue(a, b) }); }
       else if (b && e.target.closest('.pc-qty button[data-q="1"]')) { e.preventDefault(); setCartQty(a.id, b, cartQtyOf(a.id, b) + 1); }
       else if (b && e.target.closest('.pc-qty button[data-q="-1"]')) { e.preventDefault(); setCartQty(a.id, b, cartQtyOf(a.id, b) - 1); }
       else writeTrail(navTrail.concat([{ id: p.id, title: p.title }]));   // body click -> .pc-stretch navigates: push this page so the child's back returns here
@@ -391,7 +446,7 @@
     btn.className = "md-header__button md-icon store-cart-btn";
     btn.setAttribute("aria-label", "Open cart");
     btn.innerHTML = ICON_BAG + '<span class="store-cart-count">0</span>';
-    btn.addEventListener("click", openCart);
+    btn.addEventListener("click", function () { track("view_cart"); openCart(); });
     inner.insertBefore(btn, icons[icons.length - 1] || null);
     cartBtn = btn;
   }
@@ -517,6 +572,7 @@
     const host = $("#checkout"); if (!host) return;
     loadCart();
     if (!cart.length) { host.innerHTML = '<div class="co-empty"><p>Your cart is empty.</p><a class="cart-shop-link" href="/store">Go to store</a></div>'; return; }
+    track("begin_checkout", { value: cartSubtotal() * 100 });
     host.innerHTML =
       '<div class="conf-back-top"><a href="/store/?cart=open" class="co-tocart"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Cart</a></div>' +
       '<div class="co-grid">' +
@@ -568,7 +624,7 @@
     if (!window.Stripe) { fail("Payment could not load. Please refresh the page."); return; }
     let data;
     try {
-      const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ cart }) });
+      const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.assign({ cart: cart }, evAttribution())) });
       data = await res.json().catch(() => ({}));
       if (!res.ok || !data.clientSecret) { fail(data.item ? lineLabel(data.item) + " is no longer available. Please edit your cart." : (data.error || "Could not start checkout. Please try again.")); return; }
     } catch (e) { fail("Network error. Check your connection and try again."); return; }
@@ -814,7 +870,7 @@
     DARK_IMAGES = {};
     (Array.isArray(window.STORE_DARK_IMAGES) ? window.STORE_DARK_IMAGES : []).forEach((u) => { DARK_IMAGES[u] = true; });
     IMAGE_BG = (window.STORE_IMAGE_BG && typeof window.STORE_IMAGE_BG === "object") ? window.STORE_IMAGE_BG : {};
-    injectHeaderCart(); loadCart(); ensureDrawer(); renderCart();
+    evInit(); injectHeaderCart(); loadCart(); ensureDrawer(); renderCart();
     if ($("#store-grid")) renderGrid();
     else if ($("#product-detail")) { const p = getProduct($("#product-detail").dataset.product); if (p) renderDetail(p); reveal(); }
     else if ($("#checkout")) { renderCheckout(); reveal(); }

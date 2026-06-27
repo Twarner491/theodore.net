@@ -109,6 +109,11 @@ export async function onRequestPost({ request, env }) {
   const email = (body && typeof body.email === "string" && body.email.indexOf("@") > 0) ? body.email.trim().slice(0, 200) : "";
   const ship = body && typeof body.shipping === "object" && body.shipping ? body.shipping : null;
   const addr = ship && typeof ship.address === "object" && ship.address ? ship.address : null;
+  // First-party funnel attribution (no PII): a random visitor id + a channel token the storefront derived.
+  // Stamped onto the order's metadata so ops can attribute revenue to its session + channel. Sanitized; never
+  // trusted for anything that affects price.
+  const anon = (body && typeof body.anon === "string") ? body.anon.replace(/[^A-Za-z0-9]/g, "").slice(0, 40) : "";
+  const src = (body && typeof body.source === "string") ? body.source.toLowerCase().replace(/[^a-z0-9_.-]/g, "").slice(0, 24) : "";
   if (!Array.isArray(cart) || cart.length === 0) return reply({ error: "Your cart is empty." }, 400);
   if (cart.length > MAX_LINES) return reply({ error: "Too many items in your cart." }, 400);
 
@@ -172,6 +177,8 @@ export async function onRequestPost({ request, env }) {
   if (calcId) form.set("metadata[tax_calculation]", calcId);   // the webhook records the tax transaction from this
   if (taxStatus) form.set("metadata[tax_status]", taxStatus);   // flags a tax-calc failure so it's visible to the operator, not silently $0
   if (email) form.set("metadata[email]", email);   // our own receipt + order lookup use this; NOT receipt_email, which makes Stripe ALSO send its own receipt
+  if (anon) form.set("metadata[anon]", anon);       // first-party visitor id -> joins this order back to its funnel session
+  if (src) form.set("metadata[src]", src);          // first-party channel (x / instagram / direct / <go-slug>) for revenue attribution
   // NB: we deliberately do NOT set shipping[...] here. confirmPayment() sets the PI's
   // shipping from the Address Element (publishable key); a secret-key shipping set
   // would then block that client update. The address above is still used for tax.
