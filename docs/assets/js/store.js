@@ -63,6 +63,8 @@
   const carouselUrls = (p) => (p.images || []).map((f) => themedUrl(p.imageBase + f));
   const minPrice = (p) => { const ps = p.variants.filter(buyable).map((v) => v.price); return ps.length ? Math.min.apply(null, ps) : null; };
   const defaultBuyBuild = (p) => { const d = p.variants.find((v) => v.id === p.defaultBuild); if (buyable(d)) return d.id; const b = p.variants.find(buyable); return b ? b.id : null; };
+  /* the first waitlist-eligible (non-buyable but coming-soon / sold-out) variant, for the ?join deep-link */
+  const comingSoonVariant = (p) => (p.variants || []).find((v) => !buyable(v) && (statusOf(v) === "comingSoon" || statusOf(v) === "soldout")) || null;
 
   /* cart: line = { id, build, qty }. localStorage is user-editable, so treat the
      stored cart as untrusted: validate its shape, drop lines whose product or
@@ -250,6 +252,7 @@
     renderAccessories(p);
     track("view_item", { product: p.id, build: build, value: evItemValue(p, build) });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncPill);
+    maybeAutoWaitlist(p);
   }
 
   /* ---- accessory add-ons: standalone one-variant products (accessory:true) shown as small
@@ -432,6 +435,32 @@
         }))
         .catch(() => { wl.innerHTML = '<p class="pe-wl-done">Network error. Email <a href="mailto:support@theodore.net">support@theodore.net</a> and we’ll add you.</p>'; });
     });
+  }
+
+  /* Shareable waitlist deep-link: /store/<product>/?join=1[&email=...][&variant=<id>] auto-opens the waitlist
+     form on a coming-soon variant and prefills (NEVER submits) the email, so a single link shared on social
+     grows the per-product waitlist. No regression when ?join is absent (returns immediately); no-ops on a
+     product with no waitlist-eligible variant. The email is prefilled only and scrubbed from the URL after. */
+  function maybeAutoWaitlist(p) {
+    let params; try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    if (params.get("join") !== "1") return;
+    const reqId = params.get("variant");
+    let target = reqId ? exactVariant(p, reqId) : null;            // ?variant only selects among this product's own ids
+    if (!target || buyable(target)) target = buyable(variantById(p, build)) ? null : variantById(p, build);
+    if (!target) target = comingSoonVariant(p);
+    if (!target) return;                                           // nothing waitlist-eligible -> leave the page normal
+    if (target.id !== build) { build = target.id; qty = 1; updateVariant(true); }  // re-select -> repaints the "Join the waitlist" state
+    openWaitlist();                                                // reused as-is: hides buy, injects + focuses the form
+    const wlHost = root && $(".pe-waitlist", root);
+    if (wlHost) { try { wlHost.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (e) {} }   // mobile: bring the form into view
+    const email = (params.get("email") || "").trim();
+    if (email && email.indexOf("@") > 0) {                         // prefill ONLY -- user must click submit themselves
+      const input = wlHost && $("input", wlHost);
+      if (input) { input.value = email.slice(0, 200); input.focus(); }
+    }
+    params.delete("join"); params.delete("email"); params.delete("variant");   // keep the email out of history / re-shares
+    const qs = params.toString();
+    try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (e) {}
   }
 
   /* ---- cart ---- */
