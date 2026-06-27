@@ -93,6 +93,7 @@ hooks:
   - hooks/case_redirects.py
   - hooks/tufte_elements.py
   - hooks/store_products.py
+  - hooks/cache_bust.py
   - hooks/search_data.py
 
 watch:
