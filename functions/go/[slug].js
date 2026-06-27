@@ -10,7 +10,9 @@
 // no secrets, no D1, so it cannot affect checkout and has no failure surface beyond the safe default.
 import { resolveGo } from "./_lib.js";
 
-export async function onRequestGet({ request, params }) {
+// onRequest handles ALL methods (GET for the click-through, HEAD for link unfurlers / scanners), so a shared
+// short link previews and resolves cleanly everywhere. The redirect is identical regardless of method.
+export async function onRequest({ request, params }) {
   const { path, go } = resolveGo(params && params.slug);
   const dest = new URL(path, new URL(request.url).origin);   // internal path resolved against OUR origin only
   dest.searchParams.set("go", go);
