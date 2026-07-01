@@ -341,6 +341,14 @@ By default running `./install.sh` will sync your frame with your bird mic via bi
 
 Building just the frame without a mic? Install with the `--bird-weather` flag and your ZIP code instead. It pulls the top recently-heard birds near you from [BirdWeather](https://app.birdweather.com) and renders the same collage on the Pi, no mic and no website needed, with cutouts pulled straight from this repo's illustrations on GitHub. 
 
+This illustration set is currently focused on species of Western US and a zipcode outside of this region may not have all species accounted for yet! The installer will automatically flag any missing species from your region (if any) and points you at a quick script to fill them in. To draw a flagged bird, run [`generate_illustrations.py`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/frame/generate_illustrations.py) on your laptop with a [Gemini API key](https://aistudio.google.com/apikey), then commit or copy the new cutouts across:
+
+```
+python3 generate_illustrations.py --zip <ZIPCODE> --gemini-key <KEY>
+```
+
+It only draws the birds you're missing.
+
 ???+ note "Remote Zipcode" 
     If there are no birdweather stations near you ([check the map](https://app.birdweather.com/)), you can setup your frame to fall back to eBird data with the `--ebird-key` flag and a free [eBird API key](https://ebird.org/api/keygen). 
     ```
