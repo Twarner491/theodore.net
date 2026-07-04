@@ -10,6 +10,10 @@ hide:
 template: comments.html
 ---
 
+<div class="embed-frame"><div class="embed-inner">
+    <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/CbiBXiwDwCE" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div></div>
+
 {.newthought}I was initally planning{/.newthought} on leaving this as a 'true' personal project of sorts. I love a good [project writeup](https://theodore.net/projects/) of course, but frankly I thought this was too quick an afternoon project to warrant any more documentation than a tweet. Twitter thought otherwise ...
 
 <center>
