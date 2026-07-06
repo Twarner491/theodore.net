@@ -10,6 +10,8 @@ working without parsing JS. To add a product: copy a store/<slug>.md, edit its
 frontmatter. Read-only: this never writes into the source tree.
 """
 
+import csv
+import io
 import json
 import os
 import re
@@ -93,6 +95,52 @@ def _sellable(v):
     return s in ('available', 'backorder', 'preorder')
 
 
+def _meta_catalog_csv(products):
+    """Meta Commerce catalog feed (one row per sellable, priced variant), served at
+    /meta-catalog.csv for Commerce Manager's scheduled fetch. Columns are Meta's
+    required set. Feed ids must never contain ':' (Meta's checkout URL encodes
+    id:qty pairs), and coming-soon/soldout variants are excluded the same way the
+    checkout catalog excludes them -- a tagged product that can't be bought is a
+    commerce-review flag."""
+    base = 'https://theodore.net'
+    out = io.StringIO()
+    w = csv.writer(out)
+    w.writerow(['id', 'title', 'description', 'availability', 'condition',
+                'price', 'link', 'image_link', 'brand'])
+    for p in products:
+        if not p.get('published') or not p.get('id'):
+            continue
+        desc = p.get('sub') or p.get('teaser') or p.get('title') or ''
+        img_base = p.get('imageBase', '') or ''
+        images = p.get('images') or []
+        first_img = images[0] if images else ''
+        for v in (p.get('variants') or []):
+            if not (isinstance(v, dict) and _sellable(v)):
+                continue
+            price = v.get('price')
+            if not isinstance(price, (int, float)):
+                continue
+            img = v.get('image') or first_img
+            image_link = ''
+            if img:
+                img = str(img)
+                image_link = img if img.startswith('http') else base + img_base + img
+            title = str(p.get('title', p['id']))
+            label = str(v.get('label', v.get('id', '')))
+            w.writerow([
+                p['id'] + '-' + str(v.get('id', '')),
+                title if (not label or label == title) else title + ' - ' + label,
+                desc,
+                'in stock',
+                'new',
+                '%.2f USD' % float(price),
+                base + '/store/' + p['id'] + '/',
+                image_link,
+                'theodore.net',
+            ])
+    return out.getvalue()
+
+
 def on_files(files, config):
     products = _products(config['docs_dir'])
     # product image URLs that have a "<name>DARK.<ext>" sibling on disk; store.js
@@ -162,6 +210,9 @@ def on_files(files, config):
         print('WARNING [store_products]: STRIPE_MODE=live but these sellable variants have no '
               'stripePriceLive and were dropped from store-catalog.json: ' + ', '.join(missing))
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
+    # Meta (Instagram Shop) catalog feed -- same frontmatter source of truth, so
+    # prices/availability can never drift from the site (the #1 commerce-review rejection).
+    files.append(File.generated(config, 'meta-catalog.csv', content=_meta_catalog_csv(products)))
     return files
 
 

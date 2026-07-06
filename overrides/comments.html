@@ -11,10 +11,11 @@
 {% set page_type = "writings" if "writings" in page.url else "Projects" %}
 {% set site_base = (config.site_url or "https://theodore.net/") | trim %}
 {% if site_base.endswith("/") %}{% set site_base = site_base[:-1] %}{% endif %}
-{% set page_full_url = site_base ~ page.url %}
+{% set page_full_url = site_base ~ "/" ~ page.url %}
 {% set page_full_thumbnail = page_thumbnail if page_thumbnail.startswith("http") else site_base ~ page_thumbnail %}
 
 {% block extrahead %}
+  <meta name="facebook-domain-verification" content="qkq5ugrp1j623jl830eabbokbj9o65" />
   <!-- Critical CSS to prevent flash of unstyled header -->
   <style>
     .md-header { background: transparent !important; box-shadow: none !important; }
