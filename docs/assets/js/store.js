@@ -98,6 +98,7 @@
     if (ex) ex.qty = Math.min(ex.qty + qty, MAX_QTY); else cart.push({ id, build, qty: Math.min(qty, MAX_QTY) });
     saveCart(); renderCart(); updateBadge(true); openCart();
     var atcUnit = evItemValue(getProduct(id), build); track("add_to_cart", { product: id, build: build, qty: qty, value: atcUnit != null ? atcUnit * qty : null });
+    ga4("add_to_cart", { currency: "USD", value: ((ga4Item(id, build, qty).price) || 0) * qty, items: [ga4Item(id, build, qty)] });
   }
   function setLineQty(i, qty) { if (!cart[i]) return; if (qty <= 0) cart.splice(i, 1); else cart[i].qty = Math.min(Math.floor(qty), MAX_QTY); saveCart(); renderCart(); }
 
@@ -123,7 +124,16 @@
     if (go) src = evClean(go) || "direct";
     else {
       let host = ""; try { host = new URL(document.referrer).hostname.toLowerCase(); } catch (e) {}
-      if (!host || /(^|\.)theodore\.net$/.test(host)) src = "direct";
+      if (!host || /(^|\.)theodore\.net$/.test(host)) {
+        // Internal hop or direct load: prefer the sitewide first-touch (attribution.js)
+        // -- most sessions LAND on a project page that doesn't run this file, so the
+        // channel that actually brought them lives in localStorage, not the referrer.
+        src = "direct";
+        try {
+          const ft = JSON.parse(localStorage.getItem("attr:first:v1"));
+          if (ft && ft.src && Date.now() - (ft.ts || 0) < 90 * 864e5) src = evClean(ft.src) || "direct";
+        } catch (e) {}
+      }
       else if (/(^|\.)(x\.com|twitter\.com|t\.co)$/.test(host)) src = "x";
       else if (/(^|\.)instagram\.com$/.test(host)) src = "instagram";
       else if (/(^|\.)(facebook\.com|fb\.com|fb\.me)$/.test(host) || /^[lm]\.facebook\.com$/.test(host)) src = "facebook";
@@ -140,6 +150,20 @@
   // expose the session's first-party identity so checkout can stamp it onto the order (attribution join)
   function evAttribution() { try { return { anon: evAnon(), source: evSource() }; } catch (e) { return {}; } }
   function evItemValue(p, b) { try { const v = variantById(p, b || (p.defaultBuild || (p.variants[0] || {}).id)); return v && v.price ? v.price * 100 : null; } catch (e) { return null; } }
+  /* ---- GA4 ecommerce mirrors: the same moments the first-party beacon tracks,
+     emitted as standard gtag ecommerce events so channel/conversion reporting works
+     in GA4 (and via Teddy's Meta<->GA link, for Shop traffic) without any new
+     tracking surface. gtag ships with the site's existing analytics; if it's
+     absent (blocked, local dev) these are silent no-ops and can never break the
+     store. item_id matches the Meta catalog feed ids ("<product>-<variant>"). ---- */
+  function ga4(name, params) { try { if (typeof window.gtag === "function") window.gtag("event", name, params); } catch (e) { /* never breaks the store */ } }
+  function ga4Item(id, buildId, qty) {
+    const p = getProduct(id);
+    const b = buildId || ((p && p.defaultBuild) || "");
+    const v = p ? variantById(p, b) : null;
+    return { item_id: id + "-" + b, item_name: (p && p.title) || id, item_variant: b, price: (v && v.price) || 0, quantity: qty || 1 };
+  }
+
   function track(type, ex) {
     try {
       const ev = { t: type, a: evAnon(), s: evSess(), src: evSource() };
@@ -251,6 +275,7 @@
     renderCarousel(); wireDetail(); updateVariant(false);
     renderAccessories(p);
     track("view_item", { product: p.id, build: build, value: evItemValue(p, build) });
+    ga4("view_item", { currency: "USD", value: (variantById(p, build) || {}).price || 0, items: [ga4Item(p.id, build, 1)] });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncPill);
     maybeAutoWaitlist(p);
   }
@@ -311,7 +336,7 @@
       const card = e.target.closest(".product-card--mini"); if (!card) return;
       const a = getProduct(card.dataset.acc); if (!a) return;
       const b = defaultBuyBuild(a);
-      if (b && e.target.closest(".pc-add")) { e.preventDefault(); setCartQty(a.id, b, 1); track("add_to_cart", { product: a.id, build: b, qty: 1, value: evItemValue(a, b) }); }
+      if (b && e.target.closest(".pc-add")) { e.preventDefault(); setCartQty(a.id, b, 1); track("add_to_cart", { product: a.id, build: b, qty: 1, value: evItemValue(a, b) }); ga4("add_to_cart", { currency: "USD", value: (ga4Item(a.id, b, 1).price) || 0, items: [ga4Item(a.id, b, 1)] }); }
       else if (b && e.target.closest('.pc-qty button[data-q="1"]')) { e.preventDefault(); setCartQty(a.id, b, cartQtyOf(a.id, b) + 1); }
       else if (b && e.target.closest('.pc-qty button[data-q="-1"]')) { e.preventDefault(); setCartQty(a.id, b, cartQtyOf(a.id, b) - 1); }
       else writeTrail(navTrail.concat([{ id: p.id, title: p.title }]));   // body click -> .pc-stretch navigates: push this page so the child's back returns here
@@ -602,6 +627,7 @@
     loadCart();
     if (!cart.length) { host.innerHTML = '<div class="co-empty"><p>Your cart is empty.</p><a class="cart-shop-link" href="/store">Go to store</a></div>'; return; }
     track("begin_checkout", { value: cartSubtotal() * 100 });
+    ga4("begin_checkout", { currency: "USD", value: cartSubtotal(), items: cart.map(function (l) { return ga4Item(l.id, l.build, l.qty); }) });
     host.innerHTML =
       '<div class="conf-back-top"><a href="/store/?cart=open" class="co-tocart"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Cart</a></div>' +
       '<div class="co-grid">' +
@@ -868,6 +894,15 @@
     } catch (e) {}
     if (!ok) { renderLookup(host, "We couldn't load that order. Look it up below."); return; }
     if ((status && status !== "succeeded") && d.status !== "succeeded") { renderMessage(host, d.status === "processing" ? "Your payment is processing" : "Your payment did not complete"); return; }
+    // GA4 purchase: transaction_id = the PaymentIntent id, so refreshes of the
+    // confirmation page dedupe server-side in GA4 and never double-count revenue.
+    ga4("purchase", {
+      transaction_id: pi, currency: "USD",
+      value: ((d.breakdown && d.breakdown.total != null ? d.breakdown.total : d.amount) || 0) / 100,
+      shipping: ((d.breakdown && d.breakdown.shipping) || 0) / 100,
+      tax: ((d.breakdown && d.breakdown.tax) || 0) / 100,
+      items: (d.items || []).map(function (it) { return ga4Item(it.id, it.build, it.qty); })
+    });
     renderOrder(host, d);
   }
 
