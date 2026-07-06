@@ -60,6 +60,45 @@
   <meta name="twitter:title" content="{{ _ogtitle | striptags }}">
   <meta name="twitter:description" content="{{ _ogdesc | striptags }}">
   <meta name="twitter:image" content="{{ _img }}">
+  {%- if page.meta.product and page.meta.variants %}
+  {# Product/Offer JSON-LD in the served HTML: Meta's catalog crawler and Google's
+     free merchant listings both read availability/price from here -- the PDP itself
+     is client-rendered, so without this block crawlers see no buyable signal and
+     Meta marks tagged items "sold out". One Offer per sellable variant; coming-soon
+     and sold-out variants are excluded (same rule as the checkout catalog + feed). #}
+    {%- set ns = namespace(offers=[], imgs=[]) -%}
+    {%- for f in (page.meta.images or []) -%}
+      {%- set _u = (page.meta.imageBase or '') ~ f -%}
+      {%- if _u.startswith('/') %}{% set _u = _site ~ _u %}{% endif -%}
+      {%- set ns.imgs = ns.imgs + [_u] -%}
+    {%- endfor -%}
+    {%- for v in page.meta.variants -%}
+      {%- set _status = v.status | default('comingSoon' if v.comingSoon else 'available', true) -%}
+      {%- if v.price and _status in ['available', 'backorder', 'preorder'] -%}
+        {%- set ns.offers = ns.offers + [{
+          '@type': 'Offer',
+          'name': v.label | default(v.id, true),
+          'price': '%.2f' | format(v.price),
+          'priceCurrency': 'USD',
+          'availability': 'https://schema.org/InStock' if _status == 'available' else ('https://schema.org/PreOrder' if _status == 'preorder' else 'https://schema.org/BackOrder'),
+          'itemCondition': 'https://schema.org/NewCondition',
+          'url': page.canonical_url
+        }] -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if ns.offers %}
+  <script type="application/ld+json">{{ {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    'name': page.title | striptags,
+    'description': _ogdesc | striptags,
+    'image': ns.imgs if ns.imgs else [_img],
+    'brand': {'@type': 'Brand', 'name': 'theodore.net'},
+    'sku': page.meta.id | default(page.title, true),
+    'offers': ns.offers
+  } | tojson }}</script>
+    {%- endif -%}
+  {%- endif -%}
   {%- endif -%}
   {%- if page and page.meta and page.meta.robots -%}
   <meta name="robots" content="{{ page.meta.robots | striptags }}">
