@@ -871,6 +871,52 @@
     renderOrder(host, d);
   }
 
+  /* ---- Meta Shop checkout-URL handoff ----
+     Instagram/Facebook Shop product links land on /store/checkout/ with
+     ?products=<feedId>:<qty>,<feedId>:<qty> (feed ids are "<productId>-<variantId>"
+     exactly as /meta-catalog.csv publishes them) plus params Meta appends
+     (utm_*, fbclid, cart_origin, coupon). Per Meta's checkout-URL spec the cart
+     is REPLACED, unknown ids are ignored, and nothing price-like is ever read
+     from the URL (the backend recomputes all prices). Also accepts the
+     hand-shareable ?product=<id>&build=<variant>&qty=N form. All handled params
+     are scrubbed afterward so re-shared URLs stay clean. */
+  function importCartFromUrl() {
+    if (!/^\/store\/checkout(\/|$)/.test(location.pathname)) return;
+    let params; try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const spec = params.get("products"), one = params.get("product");
+    if (!spec && !one) return;
+    const lines = [];
+    const feedLine = (fid, qty) => {
+      // Product ids themselves contain hyphens (avian-visitors vs avian-visitors-parts),
+      // so resolve against the LONGEST product id that prefixes the feed id.
+      let best = null;
+      PRODUCTS.forEach((p) => {
+        const pid = String(p.id || "");
+        if ((fid === pid || fid.indexOf(pid + "-") === 0) && (!best || pid.length > best.length)) best = pid;
+      });
+      if (!best) return;
+      lines.push({ id: best, build: fid === best ? "" : fid.slice(best.length + 1), qty });
+    };
+    if (spec) {
+      spec.split(",").forEach((entry) => {
+        const at = entry.lastIndexOf(":");   // qty sits after the LAST colon
+        const fid = (at < 0 ? entry : entry.slice(0, at)).trim();
+        const qty = at < 0 ? 1 : Math.floor(Number(entry.slice(at + 1)));
+        if (fid) feedLine(fid, isFinite(qty) && qty > 0 ? qty : 1);
+      });
+    } else {
+      const qty = Math.floor(Number(params.get("qty") || 1));
+      lines.push({ id: String(one), build: String(params.get("build") || ""), qty: isFinite(qty) && qty > 0 ? qty : 1 });
+    }
+    lines.forEach((l) => { if (!l.build) { const p = getProduct(l.id); l.build = String((p && p.defaultBuild) || ""); } });
+    const next = sanitizeCart(lines);        // validates product+variant, clamps qty
+    if (next.length) { cart = next; saveCart(); }   // replace only when something resolved -- a junk link never empties a real cart
+    ["products", "product", "build", "qty", "coupon", "cart_origin", "fbclid",
+     "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach((k) => params.delete(k));
+    const qs = params.toString();
+    try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (e) {}
+  }
+
   function handleCheckoutReturn() {
     let params;
     try { params = new URLSearchParams(location.search); } catch (e) { return; }
@@ -899,7 +945,7 @@
     DARK_IMAGES = {};
     (Array.isArray(window.STORE_DARK_IMAGES) ? window.STORE_DARK_IMAGES : []).forEach((u) => { DARK_IMAGES[u] = true; });
     IMAGE_BG = (window.STORE_IMAGE_BG && typeof window.STORE_IMAGE_BG === "object") ? window.STORE_IMAGE_BG : {};
-    evInit(); injectHeaderCart(); loadCart(); ensureDrawer(); renderCart();
+    evInit(); injectHeaderCart(); loadCart(); importCartFromUrl(); ensureDrawer(); renderCart();
     if ($("#store-grid")) renderGrid();
     else if ($("#product-detail")) { const p = getProduct($("#product-detail").dataset.product); if (p) renderDetail(p); reveal(); }
     else if ($("#checkout")) { renderCheckout(); reveal(); }
