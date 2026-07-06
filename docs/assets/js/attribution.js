@@ -12,6 +12,9 @@
   var KEY = "attr:first:v1";
   var TTL = 90 * 864e5;   // 90 days, matching the consumer check in store.js
   try {
+    // Never capture on checkout/confirmation: payment redirects (Stripe 3DS, wallet
+    // auth) land there with payment-infrastructure referrers that are not channels.
+    if (/^\/store\/(checkout|confirmation)/.test(location.pathname)) return;
     var cur = null;
     try { cur = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
     if (cur && cur.src && Date.now() - (cur.ts || 0) < TTL) return;   // keep the true first touch
@@ -27,7 +30,8 @@
     else if (/(^|\.)(youtube\.com|youtu\.be)$/.test(host)) src = "youtube";
     else if (/(^|\.)reddit\.com$/.test(host)) src = "reddit";
     else if (/(^|\.)news\.ycombinator\.com$/.test(host)) src = "hn";
-    else if (/(^|\.)(google\.|bing\.|duckduckgo\.)/.test(host)) src = "search";
+    else if (/(^|\.)(google|bing|duckduckgo)\.[a-z.]{2,10}$/.test(host)) src = "search";
+    else if (/(^|\.)(stripe\.com|stripe\.network|link\.com|pay\.google\.com|paypal\.com|klarna\.com)$/.test(host)) src = null;   // payment/3DS redirect hosts are not channels
     else src = clean(host.replace(/^www\./, ""));
     if (src) localStorage.setItem(KEY, JSON.stringify({ src: src, l: location.pathname.slice(0, 256), ts: Date.now() }));
   } catch (e) { /* attribution must never break a page */ }

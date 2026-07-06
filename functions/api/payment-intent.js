@@ -26,12 +26,14 @@ function computeShippingCents(totalLb, state) {
   // Calibrated 2026-07 against the first 27 weighed shipments: USPS GA / UPS Ground
   // labels ran $6.44-8.83, so each tier targets actual label cost + ~$1-1.50 honest
   // buffer (the old table netted ~2x the label and read as sticker shock at checkout).
-  const base = lb <= 0.5 ? 400 : lb <= 1 ? 550 : lb <= 2 ? 650 : lb <= 3 ? 750 : lb <= 5 ? 900 : lb <= 10 ? 1300 : 1800;
+  // Above 10 lb (multi-kit carts) scale per-lb -- heavy orders ship as multiple
+  // boxes, so a flat top tier would quietly subsidize every extra kit.
+  const base = lb <= 0.5 ? 400 : lb <= 1 ? 550 : lb <= 2 ? 650 : lb <= 3 ? 750 : lb <= 5 ? 900 : lb <= 10 ? 1300 : 1300 + Math.ceil(lb - 10) * 150;
   return base + destinationSurchargeCents(state);
 }
 function destinationSurchargeCents(state) {
   const s = (state || "").toUpperCase();
-  if (NONCONTIGUOUS[s]) return 600;          // AK / HI / territories: always pricier
+  if (NONCONTIGUOUS[s]) return 800;          // AK / HI / territories: zone-9 labels run well above the 27-label calibration set
   const c = STATE_CENTROIDS[s];
   if (!c) return 300;                         // unknown US state -> assume far
   const mi = haversineMiles(SHIP_FROM, { lat: c[0], lng: c[1] });

@@ -95,7 +95,7 @@ def _sellable(v):
     return s in ('available', 'backorder', 'preorder')
 
 
-def _meta_catalog_csv(products):
+def _meta_catalog_csv(products, price_field='stripePrice'):
     """Meta Commerce catalog feed (one row per sellable, priced variant), served at
     /meta-catalog.csv for Commerce Manager's scheduled fetch. Columns are Meta's
     required set. Feed ids must never contain ':' (Meta's checkout URL encodes
@@ -120,6 +120,13 @@ def _meta_catalog_csv(products):
             price = v.get('price')
             if not isinstance(price, (int, float)):
                 continue
+            # Mirror store-catalog.json's gate: a variant the checkout would refuse
+            # (no Price id for this mode) must never be published to Meta as buyable.
+            if not v.get(price_field):
+                continue
+            status = v.get('status') or ('comingSoon' if v.get('comingSoon') else 'available')
+            availability = {'available': 'in stock', 'backorder': 'available for order',
+                            'preorder': 'preorder'}.get(status, 'in stock')
             img = v.get('image') or first_img
             image_link = ''
             if img:
@@ -131,7 +138,7 @@ def _meta_catalog_csv(products):
                 p['id'] + '-' + str(v.get('id', '')),
                 title if (not label or label == title) else title + ' - ' + label,
                 desc,
-                'in stock',
+                availability,
                 'new',
                 '%.2f USD' % float(price),
                 base + '/store/' + p['id'] + '/',
@@ -212,7 +219,7 @@ def on_files(files, config):
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
     # Meta (Instagram Shop) catalog feed -- same frontmatter source of truth, so
     # prices/availability can never drift from the site (the #1 commerce-review rejection).
-    files.append(File.generated(config, 'meta-catalog.csv', content=_meta_catalog_csv(products)))
+    files.append(File.generated(config, 'meta-catalog.csv', content=_meta_catalog_csv(products, price_field)))
     return files
 
 

@@ -98,7 +98,8 @@
     if (ex) ex.qty = Math.min(ex.qty + qty, MAX_QTY); else cart.push({ id, build, qty: Math.min(qty, MAX_QTY) });
     saveCart(); renderCart(); updateBadge(true); openCart();
     var atcUnit = evItemValue(getProduct(id), build); track("add_to_cart", { product: id, build: build, qty: qty, value: atcUnit != null ? atcUnit * qty : null });
-    ga4("add_to_cart", { currency: "USD", value: ((ga4Item(id, build, qty).price) || 0) * qty, items: [ga4Item(id, build, qty)] });
+    var ga4Qty = Math.min(qty, MAX_QTY), ga4Line = ga4Item(id, build, ga4Qty);
+    ga4("add_to_cart", { currency: "USD", value: (ga4Line.price || 0) * ga4Qty, items: [ga4Line] });
   }
   function setLineQty(i, qty) { if (!cart[i]) return; if (qty <= 0) cart.splice(i, 1); else cart[i].qty = Math.min(Math.floor(qty), MAX_QTY); saveCart(); renderCart(); }
 
@@ -140,7 +141,7 @@
       else if (/(^|\.)(youtube\.com|youtu\.be)$/.test(host)) src = "youtube";
       else if (/(^|\.)reddit\.com$/.test(host)) src = "reddit";
       else if (/(^|\.)news\.ycombinator\.com$/.test(host)) src = "hn";
-      else if (/(^|\.)(google\.|bing\.|duckduckgo\.)/.test(host)) src = "search";
+      else if (/(^|\.)(google|bing|duckduckgo)\.[a-z.]{2,10}$/.test(host)) src = "search";
       else src = evClean(host.replace(/^www\./, "")) || "direct";
     }
     sss(EV_SRC, src);
@@ -896,6 +897,9 @@
     if ((status && status !== "succeeded") && d.status !== "succeeded") { renderMessage(host, d.status === "processing" ? "Your payment is processing" : "Your payment did not complete"); return; }
     // GA4 purchase: transaction_id = the PaymentIntent id, so refreshes of the
     // confirmation page dedupe server-side in GA4 and never double-count revenue.
+    // Fire only on a server-confirmed success -- the render gate above lets
+    // processing/unknown states through to renderOrder, which must not count.
+    if (d.status === "succeeded" || status === "succeeded")
     ga4("purchase", {
       transaction_id: pi, currency: "USD",
       value: ((d.breakdown && d.breakdown.total != null ? d.breakdown.total : d.amount) || 0) / 100,
@@ -917,6 +921,7 @@
      are scrubbed afterward so re-shared URLs stay clean. */
   function importCartFromUrl() {
     if (!/^\/store\/checkout(\/|$)/.test(location.pathname)) return;
+    if (!PRODUCTS.length) return;   // catalog failed to load: never touch the stored cart on unvalidatable input
     let params; try { params = new URLSearchParams(location.search); } catch (e) { return; }
     const spec = params.get("products"), one = params.get("product");
     if (!spec && !one) return;
@@ -944,8 +949,16 @@
       lines.push({ id: String(one), build: String(params.get("build") || ""), qty: isFinite(qty) && qty > 0 ? qty : 1 });
     }
     lines.forEach((l) => { if (!l.build) { const p = getProduct(l.id); l.build = String((p && p.defaultBuild) || ""); } });
-    const next = sanitizeCart(lines);        // validates product+variant, clamps qty
-    if (next.length) { cart = next; saveCart(); }   // replace only when something resolved -- a junk link never empties a real cart
+    // validate + clamp, then drop unbuyable variants (coming-soon/sold-out): a link
+    // to something that can't be purchased must not displace a purchasable cart.
+    const next = sanitizeCart(lines).filter((l) => { const p = getProduct(l.id); const v = p && variantById(p, l.build); return v && buyable(v); });
+    if (!next.length) { /* nothing purchasable resolved -- leave the cart alone */ }
+    else if (one && !spec) {
+      // Hand-shared single-product links MERGE (a shopper's built-up cart survives
+      // clicking a posted link); only the Meta ?products= handoff replaces, per spec.
+      next.forEach((l) => { const ex = cart.find((c) => c.id === l.id && c.build === l.build); if (ex) ex.qty = Math.min(ex.qty + l.qty, MAX_QTY); else cart.push(l); });
+      saveCart();
+    } else { cart = next; saveCart(); }
     ["products", "product", "build", "qty", "coupon", "cart_origin", "fbclid",
      "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach((k) => params.delete(k));
     const qs = params.toString();
