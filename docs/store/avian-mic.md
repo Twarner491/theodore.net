@@ -19,7 +19,7 @@ images:
   - birdMicElectronics.png
   - birdMic3D.png
 defaultBuild: electronics
-weight: 0.4  
+weight: 0.6   # est from packed weights; bare-kit scale data pending
 project: /projects/AvianVisitors/
 related:
   - avian-visitors
@@ -42,7 +42,7 @@ variants:
     price: 210
     stripePrice: "price_1TkCtwRPSNpqisAPNx2Q6qnQ"
     stripePriceLive: "price_1TkD4vRPSNpqisAPXdZHZgwA"
-    weight: 0.5   
+    weight: 0.75  # scale-verified: ships ~1.05 lb packed
     desc: All electronics plus the 3D-printed case.
     contents:
       - Everything in the Electronics Kit

@@ -20,7 +20,7 @@ images:
   - avianElectronics.png
   - frameAndBacking.png
 defaultBuild: electronics
-weight: 0.9  
+weight: 1.7   # scale-verified: base kit ships ~2.0 lb packed (0.3 packaging added at checkout)
 project: /projects/AvianVisitors/
 related:
   - avian-mic
@@ -49,7 +49,7 @@ variants:
     image: frameAndBacking.png
     label: "+ Frame & Parts"
     price: 520
-    weight: 2.2  
+    weight: 3.2   # scale-verified: ships 3.1-3.7 lb packed
     stripePrice: "price_1TkB7KRPSNpqisAPHfB4WxjI"
     stripePriceLive: "price_1TkCJdRPSNpqisAP6IenR74C"
     desc: All electronics + a 3D printed backplate and a finished wood frame with mat.

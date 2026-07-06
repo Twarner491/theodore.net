@@ -23,19 +23,22 @@ const SHIP_FROM = { lat: 37.77, lng: -122.40 };   // San Francisco, ZIP 94107 (s
    call -- nothing else in checkout or tax changes. */
 function computeShippingCents(totalLb, state) {
   const lb = totalLb + PACKAGING_LB;
-  const base = lb <= 0.5 ? 500 : lb <= 1 ? 650 : lb <= 2 ? 850 : lb <= 3 ? 1050 : lb <= 5 ? 1350 : lb <= 10 ? 1900 : 2600;
+  // Calibrated 2026-07 against the first 27 weighed shipments: USPS GA / UPS Ground
+  // labels ran $6.44-8.83, so each tier targets actual label cost + ~$1-1.50 honest
+  // buffer (the old table netted ~2x the label and read as sticker shock at checkout).
+  const base = lb <= 0.5 ? 400 : lb <= 1 ? 550 : lb <= 2 ? 650 : lb <= 3 ? 750 : lb <= 5 ? 900 : lb <= 10 ? 1300 : 1800;
   return base + destinationSurchargeCents(state);
 }
 function destinationSurchargeCents(state) {
   const s = (state || "").toUpperCase();
-  if (NONCONTIGUOUS[s]) return 900;          // AK / HI / territories: always pricier
+  if (NONCONTIGUOUS[s]) return 600;          // AK / HI / territories: always pricier
   const c = STATE_CENTROIDS[s];
-  if (!c) return 500;                         // unknown US state -> assume far
+  if (!c) return 300;                         // unknown US state -> assume far
   const mi = haversineMiles(SHIP_FROM, { lat: c[0], lng: c[1] });
   if (mi <= 300) return 0;
-  if (mi <= 900) return 150;
-  if (mi <= 1600) return 350;
-  return 500;
+  if (mi <= 900) return 100;
+  if (mi <= 1600) return 200;
+  return 300;
 }
 function haversineMiles(a, b) {
   const R = 3958.8, rad = (d) => (d * Math.PI) / 180;
