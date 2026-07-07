@@ -105,8 +105,11 @@ def _meta_catalog_csv(products, price_field='stripePrice'):
     base = 'https://theodore.net'
     out = io.StringIO()
     w = csv.writer(out)
+    # quantity_to_sell_on_facebook: without it, the Instagram shop surface renders
+    # items "Sold out" even when availability says in stock (Meta help 560696898000137).
+    # Kits are made to order, so this is a display/eligibility field, not real inventory.
     w.writerow(['id', 'title', 'description', 'availability', 'condition',
-                'price', 'link', 'image_link', 'brand'])
+                'price', 'link', 'image_link', 'brand', 'quantity_to_sell_on_facebook'])
     for p in products:
         if not p.get('published') or not p.get('id'):
             continue
@@ -144,6 +147,7 @@ def _meta_catalog_csv(products, price_field='stripePrice'):
                 base + '/store/' + p['id'] + '/',
                 image_link,
                 'theodore.net',
+                25,
             ])
     return out.getvalue()
 
