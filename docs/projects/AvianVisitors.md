@@ -60,7 +60,7 @@ Building a bird tracking station of your own is easy enough. The full project re
 
 | Qty | Description | Price | Link |
 |-----|-------------|-------|------|
-| 1 | Raspberry Pi (4B / 5 / Zero 2W) | ~$35-80 | [Amazon](https://amzn.to/43yLDZJ) |
+| 1 | Raspberry Pi (4B / 5 / 3A+ / Zero 2W) | ~$25-80 | [Amazon](https://amzn.to/43yLDZJ) |
 | 1 | Micro SD Card (≥32 GB) | ~$10 | [Amazon](https://amzn.to/4eGy7te) |
 | 1 | USB lavalier microphone | $16.95 | [Amazon](https://amzn.to/4vLSaMK) |
 | 1 | Pi power supply | ~$10 | - |
@@ -294,14 +294,16 @@ Everything you need to build a frame of your own can be found at [github.com/Twa
 
 | Qty | Description | Price | Link |
 |-----|-------------|-------|------|
-| 1 | Raspberry Pi Zero (2) W | ~$35 | [Amazon](https://amzn.to/49Xp58I) |
+| 1 | Raspberry Pi 3 A+ or Zero 2 W | ~$25-35 | [Amazon](https://amzn.to/49Xp58I) |
 | 1 | 13.3" E Ink Display     | $299.99 | [Amazon](https://amzn.to/4xlAWr3) |
 | 1 | A4 Wood Photo Frame    | $21.99 | [Amazon](https://amzn.to/3RWFbJE) |
 | 1 | Long, Flat Micro USB Cable    | $7.99 | [Amazon](https://a.co/d/0a59rKSk) |
 | 1 | Flat USB Brick    | $7.59 | [Amazon](https://amzn.to/3S4CtSs) |
-| | **Total** | **~$372** | | |
+| | **Total** | **~$362** | | |
 
 </div>
+
+The 3 A+ and Zero 2 W are both tested and set up identically; any Pi with the 40-pin header that runs 64-bit Raspberry Pi OS works, and the printed backing pressure-fits either board. Kits now ship the 3 A+ (the Zero 2 W is in a global shortage). It is more powerful and adds 5 GHz Wi-Fi; the only setup difference is picking **Raspberry Pi 3** as the device in the Imager.
 
 To start, I flashed an old Raspberry Pi Zero 2 W i had laying around with Raspberry Pi OS Lite (64-bit) via [Raspberry Pi Imager](https://www.raspberrypi.com/software/). In the customisation dialog set:
 
