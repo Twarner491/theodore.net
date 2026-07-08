@@ -11,6 +11,7 @@ frontmatter. Read-only: this never writes into the source tree.
 """
 
 import csv
+import hashlib
 import io
 import json
 import os
@@ -95,7 +96,7 @@ def _sellable(v):
     return s in ('available', 'backorder', 'preorder')
 
 
-def _meta_catalog_csv(products, price_field='stripePrice'):
+def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
     """Meta Commerce catalog feed (one row per sellable, priced variant), served at
     /meta-catalog.csv for Commerce Manager's scheduled fetch. Columns are Meta's
     required set. Feed ids must never contain ':' (Meta's checkout URL encodes
@@ -135,6 +136,17 @@ def _meta_catalog_csv(products, price_field='stripePrice'):
             if img:
                 img = str(img)
                 image_link = img if img.startswith('http') else base + img_base + img
+                # Meta caches catalog images by URL, so a replaced photo under the same
+                # filename would never refresh in the shop. Version the URL by content
+                # hash: any image swap yields a new URL and Meta re-downloads on the
+                # next feed fetch.
+                if docs_dir and not img.startswith('http'):
+                    try:
+                        fp = Path(docs_dir) / (img_base + img).lstrip('/')
+                        if fp.exists():
+                            image_link += '?v=' + hashlib.sha1(fp.read_bytes()).hexdigest()[:8]
+                    except Exception:
+                        pass
             title = str(p.get('title', p['id']))
             label = str(v.get('label', v.get('id', '')))
             w.writerow([
@@ -223,7 +235,7 @@ def on_files(files, config):
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
     # Meta (Instagram Shop) catalog feed -- same frontmatter source of truth, so
     # prices/availability can never drift from the site (the #1 commerce-review rejection).
-    files.append(File.generated(config, 'meta-catalog.csv', content=_meta_catalog_csv(products, price_field)))
+    files.append(File.generated(config, 'meta-catalog.csv', content=_meta_catalog_csv(products, price_field, config['docs_dir'])))
     return files
 
 

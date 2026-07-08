@@ -41,7 +41,7 @@ variants:
     stripePriceLive: "price_1TkCJcRPSNpqisAP3ee3eytM"
     desc: All electronics needed for the build, you provide the frame and backing.
     contents:
-      - Raspberry Pi 3 A+*
+      - Raspberry Pi 3 A+
       - 13.3" Spectra 6 E-ink panel
       - microSD card
       - Power cable & brick
@@ -57,7 +57,7 @@ variants:
       - Everything in the Electronics Kit
       - 3D Printed backplate
       - Oak wood frame and mat
-softwareNote: "Hardware only. You install the open-source software on your own device at first setup. *Kits now ship a Raspberry Pi 3 A+ while the Zero 2 W shortage lasts: a drop-in fit in the same backing, more powerful, with 5 GHz Wi-Fi. Setup is identical, just pick Raspberry Pi 3 in the Imager."
+softwareNote: Hardware only. You install the open-source software on your own device at first setup.
 sections:
   - label: Pairs with
     items:
