@@ -1,0 +1,6 @@
+# mkdocs.yml renames the created feed to feed.xml, but the Material theme still
+# advertises the plugin's default filename in every page head. 301 it to the
+# real feed so readers that picked it up start working. /feed catches guesses.
+/feed_rss_created.xml /feed.xml 301
+/feed /feed.xml 301
+/feed/ /feed.xml 301
