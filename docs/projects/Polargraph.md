@@ -239,6 +239,8 @@ Then I attached a timing pulley to each of our two steppers ...
 
 and wired both motors to the corresponding X and Y motor headers on the RAMPS shield, before mounting both steppers to our wooden backing.
 
+These pancake steppers we're using are only rated for about 1A, so next we'll want to turn the current down on both A4988 drivers. We don't need much torque to drag the counterweighted gondola, so it's best to run these drivers lean: with the board powered, put a multimeter's black probe on ground and the red probe on each driver's little potentiometer screw, then dial each down to about 0.5V, which is roughly 0.6A on the 0.1 ohm (R100) sense resistors these boards use.
+
 Next up, the endstops. I wired our two endstops on `X-MIN` and `Y-MIN` on the RAMPS shield and used a bit of hot glue to mount them in place on our motor cover brackets. *See both these mounted switches, as well as our mounted steppers below*.
 
 <div class="figure-grid grid-2x1">
