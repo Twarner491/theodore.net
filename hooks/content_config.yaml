@@ -24,13 +24,6 @@ external_projects:
     date: 2025-01-15
     external: true
 
-  - title: Tone
-    description: A digital extension of yourself, in the form of a necklace.
-    url: https://tone.computer/
-    thumbnail: /assets/images/index/toneSmall.png
-    date: 2024-02-01
-    external: true
-
   - title: How to Make (Almost) Anything
     description: 22 weeks of rapid prototyping.
     url: https://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/student-bootcamp/
