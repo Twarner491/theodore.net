@@ -1,7 +1,29 @@
 /*
- * Custom Giscus Light Theme for theodore.net
- * Based on noborder_light with subtle borders
+ * theodore.net / giscus light
+ *
+ * Palette variables follow giscus/Primer's public custom-theme contract.
+ * Component overrides intentionally stay on giscus' public .gsc-* hooks.
  */
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("https://theodore.net/assets/fonts/jetbrains-mono/jetbrains-mono-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("https://theodore.net/assets/fonts/jetbrains-mono/jetbrains-mono-italic.woff2") format("woff2");
+}
+
+:root {
+  color-scheme: light;
+}
 
 main {
   --color-prettylights-syntax-comment: #6e7781;
@@ -31,62 +53,828 @@ main {
   --color-prettylights-syntax-markup-ignored-text: #eaeef2;
   --color-prettylights-syntax-markup-ignored-bg: #0550ae;
   --color-prettylights-syntax-meta-diff-range: #8250df;
+  --color-prettylights-syntax-brackethighlighter-angle: #57606a;
   --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
+  --color-prettylights-syntax-constant-other-reference-link: #0a3069;
   --color-btn-text: #24292f;
   --color-btn-bg: #f6f8fa;
-  --color-btn-border: rgba(31, 35, 40, 0.15);
-  --color-btn-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
-  --color-btn-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  --color-btn-hover-bg: #f3f4f6;
-  --color-btn-hover-border: rgba(31, 35, 40, 0.15);
-  --color-btn-active-bg: hsla(220, 14%, 93%, 1);
-  --color-btn-active-border: rgba(31, 35, 40, 0.15);
-  --color-btn-selected-bg: hsla(220, 14%, 94%, 1);
+  --color-btn-border: rgb(31 35 40 / 15%);
+  --color-btn-shadow: 0 1px 0 rgb(31 35 40 / 4%);
+  --color-btn-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 25%);
+  --color-btn-hover-bg: #eff1f3;
+  --color-btn-hover-border: rgb(31 35 40 / 24%);
+  --color-btn-active-bg: #e9ebee;
+  --color-btn-active-border: rgb(31 35 40 / 24%);
+  --color-btn-selected-bg: #eceef0;
   --color-btn-primary-text: #fff;
   --color-btn-primary-bg: #1a1a1a;
   --color-btn-primary-border: #1a1a1a;
-  --color-btn-primary-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
-  --color-btn-primary-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --color-btn-primary-shadow: 0 1px 0 rgb(31 35 40 / 10%);
+  --color-btn-primary-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
   --color-btn-primary-hover-bg: #333;
   --color-btn-primary-hover-border: #333;
   --color-btn-primary-selected-bg: #333;
-  --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.8);
+  --color-btn-primary-selected-shadow: inset 0 1px 0 rgb(0 0 0 / 20%);
+  --color-btn-primary-disabled-text: rgb(255 255 255 / 80%);
   --color-btn-primary-disabled-bg: #8c959f;
-  --color-btn-primary-disabled-border: rgba(31, 35, 40, 0.15);
-  --color-action-list-item-default-hover-bg: rgba(208, 215, 222, 0.32);
+  --color-btn-primary-disabled-border: rgb(31 35 40 / 15%);
+  --color-action-list-item-default-hover-bg: rgb(208 215 222 / 32%);
   --color-segmented-control-bg: #eaeef2;
   --color-segmented-control-button-bg: #fff;
   --color-segmented-control-button-selected-border: #8c959f;
   --color-fg-default: #1a1a1a;
   --color-fg-muted: #656d76;
   --color-fg-subtle: #6e7781;
-  --color-canvas-default: #ffffff;
+  --color-canvas-default: #fff;
   --color-canvas-overlay: #fff;
   --color-canvas-inset: #f6f8fa;
   --color-canvas-subtle: #f6f8fa;
-  --color-border-default: rgba(31, 35, 40, 0.12);
-  --color-border-muted: rgba(216, 222, 228, 0.8);
-  --color-neutral-muted: rgba(175, 184, 193, 0.2);
+  --color-border-default: rgb(31 35 40 / 17%);
+  --color-border-muted: rgb(31 35 40 / 11%);
+  --color-neutral-muted: rgb(175 184 193 / 20%);
+  --color-neutral-subtle: rgb(175 184 193 / 12%);
   --color-accent-fg: #1a1a1a;
   --color-accent-emphasis: #1a1a1a;
-  --color-accent-muted: rgba(84, 174, 255, 0.4);
-  --color-accent-subtle: #ddf4ff;
+  --color-accent-muted: rgb(31 35 40 / 24%);
+  --color-accent-subtle: rgb(31 35 40 / 7%);
   --color-success-fg: #1a7f37;
   --color-attention-fg: #9a6700;
-  --color-attention-muted: rgba(212, 167, 44, 0.4);
+  --color-attention-muted: rgb(212 167 44 / 40%);
   --color-attention-subtle: #fff8c5;
   --color-danger-fg: #cf222e;
-  --color-danger-muted: rgba(255, 129, 130, 0.4);
+  --color-danger-muted: rgb(255 129 130 / 40%);
   --color-danger-subtle: #ffebe9;
-  --color-primer-shadow-inset: inset 0 1px 0 rgba(208, 215, 222, 0.2);
+  --color-primer-shadow-inset: inset 0 1px 0 rgb(208 215 222 / 20%);
   --color-scale-gray-1: #eaeef2;
-  --color-scale-blue-1: #b6e3ff;
-  
-  color: #1a1a1a;
+  --color-scale-blue-1: #d8dadd;
+  --color-social-reaction-bg-hover: var(--color-scale-gray-1);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-1);
+  --tw-giscus-border-hover: rgb(31 35 40 / 28%);
+  --tw-giscus-focus-border: rgb(31 35 40 / 32%);
+  --tw-giscus-focus-ring: rgb(31 35 40 / 38%);
+  --tw-giscus-tab-stroke: #c7c9cc;
+  --tw-giscus-radius-card: 16px;
+  --tw-giscus-radius-inner: 14px;
+  --tw-giscus-radius-control: 12px;
+  --tw-giscus-radius-compact: 10px;
+  --tw-giscus-selected-bg: #fafafa;
+  --tw-giscus-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+
+  color: var(--color-fg-default);
   background-color: transparent;
 }
 
-/* Hide powered by giscus */
-.gsc-footer {
-  display: none !important;
+main .pagination-loader-container {
+  background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line.svg");
+}
+
+main .gsc-loading-image {
+  background-image: url("https://github.githubassets.com/images/mona-loading-default.gif");
+}
+
+/* Keep giscus' native GitHub/system sans stack. Monospace is reserved for
+   content that is actually code. */
+.gsc-main {
+  font-family: var(--tw-giscus-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.gsc-header,
+.gsc-comment-author,
+.gsc-reply-author,
+.gsc-comment-footer,
+.gsc-reply-footer,
+.gsc-comment-box,
+.gsc-comment-box-textarea,
+.gsc-right-header .btn {
+  font-family: var(--tw-giscus-font-sans);
+}
+
+.gsc-comment-content,
+.gsc-reply-content {
+  line-height: 1.65;
+}
+
+/* GitHub-compatible Markdown, translated into theodore.net's prose system.
+   This only changes presentation; comments remain ordinary GFM everywhere. */
+:is(.gsc-comment-content, .gsc-reply-content) :is(h1, h2, h3, h4, h5, h6) {
+  border-bottom: 0;
+  color: var(--color-fg-default);
+  font-family: var(--tw-giscus-font-sans);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) h1 {
+  margin: 1.35em 0 0.55em;
+  font-size: 1.75em;
+  line-height: 1.2;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) h2:not(.sr-only) {
+  margin: 1.3em 0 0.55em;
+  font-size: 1.5em;
+  line-height: 1.25;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) h3 {
+  margin: 1.25em 0 0.5em;
+  font-size: 1.28em;
+  line-height: 1.3;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) :is(h4, h5, h6) {
+  margin: 1.2em 0 0.45em;
+  font-size: 1.08em;
+  line-height: 1.35;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) :is(p, ol, ul, dl, blockquote) {
+  line-height: 1.7;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) :is(ol, ul) {
+  margin-block: 1em;
+  padding-left: 1.55em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) li + li {
+  margin-top: 0.35em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) li::marker {
+  color: var(--color-fg-muted);
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.88em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) a:not([data-footnote-ref]):not([data-footnote-backref]):not(:has(img:not(.emoji))) {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-border-default);
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.15em;
+  transition: opacity 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) a:not([data-footnote-ref]):not([data-footnote-backref]):not(:has(img:not(.emoji))):hover {
+  text-decoration-color: currentColor;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) blockquote {
+  margin: 1.5em 0;
+  padding: 0.1em 1.15em;
+  border-left: 3px solid var(--color-border-default);
+  color: var(--color-fg-default);
+  font-style: italic;
+  opacity: 0.8;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) blockquote > :first-child {
+  margin-top: 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) hr {
+  height: 0;
+  margin: 1.5em 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-muted);
+  background: transparent;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) :is(code, pre, kbd) {
+  font-family: "JetBrains Mono", monospace;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) code:not(pre code) {
+  padding: 0.12em 0.35em;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  corner-shape: squircle;
+  background: var(--color-canvas-inset);
+  font-size: 0.86em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) pre {
+  margin: 1.5em 0;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--tw-giscus-radius-inner);
+  corner-shape: squircle;
+  background: var(--color-canvas-inset);
+  box-shadow: none;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) pre code {
+  border: 0;
+  background: transparent;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table {
+  width: 100%;
+  margin: 1.5em 0;
+  border: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.88em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table th {
+  padding: 0.65em 0.8em;
+  border: 0;
+  border-bottom: 2px solid var(--color-border-default);
+  background: transparent;
+  color: var(--color-fg-muted);
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.88em;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table td {
+  padding: 0.55em 0.8em;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-muted);
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table tr:last-child td {
+  border-bottom: 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table tbody tr:hover {
+  background: var(--color-neutral-subtle);
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) details {
+  margin: 1.5em 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--tw-giscus-radius-inner);
+  corner-shape: squircle;
+  background: var(--color-canvas-subtle);
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) details summary {
+  padding: 0.75em 1em;
+  cursor: pointer;
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.88em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) details[open] summary {
+  border-bottom: 1px solid var(--color-border-muted);
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) details > :not(summary) {
+  margin-right: 1em;
+  margin-left: 1em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) input[type="checkbox"] {
+  accent-color: var(--color-fg-default);
+}
+
+/* Keep footnote references quiet and remove the redundant return link. */
+:is(.gsc-comment-content, .gsc-reply-content) a[data-footnote-ref] {
+  margin-left: 0.12em;
+  color: var(--color-fg-muted);
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.72em;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) section[data-footnotes] {
+  margin-top: 1.75em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--color-border-muted);
+  color: var(--color-fg-muted);
+  font-size: 0.84em;
+  line-height: 1.55;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) section[data-footnotes] > ol {
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) section[data-footnotes] li {
+  margin: 0.35em 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) section[data-footnotes] p {
+  margin: 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) a[data-footnote-backref] {
+  display: none;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) a[data-footnote-ref]:hover {
+  color: var(--color-fg-default);
+  opacity: 1;
+}
+
+/* User-uploaded photos are supporting material, not full-width page art.
+   Keep a useful thumbnail in the thread while preserving the original link. */
+.gsc-comment-content a:has(img:not(.emoji)),
+.gsc-reply-content a:has(img:not(.emoji)) {
+  display: block;
+  width: fit-content;
+  max-width: min(100%, 22.5rem);
+  margin: 0.8em 0 0.15em;
+  padding: 4px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--tw-giscus-radius-inner);
+  corner-shape: squircle;
+  background: var(--color-canvas-inset);
+  box-shadow: 0 8px 24px rgb(31 35 40 / 8%);
+  line-height: 0;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.gsc-comment-content img:not(.emoji),
+.gsc-reply-content img:not(.emoji) {
+  display: block;
+  width: auto !important;
+  height: auto !important;
+  max-width: min(100%, 22rem) !important;
+  max-height: 18rem !important;
+  margin: 0;
+  border-radius: var(--tw-giscus-radius-compact) !important;
+  corner-shape: squircle;
+  object-fit: contain;
+}
+
+/* Surfaces and theodore.net's soft, nested corner system. */
+.gsc-comment > .color-bg-primary {
+  box-sizing: border-box;
+  width: calc(100% - 1px) !important;
+  overflow: hidden;
+  border-radius: 14px !important;
+  corner-shape: squircle;
+  transition: none;
+}
+
+.gsc-replies {
+  margin: 0 6px 6px;
+  padding-top: 0 !important;
+  overflow: hidden;
+  border: 1px solid var(--color-border-muted) !important;
+  background: var(--color-canvas-inset) !important;
+  border-radius: 12px !important;
+  corner-shape: squircle;
+}
+
+.gsc-replies > .gsc-reply:first-child {
+  padding-top: 6px;
+}
+
+.gsc-comment-box {
+  box-sizing: border-box;
+  width: calc(100% - 1px);
+  overflow: hidden;
+  border: 1px solid var(--color-border-default);
+  border-radius: 14px !important;
+  corner-shape: squircle;
+  background: var(--color-canvas-default) !important;
+  transition: none;
+}
+
+.gsc-comment-box:focus-within {
+  border-color: var(--color-border-default) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-tabs {
+  border-bottom-color: var(--tw-giscus-tab-stroke) !important;
+  border-radius: 13px 13px 0 0;
+  background: var(--color-canvas-subtle) !important;
+}
+
+.gsc-comment-box-tabs > div:first-child {
+  --tw-giscus-comment-tab-width: 4.625rem;
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 9.25rem;
+  margin: 8px 8px -1px !important;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.gsc-comment-box-tabs > div:first-child::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 8px;
+  left: 0;
+  box-sizing: border-box;
+  width: var(--tw-giscus-comment-tab-width);
+  border: 1px solid var(--tw-giscus-tab-stroke);
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  corner-shape: squircle;
+  background: var(--color-canvas-default);
+  backface-visibility: hidden;
+  content: "";
+  transform: translate3d(0, 0, 0);
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.gsc-comment-box-tabs > div:first-child::after {
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+  left: -7px;
+  width: calc(var(--tw-giscus-comment-tab-width) + 14px);
+  height: 8px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at left top,
+      transparent 7px,
+      var(--tw-giscus-tab-stroke) 7px 8px,
+      var(--color-canvas-default) 8px) left top / 8px 8px no-repeat,
+    radial-gradient(circle at right top,
+      transparent 7px,
+      var(--tw-giscus-tab-stroke) 7px 8px,
+      var(--color-canvas-default) 8px) right top / 8px 8px no-repeat,
+    linear-gradient(var(--color-canvas-default), var(--color-canvas-default))
+      center top / calc(100% - 16px) 8px no-repeat;
+  backface-visibility: hidden;
+  content: "";
+  transform: translate3d(0, 0, 0);
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.gsc-comment-box-tabs > div:first-child:has(button:nth-child(2).color-text-primary)::before {
+  transform: translate3d(100%, 0, 0);
+}
+
+.gsc-comment-box-tabs > div:first-child:has(button:nth-child(2).color-text-primary)::after {
+  transform: translate3d(var(--tw-giscus-comment-tab-width), 0, 0);
+}
+
+.gsc-comment-box-tabs > div:first-child > button {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
+  padding: 0.5rem 0.75rem !important;
+  border: 0 !important;
+  border-radius: 10px 10px 0 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--color-fg-muted) !important;
+  transition: color 140ms ease;
+}
+
+.gsc-comment-box-tabs > div:first-child > button.color-text-primary {
+  color: var(--color-fg-default) !important;
+}
+
+.gsc-comment-box-tabs > div:first-child > button:focus,
+.gsc-comment-box-tabs > div:first-child > button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-write,
+.gsc-comment-box-preview {
+  animation: gsc-comment-panel-in 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes gsc-comment-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(1px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gsc-comment-box-textarea {
+  border-bottom: 0;
+  border-radius: var(--tw-giscus-radius-inner) var(--tw-giscus-radius-inner) 0 0 !important;
+  corner-shape: squircle;
+  background: var(--color-canvas-inset) !important;
+  line-height: 1.6;
+}
+
+.gsc-comment-box-textarea:focus,
+.gsc-comment-box-textarea:focus-visible {
+  border-color: var(--color-border-muted) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-main:focus-within,
+.gsc-comment-box-write:focus-within,
+.gsc-comment-box-preview:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-textarea-extras {
+  border-radius: 0 0 var(--tw-giscus-radius-inner) var(--tw-giscus-radius-inner) !important;
+  corner-shape: squircle;
+  background: var(--color-canvas-inset) !important;
+}
+
+.gsc-right-header {
+  position: relative;
+  isolation: isolate;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 9.25rem;
+  margin-right: 1px;
+  padding: 3px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--tw-giscus-radius-control);
+  corner-shape: squircle;
+  background: var(--color-canvas-subtle);
+}
+
+.gsc-right-header::before {
+  position: absolute;
+  z-index: -1;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  box-sizing: border-box;
+  width: calc((100% - 6px) / 2);
+  border: 1px solid var(--color-border-default);
+  border-radius: 9px;
+  corner-shape: squircle;
+  background: var(--tw-giscus-selected-bg);
+  box-shadow: var(--color-btn-shadow);
+  content: "";
+  transform: translateX(0);
+  transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gsc-right-header:has(.BtnGroup-item:last-child.BtnGroup-item--selected)::before {
+  transform: translateX(100%);
+}
+
+.gsc-right-header .BtnGroup-item {
+  position: relative;
+  z-index: 1;
+  display: flex !important;
+  min-width: 0;
+  min-height: 28px;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.gsc-right-header .BtnGroup-item + .BtnGroup-item {
+  margin-left: 0 !important;
+}
+
+.gsc-right-header .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 28px;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--color-fg-muted) !important;
+  transition: color 140ms ease;
+}
+
+.gsc-right-header .BtnGroup-item--selected .btn {
+  color: var(--color-fg-default) !important;
+}
+
+.gsc-right-header .btn:focus-visible {
+  outline: none !important;
+  box-shadow: inset 0 0 0 1px var(--color-border-default) !important;
+}
+
+.gsc-main .btn,
+.gsc-comment-box .btn,
+.gsc-toolbar-item {
+  border-radius: var(--tw-giscus-radius-control) !important;
+  corner-shape: squircle;
+  transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.gsc-pagination-button {
+  border-radius: var(--tw-giscus-radius-control) !important;
+  corner-shape: squircle;
+  box-shadow: none;
+  transition: none;
+}
+
+.gsc-pagination-button > span:last-child {
+  font-style: italic;
+  font-weight: 400 !important;
+}
+
+.gsc-social-reaction-summary-item {
+  border-color: var(--color-border-muted) !important;
+  border-radius: 999px !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.gsc-direct-reaction-button:not(.gsc-upvote-button) {
+  padding-right: 6px !important;
+  padding-left: 6px !important;
+}
+
+.gsc-social-reaction-summary-item:not(:disabled) {
+  cursor: pointer;
+}
+
+.gsc-social-reaction-summary-item:not(:disabled):is(:hover, :active) {
+  opacity: 1 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-reactions-button:hover:enabled,
+.gsc-reactions-button:hover {
+  background-color: var(--color-canvas-inset) !important;
+}
+
+:is(.gsc-direct-reaction-button, .gsc-upvote-button):not(.has-reacted):hover:enabled {
+  background-color: transparent !important;
+}
+
+.gsc-social-reaction-summary-item.has-reacted:hover:enabled {
+  background-color: var(--color-accent-subtle) !important;
+}
+
+.gsc-social-reaction-summary-item :is(.gsc-direct-reaction-button-emoji, .gsc-social-reaction-summary-item-count) {
+  transform: none !important;
+  transition: none !important;
+}
+
+.gsc-reactions-popover {
+  overflow: hidden;
+  border-radius: var(--tw-giscus-radius-card) !important;
+  corner-shape: squircle;
+  box-shadow: 0 10px 30px rgb(31 35 40 / 10%);
+}
+
+/* Authenticated pickers do not need a heading; retain the signed-out prompt
+   because it contains the only sign-in affordance. */
+.gsc-reactions-popover:not(:has(.gsc-emoji-button.no-token)) > p:first-child,
+.gsc-reactions-popover:not(:has(.gsc-emoji-button.no-token)) > p:first-child + .border-t {
+  display: none;
+}
+
+.gsc-emoji-button,
+.gsc-emoji-button .gsc-emoji {
+  transform: none !important;
+  transition: none !important;
+}
+
+.gsc-emoji-button:not(:disabled) {
+  cursor: pointer;
+}
+
+.gsc-emoji-button:not(:disabled):is(:hover, :focus, :active) {
+  background: transparent !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.gsc-emoji-button:is(:hover, :focus, :active) .gsc-emoji {
+  display: inline-block;
+  transform: none !important;
+}
+
+.gsc-comment-author-avatar img,
+.gsc-reply-author-avatar img {
+  border: 1px solid var(--color-border-muted);
+}
+
+.ClipboardButton .js-clipboard-check-icon {
+  color: var(--color-fg-muted) !important;
+}
+
+.gsc-left-header > em {
+  color: var(--color-fg-default) !important;
+  font-size: 0 !important;
+  font-style: normal;
+  opacity: 0.4;
+  transform: translateY(2px);
+}
+
+.gsc-left-header > em::before {
+  content: "powered by ";
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.6875rem;
+}
+
+.gsc-left-header > em > a {
+  color: inherit !important;
+  font-size: 0.6875rem;
+}
+
+@media (hover: hover) {
+  .gsc-comment-box .btn:hover,
+  .gsc-toolbar-item:hover {
+    transform: scale(0.97);
+  }
+
+  .gsc-main a:hover {
+    opacity: 0.68;
+  }
+
+  .gsc-comment-content a:has(img:not(.emoji)):hover,
+  .gsc-reply-content a:has(img:not(.emoji)):hover {
+    opacity: 1;
+  }
+}
+
+.gsc-main :focus-visible {
+  outline: 1.5px solid var(--tw-giscus-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Giscus focuses reply controls as it swaps the prompt for the editor. Keep
+   that handoff quiet and let the reply card's own border carry focus state. */
+.gsc-reply-box > button:focus,
+.gsc-reply-box > button:focus-visible,
+.gsc-comment-box-is-reply .gsc-comment-box-textarea:focus,
+.gsc-comment-box-is-reply .gsc-comment-box-textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-reply-box > button:focus,
+.gsc-reply-box > button:focus-visible {
+  border-color: var(--color-border-muted) !important;
+}
+
+.gsc-comment-box-is-reply,
+.gsc-comment-box-is-reply:focus-within {
+  border-top-width: 1px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-is-reply .gsc-comment-box-tabs {
+  border-top: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsc-right-header::before,
+  .gsc-comment-box-tabs > div:first-child::before,
+  .gsc-comment-box-tabs > div:first-child::after,
+  .gsc-comment-box-write,
+  .gsc-comment-box-preview,
+  .gsc-comment > .color-bg-primary,
+  .gsc-comment-box .btn,
+  .gsc-toolbar-item,
+  .gsc-social-reaction-summary-item,
+  .gsc-emoji-button,
+  .gsc-comment-content a:has(img:not(.emoji)),
+  .gsc-reply-content a:has(img:not(.emoji)) {
+    transition: none;
+  }
+
+  .gsc-comment-box-write,
+  .gsc-comment-box-preview {
+    animation: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .gsc-comment-content img:not(.emoji),
+  .gsc-reply-content img:not(.emoji) {
+    max-height: 14rem !important;
+  }
 }

@@ -403,53 +403,176 @@
 
   <!-- Giscus Comments -->
   <h2 id="__comments">{{ lang.t("meta.comments") }}</h2>
-  <script src="https://giscus.app/client.js"
-  data-cfasync="false"
-  data-repo="Twarner491/theodore.net"
-  data-repo-id="MDEwOlJlcG9zaXRvcnkzNzgyODU0MTk="
-  data-category="General"
-  data-category-id="DIC_kwDOFowta84CA5IA"
-  data-mapping="title"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="bottom"
-  data-theme="light"
-  data-lang="en"
-  crossorigin="anonymous"
-  async>
-</script>
+  <div id="giscus-comments"></div>
 
   {% if page.meta and page.meta.draft and config.extra.draft_password_hash %}
   <script src="/assets/js/draft-auth.js"></script>
   {% endif %}
 
-  <!-- Reload on palette change -->
+  <!-- Production loads the deployed HTTPS themes. During mkdocs serve, start
+       from that same custom theme, then replace it in place with the local CSS
+       data URL once the hosted iframe is ready; https cannot load localhost. -->
   <script>
-    var palette = __md_get("__palette")
-    if (palette && typeof palette.color === "object")
-      if (palette.color.scheme === "slate") {
-        var giscus = document.querySelector("script[src*=giscus]")
-        giscus.setAttribute("data-theme", "transparent_dark")
+    ;(function() {
+      var isLocalPreview = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname)
+      var themeVersion = "20260817-22"
+      var themes = {
+        light: "https://theodore.net/assets/css/giscus-light.css?v=" + themeVersion,
+        dark: "https://theodore.net/assets/css/giscus-dark.css?v=" + themeVersion
+      }
+      var previewThemes = {}
+      var previewThemesReady = false
+      var previewFrameReady = false
+      var previewThemeApplied = false
+
+      function currentThemeName() {
+        var palette = __md_get("__palette")
+        return palette && typeof palette.color === "object" && palette.color.scheme === "slate"
+          ? "dark"
+          : "light"
       }
 
-    /* Register event handlers after documented loaded */
-    document.addEventListener("DOMContentLoaded", function() {
-      var ref = document.querySelector("[data-md-component=palette]")
-      ref.addEventListener("change", function() {
-        var palette = __md_get("__palette")
-        if (palette && typeof palette.color === "object") {
-          var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light"
-
-          /* Instruct Giscus to change theme */
-          var frame = document.querySelector(".giscus-frame")
-          frame.contentWindow.postMessage(
-            { giscus: { setConfig: { theme } } },
-            "https://giscus.app"
-          )
+      function currentTheme() {
+        var name = currentThemeName()
+        if (isLocalPreview) {
+          return previewThemes[name] || themes[name]
         }
+        return themes[name]
+      }
+
+      function setGiscusTheme() {
+        var frame = document.querySelector(".giscus-frame")
+        if (!frame || !frame.contentWindow) return false
+
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: currentTheme() } } },
+          "https://giscus.app"
+        )
+        return true
+      }
+
+      function applyPreviewThemeOnce() {
+        if (!isLocalPreview || previewThemeApplied || !previewThemesReady || !previewFrameReady) return
+        previewThemeApplied = setGiscusTheme()
+      }
+
+      function preserveGiscusScrollPosition(frame) {
+        var scrolling = document.scrollingElement
+        if (!scrolling) return
+
+        var pageBottomGap = Math.max(0, scrolling.scrollHeight - window.scrollY - window.innerHeight)
+        var shouldAnchor = (
+          pageBottomGap <= Math.max(160, window.innerHeight * 0.35)
+          || document.activeElement === frame
+        )
+        if (!shouldAnchor) return
+
+        var root = document.documentElement
+        var previousScrollBehavior = root.style.scrollBehavior
+        root.style.scrollBehavior = "auto"
+
+        function restoreBottomGap() {
+          var targetScrollY = scrolling.scrollHeight - window.innerHeight - pageBottomGap
+          window.scrollTo(0, targetScrollY)
+        }
+
+        // The official giscus client owns iframe sizing. Restore the reader's
+        // position after its listener has applied the exact reported height.
+        Promise.resolve().then(function() {
+          restoreBottomGap()
+          window.requestAnimationFrame(function() {
+            restoreBottomGap()
+            window.requestAnimationFrame(function() {
+              root.style.scrollBehavior = previousScrollBehavior
+            })
+          })
+        })
+      }
+
+      function handleGiscusReady(event) {
+        if (event.origin !== "https://giscus.app") return
+
+        var frame = document.querySelector(".giscus-frame")
+        var data = event.data
+        if (!frame || event.source !== frame.contentWindow) return
+        if (!data || typeof data !== "object" || !data.giscus || !data.giscus.resizeHeight) return
+
+        var requestedHeight = Number(data.giscus.resizeHeight)
+        if (!Number.isFinite(requestedHeight) || requestedHeight <= 0) return
+
+        preserveGiscusScrollPosition(frame)
+        previewFrameReady = true
+        applyPreviewThemeOnce()
+      }
+
+      window.addEventListener("message", handleGiscusReady)
+
+      function loadPreviewThemes() {
+        if (!isLocalPreview || typeof window.fetch !== "function") return Promise.resolve()
+
+        return Promise.all(["light", "dark"].map(function(name) {
+          return fetch("/assets/css/giscus-" + name + ".css?v=" + themeVersion, { cache: "no-store" })
+            .then(function(response) {
+              if (!response.ok) throw new Error("Unable to load local giscus " + name + " theme")
+              return response.text()
+            })
+            .then(function(css) {
+              previewThemes[name] = "data:text/css;charset=utf-8," + encodeURIComponent(css)
+            })
+        })).then(function() {
+          previewThemesReady = true
+          applyPreviewThemeOnce()
+        }).catch(function(error) {
+          console.warn("[giscus preview]", error)
+        })
+      }
+
+      var mount = document.getElementById("giscus-comments")
+      function mountGiscus() {
+        if (!mount || mount.querySelector('script[src="https://giscus.app/client.js"]')) return
+
+        var giscus = document.createElement("script")
+        var config = {
+          "data-cfasync": "false",
+          "data-repo": "Twarner491/theodore.net",
+          "data-repo-id": "MDEwOlJlcG9zaXRvcnkzNzgyODU0MTk=",
+          "data-category": "General",
+          "data-category-id": "DIC_kwDOFowta84CA5IA",
+          "data-mapping": "title",
+          "data-strict": "0",
+          "data-reactions-enabled": "1",
+          "data-emit-metadata": "0",
+          "data-input-position": "bottom",
+          "data-theme": currentTheme(),
+          "data-lang": "en"
+        }
+
+        Object.keys(config).forEach(function(key) {
+          giscus.setAttribute(key, config[key])
+        })
+        giscus.src = "https://giscus.app/client.js"
+        giscus.async = true
+        giscus.crossOrigin = "anonymous"
+        mount.appendChild(giscus)
+      }
+
+      if (mount) {
+        mountGiscus()
+        loadPreviewThemes()
+      }
+
+      /* Register event handlers after documented loaded */
+      document.addEventListener("DOMContentLoaded", function() {
+        var ref = document.querySelector("[data-md-component=palette]")
+        if (!ref) return
+
+        ref.addEventListener("change", function() {
+          /* Change theme without replacing the iframe or touching the
+             discussion mapping. */
+          setGiscusTheme()
+        })
       })
-    })
+    })()
   </script>
 {% endblock %}
 

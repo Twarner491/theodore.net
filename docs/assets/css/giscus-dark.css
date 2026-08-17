@@ -1,112 +1,882 @@
 /*
- * Custom Giscus Dark Theme for theodore.net
- * Gray palette: #212226, #42444c, #636672
+ * theodore.net / giscus dark
+ *
+ * The iframe's base matches the site (#212226), while comments, replies,
+ * composer, menus, and controls occupy distinct nested surfaces.
  */
 
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("https://theodore.net/assets/fonts/jetbrains-mono/jetbrains-mono-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("https://theodore.net/assets/fonts/jetbrains-mono/jetbrains-mono-italic.woff2") format("woff2");
+}
+
+:root {
+  color-scheme: dark;
+}
+
 main {
-  --color-prettylights-syntax-comment: #636672;
-  --color-prettylights-syntax-constant: #9aa0ac;
-  --color-prettylights-syntax-entity: #b0b5c0;
-  --color-prettylights-syntax-storage-modifier-import: #c0c4cc;
-  --color-prettylights-syntax-entity-tag: #8a9a8a;
-  --color-prettylights-syntax-keyword: #c08080;
-  --color-prettylights-syntax-string: #a0b0c0;
-  --color-prettylights-syntax-variable: #c0a080;
-  --color-prettylights-syntax-brackethighlighter-unmatched: #c08080;
-  --color-prettylights-syntax-invalid-illegal-text: #e0e4ec;
-  --color-prettylights-syntax-invalid-illegal-bg: #802020;
-  --color-prettylights-syntax-carriage-return-text: #e0e4ec;
-  --color-prettylights-syntax-carriage-return-bg: #802020;
-  --color-prettylights-syntax-string-regexp: #8a9a8a;
-  --color-prettylights-syntax-markup-list: #c0a080;
-  --color-prettylights-syntax-markup-heading: #9aa0ac;
-  --color-prettylights-syntax-markup-italic: #c0c4cc;
-  --color-prettylights-syntax-markup-bold: #c0c4cc;
-  --color-prettylights-syntax-markup-deleted-text: #e0a0a0;
-  --color-prettylights-syntax-markup-deleted-bg: #402020;
-  --color-prettylights-syntax-markup-inserted-text: #a0c0a0;
-  --color-prettylights-syntax-markup-inserted-bg: #204020;
-  --color-prettylights-syntax-markup-changed-text: #e0c0a0;
-  --color-prettylights-syntax-markup-changed-bg: #402810;
-  --color-prettylights-syntax-markup-ignored-text: #c0c4cc;
-  --color-prettylights-syntax-markup-ignored-bg: #42444c;
-  --color-prettylights-syntax-meta-diff-range: #b0b5c0;
-  --color-prettylights-syntax-sublimelinter-gutter-mark: #42444c;
-  
-  /* Buttons */
-  --color-btn-text: #b0b4bc;
-  --color-btn-bg: #2a2b30;
-  --color-btn-border: #42444c;
+  --color-prettylights-syntax-comment: #7e838e;
+  --color-prettylights-syntax-constant: #aeb8c8;
+  --color-prettylights-syntax-entity: #c0b8cc;
+  --color-prettylights-syntax-storage-modifier-import: #d2d4da;
+  --color-prettylights-syntax-entity-tag: #9ab29d;
+  --color-prettylights-syntax-keyword: #c89090;
+  --color-prettylights-syntax-string: #aab9c7;
+  --color-prettylights-syntax-variable: #c6aa8a;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #ce8585;
+  --color-prettylights-syntax-invalid-illegal-text: #eceef2;
+  --color-prettylights-syntax-invalid-illegal-bg: #6d292d;
+  --color-prettylights-syntax-carriage-return-text: #eceef2;
+  --color-prettylights-syntax-carriage-return-bg: #6d292d;
+  --color-prettylights-syntax-string-regexp: #9ab29d;
+  --color-prettylights-syntax-markup-list: #c6aa8a;
+  --color-prettylights-syntax-markup-heading: #aeb8c8;
+  --color-prettylights-syntax-markup-italic: #d2d4da;
+  --color-prettylights-syntax-markup-bold: #d2d4da;
+  --color-prettylights-syntax-markup-deleted-text: #e2aaaa;
+  --color-prettylights-syntax-markup-deleted-bg: #47272a;
+  --color-prettylights-syntax-markup-inserted-text: #acd0b0;
+  --color-prettylights-syntax-markup-inserted-bg: #263b2c;
+  --color-prettylights-syntax-markup-changed-text: #dfc09f;
+  --color-prettylights-syntax-markup-changed-bg: #43311e;
+  --color-prettylights-syntax-markup-ignored-text: #d2d4da;
+  --color-prettylights-syntax-markup-ignored-bg: #343842;
+  --color-prettylights-syntax-meta-diff-range: #c0b8cc;
+  --color-prettylights-syntax-brackethighlighter-angle: #7e838e;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #52555e;
+  --color-prettylights-syntax-constant-other-reference-link: #aab9c7;
+  --color-btn-text: rgb(226 228 233 / 82%);
+  --color-btn-bg: #2d2e34;
+  --color-btn-border: rgb(226 228 233 / 13%);
   --color-btn-shadow: 0 0 transparent;
-  --color-btn-inset-shadow: 0 0 transparent;
-  --color-btn-hover-bg: #35363c;
-  --color-btn-hover-border: #52545c;
-  --color-btn-active-bg: #3a3b42;
-  --color-btn-active-border: #52545c;
-  --color-btn-selected-bg: #2a2b30;
-  
-  /* Primary buttons */
-  --color-btn-primary-text: #d0d4dc;
-  --color-btn-primary-bg: #42444c;
-  --color-btn-primary-border: #52545c;
+  --color-btn-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
+  --color-btn-hover-bg: #37383f;
+  --color-btn-hover-border: rgb(226 228 233 / 24%);
+  --color-btn-active-bg: #3b3c44;
+  --color-btn-active-border: rgb(226 228 233 / 28%);
+  --color-btn-selected-bg: #34353c;
+  --color-btn-primary-text: #212226;
+  --color-btn-primary-bg: rgb(226 228 233 / 88%);
+  --color-btn-primary-border: rgb(226 228 233 / 20%);
   --color-btn-primary-shadow: 0 0 transparent;
-  --color-btn-primary-inset-shadow: 0 0 transparent;
-  --color-btn-primary-hover-bg: #52545c;
-  --color-btn-primary-hover-border: #636672;
-  --color-btn-primary-selected-bg: #52545c;
-  --color-btn-primary-disabled-text: rgba(208, 212, 220, 0.5);
-  --color-btn-primary-disabled-bg: #2a2b30;
-  --color-btn-primary-disabled-border: #42444c;
-  
-  /* Actions */
-  --color-action-list-item-default-hover-bg: rgba(99, 102, 114, 0.15);
-  --color-segmented-control-bg: #2a2b30;
-  --color-segmented-control-button-bg: #212226;
-  --color-segmented-control-button-selected-border: #636672;
-  
-  /* Foreground */
-  --color-fg-default: #c0c4cc;
-  --color-fg-muted: #8a8e96;
-  --color-fg-subtle: #636672;
-  
-  /* Canvas - your grays */
-  --color-canvas-default: #212226;
-  --color-canvas-overlay: #2a2b30;
-  --color-canvas-inset: #1a1b1f;
-  --color-canvas-subtle: #2a2b30;
-  
-  /* Borders */
-  --color-border-default: #42444c;
-  --color-border-muted: #35363c;
-  
-  /* Neutral */
-  --color-neutral-muted: rgba(99, 102, 114, 0.3);
-  
-  /* Accent */
-  --color-accent-fg: #9a9ea6;
-  --color-accent-emphasis: #9a9ea6;
-  --color-accent-muted: rgba(99, 102, 114, 0.4);
-  --color-accent-subtle: rgba(99, 102, 114, 0.15);
-  
-  /* Status colors - muted grays */
-  --color-success-fg: #7a9a7a;
-  --color-attention-fg: #b09850;
-  --color-attention-muted: rgba(176, 152, 80, 0.3);
-  --color-attention-subtle: rgba(176, 152, 80, 0.1);
-  --color-danger-fg: #b07070;
-  --color-danger-muted: rgba(176, 112, 112, 0.3);
-  --color-danger-subtle: rgba(176, 112, 112, 0.1);
-  
-  /* Misc */
-  --color-primer-shadow-inset: 0 0 transparent;
-  --color-scale-gray-7: #42444c;
-  --color-scale-blue-8: #1a1b1f;
-  
-  color: #c0c4cc;
+  --color-btn-primary-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 12%);
+  --color-btn-primary-hover-bg: #f0f1f4;
+  --color-btn-primary-hover-border: #f0f1f4;
+  --color-btn-primary-selected-bg: #d6d8dd;
+  --color-btn-primary-selected-shadow: 0 0 transparent;
+  --color-btn-primary-disabled-text: rgb(33 34 38 / 55%);
+  --color-btn-primary-disabled-bg: rgb(226 228 233 / 42%);
+  --color-btn-primary-disabled-border: rgb(226 228 233 / 9%);
+  --color-action-list-item-default-hover-bg: rgb(226 228 233 / 8%);
+  --color-segmented-control-bg: #25262b;
+  --color-segmented-control-button-bg: #292a30;
+  --color-segmented-control-button-selected-border: #555861;
+  --color-fg-default: rgb(226 228 233 / 82%);
+  --color-fg-muted: rgb(226 228 233 / 64%);
+  --color-fg-subtle: rgb(226 228 233 / 56%);
+  --color-canvas-default: #292a30;
+  --color-canvas-overlay: #303138;
+  --color-canvas-inset: #1b1c20;
+  --color-canvas-subtle: #25262b;
+  --color-border-default: rgb(226 228 233 / 14%);
+  --color-border-muted: rgb(226 228 233 / 9%);
+  --color-neutral-muted: rgb(226 228 233 / 12%);
+  --color-neutral-subtle: rgb(226 228 233 / 7%);
+  --color-accent-fg: rgb(226 228 233 / 82%);
+  --color-accent-emphasis: rgb(226 228 233 / 82%);
+  --color-accent-muted: rgb(226 228 233 / 20%);
+  --color-accent-subtle: rgb(226 228 233 / 7%);
+  --color-success-fg: #8fb394;
+  --color-attention-fg: #c4aa68;
+  --color-attention-muted: rgb(196 170 104 / 32%);
+  --color-attention-subtle: rgb(196 170 104 / 10%);
+  --color-danger-fg: #cb8585;
+  --color-danger-muted: rgb(203 133 133 / 32%);
+  --color-danger-subtle: rgb(203 133 133 / 10%);
+  --color-primer-shadow-inset: inset 0 1px 0 rgb(255 255 255 / 3%);
+  --color-scale-gray-7: #36373e;
+  --color-scale-blue-8: #3c414b;
+  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+  --tw-giscus-border-hover: rgb(226 228 233 / 24%);
+  --tw-giscus-focus-border: rgb(226 228 233 / 38%);
+  --tw-giscus-focus-ring: rgb(226 228 233 / 46%);
+  --tw-giscus-tab-stroke: #53545b;
+  --tw-giscus-radius-card: 16px;
+  --tw-giscus-radius-inner: 14px;
+  --tw-giscus-radius-control: 12px;
+  --tw-giscus-radius-compact: 10px;
+  --tw-giscus-selected-bg: #292a30;
+  --tw-giscus-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+
+  color: var(--color-fg-default);
   background-color: #212226;
 }
 
-/* Hide powered by giscus */
-.gsc-footer {
-  display: none !important;
+main .pagination-loader-container {
+  background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg");
+}
+
+main .gsc-loading-image {
+  background-image: url("https://github.githubassets.com/images/mona-loading-dark.gif");
+}
+
+/* Keep giscus' native GitHub/system sans stack. Monospace is reserved for
+   content that is actually code. */
+.gsc-main {
+  font-family: var(--tw-giscus-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.gsc-header,
+.gsc-comment-author,
+.gsc-reply-author,
+.gsc-comment-footer,
+.gsc-reply-footer,
+.gsc-comment-box,
+.gsc-comment-box-textarea,
+.gsc-right-header .btn {
+  font-family: var(--tw-giscus-font-sans);
+}
+
+.gsc-comment-content,
+.gsc-reply-content {
+  line-height: 1.65;
+}
+
+/* GitHub-compatible Markdown, translated into theodore.net's prose system.
+   This only changes presentation; comments remain ordinary GFM everywhere. */
+:is(.gsc-comment-content, .gsc-reply-content) :is(h1, h2, h3, h4, h5, h6) {
+  border-bottom: 0;
+  color: var(--color-fg-default);
+  font-family: var(--tw-giscus-font-sans);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) h1 {
+  margin: 1.35em 0 0.55em;
+  font-size: 1.75em;
+  line-height: 1.2;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) h2:not(.sr-only) {
+  margin: 1.3em 0 0.55em;
+  font-size: 1.5em;
+  line-height: 1.25;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) h3 {
+  margin: 1.25em 0 0.5em;
+  font-size: 1.28em;
+  line-height: 1.3;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) :is(h4, h5, h6) {
+  margin: 1.2em 0 0.45em;
+  font-size: 1.08em;
+  line-height: 1.35;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) :is(p, ol, ul, dl, blockquote) {
+  line-height: 1.7;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) :is(ol, ul) {
+  margin-block: 1em;
+  padding-left: 1.55em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) li + li {
+  margin-top: 0.35em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) li::marker {
+  color: var(--color-fg-muted);
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.88em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) a:not([data-footnote-ref]):not([data-footnote-backref]):not(:has(img:not(.emoji))) {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-border-default);
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.15em;
+  transition: opacity 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) a:not([data-footnote-ref]):not([data-footnote-backref]):not(:has(img:not(.emoji))):hover {
+  text-decoration-color: currentColor;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) blockquote {
+  margin: 1.5em 0;
+  padding: 0.1em 1.15em;
+  border-left: 3px solid var(--color-border-default);
+  color: var(--color-fg-default);
+  font-style: italic;
+  opacity: 0.8;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) blockquote > :first-child {
+  margin-top: 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) hr {
+  height: 0;
+  margin: 1.5em 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-muted);
+  background: transparent;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) :is(code, pre, kbd) {
+  font-family: "JetBrains Mono", monospace;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) code:not(pre code) {
+  padding: 0.12em 0.35em;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  corner-shape: squircle;
+  background: var(--color-canvas-inset);
+  font-size: 0.86em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) pre {
+  margin: 1.5em 0;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--tw-giscus-radius-inner);
+  corner-shape: squircle;
+  background: var(--color-canvas-inset);
+  box-shadow: none;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) pre code {
+  border: 0;
+  background: transparent;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table {
+  width: 100%;
+  margin: 1.5em 0;
+  border: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.88em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table th {
+  padding: 0.65em 0.8em;
+  border: 0;
+  border-bottom: 2px solid var(--color-border-default);
+  background: transparent;
+  color: var(--color-fg-muted);
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.88em;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table td {
+  padding: 0.55em 0.8em;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-muted);
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table tr:last-child td {
+  border-bottom: 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) table tbody tr:hover {
+  background: var(--color-neutral-subtle);
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) details {
+  margin: 1.5em 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--tw-giscus-radius-inner);
+  corner-shape: squircle;
+  background: var(--color-canvas-subtle);
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) details summary {
+  padding: 0.75em 1em;
+  cursor: pointer;
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.88em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) details[open] summary {
+  border-bottom: 1px solid var(--color-border-muted);
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) details > :not(summary) {
+  margin-right: 1em;
+  margin-left: 1em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) input[type="checkbox"] {
+  accent-color: var(--color-fg-default);
+}
+
+/* Keep footnote references quiet and remove the redundant return link. */
+:is(.gsc-comment-content, .gsc-reply-content) a[data-footnote-ref] {
+  margin-left: 0.12em;
+  color: var(--color-fg-muted);
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.72em;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) section[data-footnotes] {
+  margin-top: 1.75em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--color-border-muted);
+  color: var(--color-fg-muted);
+  font-size: 0.84em;
+  line-height: 1.55;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) section[data-footnotes] > ol {
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) section[data-footnotes] li {
+  margin: 0.35em 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) section[data-footnotes] p {
+  margin: 0;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) a[data-footnote-backref] {
+  display: none;
+}
+
+:is(.gsc-comment-content, .gsc-reply-content) a[data-footnote-ref]:hover {
+  color: var(--color-fg-default);
+  opacity: 1;
+}
+
+/* User-uploaded photos are supporting material, not full-width page art.
+   Keep a useful thumbnail in the thread while preserving the original link. */
+.gsc-comment-content a:has(img:not(.emoji)),
+.gsc-reply-content a:has(img:not(.emoji)) {
+  display: block;
+  width: fit-content;
+  max-width: min(100%, 22.5rem);
+  margin: 0.8em 0 0.15em;
+  padding: 4px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--tw-giscus-radius-inner);
+  corner-shape: squircle;
+  background: var(--color-canvas-inset);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+  line-height: 0;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.gsc-comment-content img:not(.emoji),
+.gsc-reply-content img:not(.emoji) {
+  display: block;
+  width: auto !important;
+  height: auto !important;
+  max-width: min(100%, 22rem) !important;
+  max-height: 18rem !important;
+  margin: 0;
+  border-radius: var(--tw-giscus-radius-compact) !important;
+  corner-shape: squircle;
+  object-fit: contain;
+}
+
+/* The hierarchy that transparent_dark cannot express on this page:
+   page -> raised comment/composer -> recessed replies/textarea -> overlay. */
+.gsc-comment > .color-bg-primary {
+  box-sizing: border-box;
+  width: calc(100% - 1px) !important;
+  overflow: hidden;
+  border-radius: 14px !important;
+  corner-shape: squircle;
+  background: var(--color-canvas-default) !important;
+  transition: none;
+}
+
+.gsc-replies {
+  margin: 0 6px 6px;
+  padding-top: 0 !important;
+  overflow: hidden;
+  border: 1px solid var(--color-border-muted) !important;
+  background: var(--color-canvas-inset) !important;
+  border-radius: 12px !important;
+  corner-shape: squircle;
+}
+
+.gsc-replies > .gsc-reply:first-child {
+  padding-top: 6px;
+}
+
+.gsc-comment-box {
+  box-sizing: border-box;
+  width: calc(100% - 1px);
+  overflow: hidden;
+  border: 1px solid var(--color-border-default);
+  border-radius: 14px !important;
+  corner-shape: squircle;
+  background: var(--color-canvas-default) !important;
+  transition: none;
+}
+
+.gsc-comment-box:focus-within {
+  border-color: var(--color-border-default) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-tabs {
+  border-bottom-color: var(--tw-giscus-tab-stroke) !important;
+  border-radius: 13px 13px 0 0;
+  background: var(--color-canvas-subtle) !important;
+}
+
+.gsc-comment-box-tabs > div:first-child {
+  --tw-giscus-comment-tab-width: 4.625rem;
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 9.25rem;
+  margin: 8px 8px -1px !important;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.gsc-comment-box-tabs > div:first-child::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 8px;
+  left: 0;
+  box-sizing: border-box;
+  width: var(--tw-giscus-comment-tab-width);
+  border: 1px solid var(--tw-giscus-tab-stroke);
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  corner-shape: squircle;
+  background: var(--color-canvas-default);
+  backface-visibility: hidden;
+  content: "";
+  transform: translate3d(0, 0, 0);
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.gsc-comment-box-tabs > div:first-child::after {
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+  left: -7px;
+  width: calc(var(--tw-giscus-comment-tab-width) + 14px);
+  height: 8px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at left top,
+      transparent 7px,
+      var(--tw-giscus-tab-stroke) 7px 8px,
+      var(--color-canvas-default) 8px) left top / 8px 8px no-repeat,
+    radial-gradient(circle at right top,
+      transparent 7px,
+      var(--tw-giscus-tab-stroke) 7px 8px,
+      var(--color-canvas-default) 8px) right top / 8px 8px no-repeat,
+    linear-gradient(var(--color-canvas-default), var(--color-canvas-default))
+      center top / calc(100% - 16px) 8px no-repeat;
+  backface-visibility: hidden;
+  content: "";
+  transform: translate3d(0, 0, 0);
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.gsc-comment-box-tabs > div:first-child:has(button:nth-child(2).color-text-primary)::before {
+  transform: translate3d(100%, 0, 0);
+}
+
+.gsc-comment-box-tabs > div:first-child:has(button:nth-child(2).color-text-primary)::after {
+  transform: translate3d(var(--tw-giscus-comment-tab-width), 0, 0);
+}
+
+.gsc-comment-box-tabs > div:first-child > button {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
+  padding: 0.5rem 0.75rem !important;
+  border: 0 !important;
+  border-radius: 10px 10px 0 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--color-fg-muted) !important;
+  transition: color 140ms ease;
+}
+
+.gsc-comment-box-tabs > div:first-child > button.color-text-primary {
+  color: var(--color-fg-default) !important;
+}
+
+.gsc-comment-box-tabs > div:first-child > button:focus,
+.gsc-comment-box-tabs > div:first-child > button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-write,
+.gsc-comment-box-preview {
+  animation: gsc-comment-panel-in 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes gsc-comment-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(1px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gsc-comment-box-textarea {
+  border-bottom: 0;
+  border-radius: var(--tw-giscus-radius-inner) var(--tw-giscus-radius-inner) 0 0 !important;
+  corner-shape: squircle;
+  background: var(--color-canvas-inset) !important;
+  line-height: 1.6;
+}
+
+.gsc-comment-box-textarea:focus,
+.gsc-comment-box-textarea:focus-visible {
+  border-color: var(--color-border-muted) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-main:focus-within,
+.gsc-comment-box-write:focus-within,
+.gsc-comment-box-preview:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-textarea-extras {
+  border-radius: 0 0 var(--tw-giscus-radius-inner) var(--tw-giscus-radius-inner) !important;
+  corner-shape: squircle;
+  background: var(--color-canvas-inset) !important;
+}
+
+.gsc-right-header {
+  position: relative;
+  isolation: isolate;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 9.25rem;
+  margin-right: 1px;
+  padding: 3px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--tw-giscus-radius-control);
+  corner-shape: squircle;
+  background: var(--color-canvas-subtle);
+}
+
+.gsc-right-header::before {
+  position: absolute;
+  z-index: -1;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  box-sizing: border-box;
+  width: calc((100% - 6px) / 2);
+  border: 1px solid var(--color-border-default);
+  border-radius: 9px;
+  corner-shape: squircle;
+  background: var(--tw-giscus-selected-bg);
+  box-shadow: var(--color-btn-shadow);
+  content: "";
+  transform: translateX(0);
+  transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gsc-right-header:has(.BtnGroup-item:last-child.BtnGroup-item--selected)::before {
+  transform: translateX(100%);
+}
+
+.gsc-right-header .BtnGroup-item {
+  position: relative;
+  z-index: 1;
+  display: flex !important;
+  min-width: 0;
+  min-height: 28px;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.gsc-right-header .BtnGroup-item + .BtnGroup-item {
+  margin-left: 0 !important;
+}
+
+.gsc-right-header .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 28px;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--color-fg-muted) !important;
+  transition: color 140ms ease;
+}
+
+.gsc-right-header .BtnGroup-item--selected .btn {
+  color: var(--color-fg-default) !important;
+}
+
+.gsc-right-header .btn:focus-visible {
+  outline: none !important;
+  box-shadow: inset 0 0 0 1px var(--color-border-default) !important;
+}
+
+.gsc-main .btn,
+.gsc-comment-box .btn,
+.gsc-toolbar-item {
+  border-radius: var(--tw-giscus-radius-control) !important;
+  corner-shape: squircle;
+  transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.gsc-pagination-button {
+  border-radius: var(--tw-giscus-radius-control) !important;
+  corner-shape: squircle;
+  box-shadow: none;
+  transition: none;
+}
+
+.gsc-pagination-button > span:last-child {
+  font-style: italic;
+  font-weight: 400 !important;
+}
+
+.gsc-social-reaction-summary-item {
+  border-color: var(--color-border-muted) !important;
+  border-radius: 999px !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.gsc-direct-reaction-button:not(.gsc-upvote-button) {
+  padding-right: 6px !important;
+  padding-left: 6px !important;
+}
+
+.gsc-social-reaction-summary-item:not(:disabled) {
+  cursor: pointer;
+}
+
+.gsc-social-reaction-summary-item:not(:disabled):is(:hover, :active) {
+  opacity: 1 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-reactions-button:hover:enabled,
+.gsc-reactions-button:hover {
+  background-color: var(--color-canvas-inset) !important;
+}
+
+:is(.gsc-direct-reaction-button, .gsc-upvote-button):not(.has-reacted):hover:enabled {
+  background-color: transparent !important;
+}
+
+.gsc-social-reaction-summary-item.has-reacted:hover:enabled {
+  background-color: var(--color-accent-subtle) !important;
+}
+
+.gsc-social-reaction-summary-item :is(.gsc-direct-reaction-button-emoji, .gsc-social-reaction-summary-item-count) {
+  transform: none !important;
+  transition: none !important;
+}
+
+.gsc-reactions-popover {
+  overflow: hidden;
+  border-radius: var(--tw-giscus-radius-card) !important;
+  corner-shape: squircle;
+  box-shadow: 0 14px 34px rgb(0 0 0 / 26%);
+}
+
+/* Authenticated pickers do not need a heading; retain the signed-out prompt
+   because it contains the only sign-in affordance. */
+.gsc-reactions-popover:not(:has(.gsc-emoji-button.no-token)) > p:first-child,
+.gsc-reactions-popover:not(:has(.gsc-emoji-button.no-token)) > p:first-child + .border-t {
+  display: none;
+}
+
+.gsc-emoji-button,
+.gsc-emoji-button .gsc-emoji {
+  transform: none !important;
+  transition: none !important;
+}
+
+.gsc-emoji-button:not(:disabled) {
+  cursor: pointer;
+}
+
+.gsc-emoji-button:not(:disabled):is(:hover, :focus, :active) {
+  background: transparent !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.gsc-emoji-button:is(:hover, :focus, :active) .gsc-emoji {
+  display: inline-block;
+  transform: none !important;
+}
+
+.gsc-comment-author-avatar img,
+.gsc-reply-author-avatar img {
+  border: 1px solid var(--color-border-muted);
+}
+
+.ClipboardButton .js-clipboard-check-icon {
+  color: var(--color-fg-muted) !important;
+}
+
+.gsc-left-header > em {
+  color: var(--color-fg-default) !important;
+  font-size: 0 !important;
+  font-style: normal;
+  opacity: 0.4;
+  transform: translateY(2px);
+}
+
+.gsc-left-header > em::before {
+  content: "powered by ";
+  font-family: var(--tw-giscus-font-sans);
+  font-size: 0.6875rem;
+}
+
+.gsc-left-header > em > a {
+  color: inherit !important;
+  font-size: 0.6875rem;
+}
+
+@media (hover: hover) {
+  .gsc-comment-box .btn:hover,
+  .gsc-toolbar-item:hover {
+    transform: scale(0.97);
+  }
+
+  .gsc-main a:hover {
+    opacity: 0.68;
+  }
+
+  .gsc-comment-content a:has(img:not(.emoji)):hover,
+  .gsc-reply-content a:has(img:not(.emoji)):hover {
+    opacity: 1;
+  }
+}
+
+.gsc-main :focus-visible {
+  outline: 1.5px solid var(--tw-giscus-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Giscus focuses reply controls as it swaps the prompt for the editor. Keep
+   that handoff quiet and let the reply card's own border carry focus state. */
+.gsc-reply-box > button:focus,
+.gsc-reply-box > button:focus-visible,
+.gsc-comment-box-is-reply .gsc-comment-box-textarea:focus,
+.gsc-comment-box-is-reply .gsc-comment-box-textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-reply-box > button:focus,
+.gsc-reply-box > button:focus-visible {
+  border-color: var(--color-border-muted) !important;
+}
+
+.gsc-comment-box-is-reply,
+.gsc-comment-box-is-reply:focus-within {
+  border-top-width: 1px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gsc-comment-box-is-reply .gsc-comment-box-tabs {
+  border-top: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsc-right-header::before,
+  .gsc-comment-box-tabs > div:first-child::before,
+  .gsc-comment-box-tabs > div:first-child::after,
+  .gsc-comment-box-write,
+  .gsc-comment-box-preview,
+  .gsc-comment > .color-bg-primary,
+  .gsc-comment-box .btn,
+  .gsc-toolbar-item,
+  .gsc-social-reaction-summary-item,
+  .gsc-emoji-button,
+  .gsc-comment-content a:has(img:not(.emoji)),
+  .gsc-reply-content a:has(img:not(.emoji)) {
+    transition: none;
+  }
+
+  .gsc-comment-box-write,
+  .gsc-comment-box-preview {
+    animation: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .gsc-comment-content img:not(.emoji),
+  .gsc-reply-content img:not(.emoji) {
+    max-height: 14rem !important;
+  }
 }

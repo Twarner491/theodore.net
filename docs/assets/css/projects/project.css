@@ -825,7 +825,8 @@
 
 /* Prevent iframe focus/animations from scrolling page */
 .plotter-iframe,
-iframe[sandbox] {
+iframe[sandbox],
+.giscus-frame {
   contain: paint;
 }
 
@@ -856,5 +857,6 @@ iframe[sandbox] {
 
 .giscus-frame {
   width: 100%;
+  overflow-anchor: none;
   border: none;
 }
