@@ -8,11 +8,28 @@
 {% set page_readtime = page.meta.readtime | default("") %}
 {% set page_date = page.meta.date | default("") %}
 {% set page_date_display = page.meta.date_display | default("") %}
+{% set page_published_time = page.meta.datePublished | default(page_date, true) %}
+{% set page_modified_time = page.meta.dateModified | default(page_published_time, true) %}
 {% set page_type = "writings" if "writings" in page.url else "Projects" %}
 {% set site_base = (config.site_url or "https://theodore.net/") | trim %}
 {% if site_base.endswith("/") %}{% set site_base = site_base[:-1] %}{% endif %}
 {% set page_full_url = site_base ~ "/" ~ page.url %}
 {% set page_full_thumbnail = page_thumbnail if page_thumbnail.startswith("http") else site_base ~ page_thumbnail %}
+{% set page_thumbnail_alt = page.meta.thumbnail_alt | default(page_title, true) %}
+{% set page_thumbnail_width = page.meta.thumbnail_width | default("") %}
+{% set page_thumbnail_height = page.meta.thumbnail_height | default("") %}
+{% set page_thumbnail_file = page_thumbnail.split("?")[0] | lower %}
+{% if page.meta.thumbnail_type %}
+  {% set page_thumbnail_type = page.meta.thumbnail_type %}
+{% elif page_thumbnail_file.endswith(".jpg") or page_thumbnail_file.endswith(".jpeg") %}
+  {% set page_thumbnail_type = "image/jpeg" %}
+{% elif page_thumbnail_file.endswith(".webp") %}
+  {% set page_thumbnail_type = "image/webp" %}
+{% elif page_thumbnail_file.endswith(".gif") %}
+  {% set page_thumbnail_type = "image/gif" %}
+{% else %}
+  {% set page_thumbnail_type = "image/png" %}
+{% endif %}
 
 {% block extrahead %}
   <meta name="facebook-domain-verification" content="qkq5ugrp1j623jl830eabbokbj9o65" />
@@ -41,20 +58,31 @@
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:locale" content="en_US">
   <meta property="og:url" content="{{ page_full_url }}">
   <meta property="og:title" content="{{ page_title }} - Teddy Warner">
   <meta property="og:description" content="{{ page_description }}">
   <meta property="og:image" content="{{ page_full_thumbnail }}">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image:secure_url" content="{{ page_full_thumbnail }}">
+  <meta property="og:image:type" content="{{ page_thumbnail_type }}">
+  {% if page_thumbnail_width and page_thumbnail_height %}
+  <meta property="og:image:width" content="{{ page_thumbnail_width }}">
+  <meta property="og:image:height" content="{{ page_thumbnail_height }}">
+  {% endif %}
+  <meta property="og:image:alt" content="{{ page_thumbnail_alt }}">
+  {% if page_published_time %}<meta property="article:published_time" content="{{ page_published_time }}">{% endif %}
+  {% if page_modified_time %}<meta property="article:modified_time" content="{{ page_modified_time }}">{% endif %}
 
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="{{ page_full_url }}">
-  <meta property="twitter:title" content="{{ page_title }} - Teddy Warner">
-  <meta property="twitter:description" content="{{ page_description }}">
-  <meta property="twitter:image" content="{{ page_full_thumbnail }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@WarnerTeddy">
+  <meta name="twitter:creator" content="@WarnerTeddy">
+  <meta name="twitter:url" content="{{ page_full_url }}">
+  <meta name="twitter:title" content="{{ page_title }} - Teddy Warner">
+  <meta name="twitter:description" content="{{ page_description }}">
+  <meta name="twitter:image" content="{{ page_full_thumbnail }}">
+  <meta name="twitter:image:alt" content="{{ page_thumbnail_alt }}">
 
   <!-- Preconnect hints -->
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>

@@ -2,7 +2,7 @@
 title: The Fallacy of Justice
 description: A Platonic Dialogue
 keywords: philosophy, Platonic dialogue, justice, Socrates, George Orwell, 1984, political philosophy, power dynamics, class exploitation, social hierarchy, ethics, virtue, philosophy essay, classical Athens, philosophical discourse
-thumbnail: /assets/images/foj/thumb.pnga-mutual-meaning.md
+thumbnail: /assets/images/thumb.png
 draft: true
 date: 2022-12-01
 hide:

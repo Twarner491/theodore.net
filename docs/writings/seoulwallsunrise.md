@@ -2,7 +2,7 @@
 title: A Seoul Wall Sunrise
 description: Some blissfully ignorant thoughts.
 keywords: philosophy, consciousness, self-awareness, meta-cognition, flow state, mindfulness, introspection, thinking, meditation, Seoul, sunrise, Csikszentmihalyi, contemplation, perception, cognitive state
-thumbnail: /assets/images/seoulwallsunrise/thumb.png
+thumbnail: /assets/images/Japan/favs/000061380017_17.jpg
 date: 2025-10-01
 hide:
   - navigation

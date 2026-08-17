@@ -1,5 +1,6 @@
 ---
 description: causa sui. // @WarnerTeddy
+og_description: i make machines. // @WarnerTeddy
 hide:
   - navigation
   - toc
@@ -22,23 +23,6 @@ search:
   <meta name="author" content="Teddy Warner">
   <meta name="robots" content="index, follow">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://theodore.net/">
-  <meta property="og:title" content="Teddy Warner">
-  <meta property="og:description" content="i make machines. // @WarnerTeddy">
-  <meta property="og:image" content="https://theodore.net/assets/images/thumb.png">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://theodore.net/">
-  <meta property="twitter:title" content="Teddy Warner">
-  <meta property="twitter:description" content="i make machines. // @WarnerTeddy">
-  <meta property="twitter:image" content="https://theodore.net/assets/images/thumb.png">
-
   <!-- Preconnect to external domains for performance -->
   <link rel="preconnect" href="https://api.github.com">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">

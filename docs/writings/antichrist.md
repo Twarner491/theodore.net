@@ -2,6 +2,10 @@
 title: Paradise Gained
 description: We Christians must hope for more.
 keywords: antichrist, antichrist theology, hope, theological virtues, faith hope love, spe salvi, benedict xvi, solovyov antichrist, original sin, paradise lost, theia moira, catholic theology, eschatology, gaudium et spes, vatican ii, church fathers, newman antichrist, plato meno virtue, barthélemy god and his image, antichrist tradition, vigilant hope, secular humanism, morality without god
+thumbnail: /assets/images/antichrist/paradise-gained-social.jpg
+thumbnail_alt: Paradise Gained — We Christians must hope for more.
+thumbnail_width: 1200
+thumbnail_height: 630
 date: 2026-03-09
 draft: true
 hide:

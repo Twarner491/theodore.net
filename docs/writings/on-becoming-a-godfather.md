@@ -2,7 +2,7 @@
 title: On Becoming a Godfather
 description: This confers great benefits like, being able to speak in a raspy voice.
 keywords: Godfather, Baptism, Catholicism, Faith journey, Religious conversion, Catholic education, Philosophy, Science vs faith, Werner Heisenberg, Thich Nhat Hanh, Eastern philosophy, Thomas the Apostle, Doubting Thomas, John 20:24-29, Father Anthony De Mello, The Way to Love, Intrinsic happiness, Extrinsic goals, Silicon Valley culture, Personal growth, Spiritual development, Religious questioning, Teenage faith crisis, Cultural Catholicism, Secular education, North Carolina, California, Bay Area, Thiel Fellowship, Werner Heisenberg quote, No man's land metaphor, Faith and science harmony, Gödel's incompleteness, Big Bang, Consciousness, Subjective experience, Neural computation, Mathematical reality, Infinite regress, Moral frameworks, Existential meaning, Ultimate purpose, Transcendence
-thumbnail: /assets/images/Godfather/thumb.png
+thumbnail: /assets/images/Godfather/thumb.jpg
 date: 2025-08-01
 hide:
   - navigation

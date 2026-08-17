@@ -4,6 +4,7 @@ hide:
   - toc
   - feedback
 template: index.html
+og_description: A conglomerate of my thoughts and essays.
 search:
   exclude: true
 ---
@@ -19,23 +20,6 @@ search:
   <meta name="author" content="Teddy Warner">
   <meta name="robots" content="index, follow">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://theodore.net/writings/">
-  <meta property="og:title" content="Writings - Teddy Warner">
-  <meta property="og:description" content="A conglomerate of my thoughts and essays.">
-  <meta property="og:image" content="https://theodore.net/assets/images/thumb.png">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://theodore.net/writings/">
-  <meta property="twitter:title" content="Writings - Teddy Warner">
-  <meta property="twitter:description" content="A conglomerate of my thoughts and essays.">
-  <meta property="twitter:image" content="https://theodore.net/assets/images/thumb.png">
-
   <!-- Existing resource links -->
   <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous"></script>
   <!-- Fonts served locally via tufte.css -->

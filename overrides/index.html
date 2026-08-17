@@ -39,28 +39,35 @@
   <link rel="preload" as="image" type="image/svg+xml" href="/assets/images/index/avatardark.svg">
   <link rel="preload" as="image" type="image/svg+xml" href="/assets/images/index/avatarlight.svg">
 
-  {# Social-share + SEO meta in the REAL <head>. These pages declare their own <head> in
-     the markdown body, where OG tags are not reliably read by crawlers, so they are emitted
-     here from frontmatter. Gated so non-store pages are untouched. #}
-  {%- if page and page.meta and (page.meta.product or page.meta.og_image) -%}
+  {# Social-share + SEO meta in the REAL <head>. Some legacy pages declare these in
+     their markdown body, where social crawlers do not reliably read them. #}
+  {%- if page and page.meta -%}
     {%- set _site = (config.site_url or '') | trim -%}
     {%- if _site.endswith('/') %}{% set _site = _site[:-1] %}{% endif -%}
     {%- set _ogtitle = (page.title ~ ' - ' ~ config.site_name) if page.title else config.site_name -%}
-    {%- set _ogdesc = page.meta.description or page.meta.sub or page.meta.teaser or config.site_description -%}
+    {%- set _ogdesc = page.meta.og_description or page.meta.description or page.meta.sub or page.meta.teaser or config.site_description -%}
     {%- if page.meta.og_image -%}{% set _img = page.meta.og_image %}
+    {%- elif page.meta.thumbnail -%}{% set _img = page.meta.thumbnail %}
     {%- elif page.meta.images and page.meta.images[0] -%}{% set _img = (page.meta.imageBase or '') ~ page.meta.images[0] %}
     {%- else -%}{% set _img = '/assets/images/thumb.png' %}{%- endif -%}
     {%- if _img.startswith('/') %}{% set _img = _site ~ _img %}{% endif -%}
+    {%- set _img_alt = page.meta.thumbnail_alt or page.meta.image_alt or _ogtitle -%}
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:locale" content="en_US">
   <meta property="og:title" content="{{ _ogtitle | striptags }}">
   <meta property="og:description" content="{{ _ogdesc | striptags }}">
   <meta property="og:image" content="{{ _img }}">
+  <meta property="og:image:secure_url" content="{{ _img }}">
+  <meta property="og:image:alt" content="{{ _img_alt | striptags }}">
   <meta property="og:url" content="{{ page.canonical_url }}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@WarnerTeddy">
+  <meta name="twitter:creator" content="@WarnerTeddy">
   <meta name="twitter:title" content="{{ _ogtitle | striptags }}">
   <meta name="twitter:description" content="{{ _ogdesc | striptags }}">
   <meta name="twitter:image" content="{{ _img }}">
+  <meta name="twitter:image:alt" content="{{ _img_alt | striptags }}">
   {%- if page.meta.product and page.meta.variants %}
   {# Product/Offer JSON-LD in the served HTML: Meta's catalog crawler and Google's
      free merchant listings both read availability/price from here -- the PDP itself

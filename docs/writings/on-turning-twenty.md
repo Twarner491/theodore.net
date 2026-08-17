@@ -2,7 +2,9 @@
 title: On Turning Twenty
 description: I turned twenty today.
 keywords: Turning twenty, Personal reflection, Life lessons, University dropout, Entrepreneurship, Thiel Fellowship, Intempus, USC Iovine and Young Academy, Carpe diem, Causa sui, Intrinsic motivation, Confidence building, Self-improvement, Life advice, Personal growth, Teenage years, Career decisions, Startup journey, Young entrepreneur, Life philosophy
-thumbnail: /assets/images/20/thumb.png
+thumbnail: /assets/images/20/social.jpg
+thumbnail_width: 1200
+thumbnail_height: 630
 date: 2025-08-01
 hide:
   - navigation

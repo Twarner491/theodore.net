@@ -2,7 +2,9 @@
 title: Kitchen Chronicles
 description: My time in the kitchen.
 keywords: cooking, kitchen, recipes, meal prep, home cooking, food preparation, culinary skills, apartment living, productivity, downtime activities, scrapbook, vibes-based cooking, Teddy Warner, food blog, kitchen chronicles, cooking tips, recipe collection, dexterity, hardware development, lifestyle, San Francisco, cooking philosophy, meal planning, greek yogurt mac and cheese, marry me chicken, focaccia, mediterranean food, comfort food, baking, desserts
-thumbnail: /assets/images/kitchenchronicles/kitchenchronicles.gif
+thumbnail: /assets/images/kitchenchronicles/social.jpg
+thumbnail_width: 1200
+thumbnail_height: 630
 date: 2025-09-01
 hide:
   - navigation

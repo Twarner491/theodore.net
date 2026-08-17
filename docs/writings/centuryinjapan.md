@@ -2,7 +2,7 @@
 title: A Century in Japan
 description: 439.59 miles, 21,165 ft of elev. gained, ~39.21 hrs of peddling.
 keywords: cycling Japan, bikepacking, century ride, long distance cycling, Osaka to Tokyo, bike touring Japan, Japanese Alps, 35mm film photography, adventure cycling, travel writing, San Francisco, cycling adventure, film camera travel, bike journey, endurance cycling
-thumbnail: /assets/images/centuryinjapan/thumb.png
+thumbnail: /assets/images/Japan/favs/000061410018_18.jpg
 date: 2025-11-01
 hide:
   - navigation
