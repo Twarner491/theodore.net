@@ -787,9 +787,18 @@
     return "";
   }
   function timelineHTML(d) {
-    const shipped = d.fulfillment === "shipped", url = shipped ? trackUrl(d.carrier, d.tracking) : "";
+    const shipped = d.fulfillment === "shipped";
     const steps = [["Ordered", "done"], ["Building", shipped ? "done" : "current"], ["Shipped", shipped ? "current" : "upcoming"], ["Delivered", "upcoming"]];
-    const note = shipped && d.tracking ? '<p class="tl-track">' + escapeHtml(d.carrier || "") + " - " + (url ? '<a href="' + url + '" target="_blank" rel="noopener">' + escapeHtml(d.tracking) + "</a>" : escapeHtml(d.tracking)) + "</p>" : "";
+    // A big order can ship in SEVERAL boxes, each with its own tracking number, so list every parcel.
+    // `parcels` falls back to the single carrier/tracking, which keeps a normal order rendering as before.
+    const parcels = (d.parcels && d.parcels.length) ? d.parcels : (d.tracking ? [{ box: 1, of: 1, carrier: d.carrier, tracking: d.tracking }] : []);
+    const line = (p) => {
+      const u = trackUrl(p.carrier, p.tracking);
+      const label = p.of > 1 ? "Box " + p.box + " of " + p.of + " - " : "";
+      return '<p class="tl-track">' + label + escapeHtml(p.carrier || "") + " - " +
+        (u ? '<a href="' + u + '" target="_blank" rel="noopener">' + escapeHtml(p.tracking) + "</a>" : escapeHtml(p.tracking)) + "</p>";
+    };
+    const note = shipped ? parcels.map(line).join("") : "";
     return '<div class="conf-block"><p class="conf-block-h">Status</p><div class="conf-timeline-h" role="list">' +
       steps.map((s) => '<div class="tl-step tl-' + s[1] + '" role="listitem"><span class="tl-dot"></span><span class="tl-label">' + s[0] + "</span></div>").join("") +
       "</div>" + note + "</div>";
