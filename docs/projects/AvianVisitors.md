@@ -39,7 +39,7 @@ See it running at [bird.onethreenine.net](https://bird.onethreenine.net):
 
 <div class="embed-frame" style="--embed-height: 700px;">
   <iframe
-    src="https://bird.onethreenine.net/"
+    data-src="https://bird.onethreenine.net/"
     frameborder="0"
     sandbox="allow-scripts allow-same-origin allow-forms"
     tabindex="-1"

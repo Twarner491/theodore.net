@@ -810,26 +810,4 @@ I'm shuffling generator and color orderings for each request to prevent Gemini f
     updateAnimation();
 })();
 
-// Defer iframe loading until visible
-(function() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const iframe = entry.target;
-        const src = iframe.dataset.src;
-        if (src && !iframe.src) {
-          iframe.src = src;
-          iframe.addEventListener('load', () => {
-            if (document.activeElement === iframe) iframe.blur();
-          }, { once: true });
-        }
-        observer.unobserve(iframe);
-      }
-    });
-  }, { rootMargin: '300px' });
-
-  document.querySelectorAll('iframe[data-src]').forEach(iframe => {
-    observer.observe(iframe);
-  });
-})();
 </script>

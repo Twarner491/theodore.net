@@ -566,25 +566,3 @@ p.s. This "i before e except after c" shenanigans really throws me off. Apologie
 </div>
 
 <script src="../../assets/js/reciepts.js"></script>
-
-<script>
-// Simple deferred iframe loading - no scroll lock
-(function() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const iframe = entry.target;
-        const src = iframe.dataset.src;
-        if (src && !iframe.src) {
-          iframe.src = src;
-        }
-        observer.unobserve(iframe);
-      }
-    });
-  }, { rootMargin: '200px' });
-  
-  document.querySelectorAll('iframe[data-src]').forEach(iframe => {
-    observer.observe(iframe);
-  });
-})();
-</script>

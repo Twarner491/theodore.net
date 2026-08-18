@@ -823,31 +823,24 @@
   opacity: 0.9;
 }
 
-/* Prevent iframe focus/animations from scrolling page */
-.plotter-iframe,
-iframe[sandbox],
+/* Keep the comments iframe in its own paint boundary. */
 .giscus-frame {
   contain: paint;
 }
 
-/* Wrapper to fully isolate iframe scroll behavior */
+/* Standalone app embed wrapper. */
 .iframe-container {
   position: relative;
   overflow: clip;
-  contain: strict;
-  isolation: isolate;
-  overscroll-behavior: contain;
 }
 
 .iframe-container iframe {
   display: block;
-  overscroll-behavior: contain;
 }
 
-/* Prevent any scroll anchoring from iframes */
-.iframe-container,
-.iframe-container iframe {
-  overflow-anchor: none;
+.md-typeset .embed-frame[style*="--embed-height"] {
+  box-sizing: content-box;
+  min-height: var(--embed-height, 500px);
 }
 
 /* Giscus container */
