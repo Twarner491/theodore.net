@@ -15,7 +15,7 @@ search:
   
   <!-- Primary Meta Tags -->
   <meta name="title" content="Projects - Teddy Warner">
-  <meta name="description" content="Some of the Open-Source shenanigans I've been up to.">
+  <meta name="description" content="Here's some of the stuff I've been up to.">
   <meta name="keywords" content="Digital fabrication, PCB development, Mechatronics engineering, USC Iovine and Young Academy, Engineering design, Fab Academy, Hardware engineering, Rapid prototyping, CAD design, Physical computing, Electronics design, IoT development, Wearable technology, Engineering portfolio">
   <meta name="author" content="Teddy Warner">
   <meta name="robots" content="index, follow">
@@ -31,7 +31,7 @@ search:
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Projects - Teddy Warner",
-    "description": "Some of the Open-Source shenanigans I've been up to.",
+    "description": "Here's some of the stuff I've been up to.",
     "url": "https://theodore.net/projects/",
     "author": {
       "@type": "Person",

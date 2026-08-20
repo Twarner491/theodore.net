@@ -322,7 +322,7 @@ As a final step to prep for step 2: Printer Hacking, we'll set up this app to au
 
 #### A Dot or Nothing
 
-Sometimes a quote deserves a photo, to further commemorate its moment. Receipt [dot] local offers an upload button to fulfill this end, which surfaces a little problem: how do you print an image on a binary thermal printer head? With some fun dithering of course: scatter pure black dots at the right density and let your eye average them back into greys, spending the spatial resolution the printer has to buy back the tones it doesn't. It lays down a row of $384$ dots, and each one is either burned black or left blank, a single bit. The photo you handed it, though, carries $2^8 = 256$ shades per pixel.
+Sometimes a quote deserves a photo, to further commemorate its moment. Receipt [dot] local offers an upload button to fulfill this end, which surfaces a little problem: how do you print an image on a binary thermal printer head? With some fun dithering of course: scatter pure black dots at the right density and let your eye average them back into greys, spending the spatial resolution the printer has to buy back the tones it doesn't. It lays down a row of $576$ dots, and each one is either burned black or left blank, a single bit. The photo you handed it, though, carries $2^8 = 256$ shades per pixel.
 
 <div class="dither-diagram-wrap" style="margin: 0.5rem 0 1.25rem;">
 <svg class="dither-diagram" viewBox="0 0 1000 512" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="color:var(--md-default-fg-color);width:100%;height:auto" font-family="Palatino, Georgia, &quot;Times New Roman&quot;, serif">
@@ -357,17 +357,19 @@ requestAnimationFrame(fr);
 </svg>
 </div>
 
-{.marginnote}The whole pipeline lives in [`process_image_for_thermal`](https://github.com/Twarner491/quotes/blob/main/src/app.py): greyscale, a nudge of contrast and sharpness for thermal paper, then the dither.{/.marginnote}
+{.marginnote}The whole pipeline lives in [process_image_for_thermal](https://github.com/Twarner491/quotes/blob/main/src/mqtt_print_subscriber.py): greyscale, a gentle touch of contrast and sharpness for thermal paper, a gamma curve to undo the printer's over-darkening, then the dither.{/.marginnote}
 
-We're using Floyd-Steinberg for error diffusion, which is what Pillow uses under the hood when you `convert('1')`. Sweep the image one pixel at a time, at each pixel, round its grey value $v$ to whichever endpoint is closer
+The paper demands a correction first. A burned dot bleeds a hair wider than the pixel that asked for it, so midtones print heavier than intended and a naive image comes out muddy. We compensate before dithering by lightening the greys with a gamma curve, $v \mapsto 255\,(v/255)^{1/2}$, handing the printer tones that are a little too bright on purpose so its own darkening lands them honest.
+
+Then the dither. We're using Atkinson error diffusion hand-rolled in a few lines of NumPy, since Pillow only ships Floyd–Steinberg. Sweep the image one pixel at a time, at each pixel, round its grey value $v$ to whichever endpoint is closer
 
 $$q = \begin{cases} 0 & v < 128 \\ 255 & v \ge 128, \end{cases}$$
 
-... and you have made a rounding error $e = v - q$, the exact sliver of tone that one dot couldn't represent. Rather than discard it, Floyd-Steinberg spreads $e$ onto the neighbours it hasn't reached yet, weighted by proximity:
+... and you have made a rounding error $e = v - q$, the exact sliver of tone that one dot couldn't represent. Atkinson spreads $e$ onto the neighbours it hasn't reached yet, in eighths, to six of them:
 
-$$\frac{1}{16}\begin{bmatrix} & \ast & 7 \\ 3 & 5 & 1 \end{bmatrix}.$$
+$$\frac{1}{8}\begin{bmatrix} & \ast & 1 & 1 \\ 1 & 1 & 1 & \\ & 1 & & \end{bmatrix}.$$
 
-A pixel forced to white thus leaves its darkness behind as a debt the next pixels have to settle, tugging them toward black so the local average stays honest. Because the weights sum to one, $\tfrac{7 + 3 + 5 + 1}{16} = 1$, none of that brightness escapes the image; it only gets rearranged into the dot texture above. That small act of conservation is the whole trick, and it's why a couple hundred scattered dots still resolve into a face.
+A pixel forced to white leaves its darkness behind as a debt the next pixels partly settle, tugging them toward black so the local average stays roughly honest. But the weights sum to $\tfrac{6}{8}$, not one: a full quarter of every error is simply dropped on the floor. That deliberate leak is the whole character of Atkinson. Where Floyd–Steinberg conserves every sliver and keeps trading tonal debts across a flat region, leaving a faint wormy texture, Atkinson lets a bit of it evaporate, so highlights run clean white and shadows settle to solid black. The trade is a little less tonal range for a lot less noise, and on $203$-dpi thermal paper that punchier, cleaner dot is exactly what reads. A couple hundred scattered dots, a quarter of the arithmetic quietly discarded, and the whole thing still resolves into a face.
 
 #### Printer Hacking
 
@@ -456,7 +458,7 @@ Building a quote receipt printer of your own is easy enough. The full project re
 
 ### Quotebook
 
-This thing is so awesome. I've had some great fun printing out quotes this weekend and attached a few favorites below. I'll update this every once in a while as I log more silly things.
+This thing is so awesome. I've had some great fun printing out quotes this weekend and attached a few favorites below. I've also put together a larger set containing all the receipts i've gotten around to scanning on [quote.theodore.net](https://quote.theodore.net/).
 
 <div class="receipt-carousel-container">
   <div class="receipt-carousel">

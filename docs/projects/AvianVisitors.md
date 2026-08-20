@@ -203,7 +203,7 @@ This clones the fork, runs BirdNET-Pi's installer (audio capture, model, web UI,
 
 #### Illustrations + Collage
 
-The collage ships with 450 bundled illustrations of the most common North American species, generated via Gemini's [`gemini-2.5-flash-image`](https://ai.google.dev/gemini-api/docs/image-generation) model. Each species gets two poses: perched <img src="https://bird.onethreenine.net/avian/api/cutout.php?sci=Corvus%20brachyrhynchos&com=American%20Crow" alt="perched American Crow" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;"> and in-flight <img src="https://bird.onethreenine.net/avian/api/cutout.php?sci=Corvus%20brachyrhynchos&com=American%20Crow&pose=2" alt="American Crow in flight" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;">. The prompt template lives at [`avian/scripts/prompt.template.md`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/prompt.template.md):
+The collage ships with 666 bundled illustrations of 333 North American species, generated via Gemini's [`gemini-2.5-flash-image`](https://ai.google.dev/gemini-api/docs/image-generation) model. Each species gets two poses: perched <img src="https://bird.onethreenine.net/avian/api/cutout.php?sci=Corvus%20brachyrhynchos&com=American%20Crow" alt="perched American Crow" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;"> and in-flight <img src="https://bird.onethreenine.net/avian/api/cutout.php?sci=Corvus%20brachyrhynchos&com=American%20Crow&pose=2" alt="American Crow in flight" style="height: 1.6em; vertical-align: middle; margin: 0 0.15em;">. The prompt template lives at [`avian/scripts/prompt.template.md`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/prompt.template.md):
 
 ```
 Generate a {pose} {com_name} ({sci_name}) in the style of an
@@ -240,6 +240,8 @@ python3 ~/BirdNET-Pi/avian/scripts/cutout.py
 python3 ~/BirdNET-Pi/avian/scripts/build_masks.py
 ```
 
+On a Pi with 4 GB of memory or less, add `--model u2net` to the `cutout.py` command. The default model can otherwise be killed for running out of memory without printing a useful error.
+
 When you pass `--ebird-region`, the pre-gen script intersects BirdNET's full species list with whatever eBird reports as observed in that region,{.marginnote}eBird region codes are `<country>-<state>` (e.g. `US-CA`) for state-level filtering, or `<country>-<state>-<county>` (e.g. `US-CA-085` for Santa Clara County) for tighter filtering.{/.marginnote} which cuts the render count from ~3000 species globally down to whatever's actually flying past your place.
 
 It's worth flagging that Gemini hallucinates anatomy here with non-trivial frequency, so the repo ships the post-audit image set with extra wings, disembodied feet, and training-image watermarks already removed.{.marginnote}The audit pass that produced the current bundled set caught ~3% anatomical defects on perched poses and ~5% on flight poses. Flight poses are harder because Gemini's strong prior for "wings spread" reads any feather mass near the body as a candidate wing, so the same chickadee can take five or six regen attempts before producing a clean output.{/.marginnote}
@@ -250,7 +252,9 @@ It's worth flagging that Gemini hallucinates anatomy here with non-trivial frequ
 
 </figure>
 
-Each species ships with a binary alpha mask{.marginnote}Generated offline by downsampling the illustration to ~93px wide, thresholding the alpha channel, and packing the result into a base64-encoded bit-array. The masks are inlined directly in [`avian/frontend/apt.js`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/frontend/apt.js) 498 of them, 249 species × 2 poses, ~590KB, built by [`avian/scripts/build_masks.py`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/build_masks.py).{/.marginnote} that encodes the bird's silhouette. The frontend uses these masks for two things: tile-packing (so bounding boxes can overlap as long as the silhouettes don't), and hover hit-testing (so the right bird highlights when you mouse over a region where two tiles' bounding boxes overlap).
+Each pose ships with a binary alpha mask{.marginnote}Generated offline by downsampling the illustration to ~93px wide, thresholding the alpha channel, and packing the result into a base64-encoded bit-array. The dimensions and matching masks for all 666 poses, 333 species × 2 poses, live in [`dims.json`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/frontend/dims.json) and [`masks.json`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/frontend/masks.json), built by [`avian/scripts/build_masks.py`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/avian/scripts/build_masks.py).{/.marginnote} that encodes the bird's silhouette. The frontend uses these masks for two things: tile-packing (so bounding boxes can overlap as long as the silhouettes don't), and hover hit-testing (so the right bird highlights when you mouse over a region where two tiles' bounding boxes overlap).
+
+The same nesting idea extends to the names, which you can turn on in Settings. The obvious version was a caption parked underneath every tile, but it immediately pulled the collage apart. Instead, the browser walks the bird's binary silhouette and looks for a stretch of back, belly, or wing that can carry the name.
 
 The packing algorithm itself is a center-out spiral: tiles get sorted by area descending, the largest is placed at the center of mass, and each subsequent tile spirals outward from the center until finding a position where its mask doesn't intersect any already-placed mask. The cost function biases horizontally to produce wider, more landscape-friendly clusters:
 
@@ -270,11 +274,88 @@ where $B$ is the viewport area budget (28% to 46% of viewport depending on speci
 
 After the initial pack, if any tile lands off-screen, every tile shrinks by 7% and the whole layout repacks, looping up to 10 times before bailing (by which point the linear scale is ~50% of original). This guarantees every species fits at every viewport from 390px mobile widths up through 2560px studio displays, which matters more than you'd think on a site where the collage IS the page.
 
+Choosing that text-bearing edge for the nested bird names is a geometry problem of its own. For a candidate run $R=(p_a,\ldots,p_b)$, straightness is its chord divided by its traced length,
+
+$$r(R)=\frac{\lVert p_b-p_a\rVert}{\sum_{i=a}^{b-1}\lVert p_{i+1}-p_i\rVert}$$
+
+then the first pass scores the run by how much of the name it carries, how straight it stays, and how far its letters would lean:
+
+$$
+\begin{aligned}
+q(R) &= \min(c,1)\,S(r)\,L(\theta),\\
+S(r) &= \operatorname{clamp}\!\left(\frac{r-0.85}{0.12},0,1\right),\\
+L(\theta) &= 1-\frac{0.5\theta}{55^\circ}.
+\end{aligned}
+$$
+
+Here $c$ is the share of the name carried by the edge and $\theta$ is the steepest local letter angle.
+
+The winning baseline still has to pass one last, fussier test: the full inked band of every letter is swept against the mask, not just the line it sits on. If a bird offers no clean edge, a supporting tangent guarantees that it still gets a readable name. The finished label goes back into the same collision grid as the bird, so the rest of the flock can nest into its open corners without printing through the letters.
+
+<figure class="avian-name-compare" aria-label="American Crow with a caption below compared with its name fitted to the bird's silhouette">
+  <div class="avian-name-example">
+    <div class="avian-name-canvas" role="img" aria-label="American Crow with its name below the illustration">
+      <div class="avian-label-tile avian-label-tile--caption">
+        <img src="/assets/avian-stamps/illustrations/corvus-brachyrhynchos.webp" alt="">
+        <span>American Crow</span>
+      </div>
+    </div>
+    <figcaption>caption</figcaption>
+  </div>
+  <div class="avian-name-example">
+    <div class="avian-name-canvas" role="img" aria-label="American Crow with its name following the silhouette">
+      <div class="avian-label-tile avian-label-tile--contour">
+        <img src="/assets/avian-stamps/illustrations/corvus-brachyrhynchos.webp" alt="">
+        <svg aria-hidden="true" viewBox="34 -25.4 106 95">
+          <defs>
+            <filter id="avian-crow-ink" x="-6%" y="-16%" width="112%" height="132%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="2" seed="17" result="tooth"></feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="tooth" scale="1.1" xChannelSelector="R" yChannelSelector="G" result="edge"></feDisplacementMap>
+              <feTurbulence type="fractalNoise" baseFrequency="0.25 0.55" numOctaves="3" seed="5" result="pool"></feTurbulence>
+              <feComponentTransfer in="pool" result="density"><feFuncA type="linear" slope="0.42" intercept="0.42"></feFuncA></feComponentTransfer>
+              <feComposite in="edge" in2="density" operator="in"></feComposite>
+            </filter>
+            <path id="avian-crow-path" d="M38.3 -6.1 L44.1 -4.7 L49.4 -2.0 L54.1 1.5 L58.4 5.6 L62.2 10.1 L66.2 14.4 L71.1 17.7 L76.3 20.6 L81.4 23.6 L86.3 27.0 L90.9 30.6 L95.2 34.7 L99.4 38.9 L103.7 42.9 L108.4 46.6 L112.8 50.5 L117.0 54.6 L121.7 58.3 L126.4 61.9"></path>
+          </defs>
+          <text filter="url(#avian-crow-ink)"><textPath href="#avian-crow-path" startOffset="50%" text-anchor="middle">American Crow</textPath></text>
+        </svg>
+      </div>
+    </div>
+    <figcaption>nested</figcaption>
+  </div>
+</figure>
+
 #### ~ Real Time
 
 The frontend polls the recent-detections endpoint every 30 seconds, and when a new species crosses into the current time window it joins the layout at the next refresh, with the cluster shifting just slightly to make room.{.marginnote}The frontend does a full re-pack rather than incremental insertion. Repacking ~10 species at the current grid stride (4px) takes <20ms in V8 on a Pi 4 client.{/.marginnote} The window picker (`1H / 12H / 24H / 7D / ALL`) refetches with the matching `?hours=N` and re-renders in place, and the whole thing happens quietly enough that I've left the page open for hours at a time without noticing the transitions.
 
 Clicking any tile in the collage (or any card in the atlas view) opens a detail modal that hits a Wikipedia summary endpoint for the species description and offers both perched and flight poses via a toggle. The recordings list pulls the most-recent BirdNET-Pi-archived mp3s for the species, matched on the common name and sourced from `$HOME/BirdSongs/Extracted/By_Date/<date>/<Common_Name>/`, each rendered alongside its spectrogram, with wiki and eBird chips at the bottom for external references.
+
+#### An Atlas of Stamps
+
+Every new species heard by the station unlocks a new stamp in the Atlas. Each family gets its own issue, and the collection can be arranged as a life list, grouped by family, alphabetically, or by how often each bird has called. Open any stamp and it becomes the bird's little field postcard, with its first and latest detections, description, and recordings together in one place. The sheet fills as new visitors arrive, which makes the life list feel a bit more like a collection I'm actually building.
+
+The current library covers seventeen family issues.{.marginnote}The sheet below is a live render of one bird from each family. Its fringe, palette, and type come from the same code as the Atlas, not a folder of finished pictures.{/.marginnote}
+
+<figure class="avian-stamp-embed" data-avian-stamp-grid aria-label="The seventeen Avian Atlas family stamps" aria-busy="true">
+  <a class="avian-stamp-fallback" href="https://bird.onethreenine.net/">open the live atlas</a>
+</figure>
+
+All of these stamps are templates rendered in JS, which makes dynamically populating them with different birds or illustration styles super simple and robust. Varying lengths in bird names can bite us a bit here, but it's easy enough to fix with some max-width scaling.{.marginnote}Anna's, Black-chinned, and Allen's Hummingbirds share one issue below - only the species, illustration, and issue number change.{/.marginnote}
+
+<figure class="avian-stamp-embed avian-stamp-sequence" data-avian-hummingbird-row aria-label="Three hummingbird species rendered as one Avian Atlas family issue" aria-busy="true">
+  <a class="avian-stamp-fallback" href="https://bird.onethreenine.net/">open the live atlas</a>
+</figure>
+
+Each stamp in the atlas can be expanded into a 'postcard' with proper details on that bird, how to classify it by eye, its family, genus, species, and rarity in your region, as well as stats and past data your instance has collected on that species specifically.
+
+<div id="annas-hummingbird-postcard" class="avian-atlas-postcard" data-avian-postcard data-species="Calypte anna" role="figure" aria-label="Interactive Anna's Hummingbird Atlas postcard" aria-busy="true">
+  <div data-avian-postcard-mount role="group" aria-label="Anna's Hummingbird postcard">
+    <p data-avian-postcard-status>loading Anna's Hummingbird postcard...</p>
+  </div>
+</div>
+
+All of this collected data can also be exported in bulk via the interface's `Tools` page, which allows you to use your station for a bunch of fun stuff like more bioacoustics, sampling calls for music, tracking phenology and migration timing, comparing urban soundscapes, and many other fun things that I haven't even dreamt up yet!
 
 ### Frame-ous
 
@@ -362,6 +443,15 @@ It only draws the birds you're missing.
     ```
 
 Or if your like me and host your bird mic data on a public url, you can also point the frame straight at that with the `--image-url` flag and your public URL!
+
+Bird names are off on the frame by default. For the two modes where the Pi draws the collage, turn them on or off whenever you like and the frame saves the choice and refreshes straight away:
+
+```
+birdframe-names on
+birdframe-names off
+```
+
+With `--image-url`, the same command adds `labels=1` or `labels=0` to the source URL. That only changes the picture if its source understands the switch.
 
 ??? note "Public URL hosting" 
     I’ve opted to render my collage on demand and serve it at `/frame.png` with [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/). This allows our Pi Zero to just fetch this finished PNG, rather than render the page itself on edge, and is easy as I've already opted to host my bird mic data publicly (at bird.onethreenine.net!) via cloudflare anyway. 

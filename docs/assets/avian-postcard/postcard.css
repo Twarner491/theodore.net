@@ -1,0 +1,604 @@
+@import url('/assets/avian-stamps/stamps.css');
+
+:host {
+  all: initial;
+  color-scheme: light;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 2rem auto 2.4rem;
+  container: avian-postcard / inline-size;
+}
+
+:host([data-theme="dark"]) { color-scheme: dark; }
+:host([data-state="loading"]) { min-height: min(520px, 72vw); }
+:host([hidden]) { display: none; }
+
+.postcard-embed,
+.postcard-embed *,
+.postcard-embed *::before,
+.postcard-embed *::after { box-sizing: border-box; }
+
+.postcard-embed {
+  width: 100%;
+  min-width: 0;
+  color: #29251f;
+  font-family: ui-serif, "Iowan Old Style", Georgia, serif;
+  font-synthesis: none;
+  line-height: normal;
+  text-align: left;
+  -webkit-text-size-adjust: 100%;
+}
+
+.postcard-sheet {
+  --paper: #fffefa;
+  --paper-2: #f1f0ec;
+  --ink: #29251f;
+  --ink-soft: #77736b;
+  --pill: #fffefa;
+  --recess: inset 0 1px 4px color-mix(in srgb, var(--ink) 11%, transparent);
+  --raised: 0 1px 5px color-mix(in srgb, var(--ink) 13%, transparent);
+  --card-stock: #f7f6f2;
+  --card-panel: var(--paper);
+  --card-panel-soft: var(--paper);
+  --card-control: var(--paper-2);
+  --card-control-active: var(--paper);
+  --card-action-surface: color-mix(in srgb, var(--card-control) 90%, #ead7b5 10%);
+  --card-action-active: color-mix(in srgb, var(--card-control-active) 94%, #ead7b5 6%);
+  --card-ink: #29251f;
+  --card-muted: #77736b;
+  --card-rule: rgba(61, 51, 37, .13);
+  --card-halo: rgba(255, 252, 240, .66);
+  --card-image-shadow: rgba(44, 35, 24, .13);
+  --card-spectro-filter: none;
+  --card-spectro-opacity: 1;
+  --card-shadow: 0 1px 2px rgba(42, 34, 24, .035), 0 8px 24px rgba(38, 30, 20, .075);
+  --card-stock-wash: color-mix(in srgb, var(--card-stock) 94%, transparent);
+  --card-panel-wash: color-mix(in srgb, var(--card-panel) 96.5%, transparent);
+  --card-paper-blend: multiply;
+  position: relative;
+  width: min(880px, 100%);
+  height: 520px;
+  min-height: 450px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+  gap: 8px;
+  padding: 8px;
+  color: var(--card-ink);
+  background-color: var(--card-stock);
+  background-image:
+    linear-gradient(var(--card-stock-wash), var(--card-stock-wash)),
+    url('/assets/avian-stamps/assets/stamp/paper-texture-grey.webp');
+  background-position: 0 0, center;
+  background-size: auto, 680px 510px;
+  background-repeat: repeat;
+  background-blend-mode: normal, var(--card-paper-blend);
+  border: 1px solid color-mix(in srgb, var(--card-ink) 18%, transparent);
+  border-radius: 3px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  isolation: isolate;
+  scrollbar-width: none;
+  overscroll-behavior-y: auto;
+}
+
+:host([data-theme="dark"]) .postcard-sheet {
+  --paper: #292a2e;
+  --paper-2: #35363b;
+  --ink: #efede8;
+  --ink-soft: #a6a5aa;
+  --pill: #44464c;
+  --card-stock: #202124;
+  --card-panel: #292a2e;
+  --card-panel-soft: #292a2e;
+  --card-control: #35363b;
+  --card-control-active: #44464c;
+  --card-action-surface: color-mix(in srgb, var(--card-control) 96%, #b9955c 4%);
+  --card-action-active: color-mix(in srgb, var(--card-control-active) 97%, #b9955c 3%);
+  --card-ink: #efede8;
+  --card-muted: #a6a5aa;
+  --card-rule: rgba(239, 238, 234, .13);
+  --card-halo: rgba(205, 210, 222, .065);
+  --card-image-shadow: rgba(0, 0, 0, .34);
+  --card-spectro-filter: brightness(0) invert(.88);
+  --card-spectro-opacity: .72;
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, .10), 0 10px 28px rgba(0, 0, 0, .18);
+  --card-stock-wash: color-mix(in srgb, var(--card-stock) 96%, transparent);
+  --card-panel-wash: color-mix(in srgb, var(--card-panel) 97%, transparent);
+  --card-paper-blend: soft-light;
+}
+
+.postcard-visual {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.postcard-bird-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 2px 9px 9px 2px;
+  background-color: var(--card-panel);
+  background-image:
+    radial-gradient(circle at 48% 43%, var(--card-halo), transparent 56%),
+    linear-gradient(var(--card-panel-wash), var(--card-panel-wash)),
+    url('/assets/avian-stamps/assets/stamp/paper-texture-grey.webp'),
+    linear-gradient(145deg, color-mix(in srgb, var(--card-panel) 94%, var(--card-stock) 6%), var(--card-panel) 62%, color-mix(in srgb, var(--card-panel) 92%, var(--card-stock) 8%));
+  background-position: 0 0, 0 0, center, 0 0;
+  background-size: auto, auto, 680px 510px, auto;
+  background-repeat: repeat;
+  background-blend-mode: normal, normal, var(--card-paper-blend), normal;
+  box-shadow: inset 0 0 0 1px var(--card-rule), inset 0 -28px 60px color-mix(in srgb, var(--card-ink) 3%, transparent);
+}
+
+.postcard-artwork { position: absolute; inset: 0; min-width: 0; min-height: 0; }
+.postcard-bird-frame .modal-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(30px, 5vw, 68px);
+  object-fit: contain;
+  filter: drop-shadow(0 12px 9px var(--card-image-shadow));
+  opacity: 1;
+  transition: opacity 180ms ease;
+}
+.postcard-bird-frame .modal-img.is-loading { opacity: 0; }
+
+.atlas-sort {
+  display: inline-flex;
+  padding: 3px;
+  position: relative;
+  pointer-events: auto;
+  background: var(--card-control);
+  border-radius: 999px;
+  box-shadow: var(--recess);
+}
+.postcard-pose-toggle { position: absolute; z-index: 3; left: 14px; bottom: 14px; }
+.atlas-sort .seg-pill {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: 30px;
+  background: var(--pill);
+  border-radius: 999px;
+  box-shadow: var(--raised);
+  pointer-events: none;
+  z-index: 0;
+  transform: translateX(0);
+  transition: transform 200ms cubic-bezier(.23, 1, .32, 1);
+}
+.atlas-sort:has(button[data-pose="2"][aria-selected="true"]) .seg-pill { transform: translateX(30px); }
+.atlas-sort button {
+  width: 30px;
+  height: 26px;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  color: var(--card-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color 200ms ease, transform 140ms cubic-bezier(.23, 1, .32, 1);
+}
+.atlas-sort button svg { width: 13px; height: 13px; display: block; opacity: 1; transition: opacity 200ms ease; }
+.atlas-sort button[aria-selected="true"] { color: var(--card-ink); }
+.atlas-sort button[aria-selected="true"] svg { opacity: .72; }
+.atlas-sort button:active { transform: scale(.94); }
+.atlas-sort button:focus-visible { outline: 1px solid var(--card-ink); outline-offset: 2px; }
+.atlas-sort button .tip {
+  position: absolute;
+  top: auto;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  padding: 3px 8px;
+  color: var(--card-muted);
+  background: var(--card-panel);
+  border-radius: 4px;
+  box-shadow: var(--raised);
+  font: 9px/1 ui-monospace, Menlo, monospace;
+  letter-spacing: .14em;
+  text-transform: lowercase;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 160ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .atlas-sort button:hover { color: var(--card-ink); }
+  .atlas-sort button:hover svg { opacity: .72; }
+  .atlas-sort button:hover .tip { opacity: 1; }
+}
+
+.postcard-links {
+  position: absolute;
+  z-index: 3;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  gap: 6px;
+  padding: 0;
+  background: transparent;
+}
+.postcard-links a {
+  min-height: 28px;
+  padding: 0 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--card-muted);
+  background: var(--card-action-surface);
+  box-shadow: inset 0 0 0 1px var(--card-rule), 0 4px 12px rgba(38, 30, 20, .07);
+  font: 600 9px/1 "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  letter-spacing: .04em;
+  text-decoration: none;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+.postcard-links a:active { transform: scale(.93); }
+.postcard-links a:focus-visible { outline: 1px solid var(--card-ink); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .postcard-links a:hover { color: var(--card-ink); background: var(--card-action-active); transform: scale(.97); }
+}
+
+.postcard-content {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  overflow: hidden;
+}
+.postcard-identity {
+  flex: 0 0 128px;
+  min-height: 128px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(124px, 27%, 170px);
+  grid-template-rows: 1fr;
+  gap: clamp(12px, 2vw, 22px);
+  align-items: stretch;
+  padding: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-rule);
+  border-radius: 9px 2px 9px 9px;
+  background-color: var(--card-panel);
+  background-image: linear-gradient(var(--card-panel-wash), var(--card-panel-wash)), url('/assets/avian-stamps/assets/stamp/paper-texture-grey.webp');
+  background-position: 0 0, center;
+  background-size: auto, 680px 510px;
+  background-repeat: repeat;
+  background-blend-mode: normal, var(--card-paper-blend);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--card-control-active) 60%, transparent);
+}
+.postcard-heading { min-width: 0; display: flex; flex-direction: column; }
+.postcard-heading h2 {
+  max-width: 100%;
+  margin: 0;
+  padding-block-end: .16em;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--card-ink);
+  font: 500 clamp(24px, 2.5vw, 34px)/1.08 ui-serif, "Iowan Old Style", Georgia, serif;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.postcard-stats {
+  width: max-content;
+  max-width: 100%;
+  margin-top: auto;
+  padding: 8px 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  overflow: hidden;
+  color: var(--card-muted);
+  font: 500 9.5px/1.2 "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+.postcard-stats > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.postcard-stats b { color: var(--card-ink); font: inherit; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.postcard-stamp-slot {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  align-self: stretch;
+  z-index: 3;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 4px;
+}
+.postcard-stamp-fallback { display: block; width: auto; height: 100%; max-width: 100%; margin-left: auto; object-fit: contain; }
+.postcard-stamp-slot .stamp-fit {
+  --stamp-edge-line: rgba(37, 31, 25, .22);
+  position: absolute !important;
+  top: calc(50% - 2px) !important;
+  right: 4px !important;
+  left: auto !important;
+  transform-origin: 100% 50% !important;
+  transform: translateY(-50%) scale(var(--postcard-scale, .5)) rotate(var(--postcard-turn, 0deg)) !important;
+  filter: none !important;
+  transition: none !important;
+}
+.postcard-stamp-slot .stamp {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%) scale(var(--scale, 1)) rotate(var(--tilt, 0deg));
+  transform-origin: 50% 50%;
+  filter: none !important;
+}
+.postcard-stamp-slot .stamp-fringe-outline { filter: url(#stampFringeLight) !important; }
+:host([data-theme="dark"]) .postcard-stamp-slot .stamp-fit { --stamp-edge-line: rgba(244, 240, 232, .32); }
+:host([data-theme="dark"]) .postcard-stamp-slot .stamp-fringe-outline { filter: url(#stampFringeDark) !important; }
+
+.postcard-section {
+  margin: 0;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid var(--card-rule);
+  border-radius: 9px;
+  color: var(--card-ink);
+  background-color: var(--card-panel);
+  background-image: linear-gradient(var(--card-panel-wash), var(--card-panel-wash)), url('/assets/avian-stamps/assets/stamp/paper-texture-grey.webp');
+  background-position: 0 0, center;
+  background-size: auto, 680px 510px;
+  background-repeat: repeat;
+  background-blend-mode: normal, var(--card-paper-blend);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--card-control-active) 45%, transparent), 0 5px 15px rgba(52, 42, 29, .03);
+}
+.postcard-recordings { border-radius: 9px 9px 2px 9px; }
+.postcard-section[open] { flex: 0 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.postcard-section::details-content { min-height: 0; overflow: hidden; }
+.postcard-section[open]::details-content { flex: 1 1 auto; }
+.postcard-about[open] { flex: 1 1 auto; }
+.postcard-recordings[open] { flex: 1 1 150px; }
+.postcard-section summary {
+  min-height: 42px;
+  padding: 0 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  list-style: none;
+  color: var(--card-ink);
+  cursor: pointer;
+  user-select: none;
+}
+.postcard-section summary::-webkit-details-marker { display: none; }
+.postcard-section summary:focus { outline: 0; }
+.postcard-section summary:focus-visible { outline: 1px solid color-mix(in srgb, var(--card-ink) 34%, transparent); outline-offset: -2px; }
+.postcard-section summary > span { font: 500 20px/1 ui-serif, "Iowan Old Style", Georgia, serif; letter-spacing: -.025em; }
+.postcard-section summary > small {
+  justify-self: end;
+  overflow: hidden;
+  color: var(--card-muted);
+  font: 500 8px/1 ui-monospace, Menlo, monospace;
+  letter-spacing: .08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.postcard-section-body { height: 100%; padding: 2px 14px 13px; background: transparent; }
+.postcard-about .postcard-section-body { min-height: 0; display: flex; flex-direction: column; padding-block: 12px; }
+.postcard-about[open] .postcard-section-body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.postcard-about[open] .postcard-section-body::-webkit-scrollbar { display: none; }
+.postcard-about .desc {
+  flex: 0 0 auto;
+  max-width: 70ch;
+  margin: 0;
+  color: color-mix(in srgb, var(--card-ink) 82%, transparent);
+  font: 12.5px/1.46 ui-serif, Georgia, serif;
+}
+.postcard-about .desc p { margin: 0; }
+.postcard-about .desc p + p { margin-top: 10px; }
+.postcard-about .modal-meta {
+  flex: 1 0 auto;
+  margin-top: 0;
+  padding-block: 11px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, max-content));
+  justify-content: space-between;
+  align-items: baseline;
+  align-content: center;
+  gap: 8px;
+}
+.postcard-about .meta-item { min-width: 0; min-height: 0; padding: 0; display: inline-flex; align-items: baseline; gap: 5px; background: transparent; }
+.postcard-about .meta-item .k,
+.postcard-about .meta-item .v { font: 500 8.25px/1.3 "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .01em; text-transform: none; }
+.postcard-about .meta-item .k { flex: 0 0 auto; color: var(--card-muted); }
+.postcard-about .meta-item .v { min-width: 0; overflow: hidden; color: var(--card-ink); text-overflow: ellipsis; white-space: nowrap; }
+.postcard-about .about-distinctive { flex: 0 0 auto; margin-top: 0; color: var(--card-muted); font-size: 11.5px; line-height: 1.42; }
+
+.postcard-recordings[open] { position: relative; min-height: 0; display: flex; flex-direction: column; }
+.postcard-recordings .postcard-section-body { position: static; flex: 1 1 auto; min-height: 0; height: 100%; padding: 0 14px; display: flex; flex-direction: column; overflow: hidden; }
+.postcard-recordings .rec-table-head,
+.postcard-recordings .rec-row-toggle { display: grid; grid-template-columns: minmax(76px, 1fr) minmax(64px, .7fr) minmax(92px, 1fr); gap: 12px; align-items: center; }
+.postcard-recordings .rec-table-head {
+  flex: 0 0 auto;
+  min-height: 24px;
+  padding: 0;
+  color: var(--card-muted);
+  font: 600 7.5px/1 ui-monospace, Menlo, monospace;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  text-align: left;
+}
+.postcard-recordings ol {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  padding: 0 0 14px;
+  list-style: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+  touch-action: pan-y pinch-zoom;
+  scrollbar-width: none;
+}
+.postcard-recordings ol::-webkit-scrollbar { display: none; }
+.postcard-recordings .rec-row { display: block; margin: 0; padding: 0; border: 0; border-top: 1px solid var(--card-rule); border-radius: 0; color: inherit; background: transparent; box-shadow: none; }
+.postcard-recordings .rec-row:first-child { border-top: 0; }
+.postcard-recordings .rec-row-toggle {
+  width: 100%;
+  min-height: 48px;
+  padding: 9px 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transform-origin: center;
+  transition: transform 160ms cubic-bezier(.23, 1, .32, 1);
+}
+.postcard-recordings .rec-row-toggle:focus { outline: 0; }
+.postcard-recordings .rec-row-toggle:focus-visible { outline: 1px solid color-mix(in srgb, var(--card-ink) 18%, transparent); outline-offset: -3px; border-radius: 3px; box-shadow: inset 2px 0 0 color-mix(in srgb, var(--card-ink) 54%, transparent); }
+.postcard-recordings .when,
+.postcard-recordings .conf,
+.postcard-recordings .date-time { min-width: 0; display: block; }
+.postcard-recordings .when b,
+.postcard-recordings .conf b,
+.postcard-recordings .date-time b { display: block; overflow: hidden; color: var(--card-ink); font: 500 12px/1 ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; text-overflow: ellipsis; white-space: nowrap; }
+.postcard-recordings .rec-spectro {
+  position: relative;
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--card-rule);
+  border-radius: 5px;
+  color: var(--card-ink);
+  background: var(--card-panel);
+  opacity: 0;
+  transition: height 220ms cubic-bezier(.22, 1, .36, 1), margin 220ms ease, opacity 160ms ease;
+}
+.postcard-recordings .rec-row.expanded .rec-spectro { height: 142px; margin: 1px 0 13px; opacity: 1; }
+.postcard-recordings .rec-spectro-image { position: absolute; z-index: 0; inset: 0 0 30px; display: block; width: 100%; height: calc(100% - 30px); max-width: none; margin: 0; object-fit: cover; object-position: 50% 60%; background: transparent; filter: var(--card-spectro-filter); opacity: var(--card-spectro-opacity); }
+.postcard-recordings .rec-spectro-played { position: absolute; z-index: 2; inset: 0 auto 30px 0; width: 0; background: color-mix(in srgb, var(--card-ink) 5%, transparent); pointer-events: none; }
+.postcard-recordings .rec-loop-region { position: absolute; z-index: 3; top: 0; bottom: 30px; left: 0; width: 25%; border-inline: 1px solid color-mix(in srgb, var(--card-ink) 46%, transparent); background: color-mix(in srgb, var(--card-ink) 4.5%, transparent); opacity: 0; pointer-events: none; }
+.postcard-recordings .rec-spectro[data-loop] .rec-loop-region { opacity: 1; }
+.postcard-recordings .rec-spectro-cursor { position: absolute; z-index: 4; top: 10px; bottom: 30px; left: 0; width: 1px; background: var(--card-ink); transform: translateX(-50%); opacity: 0; pointer-events: none; }
+.postcard-recordings .rec-spectro.armed .rec-spectro-cursor { opacity: .72; }
+.postcard-recordings .rec-spectro-cursor::after { content: ""; position: absolute; left: 50%; top: -7px; width: 4px; height: 9px; border-radius: 999px; background: var(--card-ink); transform: translateX(-50%); }
+.postcard-recordings .rec-spectro-scrub { appearance: none; position: absolute; z-index: 5; inset: 0 0 30px; width: 100%; height: calc(100% - 30px); margin: 0; padding: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y pinch-zoom; }
+.postcard-recordings .rec-spectro-scrub:focus-visible { opacity: .01; outline: 1px solid color-mix(in srgb, var(--card-ink) 45%, transparent); outline-offset: -2px; }
+.postcard-recordings .rec-loop-handle { display: none; position: absolute; z-index: 6; top: 0; bottom: 30px; width: 16px; padding: 0; border: 0; background: transparent; color: var(--card-ink); cursor: col-resize; transform: translateX(-50%); touch-action: none; }
+.postcard-recordings .rec-spectro[data-loop] .rec-loop-handle { display: block; }
+.postcard-recordings .rec-loop-handle::before { content: ""; position: absolute; top: 12px; bottom: 0; left: 50%; width: 1px; background: currentColor; transform: translateX(-50%); opacity: .52; }
+.postcard-recordings .rec-loop-handle::after { content: ""; position: absolute; top: 3px; left: 50%; width: 4px; height: 10px; border-radius: 999px; background: currentColor; transform: translateX(-50%); opacity: .82; }
+.postcard-recordings .rec-player-controls { position: absolute; z-index: 7; inset: auto 0 0; height: 30px; padding: 0 6px; display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; align-items: center; gap: 7px; border-top: 1px solid var(--card-rule); color: var(--card-ink); background: var(--card-panel); }
+.postcard-recordings .rec-player-toggle,
+.postcard-recordings .rec-loop-toggle { border: 0; color: inherit; background: transparent; cursor: pointer; transition: transform 140ms cubic-bezier(.23, 1, .32, 1), background-color 140ms ease, opacity 140ms ease; }
+.postcard-recordings .rec-player-toggle { width: 24px; height: 24px; padding: 0; display: grid; place-items: center; border-radius: 3px; opacity: .86; }
+.postcard-recordings .rec-player-toggle svg { display: block; width: 11px; height: 11px; }
+.postcard-recordings .rec-player-toggle[data-active="true"] { opacity: .66; }
+.postcard-recordings .rec-player-toggle[data-error="true"] { opacity: .38; cursor: not-allowed; }
+.postcard-recordings .rec-player-time { overflow: hidden; color: var(--card-muted); font: 500 8px/1 ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; letter-spacing: .04em; white-space: nowrap; }
+.postcard-recordings .rec-loop-toggle { height: 22px; padding: 0 6px; display: inline-flex; align-items: center; gap: 4px; border-radius: 4px; color: var(--card-muted); font: 600 7px/1 ui-monospace, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; }
+.postcard-recordings .rec-loop-toggle svg { width: 13px; height: 13px; }
+.postcard-recordings .rec-loop-toggle[aria-pressed="true"] { color: var(--card-ink); background: var(--card-control); }
+.postcard-recordings .rec-player-toggle:focus-visible,
+.postcard-recordings .rec-loop-toggle:focus-visible { outline: 1px solid var(--card-ink); outline-offset: 2px; }
+.postcard-recordings .rec-player-toggle:active,
+.postcard-recordings .rec-loop-toggle:active { transform: scale(.96); }
+.postcard-recordings audio { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .postcard-recordings .rec-row-toggle:hover { transform: scale(.994); }
+  .postcard-recordings .rec-player-toggle:hover { opacity: 1; }
+  .postcard-recordings .rec-loop-toggle:hover { background: var(--card-control); }
+}
+.postcard-recordings .rec-row-toggle:active { transform: scale(.988); }
+
+.sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+
+@container avian-postcard (max-width: 860px) {
+  .postcard-sheet {
+    width: min(740px, 100%);
+    height: min(820px, calc(100dvh - 20px));
+    min-height: 650px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: clamp(190px, 38cqw, 350px) minmax(0, 1fr);
+    padding: 8px;
+    border-radius: 9px;
+  }
+  .postcard-bird-frame { border-radius: 2px 2px 9px 9px; }
+  .postcard-content { height: auto; min-height: 0; }
+  .postcard-identity { min-height: 148px; flex: 0 0 148px; grid-template-columns: minmax(0, 1fr) minmax(124px, 180px); gap: 16px; border-radius: 9px; }
+  .postcard-about[open],
+  .postcard-recordings[open] { flex: 1 1 0; min-height: 0; }
+  .postcard-recordings { border-radius: 9px 9px 2px 2px; }
+  .postcard-heading h2 { font-size: clamp(27px, 5cqw, 36px); }
+}
+
+@container avian-postcard (max-width: 520px) {
+  .postcard-sheet { width: 100%; height: min(820px, calc(100dvh - 12px)); min-height: 630px; grid-template-rows: clamp(180px, 65cqw, 270px) minmax(0, 1fr); padding: 6px; gap: 6px; }
+  .postcard-bird-frame .modal-img { padding: clamp(26px, 10cqw, 44px); }
+  .postcard-content { gap: 6px; }
+  .postcard-identity { min-height: 142px; flex-basis: 142px; grid-template-columns: minmax(0, 1fr) 112px; gap: 9px; padding: 10px; }
+  .postcard-heading h2 { font-size: clamp(24px, 7cqw, 32px); }
+  .postcard-stats { gap: 5px; font-size: 8px; }
+  .postcard-section summary { min-height: 46px; padding: 0 13px; gap: 8px; }
+  .postcard-section summary > span { font-size: 18px; }
+  .postcard-section summary > small { font-size: 7px; }
+  .postcard-about .modal-meta { gap: 5px; }
+  .postcard-about .meta-item { gap: 4px; }
+  .postcard-about .meta-item .k,
+  .postcard-about .meta-item .v { font-size: 7px; }
+  .postcard-recordings .postcard-section-body { padding-inline: 13px; }
+  .postcard-recordings .rec-table-head,
+  .postcard-recordings .rec-row-toggle { grid-template-columns: minmax(66px, .9fr) minmax(54px, .6fr) minmax(84px, 1fr); gap: 7px; }
+  .postcard-recordings .rec-table-head { font-size: 6.8px; letter-spacing: .065em; }
+  .postcard-recordings .when b,
+  .postcard-recordings .conf b,
+  .postcard-recordings .date-time b { font-size: 10.5px; }
+  .postcard-links a { padding-inline: 8px; font-size: 8px; }
+}
+
+@container avian-postcard (max-width: 350px) {
+  .postcard-heading h2 { font-size: 20px; }
+  .postcard-about .postcard-section-body { padding-inline: 9px; }
+  .postcard-about .modal-meta { gap: 2px; }
+  .postcard-about .meta-item { gap: 2px; }
+  .postcard-about .meta-item .k,
+  .postcard-about .meta-item .v { font-size: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .postcard-bird-frame .modal-img,
+  .atlas-sort .seg-pill,
+  .atlas-sort button,
+  .postcard-links a,
+  .postcard-recordings .rec-row-toggle,
+  .postcard-recordings .rec-spectro,
+  .postcard-recordings .rec-player-toggle,
+  .postcard-recordings .rec-loop-toggle { transition-duration: 1ms !important; }
+}

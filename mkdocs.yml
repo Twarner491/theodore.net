@@ -165,6 +165,8 @@ extra_javascript:
   - assets/js/code-copy.js
   - assets/js/footer-social.js
   - assets/js/search.js
+  - assets/js/avian-stamps.js
+  - assets/js/avian-postcard.js?v=20260820-2
 
 nav:
   - Home: https://teddywarner.com

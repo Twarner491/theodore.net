@@ -64,39 +64,6 @@ If Antichrist claims himself the highest good, the most just, but is in fact not
 
 {.marginnote}Even if Antichrist were the second most just, most virtuous, behind only Our Lord himself - the gap between any finite good and God is not a gap of degree but of kind. It is infinite. The closer he gets to the good while refusing God, the worse it is.{/.marginnote}
 
-<div style="max-width: 700px; margin: 1.5em auto; color: var(--md-default-fg-color, #333);">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200" font-family="var(--md-text-font-family, 'Palatino Linotype'), serif" style="width:100%;height:auto;">
-  <!-- Horizontal axis -->
-  <line x1="30" y1="90" x2="670" y2="90" stroke="currentColor" stroke-width="1.5"/>
-  <polygon points="675,90 665,85 665,95" fill="currentColor"/>
-  <text x="670" y="115" fill="currentColor" font-size="10" font-style="italic" text-anchor="end">Goodness / Justice</text>
-  <line x1="50" y1="85" x2="50" y2="95" stroke="currentColor" stroke-width="1"/>
-  <text x="50" y="78" fill="currentColor" font-size="10" text-anchor="middle" opacity="0.4">0</text>
-  <line x1="140" y1="85" x2="140" y2="95" stroke="currentColor" stroke-width="1" opacity="0.5"/>
-  <text x="140" y="78" fill="currentColor" font-size="11" font-style="italic" text-anchor="middle" opacity="0.5">man</text>
-  <line x1="240" y1="85" x2="240" y2="95" stroke="currentColor" stroke-width="1" opacity="0.5"/>
-  <text x="240" y="78" fill="currentColor" font-size="11" font-style="italic" text-anchor="middle" opacity="0.5">the righteous</text>
-  <line x1="370" y1="85" x2="370" y2="95" stroke="currentColor" stroke-width="1.5"/>
-  <text x="370" y="72" fill="currentColor" font-size="13" font-style="italic" text-anchor="middle">Antichrist</text>
-  <text x="370" y="58" fill="currentColor" font-size="10" text-anchor="middle" opacity="0.5">even if "the second most just"</text>
-  <text x="380" y="108" fill="currentColor" font-size="11" font-style="italic" opacity="0.5">n</text>
-  <line x1="240" y1="105" x2="370" y2="105" stroke="currentColor" stroke-width="0.75" opacity="0.5"/>
-  <line x1="240" y1="102" x2="240" y2="108" stroke="currentColor" stroke-width="0.75" opacity="0.5"/>
-  <line x1="370" y1="102" x2="370" y2="108" stroke="currentColor" stroke-width="0.75" opacity="0.5"/>
-  <text x="305" y="120" fill="currentColor" font-size="10" font-style="italic" text-anchor="middle" opacity="0.5">finite</text>
-  <line x1="440" y1="83" x2="450" y2="97" stroke="currentColor" stroke-width="1.5"/>
-  <line x1="448" y1="83" x2="458" y2="97" stroke="currentColor" stroke-width="1.5"/>
-  <line x1="500" y1="83" x2="510" y2="97" stroke="currentColor" stroke-width="1.5"/>
-  <line x1="508" y1="83" x2="518" y2="97" stroke="currentColor" stroke-width="1.5"/>
-  <line x1="620" y1="85" x2="620" y2="95" stroke="currentColor" stroke-width="1.5"/>
-  <text x="620" y="72" fill="currentColor" font-size="14" font-style="italic" text-anchor="middle">God</text>
-  <text x="620" y="58" fill="currentColor" font-size="11" text-anchor="middle" opacity="0.5">∞</text>
-  <path d="M 375,130 Q 497,145 497,140 Q 497,145 620,130" fill="none" stroke="#8b0000" stroke-width="1.5"/>
-  <text x="497" y="160" fill="#8b0000" font-size="14" font-style="italic" text-anchor="middle">δ = ∞</text>
-  <text x="497" y="180" fill="currentColor" font-size="10" text-anchor="middle" opacity="0.6">∀ n : n &lt; ∞</text>
-</svg>
-</div>
-
 And this assumes we are even defining goodness and justice on the correct axis. Consider why Plato concludes that our best understanding of virtue arises through becoming numb, like the torpedo fish. Plato does not merely conclude that virtue is mysterious - he concludes that it comes by *theia moira*, divine dispensation.{.sidenote}Plato, *Meno*, 80a-b, 99e-100b.{/.sidenote} Goodness, justice, peace, virtue, are not human achievements. We cannot light your own fire. And Antichrist's fundamental error is claiming that you can. The ultimate perversion of our consumption from the tree of knowledge is the hubris that we may cast the final judgment ourselves - that we may find a system of virtue robust enough to achieve peace and safety for the human race.
 
 Newman warns: "Far be it from us to be seduced with the fair promises in which Satan is sure to hide his poison! He promises you civil liberty; he promises you equality; he promises you trade and wealth… He shows you how to become as gods."{.sidenote}Newman, "The Patristical Idea of Antichrist."{/.sidenote}
@@ -137,6 +104,3 @@ Let us not fall asleep again. Let us stay awake in hope of our salvation.
 
 > *"Come, Lord Jesus!"*
 > - *Revelation* 22:20
-
-
-All too often, we place our hope in unlimited “upgrades,” in forms of progress that exacerbate inequalities, and in immediate solutions incapable of healing people’s wounds. As a result, while some pursue the illusion of unlimited self-assertion, many are deprived of basic necessities. - https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html

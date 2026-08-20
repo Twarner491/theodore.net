@@ -1,0 +1,261 @@
+.md-typeset .avian-name-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(.8rem, 4vw, 2.3rem);
+  width: min(100%, 34rem);
+  margin: 1.8rem auto 2.2rem !important;
+}
+
+@font-face {
+  font-family: "Avian Hand";
+  src: url("./fonts/Caveat.ttf") format("truetype");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+.md-typeset .avian-name-example {
+  min-width: 0;
+  text-align: center;
+}
+
+.md-typeset .avian-name-example figcaption {
+  margin-top: .15rem;
+  color: var(--md-default-fg-color--light);
+  font: .62rem/1.2 "JetBrains Mono", ui-monospace, monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.md-typeset .avian-name-canvas {
+  position: relative;
+  height: 11.2rem;
+}
+
+.md-typeset .avian-label-tile {
+  position: absolute;
+  top: 1.7rem;
+  left: 50%;
+  width: 144.273px;
+  height: 127.269px;
+  transform: translateX(-50%);
+}
+
+.md-typeset .avian-label-tile > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(26, 22, 18, .1));
+}
+
+/* The first label repeats the initial under-bird renderer from 017739f2;
+   the second is the current production DOM and baseline at the same size. */
+.md-typeset .avian-label-tile--caption > span {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-top: 1px;
+  color: var(--md-default-fg-color);
+  font: 600 20px/1.2 "Avian Hand", cursive;
+  white-space: nowrap;
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+.md-typeset .avian-label-tile--contour > svg {
+  position: absolute;
+  top: -25.4px;
+  left: 34px;
+  display: block;
+  width: 106px;
+  height: 95px;
+  overflow: visible;
+}
+
+.md-typeset .avian-label-tile--contour text {
+  fill: var(--md-default-fg-color--light);
+  font: 600 21px "Avian Hand", cursive;
+}
+
+.md-typeset figure.avian-stamp-embed {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 1.8rem !important;
+  margin-bottom: 2rem !important;
+  background: var(--md-default-bg-color);
+  container-type: inline-size;
+  overflow: hidden;
+  transition: background-color 180ms ease;
+}
+
+.avian-stamp-grid {
+  --pack-gap: 5.5px;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: unsafe center;
+  align-content: center;
+  gap: var(--pack-gap);
+  box-sizing: border-box;
+}
+
+.avian-stamp-grid.is-packed {
+  display: block;
+  position: relative;
+  gap: 0;
+}
+
+.avian-stamp-grid.is-packed > .avian-stamp-cell {
+  position: absolute;
+}
+
+.avian-hummingbird-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(.35rem, 1.3cqw, .85rem);
+  width: 100%;
+  align-items: center;
+  justify-items: center;
+}
+
+.avian-hummingbird-grid .avian-stamp-cell {
+  aspect-ratio: 188 / 236;
+  grid-column: auto;
+}
+
+.md-typeset figure.avian-stamp-sequence {
+  width: min(100%, 38rem);
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.avian-stamp-cell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* The live Atlas packer replaces these fallback slots with the issue's exact
+   authored dimensions. They are only visible during the first render frame. */
+.avian-stamp-grid .avian-stamp-cell {
+  flex: 0 0 auto;
+  width: 8rem;
+  height: 10rem;
+}
+
+.avian-stamp-embed .stamp-stage {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  display: grid;
+  align-items: unsafe center;
+  justify-items: unsafe center;
+}
+
+.avian-stamp-embed .stamp-stage > .stamp-fit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  justify-self: unsafe center;
+  align-self: unsafe center;
+  transform: translate(-50%, -50%) scale(var(--fit-scale));
+}
+
+.md-typeset .avian-stamp-embed .stamp-stage figure.stamp {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: var(--w);
+  max-width: none;
+  margin: 0;
+  color: #1a1612;
+  font: 16px ui-monospace, "SFMono-Regular", Menlo, monospace;
+  line-height: normal;
+  overflow-wrap: normal;
+  text-align: start;
+  transform: translate(-50%, -50%) scale(var(--scale, 1)) rotate(var(--tilt, 0deg));
+  transform-origin: 50% 50%;
+  filter: none !important;
+}
+
+.md-typeset .avian-stamp-embed .stamp-stage figure.stamp .face { box-shadow: none; }
+
+.md-typeset .avian-stamp-embed figure.stamp header {
+  width: auto;
+  height: auto;
+  padding: 0;
+  transform: none;
+  transition: none;
+}
+
+.md-typeset .avian-stamp-embed figure.stamp :where(h1, h2, h3, h4, h5, h6) {
+  color: inherit;
+  opacity: 1;
+}
+
+.md-typeset .avian-stamp-embed figure.stamp small { opacity: 1; }
+
+.avian-stamp-fallback {
+  display: none;
+  width: max-content;
+  max-width: 100%;
+  margin: 1rem auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: .75rem;
+}
+
+.avian-stamp-embed[data-state="error"] .avian-stamp-fallback { display: block; }
+
+[data-md-color-scheme="default"] .avian-stamp-embed .stamp-fit {
+  --stamp-edge-line: rgba(37, 31, 25, .22);
+}
+
+[data-md-color-scheme="default"] .avian-stamp-embed .stamp-fringe-outline {
+  filter: url(#stampFringeLight) !important;
+}
+
+[data-md-color-scheme="slate"] .avian-stamp-embed .stamp-fit {
+  --stamp-edge-line: rgba(244, 240, 232, .32);
+}
+
+[data-md-color-scheme="slate"] .avian-stamp-embed .stamp-fringe-outline {
+  filter: url(#stampFringeDark) !important;
+}
+
+[data-md-color-scheme] .avian-stamp-embed .stamp-fit[data-family="Waxwings"] > .stamp-fringe-outline,
+[data-md-color-scheme] .avian-stamp-embed .stamp-fit[data-family="Blackbirds & Orioles"] > .stamp-fringe-outline {
+  filter: url(#stampFringeContrast) !important;
+}
+
+@container (max-width: 500px) {
+  .avian-stamp-grid {
+    --pack-gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .md-typeset .avian-name-compare { gap: .55rem; }
+  .md-typeset .avian-name-example figcaption { font-size: .52rem; }
+
+  .md-typeset .avian-hummingbird-grid {
+    gap: 2px;
+    box-sizing: border-box;
+    padding-inline: 3px;
+  }
+
+  .md-typeset .avian-hummingbird-grid .stamp-fit {
+    transform: translate(-50%, -50%) scale(calc(var(--fit-scale) * .70));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset figure.avian-stamp-embed { transition: none; }
+}
