@@ -420,18 +420,23 @@ Then pick how the frame gets populated with birds.
 # No microphone: draw the collage from BirdWeather for any ZIP code.
 ./install.sh --bird-weather --zip <ZIPCODE>
 
+# No microphone: follow one public BirdWeather station exactly.
+./install.sh --station-id <STATION_ID>
+
 # Bird mic hosted at a public URL: point the frame straight at it.
 ./install.sh --image-url https://bird.onethreenine.net/frame.png?k=YOUR_FRAME_KEY
 ```
 
 By default running `./install.sh` will sync your frame with your bird mic via birdnet.local on your network.
 
-Building just the frame without a mic? Install with the `--bird-weather` flag and your ZIP code instead. It pulls the top recently-heard birds near you from [BirdWeather](https://app.birdweather.com) and renders the same collage on the Pi, no mic and no website needed, with cutouts pulled straight from this repo's illustrations on GitHub. 
+Building just the frame without a mic? Use `--zip` for birds heard around a postal code, or `--station-id` for one exact [BirdWeather](https://app.birdweather.com) station. The station ID is the public number at the end of its station-page URL, not its upload token. Both render the same collage on the Pi, no mic and no website needed, with cutouts pulled straight from this repo's illustrations on GitHub. Exact station mode never falls back to another station.
 
-This illustration set is currently focused on species of Western US and a zipcode outside of this region may not have all species accounted for yet! The installer will automatically flag any missing species from your region (if any) and points you at a quick script to fill them in. To draw a flagged bird, run [`generate_illustrations.py`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/frame/generate_illustrations.py) on your laptop with a [Gemini API key](https://aistudio.google.com/apikey), then commit or copy the new cutouts across:
+This illustration set is currently focused on species of the Western US, so a ZIP or station outside this region may include birds it cannot draw yet. The installer flags those species and points you at a script to fill them in. To draw a flagged bird, run [`generate_illustrations.py`](https://github.com/Twarner491/AvianVisitors/blob/avian-visitors/frame/generate_illustrations.py) on your laptop with a [Gemini API key](https://aistudio.google.com/apikey), then commit or copy the new cutouts across:
 
 ```
 python3 generate_illustrations.py --zip <ZIPCODE> --gemini-key <KEY>
+# or for one station
+python3 generate_illustrations.py --station-id <STATION_ID> --gemini-key <KEY>
 ```
 
 It only draws the birds you're missing.
@@ -450,6 +455,8 @@ Bird names are off on the frame by default. For the two modes where the Pi draws
 birdframe-names on
 birdframe-names off
 ```
+
+Set `shoot_title = ""` in `~/.birdframe/config.toml` if you want to hide only the frame title.
 
 With `--image-url`, the same command adds `labels=1` or `labels=0` to the source URL. That only changes the picture if its source understands the switch.
 
