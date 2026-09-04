@@ -61,7 +61,7 @@ search:
     "award": "Thiel Fellowship",
     "sameAs": [
       "https://x.com/WarnerTeddy",
-      "https://www.linkedin.com/in/teddywarner/",
+      "https://www.instagram.com/teddymakesstuff/",
       "https://github.com/Twarner491"
     ]
   }
@@ -86,8 +86,8 @@ search:
     <section class="intro-section">
       <div class="content1">
         <div class="introabt">
-          <h2>Hey! I'm <a id="twittername" target="_blank" href="https://x.com/intent/follow?screen_name=WarnerTeddy">Teddy</a>, <span id="typed"></span></h2>
-          <h3>I build machines and write essays <br>here's a bit of my work.</h3>
+          <h2>theodore.net</h2>
+          <h3>Machines and essays and<br> more machines and more essays.</h3>
         </div>
       </div>
     </section>
@@ -119,8 +119,8 @@ search:
                         </defs>
                         <g id="title-group" class="title">
                             <rect x="141" y="143" width="224" height="49" rx="24.5" fill="var(--md-default-bg-color)" />
-                            <rect x="141.5" y="143.5" width="223" height="48" rx="24" stroke="var(--md-default-fg-color--lighter)" />
-                            <text x="253" y="175" fill="var(--md-default-fg-color--light)" text-anchor="middle" font-family="Crimson Pro" font-size="23" font-style="normal" font-weight="300" line-height="109.588%">Some stuff I've done</text>
+                            <rect x="141.5" y="143.5" width="213" height="48" rx="24" stroke="var(--md-default-fg-color--lighter)" />
+                            <text x="248" y="175" fill="var(--md-default-fg-color--light)" text-anchor="middle" font-family="Crimson Pro" font-size="23" font-style="normal" font-weight="300" line-height="109.588%">Things by theodore</text>
                         </g>
                         <a href="https://theodore.net/projects/Polargraph/" aria-label="Generative Pen-trained Transformer">
                             <g id="image-card-1" class="project">
@@ -151,17 +151,17 @@ search:
                               <rect x="805" y="624.5" width="225" height="271" rx="20.5" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                           </g>
                         </a>
-                        <a target="_blank" href="https://intempus.org" aria-label="Von Niemann Probe Project">
+                        <a href="/projects/AvianVisitors/" aria-label="Avian Visitors project">
                             <g id="image-card-4" class="project">
                                 <g clip-path="url(#clip1_107_71)">
                                     <rect x="142" y="212" width="468" height="288" rx="26" fill="var(--md-default-fg-color--lightest)" />
-                                    <image x="151" y="220" width="451" height="273" href="assets/images/index/vnp.gif" clip-path="url(#clipImage4)" preserveAspectRatio="xMidYMid slice" alt="Von Niemann Probe project image" loading="eager" />
+                                    <image x="151" y="220" width="451" height="273" href="assets/images/index/avian-visitors.gif" clip-path="url(#clipImage4)" preserveAspectRatio="xMidYMid slice" alt="Swan dipping its head underwater for the Avian Visitors project" loading="eager" />
                                     <rect x="151.5" y="220.5" width="450" height="272" rx="20.5" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                                 </g>
                                 <rect x="143.5" y="212.5" width="466" height="287" rx="24.5" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                             </g>
                         </a>
-                        <a target="_blank" href="https://stratolink.org/dashboard-v2" aria-label="Stratolink">
+                        <a target="_blank" href="https://stratolink.org" aria-label="Stratolink">
                             <g id="image-card-3" class="project">
                                 <path d="M848.04 107H818.96H652.485C644.615 107 640.679 107 637.673 108.503C635.029 109.825 632.879 111.935 631.532 114.53C630 117.48 630 121.342 630 129.066V477.986C630 485.71 630 489.572 631.532 492.522C632.879 495.117 635.029 497.227 637.673 498.549C640.679 500.052 644.615 500.052 652.485 500.052H750.262H760.035C780.16 500.052 796.475 516.367 796.475 536.493V572.934C796.475 580.658 796.475 584.52 798.007 587.47C799.354 590.065 801.504 592.175 804.149 593.497C807.155 595 811.09 595 818.96 595H818.96H1014.52H1014.52C1022.39 595 1026.32 595 1029.33 593.497C1031.97 592.175 1034.12 590.065 1035.47 587.47C1037 584.52 1037 580.658 1037 572.934V129.066V129.066C1037 121.342 1037 117.48 1035.47 114.53C1034.12 111.935 1031.97 109.825 1029.33 108.503C1026.32 107 1022.39 107 1014.52 107H848.04Z" fill="var(--md-default-fg-color--lightest)" stroke="var(--md-default-fg-color--lighter)" stroke-opacity="0.2" />
                                 <image x="638" y="107" width="390" height="488" clip-path="url(#clipImageTone)" preserveAspectRatio="xMidYMid slice" alt="Stratolink" loading="eager" fetchpriority="high" href="/assets/images/Stratolink/thumb.JPG" />
@@ -187,9 +187,9 @@ search:
     <section class="about">
       <div class="content4">
         <h2>About</h2>
-        <p class="abt1">I'm an engineer specialized in rapid prototyping and PCB design. I'm currently based in SF, building many wonderfully wacky things.</p>
+        <p class="abt1">Hi, I'm Teddy. I specialize in rapid prototyping and enjoy thinking about design. I'm currently based in SF, building many wonderfully wacky things.</p>
         <p class="abt2">I'm a <a target="_blank" style="text-decoration: none;" href="https://thielfellowship.org/">Thiel Fellow</a> and a graduate of the <a target="_blank" style="text-decoration: none;" href="https://fabacademy.org/2021/labs/charlotte/students/theodore-warner/">Fab Academy</a>. I previously worked at <a target="_blank" style="text-decoration: none;" href="https://www.midjourney.com/home">Midjourney</a> where I did research for the internal hardware effort.</p>
-        <p class="abt3">This site holds my <a href="https://theodore.net/projects">work</a> and <a href="https://theodore.net/writings">writings</a>.<span class="mobileyear"></br></br></span> Reach out at <a target="_blank" style="text-decoration: none;" href="https://x.com/intent/follow?screen_name=WarnerTeddy">@WarnerTeddy</a> or at <a  style="text-decoration: none;" href="mailto:teddy@warner.net">teddy [at] warner [dot] net</a>.</p>
+        <p class="abt3">This site holds my <a href="https://theodore.net/projects">work</a> and <a href="https://theodore.net/writings">writings</a>.<span class="mobileyear"></br></br></span> Reach out at <a target="_blank" style="text-decoration: none;" href="https://x.com/intent/follow?screen_name=WarnerTeddy">@WarnerTeddy</a> or at <a  style="text-decoration: none;" href="mailto:teddy@theodore.net">teddy [at] theodore [dot] net</a>.</p>
     </section>
     <section class="projects">
       <div class="content5">
@@ -247,26 +247,14 @@ search:
         <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
           <p class="copyright">Copyright © 2026 Teddy Warner</p>
         </a>
-        <p class="footer-links"><a href="/privacy">Privacy</a> <a href="mailto:press@theodore.net">Press</a> <a href="/store">Store</a></p>
+        <p class="footer-links"><a href="/privacy">Privacy</a> <a href="/press">Press</a> <a href="/store">Store</a></p>
     </section>
-    <h1 style="display:none;">Teddy Warner - Digital Fabrication Engineer & Designer</h1>
+    <h1 style="display:none;">theodore.net</h1>
   </div>
   </main>
 
   <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js" defer></script>
   <script defer>
-    // Wait for typed.js to load
-    // Typed.js initialization
-    window.addEventListener('load', function() {
-      var typed = new Typed('#typed', {
-        strings: ['an engineer.', 'a writer.', 'a designer.', 'a life enjoyer.'],
-        startDelay: 700,
-        typeSpeed: 60,
-        backSpeed: 60,
-        backDelay: 1200,
-        loop: true
-      });
-    });
     // Swap the theme-variant images (polargraph, printer, cork fill, tone) to match the page scheme.
     // Source of truth is the scheme Material actually applied to <body>, NOT the palette radio (which
     // can lag on a fresh load) and NOT a separate localStorage key (which desyncs from Material's own
