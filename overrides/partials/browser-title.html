@@ -1,0 +1,9 @@
+{%- if page and page.meta and page.meta.product -%}
+  <title>Buy {{ page.title | striptags }} - THEODORE.NET</title>
+{%- elif page and page.is_homepage -%}
+  <title>THEODORE.NET</title>
+{%- elif page and page.title and page.title != config.site_name -%}
+  <title>{{ page.title | striptags }} - THEODORE.NET</title>
+{%- else -%}
+  <title>THEODORE.NET</title>
+{%- endif -%}

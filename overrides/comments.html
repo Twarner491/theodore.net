@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block htmltitle %}
+  {% include "partials/browser-title.html" %}
+{% endblock %}
+
 {# Extract metadata from page.meta with defaults #}
 {% set page_title = page.meta.title | default(page.title) %}
 {% set page_description = page.meta.description | default("") %}
@@ -545,7 +549,9 @@
           "data-repo-id": "MDEwOlJlcG9zaXRvcnkzNzgyODU0MTk=",
           "data-category": "General",
           "data-category-id": "DIC_kwDOFowta84CA5IA",
-          "data-mapping": "title",
+          // Keep the discussion key independent from the browser-tab title. Existing
+          // discussions are named from the stable "Page - Teddy Warner" og:title.
+          "data-mapping": "og:title",
           "data-strict": "0",
           "data-reactions-enabled": "1",
           "data-emit-metadata": "0",

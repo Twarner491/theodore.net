@@ -3,11 +3,7 @@
 {# Product (and accessory) pages get a "Buy " tab title so they don't collide with a
    project page of the same name. Everything else keeps Material's default title. #}
 {% block htmltitle %}
-  {%- if page and page.meta and page.meta.product -%}
-    <title>Buy {{ page.title | striptags }} - {{ config.site_name }}</title>
-  {%- else -%}
-    {{ super() }}
-  {%- endif -%}
+  {% include "partials/browser-title.html" %}
 {% endblock %}
 
 {% block extrahead %}

@@ -114,7 +114,7 @@ function esc(s) {
 
 function html(inner, status) {
   const doc = `<!doctype html><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>theodore.net</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>THEODORE.NET</title>
 <style>body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;max-width:32rem;margin:4rem auto;padding:0 1.25rem;color:#111;line-height:1.6}
 h1{font-size:1.4rem}.subj{font-weight:600}.muted{color:#999;font-size:.9rem}
 button{font:inherit;padding:.6rem 1.2rem;border:0;border-radius:6px;background:#111;color:#fff;cursor:pointer}</style>
