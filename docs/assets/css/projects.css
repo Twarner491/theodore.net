@@ -48,6 +48,15 @@
   height: calc(var(--content1-height) + var(--content6-height));
 }
 
+@media screen and (min-width: 1201px) {
+  .md-header__inner {
+    max-width: 1420px;
+    margin: 0 auto;
+    padding-left: 4em;
+    padding-right: 4em;
+  }
+}
+
 .md-source {
   color: var(--md-default-fg-color);  
 }
@@ -643,10 +652,10 @@
     --font-size: 0.75em;
   }
   .introabt h2 {
-    font-size: 2em;
+    font-size: 2.5em;
   }
   .introabt h3 {
-    font-size: 0.85em;
+    font-size: 0.98em;
   }
   .projtitle {
     font-size: 0.75em;

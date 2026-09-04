@@ -48,6 +48,15 @@
   height: calc(var(--content1-height) + var(--content6-height));
 }
 
+@media screen and (min-width: 1201px) {
+  .md-header__inner {
+    max-width: 1420px;
+    margin: 0 auto;
+    padding-left: 4em;
+    padding-right: 4em;
+  }
+}
+
 .md-source {
   color: var(--md-default-fg-color);  
 }
