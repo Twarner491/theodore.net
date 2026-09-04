@@ -35,16 +35,13 @@
   }
 
   function apply(el) {
-    // Measure the BORDER box with sub-pixel precision. getComputedStyle().height is the CONTENT box
-    // (the ring ends up short on auto-height boxes like admonitions); offsetWidth/Height is the border
-    // box but ROUNDS to whole px. That rounding (e.g. 592 for a card that actually renders 591.5)
-    // misaligns the clip-path + ring against the card by up to ~0.5px, which squeezes the thin bottom
-    // border into a sub-pixel sliver that anti-aliases away on non-retina / fractional-DPR monitors
-    // (it survives at 2x). getBoundingClientRect() is the fractional border box, so the clip + ring land
-    // exactly on the card's real edges at any DPR. (It reads the untransformed box: apply() only runs
-    // from load/resize/mutation/font scans, never mid-hover, so the :hover scale never skews it.)
-    var rect = el.getBoundingClientRect();
-    var w = rect.width, h = rect.height;
+    // Measure the untransformed BORDER box. getBoundingClientRect() includes transforms applied to
+    // the element or any ancestor; when ResizeObserver re-fits a child during a card's scale hover,
+    // using that visual size bakes the scale into the path/ring and the browser then scales it again.
+    // The result is a double-scaled right/bottom edge that visibly catches up after pointer-out.
+    // Lisse's layout-space helper preserves sub-pixels and adds padding/borders for content-box nodes.
+    var size = L.getLayoutSize(el);
+    var w = size.width, h = size.height;
     if (!w || !h) return;
     var radius = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
     if (radius <= 1 || radius >= Math.min(w, h) / 2) { release(el); return; }
