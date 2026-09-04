@@ -88,7 +88,7 @@ search:
         <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
           <p class="copyright">Copyright © 2026 Teddy Warner</p>
         </a>
-        <p class="footer-links"><a href="/privacy">Privacy</a> <a href="mailto:press@theodore.net">Press</a> <a href="/store">Store</a></p>
+        <p class="footer-links"><a href="/privacy">Privacy</a> <a href="/press">Press</a> <a href="/store">Store</a></p>
     </section>
     <h1 style="display:none;">Writing Portfolio - Engineering Essays & Technical Documentation</h1>
   </div>

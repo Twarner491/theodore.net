@@ -11,6 +11,8 @@
 {% set page_published_time = page.meta.datePublished | default(page_date, true) %}
 {% set page_modified_time = page.meta.dateModified | default(page_published_time, true) %}
 {% set page_type = "writings" if "writings" in page.url else "Projects" %}
+{% set page_return_href = page.meta.return_href | default("") %}
+{% set page_return_label = page.meta.return_label | default("Back") %}
 {% set site_base = (config.site_url or "https://theodore.net/") | trim %}
 {% if site_base.endswith("/") %}{% set site_base = site_base[:-1] %}{% endif %}
 {% set page_full_url = site_base ~ "/" ~ page.url %}
@@ -314,7 +316,9 @@
   {% endif %}
 
   <!-- Return to feed link -->
-  {% if page_type == "writings" %}
+  {% if page_return_href %}
+  <div class="return2feed"><a href="{{ page_return_href }}"><i class="fa-solid fa-arrow-left-long"></i> {{ page_return_label }}</a></div>
+  {% elif page_type == "writings" %}
   <div class="return2feed"><a href="https://theodore.net/writings"><i class="fa-solid fa-arrow-left-long"></i> Writing Feed</a></div>
   {% else %}
   <div class="return2feed"><a href="https://theodore.net/projects"><i class="fa-solid fa-arrow-left-long"></i> Projects Feed</a></div>
@@ -322,7 +326,8 @@
 
   <!-- Article Header with Author Info and Share Buttons -->
   <h1 class="article-title">{{ page_title }}</h1>
-  
+
+  {% if not (page.meta and page.meta.minimal_page) %}
   <div class="article-meta" style="margin-top: -0.8em;">
     <span class="abtlinks">
       <a href="https://x.com/intent/follow?screen_name=WarnerTeddy">
@@ -344,10 +349,12 @@
   </div>
 
   <hr class="article-divider">
+  {% endif %}
 
   <!-- Page Content -->
   {{ page.content }}
 
+  {% if not (page.meta and page.meta.minimal_page) %}
   <!-- Email Subscription -->
   <section class="subscribe-section">
     <div class="subscribe-inner">
@@ -574,6 +581,7 @@
       })
     })()
   </script>
+  {% endif %}
 {% endblock %}
 
 {% block footer %}
@@ -598,6 +606,6 @@
     <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
       <p class="copyright">Copyright © {{ current_year }} Teddy Warner</p>
     </a>
-    <p class="footer-links"><a href="/privacy">Privacy</a> <a href="mailto:press@theodore.net">Press</a> <a href="/store">Store</a></p>
+    <p class="footer-links"><a href="/privacy">Privacy</a> <a href="/press">Press</a> <a href="/store">Store</a></p>
 </section>
 {% endblock %}
