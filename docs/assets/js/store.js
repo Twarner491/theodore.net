@@ -216,41 +216,109 @@
     if (p.colophon) h += '<details class="pe-details"><summary>Software &amp; licenses</summary><div class="pe-details-body">' + p.colophon + "</div></details>";
     return h;
   }
-  /* Where the back arrow points: prefer the product page you arrived from (so an accessory
-     OR a cross-sell card returns to whichever product you were viewing), then fall back to
-     an accessory's declared parent, then the store index. */
+  /* Where the back arrow points: return to the product page you actually arrived from.
+     `parentId` remains catalog taxonomy only; without a valid browsing trail every product,
+     including an accessory opened from the main grid, returns to the store index. */
   /* Breadcrumb trail (sessionStorage) so the back arrow follows your real path and never
      loops: going deeper (a card click) pushes the current page; the back arrow / browser
      Back pops it. So Store -> Bird Mic -> Avian Visitors -> (back) -> Bird Mic still backs
      to Store, instead of Bird Mic <-> Avian Visitors pinging forever. */
   const TRAIL_KEY = "store_trail";
-  const readTrail = () => { try { const t = JSON.parse(sessionStorage.getItem(TRAIL_KEY)); return Array.isArray(t) ? t : []; } catch (e) { return []; } };
-  const writeTrail = (t) => { try { sessionStorage.setItem(TRAIL_KEY, JSON.stringify(t)); } catch (e) {} };
+  function productIdFromPath(pathname) {
+    const match = String(pathname || "").match(/^\/store\/([^\/]+)\/?$/);
+    if (!match) return null;
+    let id; try { id = decodeURIComponent(match[1]); } catch (e) { return null; }
+    return getProduct(id) ? id : null;
+  }
+  function normalizedTrailEntry(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const legacyId = typeof raw.id === "string" ? raw.id : "";
+    const rawHref = typeof raw.href === "string" && raw.href ? raw.href
+      : (legacyId ? "/store/" + encodeURIComponent(legacyId) + "/" : "");
+    let url; try { url = new URL(rawHref, location.origin); } catch (e) { return null; }
+    if (url.origin !== location.origin) return null;
+    const id = productIdFromPath(url.pathname);
+    if (!id || (legacyId && legacyId !== id)) return null;
+    return { id: id, href: url.pathname + url.search + url.hash };
+  }
+  const readTrail = () => {
+    try {
+      const raw = JSON.parse(sessionStorage.getItem(TRAIL_KEY));
+      if (!Array.isArray(raw)) return [];
+      return raw.slice(-12).map(normalizedTrailEntry).filter(Boolean);
+    } catch (e) { return []; }
+  };
+  const writeTrail = (trail) => {
+    const safe = (Array.isArray(trail) ? trail : []).slice(-12).map(normalizedTrailEntry).filter(Boolean);
+    try { sessionStorage.setItem(TRAIL_KEY, JSON.stringify(safe)); } catch (e) {}
+  };
+  function currentProductTrailEntry(p) {
+    const entry = normalizedTrailEntry({ id: p.id, href: location.pathname + location.search + location.hash });
+    return entry || { id: p.id, href: "/store/" + encodeURIComponent(p.id) + "/" };
+  }
+  // Frontmatter-authored detail copy can link to another product just like an
+  // accessory card. Record only a real same-tab product navigation.
+  function detailProductLinkId(link) {
+    if (!link || typeof link.getAttribute !== "function") return null;
+    const target = String(link.getAttribute("target") || "").trim().toLowerCase();
+    if (target && target !== "_self") return null;
+    if (typeof link.hasAttribute === "function" && link.hasAttribute("download")) return null;
+    const rawHref = link.getAttribute("href");
+    if (typeof rawHref !== "string" || !rawHref.trim()) return null;
+    let url;
+    try {
+      const base = location.origin + (location.pathname || "/") + (location.search || "") + (location.hash || "");
+      url = new URL(rawHref, base);
+    } catch (e) { return null; }
+    if (url.origin !== location.origin) return null;
+    return productIdFromPath(url.pathname);
+  }
+  function rememberDetailProductLink(p, link, e) {
+    if (!p || !e || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return false;
+    const targetId = detailProductLinkId(link);
+    if (!targetId || targetId === p.id) return false;
+    writeTrail(navTrail.concat([currentProductTrailEntry(p)]));
+    return true;
+  }
+  function wireDetailProductLinks(p, scope) {
+    $$(".pe-details a[href]", scope || root).forEach((link) => {
+      link.addEventListener("click", (e) => { rememberDetailProductLink(p, link, e); });
+    });
+  }
   function referrerProductId() {
     let ref; try { ref = new URL(document.referrer); } catch (e) { return null; }
     if (ref.origin !== location.origin) return null;
-    const m = ref.pathname.match(/^\/store\/([^\/]+)\/?$/);
-    return m && getProduct(decodeURIComponent(m[1])) ? decodeURIComponent(m[1]) : null;
+    return productIdFromPath(ref.pathname);
+  }
+  function isReloadNavigation() {
+    try {
+      const entry = performance.getEntriesByType("navigation")[0];
+      return !!entry && entry.type === "reload";
+    } catch (e) { return false; }
   }
   // Reconcile the stored trail with how we actually arrived at page p, then persist it.
   function reconcileTrail(p) {
     let trail = readTrail();
-    if (referrerProductId() === null) trail = [];                                  // from the grid / off-site / a non-product page -> fresh
-    else while (trail.length && trail[trail.length - 1].id === p.id) trail.pop();  // browser-Back to a page that had pushed itself
+    const referrerId = referrerProductId(), reload = isReloadNavigation();
+    if (!reload && referrerId === null) trail = [];                                // from the grid / off-site / a non-product page -> fresh
+    else if (!reload && trail.length && trail[trail.length - 1].id === p.id)
+      while (trail.length && trail[trail.length - 1].id === p.id) trail.pop();     // browser-Back to a page that had pushed itself
+    else if (!reload && trail.length && trail[trail.length - 1].id !== referrerId)
+      trail = [];                                                                  // a typed/direct product jump cannot inherit an unrelated trail
     writeTrail(trail);
     return trail;
   }
-  function backTarget(p) {
-    if (navTrail.length) { const t = navTrail[navTrail.length - 1]; return { href: "/store/" + t.id + "/", label: t.title }; }
-    const parent = p.accessory && p.parentId ? getProduct(p.parentId) : null;   // direct-entry fallback for an accessory
-    return parent ? { href: "/store/" + parent.id + "/", label: parent.title } : { href: "/store", label: "Store" };
+  function backTarget() {
+    const entry = navTrail.length ? normalizedTrailEntry(navTrail[navTrail.length - 1]) : null;
+    const parent = entry && getProduct(entry.id);
+    return parent ? { href: entry.href, label: parent.title } : { href: "/store/", label: "Store" };
   }
   function detailHTML(p) {
     const multiVariant = (p.variants || []).length > 1;
     const builds = p.variants.map((v) => '<button type="button" data-opt="' + v.id + '">' + v.label + "</button>").join("");
-    const back = backTarget(p);
+    const back = backTarget();
     return (
-      '<div class="return2feed"><a href="' + back.href + '"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> ' + escapeHtml(back.label) + "</a></div>" +
+      '<div class="return2feed"><a href="' + escapeHtml(back.href) + '"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> ' + escapeHtml(back.label) + "</a></div>" +
       '<div class="pd-media"><div class="pe-carousel">' +
         '<button class="pe-arrow prev" type="button" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>' +
         '<div class="pe-frame"><div class="pe-slides"></div></div>' +
@@ -340,7 +408,8 @@
       if (b && e.target.closest(".pc-add")) { e.preventDefault(); setCartQty(a.id, b, 1); track("add_to_cart", { product: a.id, build: b, qty: 1, value: evItemValue(a, b) }); ga4("add_to_cart", { currency: "USD", value: (ga4Item(a.id, b, 1).price) || 0, items: [ga4Item(a.id, b, 1)] }); }
       else if (b && e.target.closest('.pc-qty button[data-q="1"]')) { e.preventDefault(); setCartQty(a.id, b, cartQtyOf(a.id, b) + 1); }
       else if (b && e.target.closest('.pc-qty button[data-q="-1"]')) { e.preventDefault(); setCartQty(a.id, b, cartQtyOf(a.id, b) - 1); }
-      else writeTrail(navTrail.concat([{ id: p.id, title: p.title }]));   // body click -> .pc-stretch navigates: push this page so the child's back returns here
+      else if (e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey)
+        writeTrail(navTrail.concat([currentProductTrailEntry(p)]));   // same-tab body click -> push this exact page so the child's back returns here
     });
     syncAccCards();
   }
@@ -407,7 +476,11 @@
   }
   function wireDetail() {
     const backLink = $(".return2feed a", root);
-    if (backLink) backLink.addEventListener("click", () => writeTrail(navTrail.slice(0, -1)));   // going up: pop the trail so it doesn't loop back
+    if (backLink) backLink.addEventListener("click", (e) => {
+      if (e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey)
+        writeTrail(navTrail.slice(0, -1));   // same-tab navigation up: pop the trail so it doesn't loop back
+    });
+    wireDetailProductLinks(P);
     $$(".opt-seg button", root).forEach((b) => b.addEventListener("click", () => { build = b.dataset.opt; qty = 1; updateVariant(); }));
     wireSlider();
     $(".pe-arrow.prev", root).addEventListener("click", () => goto(slide - 1));
