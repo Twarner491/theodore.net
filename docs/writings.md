@@ -58,8 +58,8 @@ search:
     <section class="intro-section">
       <div class="content1">
         <div class="introabt">
-          <h2>My Writings</h2>
-          <h3>Some wonderful things I've<br>expierenced and thoughts I've had.</h3>
+          <h2>Notes and Essays</h2>
+          <h3>Some wonderful things I've<br>experienced and thoughts I've had.</h3>
         </div>
       </div>
     </section>
