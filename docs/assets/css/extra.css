@@ -7,16 +7,6 @@
 .product-card,
 .store-mini-img { border-color: var(--tw-line, var(--md-default-fg-color--lighter)) !important; }
 
-/* TEMP: the dark-mode store-mini images do not exist yet, so keep the home store teaser looking
-   light under the slate scheme. The product PNGs carry an opaque near-white background, so in dark
-   mode each card would otherwise read as a bright tile inside a dark-tinted frame. Hold the card
-   surface white and the ring at its light-mode tone so the light images look deliberate. Remove this
-   block (and re-enable the swap in index.js) once the dark image variants ship. */
-[data-md-color-scheme="slate"] .press .store-mini-img {
-  background: #fff !important;
-  border-color: rgba(0, 0, 0, 0.17) !important;
-}
-
 /* Nav close (X) uses the Font Awesome xmark to match the search bar's close; the hamburger stays
    the sharp Material glyph. Hold the X box at the hamburger's 24px so swapping menu<->X never
    resizes the button: a size change there reflows the right cluster and stutters the palette/cart

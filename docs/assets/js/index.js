@@ -286,10 +286,6 @@ supportsCssVars() || alert("Please view this page in a modern browser that suppo
     }
   }
   function start() {
-    // TEMP: the dark-mode store-mini images do not exist yet, so keep the light images under the
-    // slate scheme rather than swapping to missing "<name>DARK" files. Delete this early return
-    // (and ship the *DARK.png variants) to re-enable the theme swap.
-    return;
     if (!document.querySelector(".store-mini-img img")) return;
     swap();
     var obs = new MutationObserver(swap);
