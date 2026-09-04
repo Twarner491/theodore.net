@@ -39,7 +39,7 @@ search:
         <div class="introabt">
           <div class="return2feed"><a href="/store"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Store</a></div>
           <h2>Privacy</h2>
-          <h3>What the store collects, and what it doesn't.</h3>
+          <h3>Collection, use, and retention</h3>
         </div>
       </div>
     </section>
@@ -47,36 +47,47 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective June 20, 2026.</p>
+          <p class="draft">Effective August 31, 2026</p>
 
-          <p>This policy explains what we collect, what we do with it, and the choices you have. It is written to comply with the California Online Privacy Protection Act (CalOPPA). We keep collection to a minimum, and all of it is described below.</p>
+          <p>This policy describes how the theodore.net store collects, uses, and shares personal information, and the choices available to you. It is intended to comply with the California Online Privacy Protection Act (CalOPPA).</p>
 
           <h3>What we collect</h3>
-          <p>To fulfill an order, we collect your name, email, and shipping and billing address. There are no accounts; checkout is guest-only. We also collect basic site-usage data through analytics, described below. Card payments are processed by Stripe: your card details go directly to Stripe, and we never see or store your card number. Stripe handles that data under its own policy, at <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a>.</p>
+          <p>Orders require your name, email address, billing address, and shipping address. Checkout is guest-only; the store does not create accounts. If you join a waitlist or newsletter, we collect your email address and the list tags used to send the updates you requested.</p>
+          <p>We also collect basic site and checkout activity: pages viewed, store actions, referral source, approximate location, device and browser information, a random first-party visitor identifier, and a per-tab session identifier. Checkout-funnel events do not include your email address.</p>
+          <p>Stripe processes card payments. Your card details go directly to Stripe; we do not see or store your card number. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a>.</p>
 
           <h3>How we share</h3>
-          <p>We share only what's needed to run the store and the site:</p>
+          <p>We share information only with the providers needed to operate the site and fulfill orders:</p>
           <ul>
-            <li><strong>Shipping carrier.</strong> Your name and address go to USPS or UPS to deliver your package.</li>
-            <li><strong>Hosting and site provider.</strong> Our site and orders run on a third-party hosting provider.</li>
-            <li><strong>Google Analytics.</strong> Standard site-usage data. See below.</li>
+            <li><strong>Shipping carriers.</strong> Your name, address, and shipment details go to the carrier used to deliver your package.</li>
+            <li><strong>Cloudflare.</strong> Our site, store functions, security controls, and first-party funnel endpoint run on Cloudflare. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare's privacy policy</a>.</li>
+            <li><strong>Stripe.</strong> Stripe processes payments, taxes, and order records. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a>.</li>
+            <li><strong>Buttondown.</strong> Buttondown stores waitlist and newsletter subscriptions and sends those messages. See <a href="https://buttondown.com/legal/privacy" target="_blank" rel="noopener">Buttondown's privacy policy</a>.</li>
+            <li><strong>Resend.</strong> Resend delivers transactional messages such as order and shipping emails. See <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">Resend's privacy policy</a>.</li>
+            <li><strong>Google Analytics.</strong> Google processes standard site-usage data as described below.</li>
           </ul>
-          <p>We do not sell or share your personal information for anyone else's purposes.</p>
+          <p>We do not sell personal information or use waitlist email addresses for unrelated purposes.</p>
 
           <h3>Cookies, analytics, and Do Not Track</h3>
-          <p>We use Google Analytics to understand how the site is used. It sets cookies and collects standard usage data, such as the pages you visit, your approximate location, and your device and browser, under an identifier rather than your name. Google processes this under its own <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">privacy policy</a>. You can opt out with Google's browser add-on at <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">tools.google.com/dlpage/gaoptout</a>, or by blocking cookies in your browser. We do not respond to Do Not Track signals, because there is no agreed standard for them.</p>
+          <p>Local storage and session storage hold a random first-party visitor identifier, a per-tab visit identifier, referral attribution, cart state, and navigation state.</p>
+          <p>Google Analytics collects standard usage data, including pages viewed, approximate location, and device and browser information. This data is associated with an identifier, not your name. Google and the other providers listed above may collect information when you use the site. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.</p>
+          <p>You can opt out with <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google's browser add-on</a> or block cookies and site storage in your browser. We do not respond to Do Not Track signals because there is no agreed technical standard for them.</p>
 
           <h3>How long we keep your data</h3>
           <ul>
-            <li><strong>Order records.</strong> Kept 7 years, for tax compliance.</li>
-            <li><strong>Server logs.</strong> Deleted after 60 days.</li>
+            <li><strong>Order records.</strong> Seven years for tax compliance</li>
+            <li><strong>Server logs.</strong> 60 days</li>
+            <li><strong>Waitlist and newsletter records.</strong> Until you unsubscribe or request deletion, except for the minimal suppression record needed to honor an unsubscribe</li>
           </ul>
 
           <h3>Your choices</h3>
-          <p>To access, correct, or delete your information, email <a href="mailto:support@theodore.net">support@theodore.net</a> and we will take care of it.</p>
+          <p>To access, correct, or delete your information, email <a href="mailto:support@theodore.net">support@theodore.net</a>.</p>
 
-          <h3>Changes and contact</h3>
-          <p>If we change this policy, we will post the updated version here with a new effective date, and note any material change at the top of this page. Privacy questions: <a href="mailto:support@theodore.net">support@theodore.net</a>.</p>
+          <h3>Changes</h3>
+          <p>Updates to this policy will be posted here with a new effective date. Material changes will be noted at the top of the page.</p>
+
+          <h3>Contact</h3>
+          <p>Privacy questions: <a href="mailto:support@theodore.net">support@theodore.net</a></p>
         </div>
       </div>
     </section>

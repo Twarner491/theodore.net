@@ -39,7 +39,7 @@ search:
         <div class="introabt">
           <div class="return2feed"><a href="/store"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Store</a></div>
           <h2>Terms of Sale</h2>
-          <h3>What you agree to when you order.</h3>
+          <h3>Orders, shipping, warranties, and liability</h3>
         </div>
       </div>
     </section>
@@ -47,46 +47,49 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective June 20, 2026.</p>
+          <p class="draft">Effective August 31, 2026</p>
 
-          <p>These terms cover purchases from the theodore.net store. Placing an order means you agree to them.</p>
+          <p>These terms apply to purchases from the theodore.net store. By placing an order, you agree to them.</p>
 
           <h3>About the shop</h3>
-          <p>We are a one-person shop in California building electronics kits and 3D-printed parts kits. We sell hardware only. Checkout is guest-only; we do not create accounts.</p>
+          <p>The store is operated in California and sells finished electronic objects, electronics kits, and parts kits. Checkout is guest-only; the store does not create accounts.</p>
 
-          <h3>Made to order</h3>
-          <p>Every kit is built to order, so allow about a week for us to build yours before it ships. Because nothing ships until we build it, you can cancel for a full refund any time before your order ships. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> with your order number, or check your status on the <a href="/store/confirmation/">order lookup</a> page.</p>
+          <h3>Availability and dispatch</h3>
+          <p>Each product page states whether an item is in stock or made to order and gives an expected dispatch time. You may cancel for a full refund before the order ships. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> with your order number, or check the <a href="/store/confirmation/">order lookup</a> page.</p>
 
           <h3>Orders, pricing, and payment</h3>
-          <p>We may refuse or cancel any order at our discretion; if we cancel one you have already paid for, we refund it in full. Prices can change without notice, and we may correct pricing or product errors and cancel any affected orders, refunding what you paid in full. Card payments are handled by Stripe: your card details go directly to Stripe, and we never see or store your card number. See our <a href="/privacy">Privacy Policy</a> for more.</p>
+          <p>We may refuse or cancel an order at our discretion. If we cancel an order you have paid for, we will issue a full refund. Prices may change without notice. We may correct pricing or product errors and cancel affected orders with a full refund. Stripe processes card payments; we do not see or store your card number. See the <a href="/privacy">Privacy Policy</a>.</p>
 
           <h3>Shipping</h3>
-          <p>We ship from California to US addresses only. Kits are made to order, so most ship within about a week as we build them, and you will get tracking when yours does. Risk of loss passes to you once the carrier takes possession of the package.</p>
-          <p>If we cannot ship within a stated time, or within 30 days where no time is stated, we will contact you to offer a delay or a full-refund cancellation.</p>
+          <p>Orders ship from California to the destinations and by the services shown at checkout. Tracking is provided when the order ships. Risk of loss passes to you when the carrier takes possession of the package.</p>
+          <p>If we cannot ship within the time stated when you order, or within 30 days where no time is stated, we will contact you and give you the choice to accept a revised date or cancel for a full refund.</p>
 
           <h3>Warranty</h3>
           <p>We provide a 90-day limited warranty against manufacturing defects, measured from the date of delivery. Our remedy is repair, replacement, or refund at our discretion. See the <a href="/returns">Return Policy</a> for how to make a claim.</p>
           <p><strong>Except as expressly stated in this limited warranty, products are provided "as is." To the fullest extent permitted by law, we disclaim all implied warranties, including the implied warranties of merchantability and fitness for a particular purpose. Where a written warranty is provided, any implied warranties are limited in duration to that written warranty, as provided under the Magnuson-Moss Warranty Act.</strong></p>
-          <p>The warranty is void if a kit is assembled incorrectly, soldered wrong, or modified, or if it is damaged by misuse, static discharge, or accident.</p>
+          <p>The warranty does not cover incorrect kit assembly, unauthorized modification or repair, misuse, static discharge, accident, ordinary wear, or cosmetic damage that does not affect operation.</p>
 
           <h3>Kit safety and assumption of risk</h3>
-          <p>Building and operating electronics carries real risk. You will encounter heat, small parts, and live electrical connections. You are responsible for assembling and using these products safely, following the included guidance and standard precautions. These kits are not intended for children under 13 without adult supervision.</p>
+          <p>Building and operating electronics involves heat, small parts, and live electrical connections. Finished rechargeable products contain a lithium-ion cell. Do not open, crush, puncture, short, or expose them to excessive heat, and do not charge them with equipment outside the published specifications. Stop using any device that is swollen, leaking, unusually hot, damaged, or producing an unusual odor. Contact us for handling instructions. These products are not intended for children under 13 without adult supervision.</p>
 
           <h3>Limitation of liability</h3>
           <p>To the fullest extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising from your purchase or use of our products. Our total liability for any claim is capped at the amount you paid for the product. Nothing in these terms limits liability that cannot lawfully be limited, including liability for personal injury caused by our negligence.</p>
 
           <h3>Open-source software and hardware</h3>
-          <p>We sell hardware only. The hardware designs and software we write are open source, and we intend to keep open-sourcing what we make.</p>
-          <p>Some kits are designed to run third-party open-source software. We do not preload, bundle, or resell it. After setup you install it on your own device, under its own license, for your personal, non-commercial use. We are not affiliated with or endorsed by those projects, and their software is provided by its authors "as is," with no warranty or support from us. Per-project attributions and license details are on each product page.</p>
+          <p>Some finished products include software written by us, while some kits require software you install. Product pages state what is included. Project notices identify the relevant licenses and attributions.</p>
+          <p>Third-party software, data sources, and network services remain subject to their own terms and availability. We do not claim affiliation with or endorsement by a third party unless the product page says so.</p>
 
           <h3>Affiliate links</h3>
-          <p>Some pages on this site include affiliate links to products on Amazon. As an Amazon Associate, we earn from qualifying purchases, at no extra cost to you.</p>
+          <p>Some pages contain Amazon affiliate links. As an Amazon Associate, we earn from qualifying purchases at no extra cost to you.</p>
 
           <h3>Governing law</h3>
           <p>These terms are governed by the laws of the State of California, without regard to its conflict-of-law rules. Any dispute will be resolved in the state or federal courts located in California.</p>
 
-          <h3>Changes and contact</h3>
-          <p>We may update these terms. The version posted when you order applies to that order, and continued purchases after an update mean you accept the revised terms. Questions: <a href="mailto:support@theodore.net">support@theodore.net</a>.</p>
+          <h3>Changes</h3>
+          <p>We may update these terms. The version posted when you order applies to that order. Purchases made after an update are subject to the revised terms.</p>
+
+          <h3>Contact</h3>
+          <p>Questions: <a href="mailto:support@theodore.net">support@theodore.net</a></p>
         </div>
       </div>
     </section>
