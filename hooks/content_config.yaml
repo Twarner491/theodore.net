@@ -17,13 +17,6 @@ external_projects:
     date: 2025-08-01
     external: true
 
-  - title: Intempus
-    description: Giving agents a temporal understanding through human physiological data.
-    url: https://intempus.org
-    thumbnail: /assets/images/learnedSpec/thumb.jpg
-    date: 2025-01-15
-    external: true
-
   - title: How to Make (Almost) Anything
     description: 22 weeks of rapid prototyping.
     url: https://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/student-bootcamp/
