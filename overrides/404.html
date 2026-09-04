@@ -7,25 +7,113 @@
 <script src="https://kit.fontawesome.com/79ff35ecec.js" crossorigin="anonymous"></script>
 <!-- Fonts served locally via tufte.css -->
 <link rel="stylesheet" href="/assets/css/index.css">
+<link rel="stylesheet" href="/assets/css/header.css">
 <link rel="stylesheet" href="/assets/css/404.css">
 
 <nav class="main-navigation">
   <ul>
-    <li><a class="home" href="https://teddywarner.com"><span class="navnum">01</span> Home</a></li>
+    <li><a class="home" href="/"><span class="navnum">01</span> Home</a></li>
     <li><a class="proj" href="/projects"><span class="navnum">02</span> Projects</a></li>
     <li><a class="writ" href="/writings"><span class="navnum">03</span> Writing</a></li>
   </ul>
 </nav>
 
-<main class="error-container">
-  <div class="error-content">
-    <div class="error-image-frame">
-      <a href="/" class="error-image-link" title="Error 404">
-        <img src="/assets/images/index/404.jpg" alt="Error 404 Costume Not Found" />
-      </a>
-    </div>
+<main class="error-page" data-scroll-container>
+  <div class="content-container error-page-content">
+    <section class="error-container">
+      <div class="error-content">
+        <svg class="error-mark" viewBox="0 0 390 480" role="img" aria-labelledby="error-title error-description">
+          <title id="error-title">Error 404, page not found</title>
+          <desc id="error-description">The message drawn in the style of Teddy's fourth-grade Error 404 Halloween costume.</desc>
+          <defs>
+            <filter id="paper-ink" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.018 0.12" numOctaves="2" seed="404" result="paper-grain" />
+              <feDisplacementMap in="SourceGraphic" in2="paper-grain" scale="0.7" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+
+          <!-- Readable redraws of the shirt's individual marker gestures. -->
+          <g class="error-strokes error-strokes--regular" aria-hidden="true">
+            <!-- Error: tall open E, two short r shoulders, narrow o, rising final r. -->
+            <g class="error-word error-word--error">
+              <path d="M78 38C75 64 75 101 78 127M79 39C99 42 121 44 134 37M78 78C91 76 108 74 122 76M78 126C96 123 114 117 126 108" />
+              <path d="M139 61C136 81 135 103 136 119M138 76C147 63 157 59 169 61" />
+              <path d="M174 60C171 82 171 105 173 117M174 74C183 62 194 58 206 61" />
+              <path d="M237 55C221 51 212 66 211 87C210 108 220 120 236 117C251 114 255 91 253 73C251 59 245 52 237 55Z" />
+              <path d="M258 113C261 87 265 58 270 38M266 71C274 58 283 53 292 55" />
+            </g>
+
+            <!-- 404: much narrower than Error and left aligned beneath it. -->
+            <g class="error-word error-word--404">
+              <path d="M106 159L77 204C88 205 101 204 112 202M105 159C103 183 100 213 98 239" />
+              <path d="M132 171C116 170 108 186 108 205C108 226 118 237 132 236C148 235 155 219 154 201C153 183 145 171 132 171Z" />
+              <path d="M188 159L159 203C170 204 183 203 193 200M187 159C185 183 182 212 180 238" />
+            </g>
+
+            <!-- Page takes Costume's wide, right-shifted footprint. -->
+            <g class="error-word error-word--page">
+              <path d="M128 267C126 291 127 324 131 351M130 270C157 261 179 267 181 285C183 304 160 312 130 305" />
+              <path d="M204 299C189 294 178 307 179 326C180 343 192 351 204 342C213 334 213 312 204 299M213 299C210 315 210 335 216 347" />
+              <path d="M252 300C236 294 223 308 223 327C224 344 238 351 251 341C260 333 260 312 252 300M261 300C258 328 260 358 249 370C240 380 228 376 222 368" />
+              <path d="M297 323C312 322 328 313 325 303C322 294 307 296 299 307C290 320 295 339 309 345C322 351 340 345 352 337" />
+            </g>
+
+            <!-- Found is small, left-shifted, and uses the same marker weight. -->
+            <g class="error-word error-word--found">
+              <path d="M96 426C95 442 95 460 97 477M97 427C104 426 111 428 115 430M97 449C103 448 108 448 112 450" />
+              <path d="M126 445C117 444 114 454 115 463C116 473 122 478 129 475C136 472 138 461 135 452C133 447 130 445 126 445Z" />
+              <path d="M142 445C141 454 141 468 146 474C151 479 157 472 159 463M160 445C159 455 159 466 161 476" />
+              <path d="M168 446C168 456 168 467 170 476M170 455C175 446 182 445 185 451C188 458 186 468 188 476" />
+              <path d="M210 426C207 443 205 461 207 477M206 452C202 445 194 447 192 456C190 465 194 474 200 475C205 475 207 469 207 462" />
+            </g>
+          </g>
+
+          <!-- The heavy lowercase not and its three descending, nested underlines. -->
+          <g class="error-strokes error-strokes--not" aria-hidden="true">
+            <path d="M194 371C193 383 193 397 194 411M195 384C202 371 213 372 216 381C218 389 216 401 218 410" />
+            <path d="M241 378C229 376 223 387 224 398C225 409 234 414 243 410C252 406 254 393 250 384C248 380 245 378 241 378Z" />
+            <path d="M275 360C273 377 272 395 273 414M261 374C270 375 283 374 292 371" />
+          </g>
+          <g class="error-strokes error-strokes--underline" aria-hidden="true">
+            <path d="M190 417C222 422 263 428 301 432" />
+            <path d="M201 429C228 434 260 439 291 443" />
+            <path d="M218 441C238 445 260 449 279 452" />
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="footer visible">
+      <div class="content8">
+        <div class="socialpar">
+          <a target="_blank" href="https://github.com/Twarner491">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+        <div class="socialpar">
+          <a target="_blank" href="https://x.com/WarnerTeddy">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+        </div>
+        <div class="socialpar">
+          <a target="_blank" rel="noopener" href="https://www.instagram.com/teddymakesstuff/" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+        </div>
+        <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
+          <p class="copyright">Copyright © 2026 Teddy Warner</p>
+        </a>
+        <p class="footer-links"><a href="/privacy">Privacy</a> <a href="/press">Press</a> <a href="/store">Store</a></p>
+      </div>
+    </section>
   </div>
 </main>
+
+<script>
+  window.setTimeout(function () {
+    window.location.replace("/");
+  }, 8000);
+</script>
 
 <script src="/assets/js/index.js"></script>
 <script src="/assets/js/header.js"></script>
