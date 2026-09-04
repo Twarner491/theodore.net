@@ -31,8 +31,8 @@ export async function onRequestPost(context) {
     ? body.tags.filter((t) => typeof t === "string").map((t) => t.trim().slice(0, 60)).filter(Boolean).slice(0, 5)
     : [];
 
-  // No key configured (e.g. local without it): don't hard-fail the UX; report a no-op success.
-  if (!env.BUTTONDOWN_API_KEY) { console.log("subscribe skipped (no BUTTONDOWN_API_KEY):", email, tags.join(",")); return reply({ ok: true, skipped: true }); }
+  // Never tell a visitor they joined when the upstream enrollment cannot run.
+  if (!env.BUTTONDOWN_API_KEY) return reply({ error: "Waitlist signup is not configured." }, 503);
 
   const headers = { Authorization: `Token ${env.BUTTONDOWN_API_KEY}`, "content-type": "application/json" };
 
@@ -41,28 +41,37 @@ export async function onRequestPost(context) {
   // name->id map of the whole tag catalog (used to translate the subscriber's existing tags).
   async function resolveTags(names) {
     const map = {};
-    try {
-      const list = await fetch(`${API}/tags`, { headers }).then((x) => x.json());
-      for (const t of (list && list.results) || []) if (t && t.name) map[String(t.name).toLowerCase()] = t.id;
-    } catch (e) {}
+    const listResponse = await fetch(`${API}/tags`, { headers });
+    if (!listResponse.ok) throw new Error(`tag list ${listResponse.status}`);
+    const list = await listResponse.json();
+    for (const t of (list && list.results) || []) if (t && t.name) map[String(t.name).toLowerCase()] = t.id;
     const ids = [];
     for (const n of names) {
       let id = map[n.toLowerCase()];
       if (!id) {
-        try { const m = await fetch(`${API}/tags`, { method: "POST", headers, body: JSON.stringify({ name: n }) }).then((x) => x.json()); id = m && m.id; if (id) map[n.toLowerCase()] = id; } catch (e) {}
+        const createResponse = await fetch(`${API}/tags`, { method: "POST", headers, body: JSON.stringify({ name: n }) });
+        if (!createResponse.ok) throw new Error(`tag create ${createResponse.status}`);
+        const created = await createResponse.json();
+        id = created && created.id;
+        if (!id) throw new Error("tag create returned no id");
+        map[n.toLowerCase()] = id;
       }
       if (id) ids.push(id);
     }
     return { ids, map };
   }
 
-  // The Buttondown work is slow (up to four sequential round-trips, slower still when their firewall
-  // is scoring the IP), so don't make the visitor wait on it. Validation above already gated the
-  // response, the contract is a uniform {ok:true} either way, and Buttondown's double opt-in email is
-  // the real confirmation, so a rare upstream failure is logged rather than surfaced. waitUntil keeps
-  // the Function alive to finish the work after the response has been sent.
+  // This request is intentionally awaited. A success response means Buttondown accepted the
+  // subscriber and every requested tag, rather than merely accepting background work locally.
   async function enroll() {
-    const { ids: wantIds, map: tagMap } = tags.length ? await resolveTags(tags) : { ids: [], map: {} };
+    let wantIds, tagMap;
+    try {
+      ({ ids: wantIds, map: tagMap } = tags.length ? await resolveTags(tags) : { ids: [], map: {} });
+    } catch (e) {
+      console.log("subscribe tag resolution failed:", e && e.message);
+      return false;
+    }
+    if (wantIds.length !== new Set(tags.map((t) => t.toLowerCase())).size) return false;
 
     // Create the subscriber, or find the existing one. Pass the VISITOR's real IP so Buttondown's
     // firewall scores them, not our shared Cloudflare edge IP (which it flags as a datacenter address
@@ -76,30 +85,40 @@ export async function onRequestPost(context) {
     try {
       r = await fetch(`${API}/subscribers`, { method: "POST", headers, body: JSON.stringify(createBody) });
       d = await r.json().catch(() => ({}));
-    } catch (e) { console.log("subscribe unreachable:", e && e.message); return; }
+    } catch (e) { console.log("subscribe unreachable:", e && e.message); return false; }
     if (r.ok) {
       sid = d && d.id;
     } else if (d && d.code === "email_already_exists") {
       sid = (d.metadata && d.metadata.subscriber_id) || null;
-      if (!sid) { try { const f = await fetch(`${API}/subscribers/${encodeURIComponent(email)}`, { headers }).then((x) => x.json()); sid = f && f.id; } catch (e) {} }
+      if (!sid) {
+        try {
+          const existingResponse = await fetch(`${API}/subscribers/${encodeURIComponent(email)}`, { headers });
+          if (existingResponse.ok) sid = (await existingResponse.json()).id || null;
+        } catch (e) {}
+      }
     } else {
-      console.log("subscribe failed:", r.status, (d && d.code) || "", String((d && d.detail) || "").slice(0, 200));
-      return;
+      console.log("subscribe failed:", r.status, (d && d.code) || "");
+      return false;
     }
+    if (!sid) return false;
 
     // Apply the tags by id, merged with whatever the subscriber already has (existing tags read back
     // as names, so translate them through the catalog). PATCH is the call Buttondown actually honors.
     if (wantIds.length && sid) {
       try {
-        const cur = await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { headers }).then((x) => x.json()).catch(() => ({}));
+        const currentResponse = await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { headers });
+        if (!currentResponse.ok) return false;
+        const cur = await currentResponse.json();
         const curIds = (Array.isArray(cur.tags) ? cur.tags : []).map((n) => tagMap[String(n).toLowerCase()]).filter(Boolean);
         const merged = Array.from(new Set(curIds.concat(wantIds)));
-        await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { method: "PATCH", headers, body: JSON.stringify({ tags: merged }) });
-      } catch (e) { console.log("tag apply error:", e && e.message); }
+        const patchResponse = await fetch(`${API}/subscribers/${encodeURIComponent(sid)}`, { method: "PATCH", headers, body: JSON.stringify({ tags: merged }) });
+        if (!patchResponse.ok) return false;
+      } catch (e) { console.log("tag apply error:", e && e.message); return false; }
     }
+    return true;
   }
 
-  if (typeof context.waitUntil === "function") context.waitUntil(enroll());
-  else await enroll();
-  return reply({ ok: true });
+  return await enroll()
+    ? reply({ ok: true })
+    : reply({ error: "Could not join the waitlist. Please try again." }, 502);
 }
