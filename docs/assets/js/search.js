@@ -21,7 +21,7 @@
   function isActive() { return openState; }
   // only ever navigate to same-origin paths from the (build-time) index
   function safeHref(u) { return (typeof u === 'string' && /^\/(?!\/)/.test(u)) ? u : '#'; }
-  function price(p) { return typeof p === 'number' && isFinite(p) ? 'from $' + p : ''; }
+  function price(p, status) { return status || (typeof p === 'number' && isFinite(p) ? 'from $' + p : ''); }
   function isDark() { return (document.body.getAttribute('data-md-color-scheme') || document.documentElement.getAttribute('data-md-color-scheme')) === 'slate'; }
   // a thumbnail follows the Material theme: use the DARK sibling (only when the build found one) in dark mode
   function thumbImg(it, cls) {
@@ -67,7 +67,7 @@
     if (it.type === 'writing') {
       a.innerHTML = '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span></span>';   // title only
     } else if (it.type === 'product') {
-      a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span>' + (price(it.price) ? '<span class="tw-card-price">' + price(it.price) + '</span>' : '') + '</span>';
+      a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span>' + (price(it.price, it.status) ? '<span class="tw-card-price">' + price(it.price, it.status) + '</span>' : '') + '</span>';
     } else {
       a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span><span class="tw-card-desc">' + esc(it.description) + '</span></span>';
     }
@@ -108,7 +108,7 @@
   // ---------- results (writings-index style) ----------
   function rowEl(it) {
     var a = document.createElement('a'); a.className = 'tw-row' + (it.type === 'product' ? ' tw-row-product' : ''); a.href = safeHref(it.url); a.setAttribute('role', 'option');
-    var aside = it.type === 'product' ? price(it.price) : esc(it.date || '');
+    var aside = it.type === 'product' ? price(it.price, it.status) : esc(it.date || '');
     var sub = it.type === 'writing' ? esc(it.readtime || '') : '';
     var thumb = (it.type === 'product') ? thumbImg(it, 'tw-row-thumb') : '';   // products get an inline graphic; projects/writings stay text-only
     a.innerHTML = thumb +

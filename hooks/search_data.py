@@ -75,6 +75,12 @@ def _dark_sibling(docs_dir, url):
     return dark if (Path(docs_dir) / dark.lstrip('/')).exists() else ''
 
 
+def _variant_status(variant):
+    if not isinstance(variant, dict):
+        return 'available'
+    return variant.get('status') or ('comingSoon' if variant.get('comingSoon') else 'available')
+
+
 def _scan_store(docs_dir):
     """Read product definitions from docs/store/*.md frontmatter so products are
     searchable on every page. The frontmatter is the single source of truth
@@ -94,7 +100,16 @@ def _scan_store(docs_dir):
         pid = fm.get('id') or md.stem
         variants = fm.get('variants') if isinstance(fm.get('variants'), list) else []
         prices = [v.get('price') for v in variants
-                  if isinstance(v, dict) and isinstance(v.get('price'), (int, float))]
+                  if isinstance(v, dict) and isinstance(v.get('price'), (int, float))
+                  and _variant_status(v) in ('available', 'backorder', 'preorder')]
+        default_id = fm.get('defaultBuild')
+        default_variant = next((v for v in variants
+                                if isinstance(v, dict) and v.get('id') == default_id),
+                               variants[0] if variants else {})
+        status = '' if prices else {
+            'soldout': 'Sold out',
+            'comingSoon': 'Coming soon',
+        }.get(_variant_status(default_variant), '')
         images = fm.get('images') if isinstance(fm.get('images'), list) else []
         base = fm.get('imageBase') or ''
         thumb = (base + images[0]) if (base and images) else ''
@@ -109,6 +124,7 @@ def _scan_store(docs_dir):
             'dateISO': '',
             'readtime': '',
             'price': int(min(prices)) if prices else None,
+            'status': status,
             'keywords': fm.get('teaser', '') or '',
             'text': fm.get('sub', '') or '',
         }))

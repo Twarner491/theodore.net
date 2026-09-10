@@ -28,7 +28,7 @@ variants:
   - id: assembled
     image: heard-today.png
     label: Assembled
-    status: soldout
+    comingSoon: true
     desc: Finished, framed, and ready to hang.
     contents:
       - 13.3" Spectra 6 E-ink, matted in an oak wood frame

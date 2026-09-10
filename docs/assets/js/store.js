@@ -63,6 +63,7 @@
   const carouselUrls = (p) => (p.images || []).map((f) => themedUrl(p.imageBase + f));
   const minPrice = (p) => { const ps = p.variants.filter(buyable).map((v) => v.price); return ps.length ? Math.min.apply(null, ps) : null; };
   const defaultBuyBuild = (p) => { const d = p.variants.find((v) => v.id === p.defaultBuild); if (buyable(d)) return d.id; const b = p.variants.find(buyable); return b ? b.id : null; };
+  const waitlistLabel = (v) => statusOf(v) === "comingSoon" ? "Join the waitlist" : "Notify me";
   /* the first waitlist-eligible (non-buyable but coming-soon / sold-out) variant, for the ?join deep-link */
   const comingSoonVariant = (p) => (p.variants || []).find((v) => !buyable(v) && (statusOf(v) === "comingSoon" || statusOf(v) === "soldout")) || null;
 
@@ -472,7 +473,7 @@
     if (wl) { wl.hidden = true; wl.innerHTML = ""; }
     buy.style.display = ""; buy.disabled = false;
     if (can) { buy.classList.remove("is-waitlist"); buy.innerHTML = "<span>" + st.cta + "</span><span>" + money(v.price * qty) + "</span>"; }
-    else { buy.classList.add("is-waitlist"); buy.textContent = "Notify me"; }
+    else { buy.classList.add("is-waitlist"); buy.textContent = waitlistLabel(v); }
   }
   function wireDetail() {
     const backLink = $(".return2feed a", root);
@@ -518,7 +519,8 @@
     const wl = $(".pe-waitlist", root); if (!wl) return;
     $(".pe-buy", root).style.display = "none";
     wl.hidden = false;
-    wl.innerHTML = '<form class="pe-wl-form"><input type="email" required placeholder="you@email.com" aria-label="Email for availability notifications"><button type="submit" aria-label="Notify me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>';
+    const label = waitlistLabel(variantById(P, build));
+    wl.innerHTML = '<form class="pe-wl-form"><input type="email" required placeholder="you@email.com" aria-label="Email for availability notifications"><button type="submit" aria-label="' + label + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>';
     $("input", wl).focus();
     $(".pe-wl-form", wl).addEventListener("submit", (e) => {
       e.preventDefault();
@@ -548,7 +550,7 @@
     if (!target || buyable(target)) target = buyable(variantById(p, build)) ? null : variantById(p, build);
     if (!target) target = comingSoonVariant(p);
     if (!target) return;                                           // nothing waitlist-eligible -> leave the page normal
-    if (target.id !== build) { build = target.id; qty = 1; updateVariant(true); }  // re-select -> repaints the "Notify me" state
+    if (target.id !== build) { build = target.id; qty = 1; updateVariant(true); }  // re-select -> repaints the non-buyable state
     openWaitlist();                                                // reused as-is: hides buy, injects + focuses the form
     const wlHost = root && $(".pe-waitlist", root);
     if (wlHost) { try { wlHost.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (e) {} }   // mobile: bring the form into view
