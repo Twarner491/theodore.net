@@ -375,8 +375,8 @@
       ? '<img class="pc-img" src="' + hero + '" alt="' + escapeHtml(a.title) + '" loading="lazy">'
       : '<span class="pc-img pc-ph"><i class="' + (a.icon || "fa-solid fa-cube") + '" aria-hidden="true"></i></span>';
     const mp = minPrice(a);
-    // true accessory (single variant) -> exact price; cross-sell product (multi-variant) -> "from $X"
-    const priceHTML = a.accessory ? money((a.variants[0] || {}).price)
+    // true accessory -> exact price while buyable; cross-sell product -> "from $X"; otherwise show status
+    const priceHTML = a.accessory ? (mp != null ? money((a.variants[0] || {}).price) : productStatus(a))
       : (mp != null ? '<span class="from">from</span>' + money(mp) : productStatus(a));
     return '<div class="product-card product-card--mini" data-acc="' + escapeHtml(a.id) + '">' +
       '<a class="pc-stretch" href="/store/' + encodeURIComponent(a.id) + '/" aria-label="' + escapeHtml(a.title) + '"></a>' +
@@ -393,7 +393,7 @@
   function renderAccessories(p) {
     if (!root) return;
     const prev = document.querySelector(".pd-accessories"); if (prev) prev.remove();   // re-render safety
-    const accs = accessoriesFor(p).filter((a) => buyable(a.variants[0]));   // true accessories
+    const accs = accessoriesFor(p);                                        // true accessories
     const related = (p.related || []).map(getProduct).filter(Boolean);       // cross-sell products
     const cards = accs.concat(related).map(accCardHTML);                      // every card gets the + quick-add
     if (!cards.length) return;
@@ -472,7 +472,7 @@
     if (wl) { wl.hidden = true; wl.innerHTML = ""; }
     buy.style.display = ""; buy.disabled = false;
     if (can) { buy.classList.remove("is-waitlist"); buy.innerHTML = "<span>" + st.cta + "</span><span>" + money(v.price * qty) + "</span>"; }
-    else { buy.classList.add("is-waitlist"); buy.textContent = "Join the waitlist"; }
+    else { buy.classList.add("is-waitlist"); buy.textContent = "Notify me"; }
   }
   function wireDetail() {
     const backLink = $(".return2feed a", root);
@@ -518,7 +518,7 @@
     const wl = $(".pe-waitlist", root); if (!wl) return;
     $(".pe-buy", root).style.display = "none";
     wl.hidden = false;
-    wl.innerHTML = '<form class="pe-wl-form"><input type="email" required placeholder="you@email.com" aria-label="Email for the waitlist"><button type="submit" aria-label="Join the waitlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>';
+    wl.innerHTML = '<form class="pe-wl-form"><input type="email" required placeholder="you@email.com" aria-label="Email for availability notifications"><button type="submit" aria-label="Notify me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>';
     $("input", wl).focus();
     $(".pe-wl-form", wl).addEventListener("submit", (e) => {
       e.preventDefault();
@@ -548,7 +548,7 @@
     if (!target || buyable(target)) target = buyable(variantById(p, build)) ? null : variantById(p, build);
     if (!target) target = comingSoonVariant(p);
     if (!target) return;                                           // nothing waitlist-eligible -> leave the page normal
-    if (target.id !== build) { build = target.id; qty = 1; updateVariant(true); }  // re-select -> repaints the "Join the waitlist" state
+    if (target.id !== build) { build = target.id; qty = 1; updateVariant(true); }  // re-select -> repaints the "Notify me" state
     openWaitlist();                                                // reused as-is: hides buy, injects + focuses the form
     const wlHost = root && $(".pe-waitlist", root);
     if (wlHost) { try { wlHost.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (e) {} }   // mobile: bring the form into view

@@ -26,6 +26,7 @@ variants:
   - id: default
     image: pens.png
     label: 9-pack
+    status: soldout
     price: 28
     stripePrice: "price_1TkB7LRPSNpqisAPmfGuCIzh"
     stripePriceLive: "price_1TkCJfRPSNpqisAPPz9Lc7ut"
@@ -35,6 +36,7 @@ variants:
   - id: with-mounts
     image: penMountsandCaps.png
     label: "+ 9 Mounts & Caps"
+    status: soldout
     price: 48
     stripePrice: "price_1TkzoKRPSNpqisAPEQSKciDr"
     stripePriceLive: "price_1Tl0o9RPSNpqisAPlKRkfPHP"

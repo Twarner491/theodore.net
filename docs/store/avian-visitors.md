@@ -28,7 +28,7 @@ variants:
   - id: assembled
     image: heard-today.png
     label: Assembled
-    comingSoon: true
+    status: soldout
     desc: Finished, framed, and ready to hang.
     contents:
       - 13.3" Spectra 6 E-ink, matted in an oak wood frame
@@ -36,6 +36,7 @@ variants:
   - id: electronics
     image: avianElectronics.png
     label: Electronics Kit
+    status: soldout
     price: 450
     stripePrice: "price_1TkB7KRPSNpqisAPzs2xr9zO"
     stripePriceLive: "price_1TkCJcRPSNpqisAP3ee3eytM"
@@ -48,6 +49,7 @@ variants:
   - id: electronics-printed
     image: frameAndBacking.png
     label: "+ Frame & Parts"
+    status: soldout
     price: 520
     weight: 3.2   # scale-verified: ships 3.1-3.7 lb packed
     stripePrice: "price_1TkB7KRPSNpqisAPHfB4WxjI"

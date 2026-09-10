@@ -24,6 +24,7 @@ weight: 1.4
 variants:
   - id: default
     label: Frame & Parts
+    status: soldout
     price: 70
     stripePrice: "price_1TkzoIRPSNpqisAPDPnAXPOe"
     stripePriceLive: "price_1Tl0o8RPSNpqisAPRb2aJpEV"
