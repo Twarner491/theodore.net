@@ -27,7 +27,6 @@ variants:
   - id: electronics
     image: birdMicElectronics.png
     label: Electronics Kit
-    status: soldout
     price: 180
     stripePrice: "price_1TkCtvRPSNpqisAPIZwrcXYN"
     stripePriceLive: "price_1TkD4vRPSNpqisAP3P4gBDiF"
@@ -40,7 +39,6 @@ variants:
   - id: electronics-printed
     image: birdMic3D.png
     label: "+ 3D Printed Case"
-    status: soldout
     price: 210
     stripePrice: "price_1TkCtwRPSNpqisAPNx2Q6qnQ"
     stripePriceLive: "price_1TkD4vRPSNpqisAPXdZHZgwA"

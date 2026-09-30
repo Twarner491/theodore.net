@@ -24,7 +24,6 @@ weight: 0.15
 variants:
   - id: default
     label: Mic Mount
-    status: soldout
     price: 15
     stripePrice: "price_1TjqtARPSNpqisAPa7xOkyti"
     stripePriceLive: "price_1TkCJdRPSNpqisAP9Qp8UifQ"

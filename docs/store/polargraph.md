@@ -26,7 +26,6 @@ variants:
   - id: electronics
     image: polargraphElectronics.png
     label: Electronics Kit
-    status: soldout
     price: 430
     stripePrice: "price_1TkCtxRPSNpqisAPCqVQCdz5"
     stripePriceLive: "price_1TkD4wRPSNpqisAP9uWspmjK"
@@ -41,7 +40,6 @@ variants:
   - id: electronics-printed
     image: polargrapg3dprints.png
     label: "+ 3D Printed Parts"
-    status: soldout
     price: 520
     stripePrice: "price_1TkCtxRPSNpqisAPfnljWfZA"
     stripePriceLive: "price_1TkD4wRPSNpqisAPViFLyO2k"

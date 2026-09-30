@@ -24,7 +24,6 @@ weight: 1.4
 variants:
   - id: default
     label: 3D Printed Parts
-    status: soldout
     price: 90
     stripePrice: "price_1TkzoJRPSNpqisAPVlfZTzg2"
     stripePriceLive: "price_1Tl0o8RPSNpqisAPnCC3CyOi"

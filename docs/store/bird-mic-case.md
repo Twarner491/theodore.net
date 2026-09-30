@@ -24,7 +24,6 @@ weight: 0.2
 variants:
   - id: default
     label: Bird Mic Case
-    status: soldout
     price: 30
     stripePrice: "price_1Tl03VRPSNpqisAPPlYp1Dxm"
     stripePriceLive: "price_1Tl0o7RPSNpqisAP4CRU5gET"
