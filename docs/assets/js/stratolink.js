@@ -637,7 +637,7 @@
         chart("Temperature", b.series.temp, { unit: "°C", dp: 1 }) +
         chart("Battery", b.series.batt, { unit: "V", dp: 2 }) +
         '<div class="sl-card-foot">data from ' +
-          '<a href="https://stratolink.org/dashboard-v2" target="_blank" ' +
+          '<a href="https://stratolink.org" target="_blank" ' +
           'rel="noopener">stratolink.org</a></div>';
 
       bindControls();
