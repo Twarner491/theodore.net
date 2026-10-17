@@ -2,10 +2,10 @@
 // Creates/updates a Stripe PaymentIntent for the cart. EVERYTHING is computed
 // SERVER-SIDE so the client can never set its own price:
 //   - line prices come from each variant's Stripe Price (trusted catalog)
-//   - shipping comes from the cart weight + the customer's US destination
+//   - shipping comes from the cart weight + the customer's destination
 //   - sales tax comes from Stripe Tax (charged only where you're registered)
-// US shipping only. The client sends the cart, the (optional) shipping address,
-// and an optional receipt email -- never amounts.
+// US shipping, plus the two kits to Canada, Australia and the UK (INTL below). The client sends the
+// cart, the (optional) shipping address, and an optional receipt email -- never amounts.
 import {
   CONTIGUOUS_US_GROUND,
   canonicalShippingJson,
@@ -66,6 +66,28 @@ function destinationSurchargeCents(state) {
   if (mi <= 1600) return 200;
   return 300;
 }
+// International (Teddy, 2026-10-17): the Avian Visitors Kit and the Bird Mic Kit also ship to Canada,
+// Australia and the UK; everything else stays US-only. The buyer pays any import tax on delivery (we hold no
+// registrations there, so Stripe Tax returns $0). UK orders stay above GBP 135: at or below it the seller must
+// register for UK VAT; above it VAT is collected at the border. $210 keeps above GBP 135 until the pound tops ~$1.55.
+// One box per order: Asendia's tracked service takes up to 4.4 lb (heavier boxes cost 2-5x by USPS), so an
+// international order stays at or under 4 lb packed. The box price is the 2026-10-17 EasyPost quote at 4.4 lb
+// (flat across each country) plus about $1, and 1.5% of the subtotal covers Stripe's international card fee.
+// The worker refuses a label that costs more than the customer paid.
+const INTL = { CA: { box: 2700, states: /^(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)$/, zip: /^[A-Z]\d[A-Z] ?\d[A-Z]\d$/i },
+               AU: { box: 2800, states: /^(ACT|NSW|NT|QLD|SA|TAS|VIC|WA)$/, zip: /^\d{4}$/ },
+               GB: { box: 2300, states: null, zip: /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i } };
+const INTL_PRODUCTS = { "avian-visitors-kit": 1, "avian-mic": 1 };
+const UK_MIN_SUBTOTAL = 21000;
+const INTL_BOX_LB = 4;
+function intlShippingCents(country, subtotal) {
+  return Math.ceil((INTL[country].box + subtotal * 0.015) / 100) * 100;
+}
+function intlAddressOk(addr) {
+  const c = INTL[addr.country];
+  return !!c && !!addr.line1 && !!addr.city && c.zip.test(String(addr.postal_code || "").trim()) &&
+    (!c.states || c.states.test(String(addr.state || "").toUpperCase()));
+}
 function haversineMiles(a, b) {
   const R = 3958.8, rad = (d) => (d * Math.PI) / 180;
   const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
@@ -101,7 +123,7 @@ async function calculateTax(headers, currency, taxLines, shippingCents, addr) {
   });
   form.set("shipping_cost[amount]", String(shippingCents));
   form.set("shipping_cost[tax_behavior]", "exclusive");
-  form.set("customer_details[address][country]", "US");
+  form.set("customer_details[address][country]", addr.country === "US" ? "US" : String(addr.country));
   form.set("customer_details[address][state]", String(addr.state || "").slice(0, 20));
   form.set("customer_details[address][postal_code]", String(addr.postal_code || "").slice(0, 20));
   if (addr.city) form.set("customer_details[address][city]", String(addr.city).slice(0, 100));
@@ -275,19 +297,24 @@ export async function onRequestPost({ request, env }) {
   // Shipping + tax need a US address. Before that, initialize a manual-capture
   // draft at the subtotal so Stripe Elements can mount without making it payable.
   let shippingCents = null, taxCents = null, total = subtotal, calcId = "";
-  if (addr && typeof addr.country === "string" && addr.country !== "US") {
-    return reply({ error: "We only ship within the US right now." }, 400);
+  const intl = !!addr && addr.country !== "US";
+  if (intl) {
+    if (!Object.prototype.hasOwnProperty.call(INTL, addr.country)) return reply({ error: "We only ship within the US right now." }, 400);
+    const usOnly = normalized.find((l) => !INTL_PRODUCTS[l.id]);
+    if (usOnly) return reply({ error: (catalog[usOnly.id].title || "That item") + " ships within the US only." }, 400);
+    if (addr.country === "GB" && subtotal < UK_MIN_SUBTOTAL) return reply({ error: "UK orders need a subtotal of at least $210." }, 400);
+    if (totalLb + PACKAGING_LB > INTL_BOX_LB) return reply({ error: "International orders ship as one box of up to 4 lb, about one Avian Visitors Kit. Please place separate orders." }, 400);
   }
-  // Shipping + tax only once we have a valid US destination: a 2-letter state we recognize
+  // Shipping + tax only once we have a valid destination: in the US a 2-letter state we recognize
   // plus a 5-digit ZIP. Validating here also stops a malformed address from making the tax
   // API error out and silently fall back to $0 in a state where we DO collect.
   const _state = String((addr && addr.state) || "").toUpperCase();
   const _zip = String((addr && addr.postal_code) || "");
-  const haveAddress = !!addr && addr.country === "US" && !!(STATE_CENTROIDS[_state] || NONCONTIGUOUS[_state]) && /^\d{5}(-\d{4})?$/.test(_zip);
-  if (addr && !haveAddress) return reply({ error: "Enter a valid US shipping address." }, 400);
+  const haveAddress = !!addr && (intl ? intlAddressOk(addr) : addr.country === "US" && !!(STATE_CENTROIDS[_state] || NONCONTIGUOUS[_state]) && /^\d{5}(-\d{4})?$/.test(_zip));
+  if (addr && !haveAddress) return reply({ error: intl ? "Enter a valid shipping address." : "Enter a valid US shipping address." }, 400);
   if (piId && !haveAddress) return reply({ error: "A valid shipping address is required before payment." }, 400);
   if (haveAddress) {
-    shippingCents = computeShippingCents(totalLb, _state);
+    shippingCents = intl ? intlShippingCents(addr.country, subtotal) : computeShippingCents(totalLb, _state);
     const tax = await calculateTax(headers, currency, taxLines, shippingCents, addr);
     if (tax.error) return reply({ error: "Sales tax could not be calculated. Please try again." }, 502);
     taxCents = tax.tax; total = tax.total; calcId = tax.id;

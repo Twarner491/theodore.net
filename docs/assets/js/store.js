@@ -1276,7 +1276,7 @@
 
     const stripe = window.Stripe(data.publishableKey);
     const elements = stripe.elements({ clientSecret: data.clientSecret, appearance: checkoutAppearance(), fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" }] });
-    const addressEl = elements.create("address", { mode: "shipping", allowedCountries: ["US"], autocomplete: { mode: "disabled" } });   // US only; disable search-first autocomplete so all fields show expanded
+    const addressEl = elements.create("address", { mode: "shipping", allowedCountries: ["US", "CA", "AU", "GB"], autocomplete: { mode: "disabled" } });   // the kits also ship to CA/AU/GB (the server checks the cart); disable search-first autocomplete so all fields show expanded
     addressEl.mount("#address-element");
     const pe = elements.create("payment", { layout: "tabs", wallets: { applePay: "auto", googlePay: "auto" } });   // surface Apple Pay / Google Pay when eligible
     pe.mount("#payment-element");

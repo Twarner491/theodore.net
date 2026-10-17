@@ -47,7 +47,7 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective August 31, 2026</p>
+          <p class="draft">Effective October 17, 2026</p>
 
           <p>This policy describes how the theodore.net store collects, uses, and shares personal information, and the choices available to you. It is intended to comply with the California Online Privacy Protection Act (CalOPPA).</p>
 
@@ -59,7 +59,7 @@ search:
           <h3>How we share</h3>
           <p>We share information only with the providers needed to operate the site and fulfill orders:</p>
           <ul>
-            <li><strong>Shipping carriers.</strong> Your name, address, and shipment details go to the carrier used to deliver your package.</li>
+            <li><strong>Shipping carriers.</strong> Your name, address, and shipment details go to the carrier used to deliver your package. For orders shipped outside the US, the destination's customs authority also receives them, with the order contents and value.</li>
             <li><strong>Cloudflare.</strong> Our site, store functions, security controls, and first-party funnel endpoint run on Cloudflare. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare's privacy policy</a>.</li>
             <li><strong>Stripe.</strong> Stripe processes payments, taxes, and order records. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a>.</li>
             <li><strong>Buttondown.</strong> Buttondown stores waitlist and newsletter subscriptions and sends those messages. See <a href="https://buttondown.com/legal/privacy" target="_blank" rel="noopener">Buttondown's privacy policy</a>.</li>
@@ -82,6 +82,7 @@ search:
 
           <h3>Your choices</h3>
           <p>To access, correct, or delete your information, email <a href="mailto:support@theodore.net">support@theodore.net</a>.</p>
+          <p>If you live in the UK, you may also object to our use of your information and complain to the Information Commissioner's Office. We use order details to fill your order and keep the records tax law requires, and site data for our legitimate interest in running the store. Our providers process your information in the US.</p>
 
           <h3>Changes</h3>
           <p>Updates to this policy will be posted here with a new effective date. Material changes will be noted at the top of the page.</p>

@@ -47,7 +47,7 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective August 31, 2026</p>
+          <p class="draft">Effective October 17, 2026</p>
 
           <p>These terms apply to purchases from the theodore.net store. By placing an order, you agree to them.</p>
 
@@ -61,11 +61,13 @@ search:
           <p>We may refuse or cancel an order at our discretion. If we cancel an order you have paid for, we will issue a full refund. Prices may change without notice. We may correct pricing or product errors and cancel affected orders with a full refund. Stripe processes card payments; we do not see or store your card number. See the <a href="/privacy">Privacy Policy</a>.</p>
 
           <h3>Shipping</h3>
-          <p>Orders ship from California to the destinations and by the services shown at checkout. Tracking is provided when the order ships. Risk of loss passes to you when the carrier takes possession of the package.</p>
+          <p>Orders ship from California to the destinations and by the services shown at checkout. Tracking is provided when the order ships. Risk of loss passes to you when the carrier takes possession of the package, or on delivery for orders shipped outside the US.</p>
+          <p>For orders shipped outside the US, you pay any import duties, taxes, and carrier fees charged on delivery, and we declare the price you paid. Kits shipped outside the US do not include the US wall charger: use the included cable with a USB wall adapter rated 5 V, 3 A. If a package is refused or returned undelivered, we refund the order minus shipping both ways and any charges we incur.</p>
           <p>If we cannot ship within the time stated when you order, or within 30 days where no time is stated, we will contact you and give you the choice to accept a revised date or cancel for a full refund.</p>
 
           <h3>Warranty</h3>
           <p>We provide a 90-day limited warranty against manufacturing defects, measured from the date of delivery. Our remedy is repair, replacement, or refund at our discretion. See the <a href="/returns">Return Policy</a> for how to make a claim.</p>
+          <p>If you live outside the US, this warranty is in addition to your rights under local consumer law. For customers in Australia: Our goods come with guarantees that cannot be excluded under the Australian Consumer Law. You are entitled to a replacement or refund for a major failure and compensation for any other reasonably foreseeable loss or damage. You are also entitled to have the goods repaired or replaced if the goods fail to be of acceptable quality and the failure does not amount to a major failure.</p>
           <p><strong>Except as expressly stated in this limited warranty, products are provided "as is." To the fullest extent permitted by law, we disclaim all implied warranties, including the implied warranties of merchantability and fitness for a particular purpose. Where a written warranty is provided, any implied warranties are limited in duration to that written warranty, as provided under the Magnuson-Moss Warranty Act.</strong></p>
           <p>The warranty does not cover incorrect kit assembly, unauthorized modification or repair, misuse, static discharge, accident, ordinary wear, or cosmetic damage that does not affect operation.</p>
 
@@ -83,7 +85,7 @@ search:
           <p>Some pages contain Amazon affiliate links. As an Amazon Associate, we earn from qualifying purchases at no extra cost to you.</p>
 
           <h3>Governing law</h3>
-          <p>These terms are governed by the laws of the State of California, without regard to its conflict-of-law rules. Any dispute will be resolved in the state or federal courts located in California.</p>
+          <p>These terms are governed by the laws of the State of California, without regard to its conflict-of-law rules. Any dispute will be resolved in the state or federal courts located in California. If you live outside the US, you keep the protections of your local consumer law that cannot be waived.</p>
 
           <h3>Changes</h3>
           <p>We may update these terms. The version posted when you order applies to that order. Purchases made after an update are subject to the revised terms.</p>

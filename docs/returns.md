@@ -47,13 +47,14 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective August 31, 2026</p>
+          <p class="draft">Effective October 17, 2026</p>
 
           <p>Unopened kits and like-new finished products may be returned within 30 days of delivery. Items that arrive damaged or fail out of the box are eligible for replacement or refund.</p>
 
           <h3>Returns</h3>
           <p>Start a return within 30 days of delivery. Kits must be unopened in their original packaging, with all parts and materials intact. Finished products must be complete, undamaged, in like-new condition, and in their original protective packaging. Opened, assembled, soldered, or modified kits cannot be returned.</p>
           <p>Before sending an item, email <a href="mailto:returns@theodore.net">returns@theodore.net</a> with your order number and reason for the return. We will send return instructions. Items sent without authorization cannot be processed.</p>
+          <p>If you live in the UK, you may also cancel within 14 days of delivery for any reason, even if you opened the kit or it was on sale. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> and send the item back within 14 days of telling us. We refund the price and the original shipping within 14 days of receiving it. You pay return shipping, and we may deduct for loss in value from handling beyond what is needed to inspect the item, such as assembly. Custom items made to your spec are excluded.</p>
 
           <h3>Defective or damaged items</h3>
           <p>If an item arrives damaged or fails out of the box, email <a href="mailto:returns@theodore.net">returns@theodore.net</a> within 30 days. You may choose a replacement or refund. Include photos if possible.</p>
@@ -62,6 +63,7 @@ search:
 
           <h3>Shipping and refunds</h3>
           <p>You pay return shipping for change-of-mind returns. We cover shipping both ways for verified defective items. There is no restocking fee. Use a tracked service; refunds can be issued only for returns we receive. Approved refunds are sent to the original payment method within 10 business days of receipt.</p>
+          <p>For orders shipped outside the US, we usually send a replacement part for a covered defect instead of asking for a return. We cannot refund import taxes or carrier fees paid on delivery; your customs authority or carrier may refund them for returned goods.</p>
 
           <h3>Non-returnable items</h3>
           <ul>
