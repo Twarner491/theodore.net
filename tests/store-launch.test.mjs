@@ -214,7 +214,7 @@ async function inflate(b64) {
   const stream = new Blob([Buffer.from(b64, "base64")]).stream().pipeThrough(new DecompressionStream("deflate"));
   return new Uint8Array(await new Response(stream).arrayBuffer());
 }
-async function expected(base, digits) {
+async function expected(base, digits = []) {
   const frame = await inflate(ART[base]);
   const tiles = await Promise.all(ART.digits.map(inflate));
   digits.forEach((n, i) => {
@@ -246,10 +246,10 @@ test("the GIF decodes to exactly the page's countdown, ticking on the site's sec
 test("the GIF flips to the open state when the drop opens mid-animation, and after it", async () => {
   const last = decodeGif(await countdownGif(AT, AT - 3000)).frames;
   assert.equal(last.length, 4);
-  assert.deepEqual(last[3].pixels, await expected("open", [0, 0, 0, 0, 0, 0, 0, 0]));
+  assert.deepEqual(last[3].pixels, await expected("open"));
   const open = decodeGif(await countdownGif(AT, AT + 1)).frames;
   assert.equal(open.length, 1);
-  assert.deepEqual(open[0].pixels, await expected("open", [0, 0, 0, 0, 0, 0, 0, 0]));
+  assert.deepEqual(open[0].pixels, await expected("open"));
 });
 
 test("the countdown endpoint serves an uncached GIF for a known drop and 404s otherwise", async () => {

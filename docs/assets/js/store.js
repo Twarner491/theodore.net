@@ -797,6 +797,7 @@
         writeTrail(navTrail.concat([currentProductTrailEntry(p)]));   // same-tab body click -> push this exact page so the child's back returns here
     });
     syncAccCards();
+    reveal();   // inventory refresh replaces these cards after the initial page reveal
   }
 
   function renderCarousel() {
