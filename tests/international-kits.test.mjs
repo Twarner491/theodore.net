@@ -88,8 +88,10 @@ test("other countries and malformed addresses are refused before any price is se
   const badZip = await run([kit()], { ...ADDR.CA, postal_code: "12345" });
   assert.equal(badZip.status, 400);
   assert.equal(badZip.body.error, "Enter a valid shipping address.");
-  const badState = await run([kit()], { ...ADDR.AU, state: "XX" });
-  assert.equal(badState.status, 400);
+  const noState = await run([kit()], { ...ADDR.AU, state: "" });
+  assert.equal(noState.status, 400);
+  const named = await run([kit()], { ...ADDR.AU, state: "New South Wales" });
+  assert.equal(named.status, 200, "a state name works as well as its code");
 });
 
 test("US orders keep their existing price", async () => {

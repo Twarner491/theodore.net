@@ -74,9 +74,10 @@ function destinationSurchargeCents(state) {
 // international order stays at or under 4 lb packed. The box price is the 2026-10-17 EasyPost quote at 4.4 lb
 // (flat across each country) plus about $1, and 1.5% of the subtotal covers Stripe's international card fee.
 // The worker refuses a label that costs more than the customer paid.
-const INTL = { CA: { box: 2700, states: /^(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)$/, zip: /^[A-Z]\d[A-Z] ?\d[A-Z]\d$/i },
-               AU: { box: 2800, states: /^(ACT|NSW|NT|QLD|SA|TAS|VIC|WA)$/, zip: /^\d{4}$/ },
-               GB: { box: 2300, states: null, zip: /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i } };
+// A Canadian or Australian address needs its province/state (code or name: the carrier normalizes it).
+const INTL = { CA: { box: 2700, state: true, zip: /^[A-Z]\d[A-Z] ?\d[A-Z]\d$/i },
+               AU: { box: 2800, state: true, zip: /^\d{4}$/ },
+               GB: { box: 2300, state: false, zip: /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i } };
 const INTL_PRODUCTS = { "avian-visitors-kit": 1, "avian-mic": 1 };
 const UK_MIN_SUBTOTAL = 21000;
 const INTL_BOX_LB = 4;
@@ -86,7 +87,7 @@ function intlShippingCents(country, subtotal) {
 function intlAddressOk(addr) {
   const c = INTL[addr.country];
   return !!c && !!addr.line1 && !!addr.city && c.zip.test(String(addr.postal_code || "").trim()) &&
-    (!c.states || c.states.test(String(addr.state || "").toUpperCase()));
+    (!c.state || String(addr.state || "").trim().length >= 2);
 }
 function haversineMiles(a, b) {
   const R = 3958.8, rad = (d) => (d * Math.PI) / 180;
