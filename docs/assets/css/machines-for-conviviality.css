@@ -1,0 +1,272 @@
+/* Article-specific interactive figures. Typography and color inherit Theodore's
+   writing system; these rules only supply the controls and motion. */
+
+.md-typeset .conviviality-opening-art {
+  margin-left: 0;
+}
+
+.md-typeset .conviviality-opening-art .caption {
+  text-align: left;
+}
+
+.md-typeset .hello-world figcaption,
+.md-typeset .bee-dance figcaption {
+  margin-top: 0.5rem;
+  color: var(--md-default-fg-color--light);
+  font-family: "Crimson Pro", "ET Book", serif;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+.md-typeset .hello-world {
+  width: 100%;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.md-typeset .hello-world__prompt {
+  margin: 0 0 1rem;
+  color: var(--md-default-fg-color--light);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.md-typeset .hello-world__channels {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.md-typeset .hello-world figcaption,
+.md-typeset .bee-dance figcaption {
+  width: 100%;
+  text-align: center;
+}
+
+.md-typeset .hello-world__channel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.55em 1.1em;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--md-default-fg-color--light);
+  cursor: pointer;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  transition: border-color 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+
+.md-typeset .hello-world__channel:hover,
+.md-typeset .hello-world__channel:focus-visible {
+  border-color: var(--md-default-fg-color--light);
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .hello-world__channel:focus-visible,
+.md-typeset .bee-dance:focus-visible {
+  outline: 1px solid var(--md-default-fg-color);
+  outline-offset: 3px;
+}
+
+.md-typeset .hello-world__play-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1em;
+  height: 1.1em;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.md-typeset .hello-world__play-icon svg {
+  fill: currentColor;
+}
+
+.md-typeset .hello-world__channel.is-playing {
+  border-color: var(--md-default-fg-color--light);
+  color: var(--md-default-fg-color);
+  opacity: 0.72;
+}
+
+.md-typeset .hello-world__channel.is-playing .hello-world__play-icon {
+  position: relative;
+  background: var(--md-default-fg-color);
+  color: var(--md-default-bg-color);
+}
+
+.md-typeset .hello-world__channel.is-playing .hello-world__play-icon::before {
+  position: absolute;
+  inset: -3px;
+  border: 1px solid var(--md-default-fg-color);
+  border-radius: 50%;
+  animation: conviviality-pulse 1.1s ease-out infinite;
+  content: "";
+}
+
+.md-typeset .hello-world__channel.is-unsupported {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@keyframes conviviality-pulse {
+  from { opacity: 0.55; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.75); }
+}
+
+.md-typeset .bee-dance {
+  width: 100%;
+  margin: 1rem 0 2rem;
+  cursor: pointer;
+}
+
+.md-typeset .bee-dance__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.md-typeset .bee-dance__path {
+  fill: none;
+  stroke: var(--md-default-fg-color--lighter);
+  stroke-width: 1.4;
+  stroke-dasharray: 3.5 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.md-typeset .bee-dance__arrow {
+  fill: var(--md-default-fg-color--light);
+  opacity: 0.85;
+}
+
+.md-typeset .bee-dance__label {
+  fill: var(--md-default-fg-color--light);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.md-typeset .bee-dance__sprite-rotator {
+  transform: rotate(90deg);
+}
+
+.md-typeset .bee-dance__backing {
+  fill: var(--md-default-bg-color);
+}
+
+.md-typeset .bee-dance__bee {
+  overflow: hidden;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .bee-dance image {
+  filter: brightness(0) invert(1);
+  opacity: 0.82;
+}
+
+.md-typeset .bee-dance__bee--waggle {
+  animation: conviviality-waggle 150ms ease-in-out infinite alternate;
+}
+
+.md-typeset .bee-dance__bee,
+.md-typeset .bee-dance__human {
+  transition: opacity 520ms ease;
+}
+
+.md-typeset .bee-dance__human {
+  opacity: 0;
+}
+
+.md-typeset .bee-dance:hover .bee-dance__bee,
+.md-typeset .bee-dance:focus-visible .bee-dance__bee {
+  opacity: 0;
+}
+
+.md-typeset .bee-dance:hover .bee-dance__human,
+.md-typeset .bee-dance:focus-visible .bee-dance__human {
+  opacity: 1;
+}
+
+@keyframes conviviality-waggle {
+  from { transform: rotate(-3deg); }
+  to { transform: rotate(3deg); }
+}
+
+.md-typeset .dinkus {
+  margin: 2.5rem 0;
+  color: var(--md-default-fg-color--light);
+  font-family: "Crimson Pro", "ET Book", serif;
+  letter-spacing: 0.5em;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .md-typeset .hello-world__channels {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .md-typeset .hello-world__channel {
+    justify-content: center;
+  }
+
+  .md-typeset .bee-dance__label {
+    font-size: 11.5px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .md-typeset .conviviality-opening-art .caption {
+    text-align: center;
+  }
+
+  .md-typeset .conviviality-opening-art {
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 0 1.5rem !important;
+    padding: 0 !important;
+    color: var(--md-default-fg-color--light);
+    font-size: 0.85em;
+  }
+
+  .md-typeset .conviviality-opening-art img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .hello-world__channel.is-playing .hello-world__play-icon::before,
+  .md-typeset .bee-dance__bee--waggle {
+    animation: none;
+  }
+
+  .md-typeset .bee-dance__bee,
+  .md-typeset .bee-dance__human {
+    transition: none;
+  }
+}
+
+@media print {
+  .md-typeset .hello-world__channels {
+    display: none;
+  }
+
+  .md-typeset .bee-dance__bee--waggle {
+    animation: none;
+  }
+}
