@@ -20,7 +20,8 @@ SEARCH_DATA = load_hook("search_data")
 class StoreSalesOpenTest(unittest.TestCase):
     def test_public_catalog_reopens_only_the_existing_fulfillable_variants(self):
         expected = {
-            "avian-visitors": ["electronics", "electronics-printed"],
+            "avian-visitors": ["assembled"] if self._assembled_activated() else [],
+            "avian-visitors-kit": ["electronics", "electronics-printed"],
             "mic-mount": ["default"],
             "avian-mic": ["electronics", "electronics-printed"],
             "avian-visitors-parts": ["default"],
@@ -43,20 +44,29 @@ class StoreSalesOpenTest(unittest.TestCase):
                 self.assertTrue(variants[variant_id].get("stripePrice"))
                 self.assertTrue(variants[variant_id].get("stripePriceLive"))
 
+        # The assembled frame is a timed drop: held (unsellable) until activated, and
+        # checkout refuses it before launchAt either way.
         assembled = next(variant for variant in products["avian-visitors"]["variants"] if variant["id"] == "assembled")
-        self.assertTrue(assembled.get("comingSoon"))
-        self.assertFalse(STORE_PRODUCTS._sellable(assembled))
+        self.assertTrue(assembled.get("launchAt"))
+        self.assertEqual(STORE_PRODUCTS._sellable(assembled), self._assembled_activated())
 
-    def test_search_returns_current_public_prices_without_sold_out_status(self):
+    @staticmethod
+    def _assembled_activated():
+        products = {product["id"]: product for product in STORE_PRODUCTS._products(ROOT / "docs")}
+        return products["avian-visitors"]["variants"][0].get("status") == "available"
+
+    def test_search_returns_current_public_prices(self):
         products = {
-            product["title"]: {"price": product["price"], "status": product["status"]}
+            product["title"]: product["price"]
             for product in SEARCH_DATA._scan_store(ROOT / "docs")
+            if not product.get("accessory")
         }
 
         self.assertEqual(products, {
-            "Avian Visitors": {"price": 450, "status": ""},
-            "Bird Mic": {"price": 180, "status": ""},
-            "Polargraph Plotter": {"price": 430, "status": ""},
+            "Avian Visitors": 699,
+            "Avian Visitors Kit": 450,
+            "Bird Mic Kit": 180,
+            "Polargraph Kit": 430,
         })
 
 

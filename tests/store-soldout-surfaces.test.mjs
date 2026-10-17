@@ -48,7 +48,7 @@ function detailAvailability(product) {
         style: {},
         textContent: ""
       };
-      const input = { focus: function () {} };
+      const input = { focus: function () {}, addEventListener: function () {} };
       const form = { addEventListener: function () {} };
       const waitlist = {
         hidden: true,
@@ -99,38 +99,36 @@ function detailAvailability(product) {
 }
 
 
-const soldOutSearchItem = {
+const searchItem = {
   type: "product",
   url: "/store/avian-mic/",
   title: "Bird Mic",
   price: 180,
-  status: "Sold out",
 };
 
 
-test("expanded search browse shows product availability instead of its former price", () => {
-  const card = searchRenderers().cardEl(soldOutSearchItem);
-  assert.match(card.innerHTML, /Sold out/);
-  assert.doesNotMatch(card.innerHTML, /from \$180/);
+// Search shows a product's price only; availability lives on the product page.
+test("expanded search browse shows the product price", () => {
+  const card = searchRenderers().cardEl(searchItem);
+  assert.match(card.innerHTML, /from \$180/);
 });
 
 
-test("typed search results show product availability instead of their former price", () => {
-  const row = searchRenderers().rowEl(soldOutSearchItem);
-  assert.match(row.innerHTML, /Sold out/);
-  assert.doesNotMatch(row.innerHTML, /from \$180/);
+test("typed search results show the product price", () => {
+  const row = searchRenderers().rowEl(searchItem);
+  assert.match(row.innerHTML, /from \$180/);
 });
 
 
-test("coming-soon variants retain the dedicated waitlist action", () => {
+test("coming-soon variants offer the same Notify me waitlist action", () => {
   const state = detailAvailability({
     id: "avian-visitors",
     defaultBuild: "assembled",
     variants: [{ id: "assembled", label: "Assembled", comingSoon: true, contents: [] }],
   });
   assert.match(state.status, /Coming soon/);
-  assert.equal(state.action, "Join the waitlist");
-  assert.match(state.form, /aria-label="Join the waitlist"/);
+  assert.equal(state.action, "Notify me");
+  assert.match(state.form, /aria-label="Notify me"/);
 });
 
 

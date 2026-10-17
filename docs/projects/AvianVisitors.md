@@ -48,7 +48,7 @@ See it running at [bird.onethreenine.net](https://bird.onethreenine.net):
 
 Building a bird tracking station of your own is easy enough. The full project repo is at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). If you're interested in building one of your own, I offer a [kit that includes all of the components you need](/store/avian-mic/)!
 <a class="kit-card kit-card--margin" href="/store/avian-mic/">
-  <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Avian Mic kit"></span>
+  <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Bird Mic Kit"></span>
   <span class="kit-card__body">
     <span class="kit-card__title">Bird Mic Kit</span>
     <span class="kit-card__desc">A tiny mic that feeds your bird screen the calls it hears.</span>
@@ -361,11 +361,11 @@ All of this collected data can also be exported in bulk via the interface's `Too
 
 I've been thoroughly enjoying this little weekend build the past few weeks, but now often find myself slipping to check the website instead of actually appreciating the birds that have stopped by! In an attempt to appease my curiosity while remaining distraction-free, I've built out a nice wooden-framed e-ink feed to hang right next to my bird-mic'ed window, dynamically populated with any birds heard over the past 24 hours.
 
-Everything you need to build a frame of your own can be found at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). If you're interested in building one of your own, I also offer a [kit that includes all of the components you need](/store/avian-visitors/)!
-<a class="kit-card kit-card--margin" href="/store/avian-visitors/">
+Everything you need to build a frame of your own can be found at [github.com/Twarner491/AvianVisitors](https://github.com/Twarner491/AvianVisitors). If you're interested in building one of your own, I also offer a [kit that includes all of the components you need](/store/avian-visitors-kit/)!
+<a class="kit-card kit-card--margin" href="/store/avian-visitors-kit/">
   <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/heard-today.png" alt="Avian Visitors kit"></span>
   <span class="kit-card__body">
-    <span class="kit-card__title">Avian Visitors</span>
+    <span class="kit-card__title">Avian Visitors Kit</span>
     <span class="kit-card__desc">A framed e-ink that collages the birds heard nearby.</span>
     <span class="kit-card__price"><span class="from">from</span>$450</span>
   </span>

@@ -17,6 +17,13 @@
 /* legal pages put the back-link inside the intro, so tighten the title to it */
 .introabt:has(.return2feed) h2 { margin-top: 0.7rem; }
 
+/* store index intro: the taxonomy selector sits on the description baseline */
+.store-intro-line { display: flex; align-items: center; justify-content: space-between; gap: 1.5em; margin-top: 0.65em; }
+.introabt .store-intro-line h3 { margin: 0; }
+/* Both intro and feed fade independently, so each becomes a stacking context.
+   Keep the open dropdown above the later-painted product cards. */
+.intro-section:has(#store-filter) { position: relative; z-index: 2; }
+
 /* product pages begin a little closer to the header */
 .intro-section:has(#product-detail) { margin-top: -48px; }
 
@@ -49,6 +56,58 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
   --store-pill:   rgba(0, 0, 0, 0.32);
   --store-recess: inset 0 1px 2px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.03);
   --store-raised: inset 0 1px 2px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+/* Quiet store taxonomy dropdown. The closed control reads like a small piece of
+   metadata; the bordered surface appears only while the list is open. */
+.store-filter { flex: none; position: relative; z-index: 3; margin-left: auto; }
+.store-filter-toggle {
+  min-width: 108px; display: inline-flex; align-items: center; justify-content: flex-end; gap: 0.65em;
+  padding: 0.35em 0 0.35em 0.7em; border: 0; border-radius: 5px; background: transparent;
+  color: var(--md-default-fg-color); opacity: 0.5; cursor: pointer;
+  font-family: "JetBrains Mono"; font-size: 0.76em; font-weight: 300; line-height: 1.2;
+  transition: opacity 0.18s ease;
+}
+.store-filter-toggle:hover, .store-filter-toggle:focus-visible, .store-filter.is-open .store-filter-toggle { opacity: 0.82; }
+.store-filter-toggle:focus { outline: none; }
+.store-filter-toggle:focus-visible { outline: 1px solid var(--md-default-fg-color--lighter); outline-offset: 3px; }
+.store-filter-caret { font-size: 0.64em; opacity: 0.58; transition: transform 0.18s var(--store-ease); }
+.store-filter.is-open .store-filter-caret { transform: rotate(180deg); }
+.md-typeset .store-filter-menu {
+  position: absolute; top: calc(100% + 2px); right: 0; width: 128px; z-index: 4;
+  box-sizing: border-box; margin: 0; padding: 4px; list-style: none;
+  border: 1px solid var(--md-default-fg-color--lightest); border-radius: 10px;
+  background: var(--md-default-bg-color); box-shadow: 0 7px 22px rgba(0,0,0,0.08);
+  opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-3px); transform-origin: top right;
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0s linear 0.16s;
+}
+.md-typeset .store-filter.is-open .store-filter-menu {
+  opacity: 1; visibility: visible; pointer-events: auto; transform: none;
+  transition-delay: 0s;
+}
+.md-typeset .store-filter-menu:focus { outline: none; }
+.md-typeset .store-filter-menu [role="menuitemcheckbox"] {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.7em;
+  list-style: none; margin: 0; padding: 0.42em 0.55em; border-radius: 6px;
+  color: var(--md-default-fg-color); opacity: 0.48; cursor: pointer;
+  font-family: "JetBrains Mono"; font-size: 0.73em; font-weight: 300; line-height: 1.25;
+  transition: opacity 0.14s ease, background-color 0.14s ease;
+}
+.md-typeset .store-filter-menu [role="menuitemcheckbox"]::before { display: none; }
+.md-typeset .store-filter-menu [role="menuitemcheckbox"]::after {
+  content: ""; flex: none; width: 0.4em; height: 0.7em; margin: -0.15em 0.2em 0 0;
+  box-sizing: border-box; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  opacity: 0; transform: rotate(45deg);
+}
+.md-typeset .store-filter-menu [role="menuitemcheckbox"][aria-checked="true"] { opacity: 0.68; }
+.md-typeset .store-filter-menu [role="menuitemcheckbox"][aria-checked="true"]::after { opacity: 0.48; }
+.md-typeset .store-filter-menu [role="menuitemcheckbox"]:hover,
+.md-typeset .store-filter-menu [role="menuitemcheckbox"].is-active { opacity: 0.86; background: var(--store-track); }
+.md-typeset .store-filter-menu [role="menuitemcheckbox"][aria-disabled="true"] { cursor: default; }
+.md-typeset .store-filter-menu [role="menuitemcheckbox"][aria-disabled="true"]:hover { opacity: 0.68; background: transparent; }
+.store-filter-status {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 
 /* product grid: cards are links */
@@ -158,6 +217,11 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pe-qty button { width: 30px; height: 30px; border: 0; border-radius: 999px; background: transparent; color: var(--md-default-fg-color); font-size: 1em; cursor: pointer; opacity: 0.6; transition: opacity 0.2s ease; }
 .pe-qty button:hover { opacity: 1; }
 .pe-qty span { min-width: 26px; text-align: center; font-family: "JetBrains Mono"; font-size: 0.88em; opacity: 0.8; }
+.pe-batch {
+  margin-left: auto; text-align: right; white-space: nowrap;
+  font-family: "JetBrains Mono"; font-size: 0.7em; font-weight: 300; line-height: 1.35;
+  color: var(--md-default-fg-color); opacity: 0.5;
+}
 
 .pe-buy {
   width: 100%; border: 1.2px solid var(--md-default-fg-color); border-radius: 16px;
@@ -178,6 +242,34 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pe-wl-form button:hover { opacity: 1; }
 .pe-wl-form button svg { width: 17px; height: 17px; display: block; }
 .pe-wl-done { font-family: "JetBrains Mono"; font-size: 0.85em; font-weight: 300; opacity: 0.7; text-align: center; padding: 1em 0; margin: 0; }
+#product-detail .pe-wl-note { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; line-height: 1.6; opacity: 0.55; margin: 0.9em 0 0; }
+
+/* drop countdown: the same outlined field as the waitlist form, so "Notify me" swaps one for the
+   other in place. Digits roll inside clipped one-character slots (store.js rollDigit); clip-path,
+   not overflow, so each slot keeps its text baseline. */
+.pe-countdown { display: flex; align-items: center; justify-content: space-between; gap: 1em; width: 100%; box-sizing: border-box; padding: 0 4px 0 1.3em; border: 1.2px solid var(--md-default-fg-color--lighter); border-radius: 16px; background: var(--md-default-bg-color); font-family: "JetBrains Mono"; font-size: 0.86em; }
+/* the countdown and the form that replaces it share one fixed height (only on drop pages: the form
+   follows the countdown host), so the swap never shifts the page whatever the font metrics */
+.pe-countdown, .pe-countdown ~ .pe-waitlist .pe-wl-form { box-sizing: border-box; height: 52px; }
+.pe-countdown ~ .pe-waitlist .pe-wl-form input { align-self: stretch; padding-top: 0; padding-bottom: 0; }
+.pe-countdown[hidden] { display: none; }
+.pe-cd-time { display: inline-flex; align-items: baseline; gap: 0.9em; min-width: 0; font-size: 1.4em; font-weight: 300; line-height: 1.3; color: var(--md-default-fg-color); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pe-cd-num { display: inline-flex; opacity: 0.88; }
+.pe-cd-digit { position: relative; display: inline-block; clip-path: inset(0); }
+.pe-cd-digit::before { content: "0"; visibility: hidden; }
+.pe-cd-digit > span { position: absolute; top: 0; left: 0; right: 0; text-align: center; will-change: transform, opacity; }
+.pe-cd-label { margin-left: 0.16em; font-size: 0.56em; opacity: 0.4; }
+.pe-cd-notify, .pe-cd-joined { flex: none; height: 42px; padding: 0 1.2em; border-radius: 12px; font-family: "JetBrains Mono"; font-size: 0.92em; letter-spacing: 0.04em; white-space: nowrap; }
+.pe-cd-notify { border: 0; background: var(--md-default-fg-color); color: var(--md-default-bg-color); font-weight: 500; cursor: pointer; transition: transform 0.3s ease; }
+.pe-cd-notify:hover { transform: scale(0.97); }
+.pe-cd-notify:focus-visible { outline: 1px solid var(--md-default-fg-color--lighter); outline-offset: 3px; }
+.pe-cd-joined { display: inline-flex; align-items: center; font-weight: 300; color: var(--md-default-fg-color); opacity: 0.5; }
+.pe-cd-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (max-width: 400px) {
+  .pe-countdown { padding-left: 1em; gap: 0.6em; }
+  .pe-cd-time { gap: 0.62em; font-size: 1.26em; }
+  .pe-cd-notify, .pe-cd-joined { padding: 0 0.9em; }
+}
 
 #product-detail .pe-details { border: 0; border-top: 1px solid var(--md-default-fg-color--lightest); border-radius: 0; box-shadow: none !important; background: none; padding: 0; margin: 0; }
 #product-detail .pe-details:first-of-type { margin-top: 1.4em; }
@@ -278,6 +370,8 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .store-feed, .legal-section, .product-card { opacity: 0; }
 .store-feed.visible, .legal-section.visible { animation: fadeIn 0.6s ease-out forwards; }
 .product-card.visible { animation: fadeIn 0.5s ease-out forwards; }
+.store-grid.is-filter-update .product-card,
+.store-grid.is-filter-update .product-card.visible { opacity: 1; animation: none; }
 
 /* responsive */
 @media (max-width: 1200px) { .store-grid { grid-template-columns: repeat(3, 1fr); gap: 1.1em; } }
@@ -292,15 +386,18 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
   .pe-slide img { object-fit: contain; }
   .pe-arrow { display: none; }
   .pe-buyrow { justify-content: space-between; }
+  .pe-batch { max-width: 12em; white-space: normal; }
 }
 @media (max-width: 695px) {
+  .store-intro-line { flex-wrap: wrap; row-gap: 1em; }
+  .store-filter { margin-left: auto; }
   .store-grid { grid-template-columns: 1fr; gap: 1.4em; }
   .cart-drawer { right: 0; width: 100%; max-width: 100vw; padding-right: 0; border-radius: 0; }
   .cart-head { padding-top: 109px; }   /* drop "Cart" + close X in line with the header icon row on narrow screens */
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .product-card, .opt-pill, .cart-drawer, .cart-scrim, .pe-buy, .cart-checkout, .co-submit, .store-cart-count, .pe-slide { transition: none !important; }
+  .product-card, .opt-pill, .store-filter-toggle, .store-filter-caret, .store-filter-menu, .store-filter-menu [role="menuitemcheckbox"], .cart-drawer, .cart-scrim, .pe-buy, .pe-cd-notify, .cart-checkout, .co-submit, .store-cart-count, .pe-slide { transition: none !important; }
   .store-feed, .product-card { opacity: 1; animation: none !important; }
 }
 

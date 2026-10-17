@@ -11,65 +11,57 @@ product: true
 order: 1
 id: avian-visitors
 published: true
-teaser: A framed e-ink that displays the birds heard nearby.
-sub: A wood-framed colorful e-ink display that collages the birds heard nearby.
-description: A wood-framed colorful e-ink display that collages the birds heard nearby. A buildable kit or a finished, framed piece.
+teaser: A battery-powered e-paper frame that collages birds heard in your ZIP code.
+sub: A battery-powered e-paper frame that collages birds heard in your ZIP code.
+description: A battery-powered e-paper frame that collages birds heard in your ZIP code.
 imageBase: /assets/images/AvianVisitors/
 images:
-  - heard-today.png
-  - avianElectronics.png
-  - frameAndBacking.png
-defaultBuild: electronics
-weight: 1.7   # scale-verified: base kit ships ~2.0 lb packed (0.3 packaging added at checkout)
+  - avianAssembledTop.png
+  - avianAssembledBack.png
+  - avianAssembledSide.png
+defaultBuild: assembled
 project: /projects/AvianVisitors/
 related:
   - avian-mic
+storeListings:
+  - category: products
+    build: assembled
+    variants:
+      - assembled
+    title: Avian Visitors
 variants:
   - id: assembled
-    image: heard-today.png
+    image: avianAssembledTop.png
     label: Assembled
-    comingSoon: true
-    desc: Finished, framed, and ready to hang.
+    # Drop gate: the page (and the email countdown image) counts down to launchAt (quoted UTC;
+    # Thu Oct 29, 9:00 AM PT). soldout never sells; to open by itself at launchAt, set
+    # status: available ahead of time (with stripePriceLive and inventory provisioned).
+    # Checkout refuses this variant before launchAt. Leave launchAt in place after the drop.
+    status: available
+    launchAt: "2026-10-29T16:00:00Z"
+    launchLabel: Batch 1
+    price: 699
+    weight: 4   # PLACEHOLDER (Teddy, 2026-10-17): guessed from the kit, maybe slightly over. Weigh a packed
+                #   frame and update it before Oct 29 9 AM PT or after Batch 1 settles: orders in flight are bound to it.
+    stripePrice: price_1UAyqjRPSNpqisAPDHJxogp3
+    stripePriceLive: "price_1URc2XRPSNpqisAPNxAEEUEQ"
+    localPreview: true
+    maxQuantity: 20
+    shippingProfile: contiguous-us-ground
+    inventorySku: avian-gen3-batch-01
+    batchSize: 20
+    batchSizePrivate: true   # never show "N of 20"; only "Only N left" at 5 or fewer
+    softwareNote: Batch 1 ships Q4 2026.
     contents:
-      - 13.3" Spectra 6 E-ink, matted in an oak wood frame
-      - Charging cable & brick
-  - id: electronics
-    image: avianElectronics.png
-    label: Electronics Kit
-    price: 450
-    stripePrice: "price_1TkB7KRPSNpqisAPzs2xr9zO"
-    stripePriceLive: "price_1TkCJcRPSNpqisAP3ee3eytM"
-    desc: All electronics needed for the build, you provide the frame and backing.
-    contents:
-      - Raspberry Pi 3 A+
-      - 13.3" Spectra 6 E-ink panel
-      - microSD card
-      - Power cable & brick
-  - id: electronics-printed
-    image: frameAndBacking.png
-    label: "+ Frame & Parts"
-    price: 520
-    weight: 3.2   # scale-verified: ships 3.1-3.7 lb packed
-    stripePrice: "price_1TkB7KRPSNpqisAPHfB4WxjI"
-    stripePriceLive: "price_1TkCJdRPSNpqisAP6IenR74C"
-    desc: All electronics + a 3D printed backplate and a finished wood frame with mat.
-    contents:
-      - Everything in the Electronics Kit
-      - 3D Printed backplate
-      - Oak wood frame and mat
-softwareNote: Hardware only. You install the open-source software on your own device at first setup.
+      - Fully assembled 13.3-inch e-paper frame with rechargeable battery
+      - Wall-hanging hardware
 sections:
+  - label: How it works
+    html: The framed e-ink display dynamically updates to show a collage of the birds heard most recently within your ZIP code.
   - label: Pairs with
-    items:
-      - Pair with a <a href="/store/avian-mic/">Bird Mic</a> to fill the display with birds captured right at your home.
-  - label: Open Source
-    items:
-      - This work, like all <a href="/projects/">my other projects</a>, is open source and usually in a state of continuous revision and development. Expect things to change, and (hopefully) get sleeker and easier to use over time. If any features or tweaks or fixes to this product would make your life easier, <a href="mailto:support@theodore.net">please do let me know</a>. And if you haven't already, check out the <a href="/projects/AvianVisitors/">Avian Visitors project writeup</a>!
+    html: <a href="/store/avian-mic/">Bird Mic Kit</a> or <a href="https://www.birdweather.com/shop-birdweather-puc" target="_blank" rel="noopener noreferrer">BirdWeather PUC</a> to populate the screen with your own bioacoustics data. Not required.
   - label: Dimensions
-    items:
-      - Assembled variant comes in 11"x14" oak wood frame
-      - Frame & Parts kit ships with an A4 (8.27" x 11.69") oak wood frame
-colophon: 'Sold as hardware. The open-source BirdNET software and Cornell’s model install onto your own device on first setup, for personal use; they are not pre-loaded or resold. Bird ID by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener">BirdNET</a>, Cornell Lab of Ornithology (CC BY-NC-SA 4.0).'
+    html: 11.75 × 14.75 × 0.96 in
 ---
 
 <head>

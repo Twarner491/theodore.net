@@ -1,0 +1,13 @@
+# Source-only template. Copy it outside the deployment path, replace both
+# placeholders, test against the test-mode database, and review before deploy.
+name = "theodore-store-inventory-expiry"
+main = "store-inventory-expiry.js"
+compatibility_date = "2026-08-31"
+
+[[d1_databases]]
+binding = "STORE_INVENTORY"
+database_name = "REPLACE_WITH_INVENTORY_DATABASE_NAME"
+database_id = "REPLACE_WITH_INVENTORY_DATABASE_ID"
+
+[triggers]
+crons = ["*/5 * * * *"]

@@ -1,8 +1,8 @@
 """Emit /search-data.json for the custom card-based search.
 
-One record per project / writing with the card metadata (title, description,
-thumbnail, date, readtime) plus stripped body text for full-text matching.
-Products are sourced separately at runtime from the store (window.searchProducts).
+One record per project, writing, product, or accessory with card metadata
+(title, description, thumbnail, date, readtime) plus searchable copy. Store
+records come from the same docs/store frontmatter used to build the storefront.
 """
 
 import json
@@ -75,17 +75,16 @@ def _dark_sibling(docs_dir, url):
     return dark if (Path(docs_dir) / dark.lstrip('/')).exists() else ''
 
 
-def _variant_status(variant):
-    if not isinstance(variant, dict):
-        return 'available'
-    return variant.get('status') or ('comingSoon' if variant.get('comingSoon') else 'available')
-
-
 def _scan_store(docs_dir):
-    """Read product definitions from docs/store/*.md frontmatter so products are
-    searchable on every page. The frontmatter is the single source of truth
-    (hooks/store_products.py builds the store's runtime data from the same
-    files), so there is no JS parsing that could silently drift."""
+    """Read product definitions from docs/store/*.md frontmatter so products and
+    accessories are searchable on every page. The frontmatter is the single
+    source of truth (hooks/store_products.py builds the store's runtime data
+    from the same files), so there is no JS parsing that could silently drift.
+
+    Accessories carry their relationship metadata into the index. search.js
+    keeps them out of the empty browse view and only surfaces them for a typed
+    query, avoiding a duplicate card for every add-on in the normal Store row.
+    """
     out = []
     store = Path(docs_dir) / 'store'
     if not store.exists():
@@ -95,26 +94,32 @@ def _scan_store(docs_dir):
             fm, _ = _frontmatter(md.read_text(encoding='utf-8'))
         except Exception:
             continue
-        if not isinstance(fm, dict) or not fm.get('product') or fm.get('accessory'):
-            continue                          # accessories are add-ons, shown only on their parent page
+        if not isinstance(fm, dict) or not fm.get('product'):
+            continue
         pid = fm.get('id') or md.stem
         variants = fm.get('variants') if isinstance(fm.get('variants'), list) else []
         prices = [v.get('price') for v in variants
-                  if isinstance(v, dict) and isinstance(v.get('price'), (int, float))
-                  and _variant_status(v) in ('available', 'backorder', 'preorder')]
-        default_id = fm.get('defaultBuild')
-        default_variant = next((v for v in variants
-                                if isinstance(v, dict) and v.get('id') == default_id),
-                               variants[0] if variants else {})
-        status = '' if prices else {
-            'soldout': 'Sold out',
-            'comingSoon': 'Coming soon',
-        }.get(_variant_status(default_variant), '')
+                  if isinstance(v, dict) and isinstance(v.get('price'), (int, float))]
         images = fm.get('images') if isinstance(fm.get('images'), list) else []
         base = fm.get('imageBase') or ''
         thumb = (base + images[0]) if (base and images) else ''
+        # Product pages keep the most useful search vocabulary in `sub` and in
+        # their variant labels/descriptions/contents. In particular, an item
+        # such as "Sakura Micron 05" needs its "pens" copy indexed even though
+        # that word is not in the title. Do not add parentId here: matching a
+        # parent name alone must not make every one of its accessories appear.
+        search_terms = [fm.get('keywords', ''), fm.get('sub', ''), pid.replace('-', ' ')]
+        for variant in variants:
+            if not isinstance(variant, dict):
+                continue
+            search_terms.extend([variant.get('label', ''), variant.get('desc', '')])
+            contents = variant.get('contents')
+            if isinstance(contents, list):
+                search_terms.extend(contents)
+        keywords = ' '.join(_plain(str(term)) for term in search_terms if term)
         out.append((fm.get('order', 999), {
             'type': 'product',
+            'id': pid,
             'url': f"/store/{pid}/",
             'title': fm.get('title', '') or '',
             'description': fm.get('teaser', '') or '',
@@ -124,9 +129,10 @@ def _scan_store(docs_dir):
             'dateISO': '',
             'readtime': '',
             'price': int(min(prices)) if prices else None,
-            'status': status,
-            'keywords': fm.get('teaser', '') or '',
+            'keywords': keywords,
             'text': fm.get('sub', '') or '',
+            'accessory': bool(fm.get('accessory')),
+            'parentId': fm.get('parentId', '') or '',
         }))
     out.sort(key=lambda t: (t[0], t[1].get('title', '')))   # frontmatter `order` keeps products consistent with the store grid
     return [e for _, e in out]

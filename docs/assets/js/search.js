@@ -21,7 +21,7 @@
   function isActive() { return openState; }
   // only ever navigate to same-origin paths from the (build-time) index
   function safeHref(u) { return (typeof u === 'string' && /^\/(?!\/)/.test(u)) ? u : '#'; }
-  function price(p, status) { return status || (typeof p === 'number' && isFinite(p) ? 'from $' + p : ''); }
+  function price(p) { return typeof p === 'number' && isFinite(p) ? 'from $' + p : ''; }
   function isDark() { return (document.body.getAttribute('data-md-color-scheme') || document.documentElement.getAttribute('data-md-color-scheme')) === 'slate'; }
   // a thumbnail follows the Material theme: use the DARK sibling (only when the build found one) in dark mode
   function thumbImg(it, cls) {
@@ -39,11 +39,61 @@
     var dp = loaded ? Promise.resolve() : fetch(DATA_URL).then(function (r) { return r.json(); })
       .then(function (j) { items = (j && j.items) || []; loaded = true; }).catch(function () { items = []; loaded = true; });
     return Promise.all([fp, dp]).then(function () {
-      fuse = new Fuse(items || [], { ignoreLocation: true, threshold: 0.25, minMatchCharLength: 2, includeScore: true,
+      // Store keywords are intentionally rich (variant names + contents). A low
+      // field-norm weight prevents that useful copy from being penalized merely
+      // for being longer than a project title, so an exact "pens" hit outranks
+      // a vaguely similar title.
+      fuse = new Fuse(items || [], { ignoreLocation: true, threshold: 0.25, minMatchCharLength: 2, includeScore: true, fieldNormWeight: 0.2,
         keys: [{ name: 'title', weight: 0.5 }, { name: 'keywords', weight: 0.38 }, { name: 'description', weight: 0.12 }] });
     });
   }
-  function byType(t) { return (items || []).filter(function (it) { return it.type === t; }); }
+  // Accessories belong in typed search, but not in the default Store carousel:
+  // opening search should stay as spare as it was before add-ons were indexed.
+  function byType(t) { return (items || []).filter(function (it) { return it.type === t && (t !== 'product' || !it.accessory); }); }
+  function words(s) {
+    var found = String(s || '').toLowerCase().match(/[a-z0-9]+/g) || [];
+    return found.map(function (word) {
+      if (word.length > 4 && /ies$/.test(word)) return word.slice(0, -3) + 'y';
+      if (word.length > 3 && /s$/.test(word) && !/ss$/.test(word)) return word.slice(0, -1);
+      return word;
+    });
+  }
+  function productId(it) {
+    if (it.id) return it.id;
+    var match = String(it.url || '').match(/^\/store\/([^/]+)\/?$/);
+    return match ? match[1] : '';
+  }
+  function wordMatches(queryWord, indexedWord) {
+    if (queryWord === indexedWord) return true;
+    // Preserve Fuse's useful prefix behavior when deciding whether a child hit
+    // is specific ("fram" → "frame", "cas" → "case"). Very short prefixes
+    // are too broad to justify adding a second result beside the parent.
+    return queryWord.length >= 3 && indexedWord.length >= 3 &&
+      (indexedWord.indexOf(queryWord) === 0 || queryWord.indexOf(indexedWord) === 0);
+  }
+  // A parent-name query ("Polargraph", "Bird Mic", …) should not repeat that
+  // product's whole add-on family below it. Keep an accessory alongside its
+  // parent only when at least one query word matches accessory-specific copy.
+  function trimCoveredAccessories(list, q) {
+    var parents = {};
+    list.forEach(function (it) {
+      if (it.type === 'product' && !it.accessory) parents[productId(it)] = it;
+    });
+    var queryWords = words(q);
+    return list.filter(function (it) {
+      if (it.type !== 'product' || !it.accessory || !it.parentId || !parents[it.parentId]) return true;
+      var parentWords = {};
+      words(parents[it.parentId].title).forEach(function (word) { parentWords[word] = true; });
+      var specificWords = {};
+      words([it.title, it.description, it.keywords].join(' ')).forEach(function (word) {
+        if (!parentWords[word]) specificWords[word] = true;
+      });
+      var indexedWords = Object.keys(specificWords);
+      return queryWords.some(function (queryWord) {
+        return indexedWords.some(function (indexedWord) { return wordMatches(queryWord, indexedWord); });
+      });
+    });
+  }
   function search(q) {
     if (!fuse) return [];
     q = q.trim(); if (!q) return [];
@@ -57,6 +107,7 @@
       run(q).forEach(function (r) { if (agg[r.item.url]) agg[r.item.url].n += 0.5; });
       list = Object.keys(agg).map(function (k) { return agg[k]; }).sort(function (a, b) { return (b.n - a.n) || (a.s - b.s); }).map(function (x) { return x.item; });
     }
+    list = trimCoveredAccessories(list, q);
     return scope ? list.filter(function (it) { return it.type === scope; }) : list;
   }
 
@@ -67,7 +118,7 @@
     if (it.type === 'writing') {
       a.innerHTML = '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span></span>';   // title only
     } else if (it.type === 'product') {
-      a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span>' + (price(it.price, it.status) ? '<span class="tw-card-price">' + price(it.price, it.status) + '</span>' : '') + '</span>';
+      a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span>' + (price(it.price) ? '<span class="tw-card-price">' + price(it.price) + '</span>' : '') + '</span>';
     } else {
       a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span><span class="tw-card-desc">' + esc(it.description) + '</span></span>';
     }
@@ -108,7 +159,7 @@
   // ---------- results (writings-index style) ----------
   function rowEl(it) {
     var a = document.createElement('a'); a.className = 'tw-row' + (it.type === 'product' ? ' tw-row-product' : ''); a.href = safeHref(it.url); a.setAttribute('role', 'option');
-    var aside = it.type === 'product' ? price(it.price, it.status) : esc(it.date || '');
+    var aside = it.type === 'product' ? price(it.price) : esc(it.date || '');
     var sub = it.type === 'writing' ? esc(it.readtime || '') : '';
     var thumb = (it.type === 'product') ? thumbImg(it, 'tw-row-thumb') : '';   // products get an inline graphic; projects/writings stay text-only
     a.innerHTML = thumb +

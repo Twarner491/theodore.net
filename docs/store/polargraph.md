@@ -6,7 +6,7 @@ hide:
 template: index.html
 search:
   exclude: true
-title: Polargraph Plotter
+title: Polargraph Kit
 product: true
 order: 3
 id: polargraph
@@ -101,7 +101,7 @@ colophon: ""
       </div>
     </section>
   </div>
-  <h1 style="display:none;">Polargraph Pen Plotter - Teddy Warner</h1>
+  <h1 style="display:none;">Polargraph Kit - Teddy Warner</h1>
   </main>
 
   <script src="/assets/js/store.js" defer></script>

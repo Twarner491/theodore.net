@@ -6,6 +6,30 @@
 //   - sales tax comes from Stripe Tax (charged only where you're registered)
 // US shipping only. The client sends the cart, the (optional) shipping address,
 // and an optional receipt email -- never amounts.
+import {
+  CONTIGUOUS_US_GROUND,
+  canonicalShippingJson,
+  sha256Hex,
+  shippingDestinationError,
+  shippingDestinationMessage,
+  trustedShippingProfile,
+} from "../../lib/shipping-profile.js";
+import { createCheckoutBinding, taxAddressBinding } from "../../lib/shipping-binding.js";
+import { launchPending } from "../../lib/store-launch.js";
+import {
+  applyBoundInventoryMetadata,
+  applyPendingInventoryMetadata,
+  clearInventoryMetadata,
+  createInventoryCommerceBinding,
+  inventoryDemandFromManifest,
+  inventoryDemandScope,
+  verifyBoundInventoryMetadata,
+} from "../../lib/store-inventory-commerce.js";
+import {
+  InventorySoldOutError,
+  readInventoryAvailability,
+} from "../../lib/store-inventory.js";
+
 const MAX_QTY = 99, MAX_LINES = 50;
 const DEFAULT_WEIGHT_LB = 2.0;       // fallback when a variant has no weight
 const PACKAGING_LB = 0.3;            // box + padding added to every order
@@ -73,27 +97,77 @@ async function calculateTax(headers, currency, taxLines, shippingCents, addr) {
     form.set("line_items[" + i + "][amount]", String(li.amount));
     form.set("line_items[" + i + "][reference]", li.reference);
     form.set("line_items[" + i + "][tax_code]", TAX_CODE);
+    form.set("line_items[" + i + "][tax_behavior]", "exclusive");
   });
   form.set("shipping_cost[amount]", String(shippingCents));
+  form.set("shipping_cost[tax_behavior]", "exclusive");
   form.set("customer_details[address][country]", "US");
   form.set("customer_details[address][state]", String(addr.state || "").slice(0, 20));
   form.set("customer_details[address][postal_code]", String(addr.postal_code || "").slice(0, 20));
   if (addr.city) form.set("customer_details[address][city]", String(addr.city).slice(0, 100));
   if (addr.line1) form.set("customer_details[address][line1]", String(addr.line1).slice(0, 200));
   form.set("customer_details[address_source]", "shipping");
-  const res = await fetch("https://api.stripe.com/v1/tax/calculations", { method: "POST", headers, body: form });
-  if (!res.ok) { console.log("tax calc failed:", res.status, await res.text().catch(() => "")); return { error: true }; }
-  const c = await res.json();
+  let res;
+  try {
+    res = await fetch("https://api.stripe.com/v1/tax/calculations", { method: "POST", headers, body: form });
+  } catch (e) {
+    console.log("tax calc unavailable");
+    return { error: true };
+  }
+  if (!res.ok) { console.log("tax calc failed:", res.status); return { error: true }; }
+  let c;
+  try { c = await res.json(); } catch (e) { return { error: true }; }
+  const expectedTotal = taxLines.reduce((sum, line) => sum + line.amount, 0) + shippingCents + (c && c.tax_amount_exclusive || 0);
+  if (!c || typeof c.id !== "string" || !c.id.startsWith("taxcalc_") || c.currency !== currency ||
+      !Number.isSafeInteger(c.tax_amount_exclusive) || c.tax_amount_exclusive < 0 ||
+      !Number.isSafeInteger(c.amount_total) || c.amount_total <= 0 || c.amount_total !== expectedTotal) {
+    console.log("tax calc returned an invalid result");
+    return { error: true };
+  }
   return { id: c.id, tax: c.tax_amount_exclusive || 0, total: c.amount_total };
+}
+
+function requestedQuantity(value) {
+  const qty = Number(value);
+  return Number.isSafeInteger(qty) && qty >= 1 && qty <= MAX_QTY ? qty : null;
+}
+function catalogQuantityLimit(variant) {
+  const qty = variant && variant.maxQty;
+  return Number.isSafeInteger(qty) && qty >= 1 && qty <= MAX_QTY ? qty : 1;
 }
 
 // Sign a PI id with the secret key so the update path can prove the caller created this PI,
 // without an extra Stripe round-trip. Returned on create, required on every update.
-async function signPi(piId, secret) {
+async function signPi(piId, secret, inventoryScope = "none") {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const mac = await crypto.subtle.sign("HMAC", key, enc.encode(piId));
+  // Keep the historical ordinary-cart token byte-for-byte compatible. Finite
+  // carts add an exact demand scope so their token cannot be reused to change
+  // which stock would be reserved at the authenticated capture gate.
+  const payload = inventoryScope === "none" ? piId : piId + "\n" + inventoryScope;
+  const mac = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
   return [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function cancelPaymentIntent(piId, headers, reason) {
+  try {
+    const response = await fetch("https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(piId) + "/cancel", {
+      method: "POST",
+      headers: { ...headers, "idempotency-key": "inventory-cancel-" + piId + "-" + reason },
+      body: new URLSearchParams({ cancellation_reason: "abandoned" }),
+    });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+}
+
+function inventoryUnavailable(reply, error) {
+  if (error instanceof InventorySoldOutError) {
+    return reply({ error: "This limited batch is sold out.", code: "inventory_sold_out" }, 409);
+  }
+  console.log("inventory unavailable:", error && error.code || "unknown");
+  return reply({ error: "Limited-batch availability could not be confirmed. Please try again." }, 503);
 }
 function ctEqual(a, b) {
   if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
@@ -128,18 +202,61 @@ export async function onRequestPost({ request, env }) {
 
   const auth = { authorization: "Bearer " + env.STRIPE_SECRET_KEY };
   const headers = { ...auth, "content-type": "application/x-www-form-urlencoded" };
-  const priceCache = {};
-  const items = [], taxLines = [];
-  let subtotal = 0, currency = "usd", totalLb = 0;
+  const normalized = [], requestedByVariant = new Map();
   for (const l of cart) {
     const id = l && typeof l.id === "string" ? l.id : "";
     const build = l && typeof l.build === "string" ? l.build : "";
     const entry = id && Object.prototype.hasOwnProperty.call(catalog, id) ? catalog[id] : null;
     const variant = entry && entry.variants && Object.prototype.hasOwnProperty.call(entry.variants, build) ? entry.variants[build] : null;
     const priceId = variant && typeof variant.price === "string" ? variant.price : "";
-    const weightLb = variant && typeof variant.weightLb === "number" ? variant.weightLb : DEFAULT_WEIGHT_LB;
-    const qty = Math.min(Math.max(1, Math.floor(Number(l && l.qty)) || 1), MAX_QTY);
+    const qty = requestedQuantity(l && l.qty);
+    const shippingProfile = trustedShippingProfile(variant);
     if (!priceId.startsWith("price_")) return reply({ error: "An item in your cart is unavailable.", item: { id, build } }, 400);
+    if (shippingProfile === null) return reply({ error: "An item in your cart is unavailable.", item: { id, build } }, 400);
+    if (launchPending(variant)) return reply({ error: (entry.title || "That item") + " is not open yet." }, 400);
+    if (qty == null) return reply({ error: "Enter a valid whole-number quantity." }, 400);
+    const maxQty = catalogQuantityLimit(variant);
+    const key = id + "\u0000" + build;
+    const requested = (requestedByVariant.get(key) || 0) + qty;
+    if (requested > maxQty) return reply({ error: "You can order at most " + maxQty + " of that item per order." }, 400);
+    requestedByVariant.set(key, requested);
+    normalized.push({ id, build, priceId, qty, shippingProfile,
+      weightLb: typeof variant.weightLb === "number" ? variant.weightLb : DEFAULT_WEIGHT_LB });
+  }
+
+  const checkoutBinding = await createCheckoutBinding(normalized, catalog);
+  if (!checkoutBinding) return reply({ error: "An item in your cart is unavailable." }, 400);
+  let inventoryDemand;
+  try { inventoryDemand = inventoryDemandFromManifest(checkoutBinding.manifest, catalog); }
+  catch (error) { return reply({ error: "An item in your cart is unavailable." }, 400); }
+  const inventoryScope = inventoryDemandScope(inventoryDemand);
+  if (piId) {
+    const tok = (body && typeof body.updateToken === "string") ? body.updateToken : "";
+    if (!tok || !ctEqual(tok, await signPi(piId, env.STRIPE_SECRET_KEY, inventoryScope))) {
+      return reply({ error: "Could not update checkout." }, 400);
+    }
+  }
+  if (inventoryDemand.length) {
+    try {
+      const availability = await readInventoryAvailability(env, inventoryDemand.map((line) => line.sku));
+      if (inventoryDemand.some((line) => availability.find((row) => row.sku === line.sku).available < line.quantity)) {
+        throw new InventorySoldOutError();
+      }
+    } catch (error) {
+      return inventoryUnavailable(reply, error);
+    }
+  }
+  const requiresContiguousGround = checkoutBinding.profile === CONTIGUOUS_US_GROUND;
+  if (addr && requiresContiguousGround) {
+    const destinationError = shippingDestinationError(CONTIGUOUS_US_GROUND, ship);
+    if (destinationError) return reply({ error: shippingDestinationMessage(destinationError) }, 400);
+  }
+
+  const priceCache = {};
+  const taxLines = [];
+  let subtotal = 0, currency = "usd", totalLb = 0;
+  for (const line of normalized) {
+    const { id, build, priceId, weightLb, qty } = line;
     if (!priceCache[priceId]) {
       const pr = await fetch("https://api.stripe.com/v1/prices/" + priceId, { headers: auth });
       if (!pr.ok) return reply({ error: "An item in your cart is unavailable.", item: { id, build } }, 400);
@@ -151,13 +268,13 @@ export async function onRequestPost({ request, env }) {
     const lineTotal = price.unit_amount * qty;
     subtotal += lineTotal;
     totalLb += weightLb * qty;
-    items.push(id + "|" + build + "|" + qty);
     taxLines.push({ amount: lineTotal, reference: (id + "|" + build).slice(0, 64) });
   }
   if (subtotal <= 0) return reply({ error: "Your cart is empty." }, 400);
 
-  // shipping + tax need a US shipping address; before that, charge the subtotal as a placeholder
-  let shippingCents = null, taxCents = null, total = subtotal, calcId = "", taxStatus = "";
+  // Shipping + tax need a US address. Before that, initialize a manual-capture
+  // draft at the subtotal so Stripe Elements can mount without making it payable.
+  let shippingCents = null, taxCents = null, total = subtotal, calcId = "";
   if (addr && typeof addr.country === "string" && addr.country !== "US") {
     return reply({ error: "We only ship within the US right now." }, 400);
   }
@@ -166,21 +283,77 @@ export async function onRequestPost({ request, env }) {
   // API error out and silently fall back to $0 in a state where we DO collect.
   const _state = String((addr && addr.state) || "").toUpperCase();
   const _zip = String((addr && addr.postal_code) || "");
-  const haveAddress = !!addr && !!(STATE_CENTROIDS[_state] || NONCONTIGUOUS[_state]) && /^\d{5}(-\d{4})?$/.test(_zip);
+  const haveAddress = !!addr && addr.country === "US" && !!(STATE_CENTROIDS[_state] || NONCONTIGUOUS[_state]) && /^\d{5}(-\d{4})?$/.test(_zip);
+  if (addr && !haveAddress) return reply({ error: "Enter a valid US shipping address." }, 400);
+  if (piId && !haveAddress) return reply({ error: "A valid shipping address is required before payment." }, 400);
   if (haveAddress) {
     shippingCents = computeShippingCents(totalLb, _state);
     const tax = await calculateTax(headers, currency, taxLines, shippingCents, addr);
-    if (tax.error) { taxCents = 0; total = subtotal + shippingCents; taxStatus = "calc_failed"; }   // never block checkout on tax infra, but flag it so tax isn't silently $0
-    else { taxCents = tax.tax; total = tax.total; calcId = tax.id; }
+    if (tax.error) return reply({ error: "Sales tax could not be calculated. Please try again." }, 502);
+    taxCents = tax.tax; total = tax.total; calcId = tax.id;
   }
 
   const form = new URLSearchParams();
   form.set("amount", String(total));
-  form.set("metadata[items]", items.join(";").slice(0, 500));
+  form.set("metadata[items]", checkoutBinding.legacyItems);
   form.set("metadata[breakdown]", subtotal + "|" + (shippingCents || 0) + "|" + (taxCents || 0) + "|" + total);   // cents, for the confirmation page receipt
   form.set("metadata[weight]", String(Math.round(totalLb * 10) / 10));   // lb, for the operator's carrier call
   if (calcId) form.set("metadata[tax_calculation]", calcId);   // the webhook records the tax transaction from this
-  if (taxStatus) form.set("metadata[tax_status]", taxStatus);   // flags a tax-calc failure so it's visible to the operator, not silently $0
+  form.set("metadata[checkout_ready]", haveAddress && calcId ? "1" : "0");
+  form.set("metadata[shipping_profile]", checkoutBinding.metadataProfile);
+  form.set("metadata[shipping_items]", checkoutBinding.manifestJson);
+  form.set("metadata[shipping_items_sha256]", checkoutBinding.manifestSha256);
+  form.set("metadata[shipping_catalog_sha256]", checkoutBinding.catalogSha256);
+  let inventoryBinding = null;
+  if (inventoryDemand.length && piId) {
+    try {
+      inventoryBinding = await createInventoryCommerceBinding({
+        paymentIntentId: piId, amount: total, currency,
+        manifestSha256: checkoutBinding.manifestSha256,
+        catalogSha256: checkoutBinding.catalogSha256,
+        demand: inventoryDemand,
+      });
+      applyBoundInventoryMetadata(form, inventoryBinding);
+    } catch (error) {
+      return reply({ error: "An item in your cart is unavailable." }, 400);
+    }
+  } else if (inventoryDemand.length) {
+    await applyPendingInventoryMetadata(form, inventoryDemand);
+  } else if (piId) {
+    clearInventoryMetadata(form);
+  }
+  if (requiresContiguousGround) {
+    form.set("metadata[capture_gate]", "pending");
+    if (haveAddress) {
+      const canonicalAddress = canonicalShippingJson(ship);
+      if (!canonicalAddress) return reply({ error: "Enter a complete contiguous-US street address." }, 400);
+      const addressSha256 = await sha256Hex(canonicalAddress);
+      const taxBinding = await taxAddressBinding({
+        taxCalculation: calcId,
+        addressSha256,
+        manifestSha256: checkoutBinding.manifestSha256,
+        catalogSha256: checkoutBinding.catalogSha256,
+        profile: checkoutBinding.profile,
+        amount: total,
+        currency,
+      });
+      form.set("metadata[shipping_address_sha256]", addressSha256);
+      form.set("metadata[shipping_tax_binding]", taxBinding);
+    }
+  } else if (piId) {
+    // An update token can be reused for a different cart. Explicitly erase any
+    // prior address/capture bindings so omitted fields cannot survive the update.
+    for (const key of ["shipping_address_sha256", "shipping_tax_binding",
+      "capture_gate", "capture_block_reason", "capture_gate_event", "capture_address_sha256"]) {
+      form.set("metadata[" + key + "]", "");
+    }
+  }
+  // The initial subtotal-only intent exists only so Stripe Elements can mount.
+  // Keep it manual-capture until a server-side address + Tax calculation has
+  // finalized the total. capture_method is secret-key-only, so a caller that
+  // confirms the draft directly can at most create an expiring authorization;
+  // it cannot capture an untaxed subtotal or trigger fulfillment.
+  form.set("capture_method", (requiresContiguousGround || inventoryDemand.length) ? "manual" : (haveAddress && calcId ? "automatic" : "manual"));
   if (email) form.set("metadata[email]", email);   // our own receipt + order lookup use this; NOT receipt_email, which makes Stripe ALSO send its own receipt
   if (anon) form.set("metadata[anon]", anon);       // first-party visitor id -> joins this order back to its funnel session
   if (src) form.set("metadata[src]", src);          // first-party channel (x / instagram / direct / <go-slug>) for revenue attribution
@@ -190,11 +363,20 @@ export async function onRequestPost({ request, env }) {
   const breakdown = { subtotal, shipping: shippingCents, tax: taxCents, total, currency };
 
   if (piId) {
-    const tok = (body && typeof body.updateToken === "string") ? body.updateToken : "";
-    if (!tok || !ctEqual(tok, await signPi(piId, env.STRIPE_SECRET_KEY))) return reply({ error: "Could not update checkout." }, 400);   // only the buyer who created this PI may update it
     form.set("metadata[order_no]", piId.replace(/^pi_/, "").slice(0, 10).toUpperCase());   // searchable for the order-lookup page
     const upd = await fetch("https://api.stripe.com/v1/payment_intents/" + piId, { method: "POST", headers, body: form });
     if (!upd.ok) { console.log("payment_intent update failed:", upd.status); return reply({ error: "Could not update checkout." }, 502); }
+    if (inventoryDemand.length) {
+      let updatedPi;
+      try { updatedPi = await upd.json(); } catch (error) { updatedPi = null; }
+      try {
+        const confirmed = await verifyBoundInventoryMetadata(updatedPi);
+        if (confirmed.bindingSha256 !== inventoryBinding.bindingSha256) throw new Error("binding mismatch");
+      } catch (error) {
+        await cancelPaymentIntent(piId, headers, "update-failed");
+        return inventoryUnavailable(reply, error);
+      }
+    }
     return reply({ updated: true, ...breakdown });
   }
 
@@ -205,6 +387,34 @@ export async function onRequestPost({ request, env }) {
   const res = await fetch("https://api.stripe.com/v1/payment_intents", { method: "POST", headers, body: form });
   if (!res.ok) { console.log("payment_intent failed:", res.status); return reply({ error: "Could not start checkout." }, 502); }
   const pi = await res.json();
-  const updateToken = await signPi(pi.id, env.STRIPE_SECRET_KEY);
+  if (!pi || typeof pi.id !== "string" || !/^pi_[A-Za-z0-9_]+$/.test(pi.id) ||
+      typeof pi.client_secret !== "string" || !pi.client_secret.startsWith(pi.id + "_secret_")) {
+    return reply({ error: "Could not start checkout." }, 502);
+  }
+  if (inventoryDemand.length) {
+    try {
+      inventoryBinding = await createInventoryCommerceBinding({
+        paymentIntentId: pi.id, amount: total, currency,
+        manifestSha256: checkoutBinding.manifestSha256,
+        catalogSha256: checkoutBinding.catalogSha256,
+        demand: inventoryDemand,
+      });
+      const bindForm = new URLSearchParams();
+      applyBoundInventoryMetadata(bindForm, inventoryBinding);
+      const boundResponse = await fetch("https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(pi.id), {
+        method: "POST",
+        headers: { ...headers, "idempotency-key": "inventory-bind-" + pi.id },
+        body: bindForm,
+      });
+      if (!boundResponse.ok) throw new Error("Stripe inventory binding update failed");
+      const boundPi = await boundResponse.json();
+      const confirmed = await verifyBoundInventoryMetadata(boundPi);
+      if (confirmed.bindingSha256 !== inventoryBinding.bindingSha256) throw new Error("Stripe inventory binding mismatch");
+    } catch (error) {
+      await cancelPaymentIntent(pi.id, headers, "create-failed");
+      return inventoryUnavailable(reply, error);
+    }
+  }
+  const updateToken = await signPi(pi.id, env.STRIPE_SECRET_KEY, inventoryScope);
   return reply({ clientSecret: pi.client_secret, publishableKey: env.STRIPE_PUBLISHABLE_KEY || null, updateToken, ...breakdown });
 }

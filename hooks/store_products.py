@@ -17,6 +17,7 @@ import json
 import os
 import re
 import yaml
+from datetime import datetime, timezone
 from pathlib import Path
 from mkdocs.structure.files import File
 
@@ -29,9 +30,13 @@ except Exception:
 # keys copied verbatim from frontmatter into the runtime product object
 KEYS = ['id', 'published', 'title', 'teaser', 'sub', 'imageBase', 'images',
         'defaultBuild', 'variants', 'softwareNote', 'sections', 'colophon', 'weight',
-        'accessory', 'parentId', 'icon', 'related', 'project']
+        'accessory', 'parentId', 'icon', 'related', 'project', 'storeListings']
 
 DEFAULT_WEIGHT_LB = 2.0
+DEFAULT_MAX_QTY = 10
+ABSOLUTE_MAX_QTY = 99
+SHIPPING_PROFILES = {'contiguous-us-ground'}
+INVENTORY_SKUS = {'avian-gen3-batch-01'}
 
 
 def _bg_color(path):
@@ -96,6 +101,69 @@ def _sellable(v):
     return s in ('available', 'backorder', 'preorder')
 
 
+def _shipping_profile(v):
+    """Validate the optional fulfillment boundary carried into the trusted catalog."""
+    if 'shippingProfile' not in v:
+        return None
+    profile = v.get('shippingProfile')
+    if profile not in SHIPPING_PROFILES:
+        raise ValueError('unknown store shippingProfile: ' + repr(profile))
+    return profile
+
+
+def _inventory_sku(v):
+    """Validate an optional finite-stock authority carried only by the trusted catalog."""
+    if 'inventorySku' not in v:
+        return None
+    sku = v.get('inventorySku')
+    if sku not in INVENTORY_SKUS:
+        raise ValueError('unknown store inventorySku: ' + repr(sku))
+    if _shipping_profile(v) != 'contiguous-us-ground':
+        raise ValueError('finite inventory requires contiguous-us-ground manual capture')
+    return sku
+
+
+_LAUNCH_AT_RX = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$')
+
+
+def _launch_at(v):
+    """Validate an optional timed-drop instant. It must be a QUOTED ISO-8601 UTC string
+    ("2026-11-12T17:00:00Z"): unquoted, YAML turns it into a datetime that cannot be serialized,
+    and a bad value would otherwise reach the client and checkout gates. Returns the string."""
+    if 'launchAt' not in v:
+        return None
+    raw = v.get('launchAt')
+    if not isinstance(raw, str) or not _LAUNCH_AT_RX.match(raw):
+        raise ValueError('store launchAt must be a quoted UTC time like "2026-11-12T17:00:00Z": ' + repr(raw))
+    try:
+        datetime.strptime(raw, '%Y-%m-%dT%H:%M:%SZ')
+    except ValueError:
+        raise ValueError('store launchAt is not a real date: ' + repr(raw))
+    return raw
+
+
+def _launch_open(v, now=None):
+    """True unless the variant waits on a launchAt still in the future (at build time)."""
+    raw = _launch_at(v)
+    if raw is None:
+        return True
+    at = datetime.strptime(raw, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
+    return (now or datetime.now(timezone.utc)) >= at
+
+
+def _launches(products):
+    """Product id -> its drop time, read by functions/api/countdown.js (the email countdown GIF)
+    so the email and the product page count down to one instant. Prefers the default build."""
+    out = {}
+    for p in products:
+        timed = [v for v in (p.get('variants') or []) if isinstance(v, dict) and _launch_at(v)]
+        if not timed or not p.get('id'):
+            continue
+        v = next((x for x in timed if x.get('id') == p.get('defaultBuild')), timed[0])
+        out[p['id']] = {'launchAt': v['launchAt'], 'label': v.get('launchLabel') or ''}
+    return out
+
+
 def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
     """Meta Commerce catalog feed (one row per sellable, priced variant), served at
     /meta-catalog.csv for Commerce Manager's scheduled fetch. Columns are Meta's
@@ -120,6 +188,15 @@ def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
         first_img = images[0] if images else ''
         for v in (p.get('variants') or []):
             if not (isinstance(v, dict) and _sellable(v)):
+                continue
+            # Finite inventory cannot be represented safely by Meta's static
+            # quantity field. Keep it out of the external feed until that feed
+            # has an authoritative inventory integration.
+            if v.get('inventorySku'):
+                continue
+            # Meta has no timed availability either; a drop joins the feed on the first
+            # build after it opens.
+            if not _launch_open(v):
                 continue
             price = v.get('price')
             if not isinstance(price, (int, float)):
@@ -166,6 +243,10 @@ def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
 
 def on_files(files, config):
     products = _products(config['docs_dir'])
+    for p in products:   # before store-data.js is serialized, so a bad value fails the build clearly
+        for v in (p.get('variants') or []):
+            if isinstance(v, dict):
+                _launch_at(v)
     # product image URLs that have a "<name>DARK.<ext>" sibling on disk; store.js
     # swaps to it in dark mode and leaves the rest as-is (no broken requests)
     docs = Path(config['docs_dir'])
@@ -216,23 +297,54 @@ def on_files(files, config):
                 return float(w) if w is not None else DEFAULT_WEIGHT_LB
             except (TypeError, ValueError):
                 return DEFAULT_WEIGHT_LB
+        def _max_qty(v):
+            """Return the server-side per-order cap carried by the trusted catalog.
+
+            Frontmatter is author-controlled but can still contain a typo. Invalid
+            values therefore fail closed to one instead of silently restoring the
+            checkout's broad absolute ceiling.
+            """
+            raw = v.get('maxQuantity', DEFAULT_MAX_QTY)
+            if isinstance(raw, bool):
+                return 1
+            try:
+                value = int(raw)
+            except (TypeError, ValueError):
+                return 1
+            if value != raw or value < 1 or value > ABSOLUTE_MAX_QTY:
+                return 1
+            return value
         variants = {}
         for v in (p.get('variants') or []):
-            if not (isinstance(v, dict) and _sellable(v)):
+            if not isinstance(v, dict):
+                continue
+            shipping_profile = _shipping_profile(v)
+            inventory_sku = _inventory_sku(v)
+            if not _sellable(v):
                 continue
             price_id = v.get(price_field)
             if not price_id:
                 if v.get('stripePrice'):   # configured to sell, just missing the id for THIS mode
                     missing.append(p['id'] + '/' + str(v.get('id')))
                 continue
-            variants[v.get('id')] = {'price': price_id, 'weightLb': _w(v),
-                                     'label': v.get('label', v.get('id')), 'priceUsd': v.get('price')}
+            catalog_variant = {'price': price_id, 'weightLb': _w(v),
+                               'maxQty': _max_qty(v),
+                               'label': v.get('label', v.get('id')), 'priceUsd': v.get('price')}
+            if shipping_profile:
+                catalog_variant['shippingProfile'] = shipping_profile
+            if inventory_sku:
+                catalog_variant['inventorySku'] = inventory_sku
+            launch_at = _launch_at(v)
+            if launch_at:   # payment-intent.js refuses the variant until this instant
+                catalog_variant['launchAt'] = launch_at
+            variants[v.get('id')] = catalog_variant
         if variants:
             catalog[p['id']] = {'title': p.get('title', p['id']), 'variants': variants}
     if mode == 'live' and missing:
         print('WARNING [store_products]: STRIPE_MODE=live but these sellable variants have no '
               'stripePriceLive and were dropped from store-catalog.json: ' + ', '.join(missing))
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
+    files.append(File.generated(config, 'store-launches.json', content=json.dumps(_launches(products), ensure_ascii=False)))
     # Meta (Instagram Shop) catalog feed -- same frontmatter source of truth, so
     # prices/availability can never drift from the site (the #1 commerce-review rejection).
     files.append(File.generated(config, 'meta-catalog.csv', content=_meta_catalog_csv(products, price_field, config['docs_dir'])))

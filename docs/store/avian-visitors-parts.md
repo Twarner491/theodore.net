@@ -9,7 +9,7 @@ search:
 title: Avian Visitors Frame & Parts
 product: true
 accessory: true
-parentId: avian-visitors
+parentId: avian-visitors-kit
 order: 2
 published: true
 id: avian-visitors-parts

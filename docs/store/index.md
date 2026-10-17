@@ -39,13 +39,27 @@ search:
       <div class="content1">
         <div class="introabt">
           <h2>theodore.net Store</h2>
-          <h3>Kits and preassembled projects</h3>
+          <div class="store-intro-line">
+            <h3>Kits and preassembled projects</h3>
+            <div class="store-filter" id="store-filter">
+              <button class="store-filter-toggle" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="store-filter-menu" aria-label="Filter store listings. Selected: products and kits.">
+                <span class="store-filter-current">products + kits</span>
+                <i class="fa-solid fa-chevron-down store-filter-caret" aria-hidden="true"></i>
+              </button>
+              <ul class="store-filter-menu" id="store-filter-menu" role="menu" aria-label="Store categories" tabindex="-1" aria-hidden="true">
+                <li id="store-filter-option-products" role="menuitemcheckbox" data-filter="products" aria-checked="true" aria-disabled="false">products</li>
+                <li id="store-filter-option-kits" role="menuitemcheckbox" data-filter="kits" aria-checked="true" aria-disabled="false">kits</li>
+                <li id="store-filter-option-accessories" role="menuitemcheckbox" data-filter="accessories" aria-checked="false" aria-disabled="false">accessories</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="store-feed">
       <div class="content5">
+        <p class="store-filter-status" id="store-filter-status" aria-live="polite"></p>
         <div class="store-grid" id="store-grid"><!-- rendered by store.js --></div>
       </div>
     </section>

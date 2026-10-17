@@ -6,7 +6,7 @@ hide:
 template: index.html
 search:
   exclude: true
-title: Bird Mic
+title: Bird Mic Kit
 product: true
 order: 2
 id: avian-mic
@@ -104,7 +104,7 @@ colophon: 'Sold as hardware. BirdNET software and Cornell’s model install on y
       </div>
     </section>
   </div>
-  <h1 style="display:none;">Bird Mic - Teddy Warner</h1>
+  <h1 style="display:none;">Bird Mic Kit - Teddy Warner</h1>
   </main>
 
   <script src="/assets/js/store.js" defer></script>

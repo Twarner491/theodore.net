@@ -1,0 +1,12 @@
+# Written by tools/activate_batch_1.py. Production inventory expiry sweep.
+name = "theodore-store-inventory-expiry"
+main = "store-inventory-expiry.js"
+compatibility_date = "2026-08-31"
+
+[[d1_databases]]
+binding = "STORE_INVENTORY"
+database_name = "avian-store-inventory-production"
+database_id = "f5c3ea2a-f262-4c25-93d1-8f1c80d1f140"
+
+[triggers]
+crons = ["*/5 * * * *"]

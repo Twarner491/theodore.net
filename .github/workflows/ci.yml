@@ -30,6 +30,11 @@ jobs:
         with:
           python-version: 3.x
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -40,6 +45,15 @@ jobs:
         run: |
           pip install -r .github/requirements.txt
           pip install cairosvg
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Test commerce and runtime boundaries
+        run: npm test
+
+      - name: Test generated store architecture
+        run: python -m unittest discover -s tests -p 'test_*.py'
 
       - name: Build (live Stripe prices, apex URLs)
         run: mkdocs build --clean

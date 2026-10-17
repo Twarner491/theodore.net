@@ -7,3 +7,24 @@ pages_build_output_dir = "site"
 # Funnel analytics deliberately does NOT bind D1 here: a Pages wrangler.toml becomes the source of truth and
 # would drop dashboard-set plain vars (a live-checkout risk). The dedicated theodore-events Worker owns all
 # D1 writes; the store only sends a same-origin beacon (POST /api/ev) + stamps anon/source onto the PI.
+# Finite store inventory (STORE_INVENTORY) is bound by tools/activate_batch_1.py, which first checks
+# that the live Pages project has no dashboard vars or bindings this file would drop, then writes the
+# block below: the test database for local + preview, the production database for production. A finite
+# catalog line fails closed while the binding is absent; ordinary products never use it.
+
+# >>> store inventory: written by tools/activate_batch_1.py
+[[d1_databases]]
+binding = "STORE_INVENTORY"
+database_name = "avian-store-inventory-test"
+database_id = "f7c96240-dfe2-4c84-a150-7c4579eb0ee2"
+
+[[env.preview.d1_databases]]
+binding = "STORE_INVENTORY"
+database_name = "avian-store-inventory-test"
+database_id = "f7c96240-dfe2-4c84-a150-7c4579eb0ee2"
+
+[[env.production.d1_databases]]
+binding = "STORE_INVENTORY"
+database_name = "avian-store-inventory-production"
+database_id = "f5c3ea2a-f262-4c25-93d1-8f1c80d1f140"
+# <<< store inventory
