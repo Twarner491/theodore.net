@@ -270,23 +270,28 @@ supportsCssVars() || alert("Please view this page in a modern browser that suppo
   }
 })();
 
-/* index store-section product images follow the Material theme (swap to "<name>DARK.<ext>" in dark mode) */
+/* Product cards follow the Material theme, using dark photos found by the catalog build. */
 (function () {
+  var selector = ".store-mini-img img, .kit-card__imgwrap img";
   function swap() {
     var dark = (document.body.getAttribute("data-md-color-scheme") || document.documentElement.getAttribute("data-md-color-scheme")) === "slate";
-    var imgs = document.querySelectorAll(".store-mini-img img");
+    var imgs = document.querySelectorAll(selector);
+    var darkImages = window.STORE_DARK_IMAGES || [];
+    var backgrounds = window.STORE_IMAGE_BG || {};
     for (var i = 0; i < imgs.length; i++) {
       var img = imgs[i], cur = img.getAttribute("src");
       if (!cur) continue;
       var light = cur.replace(/DARK(\.[A-Za-z0-9]+)$/, "$1");
-      var want = dark ? light.replace(/(\.[A-Za-z0-9]+)$/, "DARK$1") : light;
+      var want = dark && darkImages.indexOf(light) >= 0 ? light.replace(/(\.[A-Za-z0-9]+)$/, "DARK$1") : light;
+      var wrap = img.closest(".kit-card__imgwrap");
+      if (wrap && backgrounds[want]) wrap.style.background = backgrounds[want];
       if (cur === want) continue;
       img.onerror = dark ? function () { this.onerror = null; this.src = this.src.replace(/DARK(\.[A-Za-z0-9]+)$/, "$1"); } : null;
       img.setAttribute("src", want);
     }
   }
   function start() {
-    if (!document.querySelector(".store-mini-img img")) return;
+    if (!document.querySelector(selector)) return;
     swap();
     var obs = new MutationObserver(swap);
     obs.observe(document.body, { attributes: true, attributeFilter: ["data-md-color-scheme"] });

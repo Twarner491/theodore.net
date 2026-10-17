@@ -14,6 +14,15 @@ template: comments.html
     <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/CbiBXiwDwCE" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </div></div>
 
+<a class="kit-card kit-card--margin kit-card--raised" href="/store/avian-visitors/">
+  <span class="kit-card__imgwrap"><img src="/assets/images/AvianVisitors/avianAssembledTop.png" alt="Fully assembled Avian Visitors frame"></span>
+  <span class="kit-card__body">
+    <span class="kit-card__title">Avian Visitors</span>
+    <span class="kit-card__desc">Local birds, in e-paper.</span>
+    <span class="kit-card__price">$699</span>
+  </span>
+</a>
+
 {.newthought}I was initally planning{/.newthought} on leaving this as a 'true' personal project of sorts. I love a good [project writeup](https://theodore.net/projects/) of course, but frankly I thought this was too quick an afternoon project to warrant any more documentation than a tweet. Twitter thought otherwise ...
 
 <center>

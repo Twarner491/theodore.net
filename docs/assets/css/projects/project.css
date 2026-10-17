@@ -754,6 +754,10 @@
 .kit-card--margin .kit-card__imgwrap { aspect-ratio: 1 / 1; margin-bottom: 7px; }
 .kit-card--margin .kit-card__body { padding: 0 2px; }
 
+@media (min-width: 1101px) {
+  .md-typeset .kit-card--raised { translate: 0 -33.333%; }
+}
+
 /* inline + wide variants: horizontal product cards on a grid (framed thumb + title/desc/price) */
 .md-typeset .kit-card--inline { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; max-width: 30rem; margin: 1.6em 0; padding: 9px; }
 .kit-card--inline .kit-card__imgwrap { width: 92px; height: 92px; }

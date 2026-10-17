@@ -51,6 +51,7 @@ def on_config(config):
     versions = {
         "assets/js/store-data.js": _source_hash(config, store_sources),
         "assets/js/search.js": _source_hash(config, [Path("docs/assets/js/search.js")]),
+        "assets/js/index.js": _source_hash(config, [Path("docs/assets/js/index.js")]),
     }
     config["extra_javascript"] = [
         asset.split("?", 1)[0] + "?h=" + versions[asset.split("?", 1)[0]]
@@ -58,6 +59,16 @@ def on_config(config):
         for asset in map(str, config.get("extra_javascript", []))
     ]
     return config
+
+
+def on_post_page(output, page, config):
+    # These card assets also have absolute references authored directly in templates.
+    for asset in ("assets/js/index.js", "assets/css/projects/project.css"):
+        reference = '/' + asset + '"'
+        if reference in output:
+            version = _source_hash(config, [Path("docs") / asset])
+            output = output.replace(reference, '/' + asset + '?h=' + version + '"')
+    return output
 
 
 def on_page_markdown(markdown, page, config, files):
