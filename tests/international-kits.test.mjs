@@ -64,7 +64,7 @@ test("a bigger order is priced as more boxes, never refused (Teddy splits it in 
   const au = await run([kit()], ADDR.AU);
   assert.equal(au.body.shipping, 3600, "one box: $28 + $7.80");
   const mics = await run([{ ...mic, qty: 4 }], ADDR.CA);
-  assert.equal(mics.body.shipping, 3900, "four mic kits fit one box: $27 + $10.80");
+  assert.equal(mics.body.shipping, 3800, "four mic kits fit one box: $27 + $10.80, rounded up");
 });
 
 test("anything but the two kits ships within the US only", async () => {
