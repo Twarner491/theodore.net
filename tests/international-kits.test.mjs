@@ -54,15 +54,17 @@ test("a kit to Canada: one box plus 1.5% for the international card fee; Stripe 
   assert.equal(r.body.total, 52000 + 3500);
 });
 
-test("an international order is one box of up to 4 lb (Asendia's tracked service stops at 4.4 lb)", async () => {
+test("a bigger order is priced as more boxes, never refused (Teddy splits it in ops)", async () => {
+  const both = await run([kit(), { ...mic, build: "electronics" }], ADDR.AU);
+  assert.equal(both.status, 200);
+  assert.equal(both.body.shipping, 6700, "2 x $28 + 1.5% of $700, rounded up");
   const two = await run([kit(2)], ADDR.AU);
-  assert.equal(two.status, 400);
-  assert.match(two.body.error, /one box of up to 4 lb/);
-  assert.equal(two.intent, null);
+  assert.equal(two.status, 200);
+  assert.equal(two.body.shipping, 7200, "2 x $28 + $15.60");
   const au = await run([kit()], ADDR.AU);
-  assert.equal(au.body.shipping, 3600, "$28 box + $7.80");
+  assert.equal(au.body.shipping, 3600, "one box: $28 + $7.80");
   const mics = await run([{ ...mic, qty: 4 }], ADDR.CA);
-  assert.equal(mics.status, 200, "four mic kits fit one box");
+  assert.equal(mics.body.shipping, 3900, "four mic kits fit one box: $27 + $10.80");
 });
 
 test("anything but the two kits ships within the US only", async () => {

@@ -70,10 +70,10 @@ function destinationSurchargeCents(state) {
 // Australia and the UK; everything else stays US-only. The buyer pays any import tax on delivery (we hold no
 // registrations there, so Stripe Tax returns $0). UK orders stay above GBP 135: at or below it the seller must
 // register for UK VAT; above it VAT is collected at the border. $210 keeps above GBP 135 until the pound tops ~$1.55.
-// One box per order: Asendia's tracked service takes up to 4.4 lb (heavier boxes cost 2-5x by USPS), so an
-// international order stays at or under 4 lb packed. The box price is the 2026-10-17 EasyPost quote at 4.4 lb
-// (flat across each country) plus about $1, and 1.5% of the subtotal covers Stripe's international card fee.
-// The worker refuses a label that costs more than the customer paid.
+// Shipping is charged per box: Asendia's tracked service takes up to 4.4 lb, so a heavier order is priced as
+// several boxes of up to 4 lb (Teddy splits it in ops). The box price is the 2026-10-17 EasyPost quote at
+// 4.4 lb (flat across each country) plus about $1, and 1.5% of the subtotal covers Stripe's international
+// card fee. The worker refuses a label that costs more than the customer paid.
 // A Canadian or Australian address needs its province/state (code or name: the carrier normalizes it).
 const INTL = { CA: { box: 2700, state: true, zip: /^[A-Z]\d[A-Z] ?\d[A-Z]\d$/i },
                AU: { box: 2800, state: true, zip: /^\d{4}$/ },
@@ -81,8 +81,9 @@ const INTL = { CA: { box: 2700, state: true, zip: /^[A-Z]\d[A-Z] ?\d[A-Z]\d$/i }
 const INTL_PRODUCTS = { "avian-visitors-kit": 1, "avian-mic": 1 };
 const UK_MIN_SUBTOTAL = 21000;
 const INTL_BOX_LB = 4;
-function intlShippingCents(country, subtotal) {
-  return Math.ceil((INTL[country].box + subtotal * 0.015) / 100) * 100;
+function intlShippingCents(country, totalLb, subtotal) {
+  const boxes = Math.max(1, Math.ceil((totalLb + PACKAGING_LB) / INTL_BOX_LB));
+  return Math.ceil((boxes * INTL[country].box + subtotal * 0.015) / 100) * 100;
 }
 function intlAddressOk(addr) {
   const c = INTL[addr.country];
@@ -304,7 +305,6 @@ export async function onRequestPost({ request, env }) {
     const usOnly = normalized.find((l) => !INTL_PRODUCTS[l.id]);
     if (usOnly) return reply({ error: (catalog[usOnly.id].title || "That item") + " ships within the US only." }, 400);
     if (addr.country === "GB" && subtotal < UK_MIN_SUBTOTAL) return reply({ error: "UK orders need a subtotal of at least $210." }, 400);
-    if (totalLb + PACKAGING_LB > INTL_BOX_LB) return reply({ error: "International orders ship as one box of up to 4 lb, about one Avian Visitors Kit. Please place separate orders." }, 400);
   }
   // Shipping + tax only once we have a valid destination: in the US a 2-letter state we recognize
   // plus a 5-digit ZIP. Validating here also stops a malformed address from making the tax
@@ -315,7 +315,7 @@ export async function onRequestPost({ request, env }) {
   if (addr && !haveAddress) return reply({ error: intl ? "Enter a valid shipping address." : "Enter a valid US shipping address." }, 400);
   if (piId && !haveAddress) return reply({ error: "A valid shipping address is required before payment." }, 400);
   if (haveAddress) {
-    shippingCents = intl ? intlShippingCents(addr.country, subtotal) : computeShippingCents(totalLb, _state);
+    shippingCents = intl ? intlShippingCents(addr.country, totalLb, subtotal) : computeShippingCents(totalLb, _state);
     const tax = await calculateTax(headers, currency, taxLines, shippingCents, addr);
     if (tax.error) return reply({ error: "Sales tax could not be calculated. Please try again." }, 502);
     taxCents = tax.tax; total = tax.total; calcId = tax.id;
