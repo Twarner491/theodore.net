@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 18
 ---
 
 {.newthought}*Ex nihilo nihil fit*{/.newthought}. Nothing comes out of nothing.

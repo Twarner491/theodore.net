@@ -9,6 +9,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 8
 ---
 
 {.newthought}Due to uncertainty{/.newthought} surrounding lab access during the Covid-19 pandemic, I received an Ender 3 3D-printer at the start of my cycle in [Fab Academy](https://fabacademy.org/). During my [second week](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/week02/) in the course, I built and began to mod this machine as a little side project to the course work. However as the cycle progressed, I quickly ran out of time to keep working on this machine's mods and moved the machine to my closet, where it sat up until the [Klipper](https://www.klipper3d.org/) firmware piqued my interest. After modding the printer during Fab Academy{.sidenote}[Fab Academy Week 2](http://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/week02/){/.sidenote}, I was running the machine on Marlin linked to Octoprint{.sidenote}[Octoprint Project Page](https://theodore.net/projects/Octoprint/){/.sidenote}, a setup I use on my other machines. This setup worked great with my machine mods, allowing me to print over a network through Octoprint as I would on any of my other Octoprint enabled machines. In this configuration, a Raspberry Pi running Octorpint hosts a local server that *.gcode* flies can be uploaded to and ran from. The Pi sends this uploaded *.gcode* to the machine's mainboard, where the code is processed, and movements/operations are determined.

@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 28
 ---
 
 {.newthought}*Novel hardware adoption*{/.newthought} *is implicitly limited by downside tolerance, not upside potential.*

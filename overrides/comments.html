@@ -414,6 +414,9 @@
 
   <!-- Giscus Comments -->
   <h2 id="__comments">{{ lang.t("meta.comments") }}</h2>
+  {% if page.meta.giscus_related_discussion %}
+  <p>A few recent comments are in <a href="https://github.com/Twarner491/theodore.net/discussions/{{ page.meta.giscus_related_discussion | int }}">a separate discussion</a>.</p>
+  {% endif %}
   <div id="giscus-comments"></div>
 
   {% if page.meta and page.meta.draft and config.extra.draft_password_hash %}
@@ -549,9 +552,14 @@
           "data-repo-id": "MDEwOlJlcG9zaXRvcnkzNzgyODU0MTk=",
           "data-category": "General",
           "data-category-id": "DIC_kwDOFowta84CA5IA",
-          // Keep the discussion key independent from the browser-tab title. Existing
-          // discussions are named from the stable "Page - Teddy Warner" og:title.
+          {% if page.meta.giscus_discussion %}
+          // Pin existing threads so GitHub search cannot hide or split them.
+          "data-mapping": "number",
+          "data-term": {{ page.meta.giscus_discussion | string | tojson }},
+          {% else %}
+          // New articles keep the original title key until their thread is pinned.
           "data-mapping": "og:title",
+          {% endif %}
           "data-strict": "0",
           "data-reactions-enabled": "1",
           "data-emit-metadata": "0",

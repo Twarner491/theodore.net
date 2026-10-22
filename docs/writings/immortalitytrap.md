@@ -8,6 +8,8 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 25
+giscus_related_discussion: 33
 ---
 
 {.newthought}This morning a friend{/.newthought} sent me an intresting read: [The Decline of Deviance](https://www.experimental-history.com/p/the-decline-of-deviance?utm_campaign=post&utm_medium=web) an aggregate of data showing a massive collapse in risk-taking behavior over the past few decade. Teen alcohol use down 50%. Sexual activity down 40%. Fighting down 35%. Geographic mobility collapsed from 20% of Americans moving annually to 10%. Even our aesthetics became safer, British Museums analyzed photos of their artifacts over time and found a steady shift toward black, gray, and white, away from bold colors. Seemingly, we’ve entered an “epidemic of the mundane”.{.sidenote}Adam Mastroianni, [The Decline of Deviance](https://www.experimental-history.com/p/the-decline-of-deviance) — documenting the collapse in risk-taking behavior from 1990–2024.{/.sidenote}

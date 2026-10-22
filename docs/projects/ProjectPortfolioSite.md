@@ -9,6 +9,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 12
 ---
 
 *The behind the scenes of the site you are on right now :)*

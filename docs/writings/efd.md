@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 19
 ---
 
 {.newthought}Emotions can be defined{/.newthought} as "guesses" about the future. They are your windows to the preconceived notions you hold about what has happened and what's to come.

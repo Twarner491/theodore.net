@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 23
 ---
 
 {.newthought}I'm currently sitting in the dirt{/.newthought}, under a tall tree in a park in the middle of Tokyo. I've managed to ignorantly place myself next to a small ant pile, and as I've been sitting here for quite some time now, the ants have taken to waging war on my legs. No matter, besides the ants, I've found quite the lovely spot. Plus, I'm not one to shy away from a good attack on the corpus inferius.

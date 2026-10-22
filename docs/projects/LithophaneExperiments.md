@@ -9,6 +9,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 30
 ---
 
 {.newthought}A Lithophane{/.newthought} is a piece of art made out of a thin translucent material designed to show an image in a "grisaille" color format when held up to light.{.sidenote}[Wikipedia: Lithophane](https://en.wikipedia.org/wiki/Lithophane){/.sidenote} 3D printers can be utilized to create some nice-looking lithophanes, a practice made easy with *3dp.rocks* lithophane generator, linked below. Due to their easy creation, I find lithophanes to be a nice medium to test slicer changes with, allowing for your time to be spent with the slicer settings, and not the file prep. 

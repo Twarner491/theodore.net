@@ -8,6 +8,8 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 29
+giscus_related_discussion: 32
 ---
 
 <div class="embed-frame"><div class="embed-inner">

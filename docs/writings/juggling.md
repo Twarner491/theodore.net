@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 20
 ---
 
 {.newthought}This semester{/.newthought} I've found myself in quite an interesting class at the USC Marshall School of Business: *BAEP 472 - The Science of Peak Performance*.{.sidenote}Taught by [Dr. Glenn Fox](https://glennrfox.com/) and [Coach Pete Carroll](https://www.petecarroll.com/).{/.sidenote}

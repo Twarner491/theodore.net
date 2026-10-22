@@ -9,6 +9,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 11
 ---
 
 {.newthought}While many find Nietzsche’s{/.newthought} nihilistic interpretation of the meaning of life to be disheartening, I’ve always appreciated the personal agency it permits. 

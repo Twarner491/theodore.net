@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 16
 ---
 
 {.newthought}When learning to race cars{/.newthought}, one of the steepest challenges drivers endure is mastering cornering techniques. To compete in the upper echelons of racing, drivers must navigate corners at speeds approaching the limits of tire grip. 

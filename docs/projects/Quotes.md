@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 26
 ---
 
 <link rel="stylesheet" href="../../assets/css/projects/receipts.css">

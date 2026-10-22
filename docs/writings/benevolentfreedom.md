@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 22
 ---
 
 {.newthought}In his 2009 essay{/.newthought}: *[The Education of a Libertarian](https://www.cato-unbound.org/2009/04/13/peter-thiel/education-libertarian/)*, Peter Thiel argues freedom and democracy are mutually exclusive.

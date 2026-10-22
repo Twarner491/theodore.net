@@ -8,6 +8,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 17
 ---
 
 {.newthought}Naïveté serves as the nemesis to bravery.{/.newthought} Plato’s text, The Meno, recounts a conversation between Socrates and Meno, initially exploring the teachability of virtue, before branching into definition of the attribute itself. 

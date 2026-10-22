@@ -10,6 +10,7 @@ hide:
   - navigation
   - tags
 template: comments.html
+giscus_discussion: 21
 ---
 
 {.newthought}Today I turned twenty{/.newthought}. Kind of crazy (or at least feels more substantial than the past few years).
