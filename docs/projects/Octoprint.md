@@ -1,6 +1,6 @@
 ---
 title: Octoprint Setup
-description: A complete Octoprint setup documentation.
+description: A complete Octoprint setup documentation
 keywords: Octoprint, 3D Printing, Raspberry Pi, Print server, Remote printing, Print monitoring, Web interface, Print farm, Printer control, Plugin configuration, Network printing
 thumbnail: /assets/images/Octoprint/laboctoprint.jpg
 date: 2021-09-01

@@ -1,6 +1,6 @@
 ---
 title: Project Portfolio Site
-description: Static site generation with Mkdocs, and hosting via GitHub Pages.
+description: Static site generation with Mkdocs, and hosting via GitHub Pages
 keywords: MkDocs, Static site generator, GitHub Pages, Documentation site, Web development, Material theme, Python, Markdown, Site customization, Portfolio website, Technical documentation
 thumbnail: /assets/images/PortfolioSite/portfolioSiteHero.png
 date: 2021-07-01

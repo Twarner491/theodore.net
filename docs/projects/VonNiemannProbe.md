@@ -1,6 +1,6 @@
 ---
 title: Von Niemann Probe
-description: An AVR-based Bluetooth telegraphing shoe insole that lets you play chess in the way Hans Niemann has been accused!
+description: An AVR-based Bluetooth telegraphing shoe insole that lets you play chess in the way Hans Niemann has been accused
 keywords: Chess cheating, Hans Niemann, Bluetooth telegraph, AVR microcontroller, Shoe insole, Parametric design, PCB design, Morse code, Chess scandal, Magnus Carlsen, Electronics project
 thumbnail: /assets/images/VonNiemannProbe/thumb.jpg
 date: 2023-12-15

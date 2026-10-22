@@ -24,9 +24,10 @@ His technical work includes Stratolink (an upper atmospheric pico balloon fleet)
 
 ## Contact
 - [X/Twitter](https://x.com/WarnerTeddy): @WarnerTeddy
+- [Instagram](https://www.instagram.com/teddymakesstuff/): @teddymakesstuff
 - [LinkedIn](https://www.linkedin.com/in/teddywarner/)
 - [GitHub](https://github.com/Twarner491)
-- Email: teddy [at] warner [dot] net
+- Email: teddy [at] theodore [dot] net
 
 ## Notable Projects
 - [Generative Pen-Trained Transformer](https://theodore.net/projects/Polargraph/): a web accessible, wall-mounted polargraph pen plotter

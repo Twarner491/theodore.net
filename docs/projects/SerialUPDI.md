@@ -1,6 +1,6 @@
 ---
 title: UPDI Serial Programming
-description: Enabling your IDE for serial UPDI programming via a portable python implementation and designated hardware.
+description: Enabling your IDE for serial UPDI programming via a portable python implementation and designated hardware
 keywords: UPDI programming, AVR microcontrollers, Serial programming, MegaTinyCore, Firmware upload, USB-C programmer, Embedded systems, Arduino IDE, Python implementation, Hardware development
 thumbnail: /assets/images/SerialUPDI/updiHero.png
 date: 2021-08-15

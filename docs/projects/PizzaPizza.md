@@ -1,6 +1,6 @@
 ---
 title: Pizza-Pizza CNC Machine
-description: A Pizza-Preparing, Tool-Changing, 3-Axis, 3D-printed CNC Machine!
+description: A Pizza-Preparing, Tool-Changing, 3-Axis, 3D-printed CNC Machine
 keywords: CNC, Robot, Pizza, Pizza Machine
 thumbnail: /assets/images/Pizza/thumb.png
 date: 2022-12-20

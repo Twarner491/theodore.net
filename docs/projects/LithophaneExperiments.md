@@ -1,6 +1,6 @@
 ---
 title: Lithophane Experiments
-description: A gallery of lithophanes.
+description: A gallery of lithophanes
 keywords: Lithophane, 3D Printing, Photography, Art, 3dp.rocks, Image processing, Light art, Custom prints, Photo printing, 3D art, DIY lithophanes
 thumbnail: /assets/images/LithophaneExperiments/hero.png
 date: 2019-01-01

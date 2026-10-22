@@ -1,6 +1,6 @@
 ---
 title: CNC Milling Workflows
-description: A relatively comprehensive guide for CNC milling.
+description: A relatively comprehensive guide for CNC milling
 keywords: CNC milling, CAM, Feeds and speeds, ShopBot, Bantam Tools, Fusion 360, Vectric Aspire, Machining, Subtractive manufacturing, Tool paths, CNC programming
 thumbnail: /assets/images/MillingWorkflow/thumb.jpg
 date: 2022-12-01

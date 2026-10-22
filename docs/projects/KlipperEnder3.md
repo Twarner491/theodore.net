@@ -1,6 +1,6 @@
 ---
 title: Klipper Enabled Ender 3
-description: As the name suggests, an Ender 3 with Klipper firmware.
+description: As the name suggests, an Ender 3 with Klipper firmware
 keywords: Klipper, Ender 3, 3D Printer, Firmware, FluiddPi, Raspberry Pi, DIY, Printer modifications, Direct drive, Auto bed leveling, Custom firmware, 3D printing
 thumbnail: /assets/images/KlipperEnder3/hero.png
 date: 2021-05-01

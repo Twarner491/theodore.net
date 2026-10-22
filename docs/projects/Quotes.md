@@ -1,6 +1,6 @@
 ---
 title: Quote Receipts
-description: Did I really say that? Why yes, you did.
+description: Did I really say that? Why yes, you did
 keywords: quote receipt printer, thermal printer project, raspberry pi, flask web server, DIY printer, quote collection, thermal receipt, python project, home automation, apartment project, raspberry pi 5, quote printer, receipt printer hack, thermal printing, local web server, skeuomorphic design
 thumbnail: /assets/images/quotes/thumb.png
 date: 2025-09-01

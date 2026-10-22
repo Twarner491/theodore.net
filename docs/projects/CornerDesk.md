@@ -1,6 +1,6 @@
 ---
 title: Cable Managed Corner Desk
-description: A clean modern corner desk.
+description: A clean modern corner desk
 keywords: Cable management, Corner desk, DIY desk, Fusion 360, CAD design, Home office setup, Pandemic project, Woodworking, Desk construction, Modern furniture, Workspace organization
 thumbnail: /assets/images/CornerDesk/finishedwoodassembly.jpg
 date: 2020-03-15

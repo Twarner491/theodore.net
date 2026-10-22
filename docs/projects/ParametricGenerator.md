@@ -1,6 +1,6 @@
 ---
 title: Parametric Bottle Cap Generator
-description: Lost a lid or just want a more functional cap? Generate and print your own, compatible with any existing threads!
+description: Lost a lid or just want a more functional cap? Generate and print your own, compatible with any existing threads
 keywords: Parametric design, Bottle caps, 3D printing, Fusion 360, Custom threads, CAD modeling, Thread profiles, Customizable caps, 3D printed lids, Parametric generator
 thumbnail: /assets/images/ParametricGenerator/hero.png
 date: 2021-11-01

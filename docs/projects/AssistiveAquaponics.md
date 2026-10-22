@@ -1,6 +1,6 @@
 ---
 title: Assistive Aquaponics Fish Tank
-description: Expanding the accessibility of successful & thriving aquaponics ecosystems.
+description: Expanding the accessibility of successful & thriving aquaponics ecosystems
 keywords: Aquaponics, Assistive technology, Digital fabrication, 3D printing, CNC milling, PCB design, Sustainable farming, Fish tank, Fab Academy, Maker project, Smart agriculture, IoT farming, Accessible design, Educational aquaponics, DIY aquaponics
 thumbnail: /assets/images/AssistiveAquaponics/presentation.png
 date: 2021-06-01

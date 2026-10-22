@@ -1,6 +1,6 @@
 ---
 title: Avian Visitors
-description: A live bird collage from your window.
+description: A live bird collage from your window
 keywords: avianvisitors, birdnet-pi, birding, raspberry pi, ml, audio classification, gemini, kachō-e, illustration, generative art, apartment project, home automation
 thumbnail: https://bird.onethreenine.net/thumb.png
 date: 2026-05-28

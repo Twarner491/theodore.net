@@ -18,14 +18,14 @@ external_projects:
     external: true
 
   - title: onethreenine.net
-    description: A web accessible corkboard for my apartment.
+    description: A web accessible corkboard for my apartment
     url: https://onethreenine.net/about
     thumbnail: /assets/images/index/cork.png
     date: 2025-08-01
     external: true
 
   - title: How to Make (Almost) Anything
-    description: 22 weeks of rapid prototyping.
+    description: 22 weeks of rapid prototyping
     url: https://fabacademy.org/2021/labs/charlotte/students/theodore-warner/Assignments/student-bootcamp/
     thumbnail: https://gitlab.fabcloud.org/academany/fabacademy/2021/labs/charlotte/students/theodore-warner/-/raw/master/docs/images/wallpaper.jpg?ref_type=heads
     date: 2021-04-28
