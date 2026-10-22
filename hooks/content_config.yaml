@@ -3,6 +3,13 @@
 
 external_projects:
 
+  - title: Prime Real Estate
+    description: A map of all the prime real estate globally
+    url: https://prime.theodore.net
+    thumbnail: /assets/images/primeReal/primeReal.png
+    date: 2026-10-18
+    external: true
+
   - title: Stratolink
     description: An upper atmospheric pico balloon network
     url: https://stratolink.org
