@@ -76,7 +76,7 @@ colophon: ""
         <div class="socialpar"><a target="_blank" href="https://github.com/Twarner491" aria-label="GitHub Profile"><i class="fa-brands fa-github"></i></a></div>
         <div class="socialpar"><a target="_blank" href="https://x.com/intent/follow?screen_name=WarnerTeddy" aria-label="X (Twitter) Profile"><i class="fa-brands fa-x-twitter"></i></a></div>
         <div class="socialpar"><a target="_blank" href="mailto:teddy@warner.net" aria-label="Send Email"><i class="fa-solid fa-paper-plane"></i></a></div>
-        <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE.md"><p class="copyright">Copyright © 2026 Teddy Warner</p></a>
+        <a href="/licensing/"><p class="copyright">Copyright © 2026 Teddy Warner</p></a>
         <p class="store-legal"><a href="/privacy">Privacy</a> <a href="/terms">Terms</a> <a href="/returns">Returns</a></p>
       </div>
     </section>

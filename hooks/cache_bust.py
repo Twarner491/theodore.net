@@ -52,6 +52,7 @@ def on_config(config):
         "assets/js/store-data.js": _source_hash(config, store_sources),
         "assets/js/search.js": _source_hash(config, [Path("docs/assets/js/search.js")]),
         "assets/js/index.js": _source_hash(config, [Path("docs/assets/js/index.js")]),
+        "assets/js/footer-social.js": _source_hash(config, [Path("docs/assets/js/footer-social.js")]),
     }
     config["extra_javascript"] = [
         asset.split("?", 1)[0] + "?h=" + versions[asset.split("?", 1)[0]]
