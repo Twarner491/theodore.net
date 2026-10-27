@@ -223,7 +223,7 @@ search:
           <a class="store-mini-card" href="/store/polargraph/">
             <div class="store-mini-img"><img src="/assets/images/Polargraph/kit.png" alt="Polargraph Kit"></div>
             <p class="store-mini-title">Polargraph Kit</p>
-            <p class="store-mini-price"><span class="from">from</span>$430</p>
+            <p class="store-mini-price">Sold out</p>
           </a>
         </div>
     </section>

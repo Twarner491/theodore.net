@@ -39,7 +39,7 @@ class StoreKitNamingTests(unittest.TestCase):
         self.assertIn('<span class="kit-card__title">Bird Mic Kit</span>', avian_project)
         self.assertIn('<span class="kit-card__title">Polargraph Kit</span>', polargraph_project)
 
-    def test_homepage_store_trio_uses_each_product_hero_and_current_price(self):
+    def test_homepage_store_trio_uses_each_product_hero_and_current_price_or_status(self):
         homepage = (DOCS / "index.md").read_text(encoding="utf-8")
         cards = re.findall(r'<a class="store-mini-card".*?</a>', homepage, flags=re.DOTALL)
 
@@ -47,7 +47,7 @@ class StoreKitNamingTests(unittest.TestCase):
         expected = [
             ('/store/avian-visitors/', '/assets/images/AvianVisitors/avianAssembledTop.png', 'Avian Visitors', '$699'),
             ('/store/avian-mic/', '/assets/images/AvianVisitors/bird-mic.png', 'Bird Mic Kit', '<span class="from">from</span>$180'),
-            ('/store/polargraph/', '/assets/images/Polargraph/kit.png', 'Polargraph Kit', '<span class="from">from</span>$430'),
+            ('/store/polargraph/', '/assets/images/Polargraph/kit.png', 'Polargraph Kit', 'Sold out'),
         ]
         for card, (href, image, title, price) in zip(cards, expected):
             with self.subTest(title=title):
