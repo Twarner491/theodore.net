@@ -18,7 +18,7 @@ SEARCH_DATA = load_hook("search_data")
 
 
 class StoreSalesOpenTest(unittest.TestCase):
-    def test_public_catalog_reopens_only_the_existing_fulfillable_variants(self):
+    def test_public_catalog_excludes_paused_polargraph_kits(self):
         expected = {
             "avian-visitors": ["assembled"] if self._assembled_activated() else [],
             "avian-visitors-kit": ["electronics", "electronics-printed"],
@@ -27,7 +27,7 @@ class StoreSalesOpenTest(unittest.TestCase):
             "avian-visitors-parts": ["default"],
             "bird-mic-case": ["default"],
             "polargraph-parts": ["default"],
-            "polargraph": ["electronics", "electronics-printed"],
+            "polargraph": [],
             "micron-pens-9": ["default", "with-mounts"],
         }
         products = {product["id"]: product for product in STORE_PRODUCTS._products(ROOT / "docs")}

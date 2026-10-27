@@ -302,17 +302,20 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
                 self.assertEqual(entry['inventorySku'], 'avian-gen3-batch-01')
                 self.assertEqual(entry['price'], variant['stripePriceLive' if mode == 'live' else 'stripePrice'])
 
-    def test_every_kit_and_accessory_is_sellable_with_test_and_live_prices(self):
+    def test_kit_and_accessory_availability_retains_test_and_live_prices(self):
         for product in self.products.values():
             for variant in product.get('variants', []):
                 if (product['id'], variant.get('id')) == ('avian-visitors', 'assembled'):
                     continue
                 with self.subTest(product=product['id'], variant=variant.get('id')):
-                    self.assertNotIn('status', variant)
+                    if product['id'] == 'polargraph':
+                        self.assertEqual(variant.get('status'), 'soldout')
+                    else:
+                        self.assertNotIn('status', variant)
                     self.assertTrue(variant.get('stripePrice'))
                     self.assertTrue(variant.get('stripePriceLive'))
 
-    def test_test_and_live_catalogs_sell_everything_except_the_assembled_frame(self):
+    def test_test_and_live_catalogs_exclude_paused_kits_and_preserve_other_products(self):
 
         class HookConfig(dict):
             use_directory_urls = True
@@ -329,7 +332,6 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
             'bird-mic-case': ['default'],
             'mic-mount': ['default'],
             'micron-pens-9': ['default', 'with-mounts'],
-            'polargraph': ['electronics', 'electronics-printed'],
             'polargraph-parts': ['default'],
         }
         if self.products['avian-visitors']['variants'][0]['status'] == 'available':

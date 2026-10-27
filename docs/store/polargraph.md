@@ -24,6 +24,7 @@ weight: 3.1
 project: /projects/Polargraph/
 variants:
   - id: electronics
+    status: soldout
     image: polargraphElectronics.png
     label: Electronics Kit
     price: 430
@@ -38,6 +39,7 @@ variants:
       - Cabling + PSU + Power cord
       - Belts, pulleys, bearings, and other hardware
   - id: electronics-printed
+    status: soldout
     image: polargrapg3dprints.png
     label: "+ 3D Printed Parts"
     price: 520
