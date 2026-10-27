@@ -1,4 +1,3 @@
 **Copyright © 2026 Teddy Warner**
-> This work may be reproduced, modified, distributed, performed, and displayed for any purpose,
-> but must acknowledge Teddy Warner. Copyright is retained and must be preserved. 
-> The work is provided as is; no warranty is provided, and users accept all liability.
+
+Website software is MIT licensed. Original writing, photographs and artwork by Teddy Warner are CC BY 4.0, unless otherwise noted. Separately licensed projects and third-party materials keep their own licenses. See [LICENSE.md](LICENSE.md) for the scope and terms. Previously granted permissions, including MIT grants, remain in effect.

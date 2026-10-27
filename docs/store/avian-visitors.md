@@ -11,9 +11,9 @@ product: true
 order: 1
 id: avian-visitors
 published: true
-teaser: A battery-powered e-paper frame that collages birds heard in your ZIP code.
-sub: A battery-powered e-paper frame that collages birds heard in your ZIP code.
-description: A battery-powered e-paper frame that collages birds heard in your ZIP code.
+teaser: A battery-powered e-paper frame that collages birds heard near your ZIP code.
+sub: A battery-powered e-paper frame that collages birds heard near your ZIP code.
+description: A battery-powered e-paper frame that collages birds heard near your ZIP code.
 imageBase: /assets/images/AvianVisitors/
 images:
   - avianAssembledTop.png
@@ -51,13 +51,13 @@ variants:
     inventorySku: avian-gen3-batch-01
     batchSize: 20
     batchSizePrivate: true   # never show "N of 20"; only "Only N left" at 5 or fewer
-    softwareNote: Batch 1 ships Q4 2026.
+    softwareNote: This is a one-man shop. I assemble each frame by hand. Batch 1 will ship by the end of 2026.
     contents:
       - Fully assembled 13.3-inch e-paper frame with rechargeable battery
       - Wall-hanging hardware
 sections:
   - label: How it works
-    html: The framed e-ink display dynamically updates to show a collage of the birds heard most recently within your ZIP code.
+    html: The framed e-ink display dynamically updates to show a collage of the birds heard most recently near your ZIP code.
   - label: Pairs with
     html: <a href="/store/avian-mic/">Bird Mic Kit</a> or <a href="https://www.birdweather.com/shop-birdweather-puc" target="_blank" rel="noopener noreferrer">BirdWeather PUC</a> to populate the screen with your own bioacoustics data. Not required.
   - label: Dimensions
@@ -99,7 +99,7 @@ sections:
         <div class="socialpar"><a target="_blank" href="https://github.com/Twarner491" aria-label="GitHub Profile"><i class="fa-brands fa-github"></i></a></div>
         <div class="socialpar"><a target="_blank" href="https://x.com/intent/follow?screen_name=WarnerTeddy" aria-label="X (Twitter) Profile"><i class="fa-brands fa-x-twitter"></i></a></div>
         <div class="socialpar"><a target="_blank" href="mailto:teddy@warner.net" aria-label="Send Email"><i class="fa-solid fa-paper-plane"></i></a></div>
-        <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE"><p class="copyright">Copyright © 2026 Teddy Warner</p></a>
+        <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE.md"><p class="copyright">Copyright © 2026 Teddy Warner</p></a>
         <p class="store-legal"><a href="/privacy">Privacy</a> <a href="/terms">Terms</a> <a href="/returns">Returns</a></p>
       </div>
     </section>

@@ -85,7 +85,7 @@ search:
             <i class="fa-brands fa-instagram"></i>
           </a>
         </div>
-        <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE">
+        <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE.md">
           <p class="copyright">Copyright © 2026 Teddy Warner</p>
         </a>
         <p class="footer-links"><a href="/privacy">Privacy</a> <a href="/press">Press</a> <a href="/store">Store</a></p>

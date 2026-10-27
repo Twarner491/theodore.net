@@ -47,12 +47,12 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective October 17, 2026</p>
+          <p class="draft">Effective October 26, 2026</p>
 
           <p>These terms apply to purchases from the theodore.net store. By placing an order, you agree to them.</p>
 
           <h3>About the shop</h3>
-          <p>The store is operated in California and sells finished electronic objects, electronics kits, and parts kits. Checkout is guest-only; the store does not create accounts.</p>
+          <p>The store is operated by Things by Theodore LLC. We sell finished electronic objects, electronics kits, and parts kits. Checkout is guest-only; the store does not create accounts.</p>
 
           <h3>Availability and dispatch</h3>
           <p>Each product page states whether an item is in stock or made to order and gives an expected dispatch time. You may cancel for a full refund before the order ships. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> with your order number, or check the <a href="/store/confirmation/">order lookup</a> page.</p>
@@ -61,24 +61,24 @@ search:
           <p>We may refuse or cancel an order at our discretion. If we cancel an order you have paid for, we will issue a full refund. Prices may change without notice. We may correct pricing or product errors and cancel affected orders with a full refund. Stripe processes card payments; we do not see or store your card number. See the <a href="/privacy">Privacy Policy</a>.</p>
 
           <h3>Shipping</h3>
-          <p>Orders ship from California to the destinations and by the services shown at checkout. Tracking is provided when the order ships. Risk of loss passes to you when the carrier takes possession of the package, or on delivery for orders shipped outside the US.</p>
+          <p>Orders ship from California to the destinations and by the services shown at checkout. Tracking is provided when the order ships. Assembled Avian Visitors frames ship by ground to street addresses in the contiguous US only, excluding PO boxes and general delivery. Risk of loss passes to you when the carrier takes possession of the package, or on delivery for orders shipped outside the US.</p>
           <p>For orders shipped outside the US, you pay any import duties, taxes, and carrier fees charged on delivery, and we declare the price you paid. Kits shipped outside the US do not include the US wall charger: use the included cable with a USB wall adapter rated 5 V, 3 A. If a package is refused or returned undelivered, we refund the order minus shipping both ways and any charges we incur.</p>
           <p>If we cannot ship within the time stated when you order, or within 30 days where no time is stated, we will contact you and give you the choice to accept a revised date or cancel for a full refund.</p>
 
-          <h3>Warranty</h3>
-          <p>We provide a 90-day limited warranty against manufacturing defects, measured from the date of delivery. Our remedy is repair, replacement, or refund at our discretion. See the <a href="/returns">Return Policy</a> for how to make a claim.</p>
+          <h3>90-day limited warranty</h3>
+          <p>We provide a 90-day limited warranty against manufacturing defects, measured from the date of delivery. Our remedy is repair, replacement, or refund at our discretion, subject to any remedy required by law. See the <a href="/returns">Return Policy</a> for how to make a claim.</p>
           <p>If you live outside the US, this warranty is in addition to your rights under local consumer law. For customers in Australia: Our goods come with guarantees that cannot be excluded under the Australian Consumer Law. You are entitled to a replacement or refund for a major failure and compensation for any other reasonably foreseeable loss or damage. You are also entitled to have the goods repaired or replaced if the goods fail to be of acceptable quality and the failure does not amount to a major failure.</p>
-          <p><strong>Except as expressly stated in this limited warranty, products are provided "as is." To the fullest extent permitted by law, we disclaim all implied warranties, including the implied warranties of merchantability and fitness for a particular purpose. Where a written warranty is provided, any implied warranties are limited in duration to that written warranty, as provided under the Magnuson-Moss Warranty Act.</strong></p>
-          <p>The warranty does not cover incorrect kit assembly, unauthorized modification or repair, misuse, static discharge, accident, ordinary wear, or cosmetic damage that does not affect operation.</p>
+          <p>This limited warranty does not exclude implied warranties or other rights under applicable law. Your rights may vary by state or country.</p>
+          <p>The warranty excludes damage caused by incorrect kit assembly, modification or repair, misuse, static discharge, or accident, as well as ordinary wear and cosmetic damage that does not affect operation.</p>
 
-          <h3>Kit safety and assumption of risk</h3>
+          <h3>Product safety</h3>
           <p>Building and operating electronics involves heat, small parts, and live electrical connections. Finished rechargeable products contain a lithium-ion cell. Do not open, crush, puncture, short, or expose them to excessive heat, and do not charge them with equipment outside the published specifications. Stop using any device that is swollen, leaking, unusually hot, damaged, or producing an unusual odor. Contact us for handling instructions. These products are not intended for children under 13 without adult supervision.</p>
 
           <h3>Limitation of liability</h3>
           <p>To the fullest extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising from your purchase or use of our products. Our total liability for any claim is capped at the amount you paid for the product. Nothing in these terms limits liability that cannot lawfully be limited, including liability for personal injury caused by our negligence.</p>
 
           <h3>Open-source software and hardware</h3>
-          <p>Some finished products include software written by us, while some kits require software you install. Product pages state what is included. Project notices identify the relevant licenses and attributions.</p>
+          <p>Some finished products include software written by us, while some kits require software you install. Product pages state what is included. Assembled Avian Visitors frames require Wi-Fi, internet access, and email registration for new collages. Project notices identify the relevant licenses and attributions.</p>
           <p>Third-party software, data sources, and network services remain subject to their own terms and availability. We do not claim affiliation with or endorsement by a third party unless the product page says so.</p>
 
           <h3>Affiliate links</h3>
@@ -101,7 +101,7 @@ search:
         <div class="socialpar"><a target="_blank" href="https://github.com/Twarner491" aria-label="GitHub"><i class="fa-brands fa-github"></i></a></div>
         <div class="socialpar"><a target="_blank" href="https://x.com/intent/follow?screen_name=WarnerTeddy" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a></div>
         <div class="socialpar"><a target="_blank" href="mailto:teddy@warner.net" aria-label="Email"><i class="fa-solid fa-paper-plane"></i></a></div>
-        <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE"><p class="copyright">Copyright © 2026 Teddy Warner</p></a>
+        <a target="_blank" href="https://github.com/Twarner491/theodore.net/blob/main/LICENSE.md"><p class="copyright">Copyright © 2026 Teddy Warner</p></a>
         <p class="store-legal"><a href="/privacy">Privacy</a> <a href="/terms">Terms</a> <a href="/returns">Returns</a></p>
       </div>
     </section>

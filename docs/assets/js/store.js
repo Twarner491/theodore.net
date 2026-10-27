@@ -1417,7 +1417,7 @@
     const projNote = proj ? '<p class="conf-note">In the meantime, see how the ' + escapeHtml(proj.title) + ' works: <a href="' + escapeHtml(proj.project) + '">read the project writeup</a></p>' : "";
     const shipBlock = a ? '<div class="conf-block"><p class="conf-block-h">Shipping to</p><p class="conf-addr">' +
       [d.shipping.name, a.line1, a.line2, ((a.city ? a.city + ", " : "") + (a.state || "") + " " + (a.postal_code || "")).trim()].filter(Boolean).map(escapeHtml).join("<br>") +
-      '</p><p class="conf-note">Made to order. Allow about a week to build and ship, plus a few days in transit. You’ll get a tracking link by email.</p>' + projNote + '</div>' : "";
+      '</p><p class="conf-note">The dispatch estimate shown when you ordered applies to your order. You’ll get a tracking link by email when it ships.</p>' + projNote + '</div>' : "";
     const pay = d.payment, brand = pay && pay.brand ? pay.brand.charAt(0).toUpperCase() + pay.brand.slice(1) : "";
     const payBlock = '<div class="conf-block"><p class="conf-block-h">Payment</p>' +
       (pay && pay.last4 ? '<p class="conf-row2">' + escapeHtml(brand) + " ending in " + escapeHtml(pay.last4) + "</p>" : "") +
@@ -1476,7 +1476,7 @@
         "</aside>" +
         '<div class="co-detail">' + backStore +
           '<div class="conf-block"><p class="conf-block-h">Need a hand?</p><p class="conf-row2">Can\'t find your order number? It is the 10-character code on your receipt. Email <a href="mailto:support@theodore.net">support@theodore.net</a> and we will look it up for you.</p></div>' +
-          '<div class="conf-block"><p class="conf-block-h">Changed your mind?</p><p class="conf-row2">Kits are made to order, so you can cancel for a full refund any time before yours ships. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> with your order number.</p></div>' +
+          '<div class="conf-block"><p class="conf-block-h">Changed your mind?</p><p class="conf-row2">You can cancel for a full refund any time before your order ships. Email <a href="mailto:returns@theodore.net">returns@theodore.net</a> with your order number.</p></div>' +
         "</div>" +
       "</div>";
     reveal();

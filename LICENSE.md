@@ -1,3 +1,16 @@
+Website licensing
+
+The software that runs this website is licensed under the MIT License.
+
+Original writing, photographs and artwork by Teddy Warner on this website are licensed under CC BY 4.0, unless otherwise noted. You can share and adapt them, including commercially, with credit to Teddy Warner, a link to the license and a note of any changes.
+
+Separately licensed projects and third-party materials keep their own licenses. These licenses do not grant trademark rights or imply endorsement.
+
+Previously granted permissions, including MIT grants, remain in effect.
+
+CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+Full terms: https://creativecommons.org/licenses/by/4.0/legalcode.en
+
 MIT License
 
 Copyright (c) 2026 Teddy Warner
