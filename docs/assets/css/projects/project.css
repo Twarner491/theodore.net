@@ -206,11 +206,11 @@
   z-index: 1;
 }
 
-.home, .proj, .writ {
+.home, .proj, .writ, .stor {
   transition: all 0.3s ease;
 }
 
-.home:hover, .proj:hover, .writ:hover {
+.home:hover, .proj:hover, .writ:hover, .stor:hover {
   font-style: italic;
 }
 
