@@ -45,7 +45,7 @@ class StoreKitNamingTests(unittest.TestCase):
 
         self.assertEqual(len(cards), 3)
         expected = [
-            ('/store/avian-visitors/', '/assets/images/AvianVisitors/avianAssembledTop.png', 'Avian Visitors', '$699'),
+            ('/store/avian-visitors/', '/assets/images/AvianVisitors/avianAssembledTop.png', 'Avian Visitors', 'Sold out'),
             ('/store/avian-mic/', '/assets/images/AvianVisitors/bird-mic.png', 'Bird Mic Kit', '<span class="from">from</span>$180'),
             ('/store/polargraph/', '/assets/images/Polargraph/kit.png', 'Polargraph Kit', 'Sold out'),
         ]
@@ -55,7 +55,9 @@ class StoreKitNamingTests(unittest.TestCase):
                 self.assertIn(f'src="{image}"', card)
                 self.assertIn(f'alt="{title}"', card)
                 self.assertIn(f'<p class="store-mini-title">{title}</p>', card)
-                self.assertIn(f'<p class="store-mini-price">{price}</p>', card)
+                self.assertRegex(card, rf'<p class="store-mini-price"[^>]*>{re.escape(price)}</p>')
+        self.assertIn('data-store-product="avian-visitors"', cards[0])
+        self.assertIn('data-store-price="$699"', cards[0])
 
     def test_avian_pairing_copy_names_the_sellable_kit(self):
         assembled = (DOCS / "store" / "avian-visitors.md").read_text(encoding="utf-8")
