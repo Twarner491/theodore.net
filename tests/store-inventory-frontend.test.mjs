@@ -410,8 +410,8 @@ test("Batch 2 detail count opens only with confirmed stock and closes on sellout
   assert.equal(helpers.batchAvailabilityText(variant), "");
   assert.equal(helpers.buyable(variant), false);
   helpers.setInventory({ "avian-gen3-batch-02": { available: 100, soldOut: false } }, true);
-  assert.equal(helpers.batchAvailabilityText(variant), "Batch 2, 100/100 remaining");
+  assert.equal(helpers.batchAvailabilityText(variant), "Batch 2, 100 remaining");
   helpers.setInventory({ "avian-gen3-batch-02": { available: 0, soldOut: true } }, true);
-  assert.equal(helpers.batchAvailabilityText(variant), "Batch 2, 0/100 remaining");
+  assert.equal(helpers.batchAvailabilityText(variant), "Batch 2, 0 remaining");
   assert.equal(helpers.buyable(variant), false);
 });

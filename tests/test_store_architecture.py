@@ -81,7 +81,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
         variant = assembled['variants'][0]
 
         self.assertNotIn('desc', variant)
-        self.assertEqual(variant['softwareNote'], 'This is a one-man shop. I assemble each frame by hand. Batch 1 will ship by the end of 2026, and Batch 2 shortly thereafter.')
+        self.assertEqual(variant['softwareNote'], 'I assemble each of these by hand, working as hard as I can to ship both Batch 1 and Batch 2 before the end of 2026.')
         self.assertNotIn('colophon', assembled)
         self.assertEqual(
             [section['label'] for section in assembled['sections']],

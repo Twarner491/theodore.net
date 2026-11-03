@@ -43,7 +43,7 @@ variants:
     shippingProfile: contiguous-us-ground
     inventorySku: avian-gen3-batch-02
     batchSize: 100
-    softwareNote: This is a one-man shop. I assemble each frame by hand. Batch 1 will ship by the end of 2026, and Batch 2 shortly thereafter.
+    softwareNote: I assemble each of these by hand, working as hard as I can to ship both Batch 1 and Batch 2 before the end of 2026.
     contents:
       - Fully assembled 13.3-inch e-paper frame with rechargeable battery
       - Wall-hanging hardware

@@ -139,7 +139,7 @@
       remaining = total;
     // `batchSizePrivate` never shows "N of M"; the count surfaces only once stock runs low
     if (v.batchSizePrivate === true) return remaining !== null && remaining > 0 && remaining <= LOW_STOCK ? "Only " + remaining + " left" : "";
-    return remaining === null ? "" : (v.batchLabel ? v.batchLabel + ", " : "") + remaining + (v.batchLabel ? "/" : " of ") + total + " remaining";
+    return remaining === null ? "" : (v.batchLabel ? v.batchLabel + ", " + remaining : remaining + " of " + total) + " remaining";
   }
   const statusOf = (v) => {
     const configured = configuredStatusOf(v);
