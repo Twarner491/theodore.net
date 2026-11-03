@@ -211,7 +211,7 @@ search:
         <!-- prices mirror the cheapest buyable variant in each docs/store/*.md (keep in sync if you change Stripe pricing) -->
         <div class="store-mini">
           <a class="store-mini-card" href="/store/avian-visitors-kit/">
-            <div class="store-mini-img"><img src="/assets/images/AvianVisitors/avianAssembledTop.png" alt="Avian Visitors Kit"></div>
+            <div class="store-mini-img"><img src="/assets/images/AvianVisitors/heard-today.png" alt="Avian Visitors Kit"></div>
             <p class="store-mini-title">Avian Visitors Kit</p>
             <p class="store-mini-price" data-store-product="avian-visitors-kit" data-store-price="from $450"><span class="from">from</span>$450</p>
           </a>

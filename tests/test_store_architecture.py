@@ -149,7 +149,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
 
         homepage = (DOCS / 'index.md').read_text(encoding='utf-8')
         project = (DOCS / 'projects' / 'AvianVisitors.md').read_text(encoding='utf-8')
-        self.assertIn('/assets/images/AvianVisitors/avianAssembledTop.png', homepage)
+        self.assertIn('/assets/images/AvianVisitors/heard-today.png', homepage)
         self.assertIn('/assets/images/AvianVisitors/heard-today.png', project)
 
     def test_store_hook_discovers_only_existing_dark_siblings(self):

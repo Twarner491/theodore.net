@@ -45,7 +45,7 @@ class StoreKitNamingTests(unittest.TestCase):
 
         self.assertEqual(len(cards), 3)
         expected = [
-            ('/store/avian-visitors-kit/', '/assets/images/AvianVisitors/avianAssembledTop.png', 'Avian Visitors Kit', '<span class="from">from</span>$450'),
+            ('/store/avian-visitors-kit/', '/assets/images/AvianVisitors/heard-today.png', 'Avian Visitors Kit', '<span class="from">from</span>$450'),
             ('/store/avian-mic/', '/assets/images/AvianVisitors/bird-mic.png', 'Bird Mic Kit', '<span class="from">from</span>$180'),
             ('/store/polargraph/', '/assets/images/Polargraph/kit.png', 'Polargraph Kit', 'Sold out'),
         ]
