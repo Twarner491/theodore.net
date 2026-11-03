@@ -169,6 +169,9 @@ def worker_toml(prod_id):
 def assembled_block(text):
     """(start, end) of the assembled variant's lines in the product frontmatter."""
     start = text.index("  - id: assembled\n")
+    retired = text.find("\nretiredVariants:\n")
+    if retired >= 0 and start > retired:
+        raise Stop("Batch 1 is retired. Its catalog fields must remain unchanged for existing orders.")
     nxt = re.search(r"\n(  - id: |[a-zA-Z])", text[start + 1:])
     end = start + 1 + nxt.start() + 1 if nxt else len(text)
     return start, end
@@ -232,6 +235,7 @@ def form_encode(params):
 
 def preflight(check):
     say("1. Preflight")
+    assembled_block(PRODUCT_MD.read_text())
     for path in ("migrations/0001_store_inventory.sql", "tools/verify-store-inventory-export.mjs",
                  "workers/store-inventory-expiry.js", "docs/store/avian-visitors.md"):
         if not (ROOT / path).exists():

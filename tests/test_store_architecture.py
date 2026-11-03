@@ -24,32 +24,26 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
         kit = self.products['avian-visitors-kit']
 
         self.assertTrue(assembled['published'])
-        self.assertEqual(assembled['defaultBuild'], 'assembled')
-        self.assertEqual([variant['id'] for variant in assembled['variants']], ['assembled'])
+        self.assertEqual(assembled['defaultBuild'], 'assembled-batch-2')
+        self.assertEqual([variant['id'] for variant in assembled['variants']], ['assembled-batch-2'])
         assembled_variant = assembled['variants'][0]
         self.assertNotIn('comingSoon', assembled_variant)
         self.assertEqual(assembled_variant['price'], 699)
         self.assertEqual(assembled_variant['stripePrice'], 'price_1UAyqjRPSNpqisAPDHJxogp3')
-        self.assertTrue(assembled_variant['localPreview'])
+        self.assertNotIn('localPreview', assembled_variant)
         self.assertEqual(assembled_variant['shippingProfile'], 'contiguous-us-ground')
-        self.assertEqual(assembled_variant['inventorySku'], 'avian-gen3-batch-01')
-        self.assertEqual(assembled_variant['batchSize'], 20)
+        self.assertEqual(assembled_variant['inventorySku'], 'avian-gen3-batch-02')
+        self.assertEqual(assembled_variant['batchSize'], 100)
         self.assertEqual(assembled_variant['maxQuantity'], 20)
-        # Batch 1 is a timed drop with a private batch size. It is either still held
-        # (soldout, no live price) or activated by tools/activate-batch-1.sh (available
-        # with a live price, still refused by checkout until launchAt).
-        if assembled_variant['status'] == 'soldout':
-            self.assertNotIn('stripePriceLive', assembled_variant)
-        else:
-            self.assertEqual(assembled_variant['status'], 'available')
-            self.assertRegex(assembled_variant['stripePriceLive'], r'^price_[A-Za-z0-9]+$')
-        self.assertEqual(assembled_variant['launchAt'], '2026-10-29T16:00:00Z')
-        self.assertEqual(assembled_variant['launchLabel'], 'Batch 1')
-        self.assertTrue(assembled_variant['batchSizePrivate'])
+        self.assertEqual(assembled_variant['status'], 'available')
+        self.assertRegex(assembled_variant['stripePriceLive'], r'^price_[A-Za-z0-9]+$')
+        self.assertNotIn('launchAt', assembled_variant)
+        self.assertEqual(assembled_variant['batchLabel'], 'Batch 2')
+        self.assertNotIn('batchSizePrivate', assembled_variant)
         self.assertEqual(assembled['storeListings'], [{
             'category': 'products',
-            'build': 'assembled',
-            'variants': ['assembled'],
+            'build': 'assembled-batch-2',
+            'variants': ['assembled-batch-2'],
             'title': 'Avian Visitors',
         }])
 
@@ -87,7 +81,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
         variant = assembled['variants'][0]
 
         self.assertNotIn('desc', variant)
-        self.assertEqual(variant['softwareNote'], 'This is a one-man shop. I assemble each frame by hand. Batch 1 will ship by the end of 2026.')
+        self.assertEqual(variant['softwareNote'], 'This is a one-man shop. I assemble each frame by hand. Batch 1 will ship by the end of 2026, and Batch 2 shortly thereafter.')
         self.assertNotIn('colophon', assembled)
         self.assertEqual(
             [section['label'] for section in assembled['sections']],
@@ -149,7 +143,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
 
         homepage = (DOCS / 'index.md').read_text(encoding='utf-8')
         project = (DOCS / 'projects' / 'AvianVisitors.md').read_text(encoding='utf-8')
-        self.assertIn('/assets/images/AvianVisitors/heard-today.png', homepage)
+        self.assertIn('/assets/images/AvianVisitors/avianAssembledTop.png', homepage)
         self.assertIn('/assets/images/AvianVisitors/heard-today.png', project)
 
     def test_store_hook_discovers_only_existing_dark_siblings(self):
@@ -274,9 +268,8 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             _inventory_sku({'inventorySku': 'avian-gen3-batch-01'})
 
-    def test_assembled_frame_enters_checkout_only_when_activated_and_always_with_its_launch_gate(self):
+    def test_batch_2_opens_without_changing_the_retired_batch_1_catalog(self):
         variant = self.products['avian-visitors']['variants'][0]
-        activated = variant['status'] == 'available'
         class HookConfig(dict):
             use_directory_urls = True
             plugins = SimpleNamespace(_current_plugin='test')
@@ -294,18 +287,26 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
                     on_files(files, config)
                 generated = next(file for file in files if file.src_uri == 'store-catalog.json')
                 catalog = json.loads(generated.content_string)
-                if not activated:
-                    self.assertNotIn('avian-visitors', catalog)
-                    continue
-                entry = catalog['avian-visitors']['variants']['assembled']
-                self.assertEqual(entry['launchAt'], '2026-10-29T16:00:00Z')
-                self.assertEqual(entry['inventorySku'], 'avian-gen3-batch-01')
+                entry = catalog['avian-visitors']['variants']['assembled-batch-2']
+                self.assertNotIn('launchAt', entry)
+                self.assertEqual(entry['inventorySku'], 'avian-gen3-batch-02')
                 self.assertEqual(entry['price'], variant['stripePriceLive' if mode == 'live' else 'stripePrice'])
+                self.assertEqual(catalog['avian-visitors']['retiredBuilds'], ['assembled'])
+                # These fields are hashed into existing Batch 1 payment bindings.
+                self.assertEqual(catalog['avian-visitors']['variants']['assembled'], {
+                    'price': variant['stripePriceLive' if mode == 'live' else 'stripePrice'],
+                    'weightLb': 4.0, 'maxQty': 20, 'label': 'Assembled', 'priceUsd': 699,
+                    'shippingProfile': 'contiguous-us-ground',
+                    'inventorySku': 'avian-gen3-batch-01', 'launchAt': '2026-10-29T16:00:00Z',
+                })
+                runtime = next(file for file in files if file.src_uri == 'assets/js/store-data.js')
+                self.assertNotIn('retiredVariants', runtime.content_string)
+                self.assertNotIn('avian-gen3-batch-01', runtime.content_string)
 
     def test_kit_and_accessory_availability_retains_test_and_live_prices(self):
         for product in self.products.values():
             for variant in product.get('variants', []):
-                if (product['id'], variant.get('id')) == ('avian-visitors', 'assembled'):
+                if (product['id'], variant.get('id')) == ('avian-visitors', 'assembled-batch-2'):
                     continue
                 with self.subTest(product=product['id'], variant=variant.get('id')):
                     if product['id'] == 'polargraph':
@@ -335,7 +336,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
             'polargraph-parts': ['default'],
         }
         if self.products['avian-visitors']['variants'][0]['status'] == 'available':
-            expected['avian-visitors'] = ['assembled']   # activated: sellable, behind its launchAt
+            expected['avian-visitors'] = ['assembled', 'assembled-batch-2']
         for mode in ('test', 'live'):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as root:
                 config = HookConfig(docs_dir=str(DOCS))
@@ -347,9 +348,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
                 catalog = json.loads(generated.content_string)
                 self.assertEqual({k: sorted(v['variants']) for k, v in catalog.items()}, expected)
                 launches = next(file for file in files if file.src_uri == 'store-launches.json')
-                self.assertEqual(json.loads(launches.content_string), {
-                    'avian-visitors': {'launchAt': '2026-10-29T16:00:00Z', 'label': 'Batch 1'},
-                })
+                self.assertEqual(json.loads(launches.content_string), {})
 
 
 if __name__ == '__main__':

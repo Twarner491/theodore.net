@@ -7,7 +7,7 @@ import test from "node:test";
 import { onRequestGet as inventoryAvailability } from "../functions/api/inventory-availability.js";
 import { onRequestPost as paymentIntent } from "../functions/api/payment-intent.js";
 import { onRequestPost as stripeWebhook } from "../functions/api/stripe-webhook.js";
-import { createCheckoutBinding, taxAddressBinding } from "../lib/shipping-binding.js";
+import { createCheckoutBinding, taxAddressBinding, verifyCheckoutBinding } from "../lib/shipping-binding.js";
 import { canonicalShippingJson, sha256Hex } from "../lib/shipping-profile.js";
 import {
   applyBoundInventoryMetadata,
@@ -138,16 +138,17 @@ async function signedWebhook(event, env, fetchMock = null) {
 
 async function boundFixture(db, {
   paymentIntentId = "pi_inventory_bound", quantity = 1, now, holdSeconds, reserve = true,
+  catalog = FINITE_CATALOG, build = "assembled",
 } = {}) {
   const at = now ?? Math.floor(Date.now() / 1000);
-  const checkout = await createCheckoutBinding([finiteLine(quantity)], FINITE_CATALOG);
+  const checkout = await createCheckoutBinding([{ ...finiteLine(quantity), build }], catalog);
   const binding = await createInventoryCommerceBinding({
     paymentIntentId,
     amount: 70000,
     currency: "usd",
     manifestSha256: checkout.manifestSha256,
     catalogSha256: checkout.catalogSha256,
-    demand: [{ sku: SKU, quantity }],
+    demand: inventoryDemandFromManifest(checkout.manifest, catalog),
   });
   if (reserve) {
     await reserveInventory({ STORE_INVENTORY: db }, paymentIntentId, binding.demand, {
@@ -852,4 +853,94 @@ test("expiry sweep marks then asks Stripe to cancel but never releases on an uns
     received: true, inventory: "released", duplicate: false,
   });
   assert.equal((await readInventoryAvailability(env))[0].available, 20);
+});
+
+
+const BATCH_2_SKU = "avian-gen3-batch-02";
+const ROLLOVER_CATALOG = {
+  "avian-visitors": {
+    ...FINITE_CATALOG["avian-visitors"], retiredBuilds: ["assembled"],
+    variants: {
+      ...FINITE_CATALOG["avian-visitors"].variants,
+      "assembled-batch-2": { ...FINITE_CATALOG["avian-visitors"].variants.assembled,
+        label: "Assembled (Batch 2)", inventorySku: BATCH_2_SKU, maxQty: 20 },
+    },
+  },
+};
+
+test("Batch 2 migration is idempotent and its 100 units cannot consume Batch 1 stock", async (t) => {
+  const db = new SQLiteD1(); t.after(() => db.close());
+  const fixture = await boundFixture(db);
+  const oldRow = db.sqlite.prepare("SELECT * FROM store_inventory_batches WHERE sku = ?").get(SKU);
+  const migration = readFileSync(new URL("../migrations/0002_avian_batch_2.sql", import.meta.url), "utf8");
+  db.sqlite.exec(migration); db.sqlite.exec(migration);
+  assert.deepEqual(db.sqlite.prepare("SELECT * FROM store_inventory_batches WHERE sku = ?").get(SKU), oldRow);
+  assert.ok(await verifyCheckoutBinding(fixture.metadata, ROLLOVER_CATALOG), "existing Batch 1 callbacks retain their catalog binding");
+  const outcomes = await Promise.allSettled(Array.from({ length: 101 }, (_, i) =>
+    reserveInventory({ STORE_INVENTORY: db }, "pi_batch2_" + i, [{ sku: BATCH_2_SKU, quantity: 1 }])));
+  assert.equal(outcomes.filter((r) => r.status === "fulfilled").length, 100);
+  assert.equal(outcomes.filter((r) => r.status === "rejected").length, 1);
+  assert.equal((await readInventoryAvailability({ STORE_INVENTORY: db }, [BATCH_2_SKU]))[0].available, 0);
+  assert.deepEqual(db.sqlite.prepare("SELECT * FROM store_inventory_batches WHERE sku = ?").get(SKU), oldRow);
+  db.sqlite.exec(migration);
+  assert.equal((await readInventoryAvailability({ STORE_INVENTORY: db }, [BATCH_2_SKU]))[0].available, 0);
+});
+
+test("retired Batch 1 checkout is rejected before Stripe while Batch 2 binds only its new SKU", async (t) => {
+  const db = new SQLiteD1(); t.after(() => db.close());
+  for (const body of [{ cart: [finiteLine()] }, { cart: [finiteLine()], paymentIntentId: "pi_old", updateToken: "old" }]) {
+    await withFetch(async (url) => {
+      assert.ok(String(url).endsWith("/store-catalog.json"), "no Stripe calls for a retired build");
+      return response(ROLLOVER_CATALOG);
+    }, async () => {
+      const result = await paymentIntent({ request: request(body), env: { STRIPE_SECRET_KEY: "sk_test_rollover", STORE_INVENTORY: db } });
+      assert.equal(result.status, 400);
+      assert.match((await result.json()).error, /batch is closed/);
+    });
+  }
+  const checkout = await createCheckoutBinding([{ id: "avian-visitors", build: "assembled-batch-2", qty: 2 }], ROLLOVER_CATALOG);
+  assert.deepEqual(inventoryDemandFromManifest(checkout.manifest, ROLLOVER_CATALOG), [{ sku: BATCH_2_SKU, quantity: 2 }]);
+});
+
+
+test("Batch 2 signed capture and success reserve then commit its own stock exactly once", async (t) => {
+  const db = new SQLiteD1(); t.after(() => db.close());
+  db.sqlite.exec(readFileSync(new URL("../migrations/0002_avian_batch_2.sql", import.meta.url), "utf8"));
+  const now = Math.floor(Date.now() / 1000);
+  const fixture = await boundFixture(db, { paymentIntentId: "pi_batch2_capture", reserve: false,
+    catalog: ROLLOVER_CATALOG, build: "assembled-batch-2", now });
+  const pi = await capturablePi(fixture, "pi_batch2_capture", "taxcalc_batch2");
+  const fetchMock = async (url, options = {}) => {
+    const target = String(url);
+    if (target.endsWith("/store-catalog.json")) return response(ROLLOVER_CATALOG);
+    if (target.endsWith("/v1/payment_intents/" + pi.id) && !options.method) return response(pi);
+    if (target.endsWith("/capture")) {
+      pi.metadata.capture_gate = "approved";
+      pi.metadata.capture_gate_event = "evt_batch2_capture";
+      pi.metadata.capture_address_sha256 = pi.metadata.shipping_address_sha256;
+      return response({ id: pi.id, status: "succeeded", metadata: pi.metadata });
+    }
+    if (target.endsWith("/tax/transactions/create_from_calculation")) return response({ id: "tax_batch2" });
+    if (target.endsWith("/v1/payment_intents/" + pi.id) && options.method === "POST") {
+      pi.metadata = metadataFromForm(options.body, pi.metadata);
+      return response(pi);
+    }
+    throw new Error("unexpected fetch " + target);
+  };
+  const capture = await signedWebhook({ id: "evt_batch2_capture", type: "payment_intent.amount_capturable_updated",
+    created: now, livemode: false, data: { object: { id: pi.id } } }, { STORE_INVENTORY: db }, fetchMock);
+  assert.deepEqual(await capture.json(), { received: true, captured: true });
+  const success = { id: "evt_batch2_success", type: "payment_intent.succeeded", created: now,
+    livemode: false, data: { object: { ...pi, status: "succeeded" } } };
+  for (let i = 0; i < 2; i++) {
+    const result = await signedWebhook(success, { STORE_INVENTORY: db }, fetchMock);
+    assert.equal(result.status, 200);
+    assert.equal((await result.json()).blocked, undefined);
+  }
+  const rows = await readInventoryAvailability({ STORE_INVENTORY: db }, [SKU, BATCH_2_SKU]);
+  assert.equal(rows.find((row) => row.sku === SKU).available, 20);
+  const batch2 = rows.find((row) => row.sku === BATCH_2_SKU);
+  assert.equal(batch2.available, 99);
+  assert.equal(batch2.sold, 1);
+  assert.equal(batch2.reserved, 0);
 });

@@ -19,6 +19,12 @@ def assembled(text):
     return yaml.safe_load(front)["variants"][0]
 
 
+def batch_1_fixture():
+    # Exercise the historical activation tool against the original Batch 1 definition.
+    current = (ROOT / "docs/store/avian-visitors.md").read_text()
+    return "---\nvariants:\n" + current.split("retiredVariants:\n", 1)[1].split("sections:", 1)[0] + "---\n"
+
+
 class ActivateBatch1Tests(unittest.TestCase):
     def test_pages_guard_flags_every_binding_or_variable_except_store_inventory(self):
         self.assertEqual(activate.unexpected_pages_settings({"name": "theodore-net", "compatibility_date": "2024-11-01"}), [])
@@ -74,7 +80,7 @@ class ActivateBatch1Tests(unittest.TestCase):
 
     def test_product_edits_touch_only_the_assembled_price_and_status(self):
         # start from the held state whether or not the repo has been activated yet
-        current = (ROOT / "docs/store/avian-visitors.md").read_text()
+        current = batch_1_fixture()
         original = re.sub(r'^    stripePriceLive: .*\n', "", current.replace("    status: available\n", "    status: soldout\n"), flags=re.M)
         self.assertEqual(assembled(original)["status"], "soldout")
         edited = activate.with_status_available(activate.with_live_price(original, "price_LiveTest123"))
@@ -90,13 +96,22 @@ class ActivateBatch1Tests(unittest.TestCase):
             activate.with_live_price(original, "price_bad id")
 
     def test_packed_weight_lands_on_the_assembled_variant_only(self):
-        text = (ROOT / "docs/store/avian-visitors.md").read_text()
+        text = batch_1_fixture()
         weighed = activate.with_weight(text, 4.2)
         self.assertEqual(assembled(weighed)["weight"], 4.2)
         self.assertEqual(activate.with_weight(weighed, 4.2), weighed)
         self.assertTrue(activate.has_weight(weighed))
         with self.assertRaises(activate.Stop):
             activate.with_weight(text, 400)
+
+    def test_activation_refuses_to_modify_retired_batch_1_fields(self):
+        current = (ROOT / "docs/store/avian-visitors.md").read_text()
+        with self.assertRaisesRegex(activate.Stop, "Batch 1 is retired"):
+            activate.with_weight(current, 4.2)
+        with self.assertRaises(activate.Stop):
+            activate.with_live_price(current, "price_New")
+        with self.assertRaises(activate.Stop):
+            activate.with_status_available(current)
 
     def test_stripe_params_encode_lists_as_repeated_keys(self):
         encoded = activate.form_encode({"enabled_events[]": ["a.b", "c.d"], "limit": 100})

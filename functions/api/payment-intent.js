@@ -231,6 +231,11 @@ export async function onRequestPost({ request, env }) {
     const id = l && typeof l.id === "string" ? l.id : "";
     const build = l && typeof l.build === "string" ? l.build : "";
     const entry = id && Object.prototype.hasOwnProperty.call(catalog, id) ? catalog[id] : null;
+    // Historical variants remain in the catalog so signed callbacks keep their original binding.
+    // Never allow a new or updated checkout to buy a retired batch.
+    if (entry && Array.isArray(entry.retiredBuilds) && entry.retiredBuilds.includes(build)) {
+      return reply({ error: "This batch is closed. Please add the current batch from the product page.", item: { id, build } }, 400);
+    }
     const variant = entry && entry.variants && Object.prototype.hasOwnProperty.call(entry.variants, build) ? entry.variants[build] : null;
     const priceId = variant && typeof variant.price === "string" ? variant.price : "";
     const qty = requestedQuantity(l && l.qty);

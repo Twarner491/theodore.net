@@ -20,7 +20,7 @@ SEARCH_DATA = load_hook("search_data")
 class StoreSalesOpenTest(unittest.TestCase):
     def test_public_catalog_excludes_paused_polargraph_kits(self):
         expected = {
-            "avian-visitors": ["assembled"] if self._assembled_activated() else [],
+            "avian-visitors": ["assembled-batch-2"] if self._assembled_activated() else [],
             "avian-visitors-kit": ["electronics", "electronics-printed"],
             "mic-mount": ["default"],
             "avian-mic": ["electronics", "electronics-printed"],
@@ -44,10 +44,9 @@ class StoreSalesOpenTest(unittest.TestCase):
                 self.assertTrue(variants[variant_id].get("stripePrice"))
                 self.assertTrue(variants[variant_id].get("stripePriceLive"))
 
-        # The assembled frame is a timed drop: held (unsellable) until activated, and
-        # checkout refuses it before launchAt either way.
-        assembled = next(variant for variant in products["avian-visitors"]["variants"] if variant["id"] == "assembled")
-        self.assertTrue(assembled.get("launchAt"))
+        assembled = products["avian-visitors"]["variants"][0]
+        self.assertEqual(assembled["inventorySku"], "avian-gen3-batch-02")
+        self.assertNotIn("launchAt", assembled)
         self.assertEqual(STORE_PRODUCTS._sellable(assembled), self._assembled_activated())
 
     @staticmethod

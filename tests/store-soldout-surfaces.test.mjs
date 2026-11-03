@@ -213,3 +213,23 @@ test("sold-out variants retain the availability notification action", () => {
   assert.equal(state.action, "Notify me");
   assert.match(state.form, /aria-label="Notify me"/);
 });
+
+
+test("Batch 2 price and sold-out labels follow its inventory without a batch announcement", async () => {
+  let available = 100;
+  const product = { ...frame, variants: [{ status: "available", price: 699,
+    batchLabel: "Batch 2", inventorySku: "avian-gen3-batch-02" }] };
+  const label = { dataset: { storeProduct: frame.id, storePrice: "$699" }, innerHTML: "Sold out" };
+  const renderers = searchRenderers({ products: [product], labels: [label], fetch: async (url) => {
+    assert.equal(url, "/api/inventory-availability?sku=avian-gen3-batch-02");
+    return { ok: true, json: async () => ({ inventory: [{ sku: "avian-gen3-batch-02", available, soldOut: available === 0 }] }) };
+  } });
+  for (available of [100, 1, 0]) {
+    await renderers.loadProductAvailability(0);
+    assert.equal(label.innerHTML, available ? "$699" : "Sold out");
+    for (const render of [renderers.cardEl, renderers.rowEl]) {
+      assert.match(render(frameItem).innerHTML, available ? /from \$699/ : /Sold out/);
+      assert.doesNotMatch(render(frameItem).innerHTML, /Batch 2 open|·/);
+    }
+  }
+});

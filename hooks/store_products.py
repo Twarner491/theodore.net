@@ -29,14 +29,14 @@ except Exception:
 
 # keys copied verbatim from frontmatter into the runtime product object
 KEYS = ['id', 'published', 'title', 'teaser', 'sub', 'imageBase', 'images',
-        'defaultBuild', 'variants', 'softwareNote', 'sections', 'colophon', 'weight',
+        'defaultBuild', 'variants', 'retiredVariants', 'softwareNote', 'sections', 'colophon', 'weight',
         'accessory', 'parentId', 'icon', 'related', 'project', 'storeListings']
 
 DEFAULT_WEIGHT_LB = 2.0
 DEFAULT_MAX_QTY = 10
 ABSOLUTE_MAX_QTY = 99
 SHIPPING_PROFILES = {'contiguous-us-ground'}
-INVENTORY_SKUS = {'avian-gen3-batch-01'}
+INVENTORY_SKUS = {'avian-gen3-batch-01', 'avian-gen3-batch-02'}
 
 
 def _bg_color(path):
@@ -269,7 +269,7 @@ def on_files(files, config):
     content = ("/* generated from docs/store/*.md frontmatter by "
                "hooks/store_products.py. do not edit by hand. */\n"
                "window.STORE_PRODUCTS = "
-               + json.dumps(products, ensure_ascii=False) + ";\n"
+               + json.dumps([{k: v for k, v in p.items() if k != 'retiredVariants'} for p in products], ensure_ascii=False) + ";\n"
                "window.STORE_DARK_IMAGES = "
                + json.dumps(dark, ensure_ascii=False) + ";\n"
                "window.STORE_IMAGE_BG = "
@@ -315,7 +315,8 @@ def on_files(files, config):
                 return 1
             return value
         variants = {}
-        for v in (p.get('variants') or []):
+        retired = p.get('retiredVariants') or []
+        for v in (p.get('variants') or []) + retired:
             if not isinstance(v, dict):
                 continue
             shipping_profile = _shipping_profile(v)
@@ -337,9 +338,13 @@ def on_files(files, config):
             launch_at = _launch_at(v)
             if launch_at:   # payment-intent.js refuses the variant until this instant
                 catalog_variant['launchAt'] = launch_at
+            if v.get('id') in variants:
+                raise ValueError('Duplicate catalog variant: ' + p['id'] + '/' + str(v.get('id')))
             variants[v.get('id')] = catalog_variant
         if variants:
             catalog[p['id']] = {'title': p.get('title', p['id']), 'variants': variants}
+            if retired:
+                catalog[p['id']]['retiredBuilds'] = [v['id'] for v in retired]
     if mode == 'live' and missing:
         print('WARNING [store_products]: STRIPE_MODE=live but these sellable variants have no '
               'stripePriceLive and were dropped from store-catalog.json: ' + ', '.join(missing))

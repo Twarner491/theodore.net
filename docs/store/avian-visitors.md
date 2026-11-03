@@ -19,17 +19,37 @@ images:
   - avianAssembledTop.png
   - avianAssembledBack.png
   - avianAssembledSide.png
-defaultBuild: assembled
+defaultBuild: assembled-batch-2
 project: /projects/AvianVisitors/
 related:
   - avian-mic
 storeListings:
   - category: products
-    build: assembled
+    build: assembled-batch-2
     variants:
-      - assembled
+      - assembled-batch-2
     title: Avian Visitors
 variants:
+  - id: assembled-batch-2
+    image: avianAssembledTop.png
+    label: Assembled (Batch 2)
+    status: available
+    batchLabel: Batch 2
+    price: 699
+    weight: 4
+    stripePrice: price_1UAyqjRPSNpqisAPDHJxogp3
+    stripePriceLive: price_1URc2XRPSNpqisAPNxAEEUEQ
+    maxQuantity: 20
+    shippingProfile: contiguous-us-ground
+    inventorySku: avian-gen3-batch-02
+    batchSize: 100
+    softwareNote: This is a one-man shop. I assemble each frame by hand. Batch 1 will ship by the end of 2026, and Batch 2 shortly thereafter.
+    contents:
+      - Fully assembled 13.3-inch e-paper frame with rechargeable battery
+      - Wall-hanging hardware
+# Retain the original catalog fields for signed Batch 1 callbacks and fulfillment retries.
+# Retired builds cannot create or update checkout sessions.
+retiredVariants:
   - id: assembled
     image: avianAssembledTop.png
     label: Assembled

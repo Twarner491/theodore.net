@@ -210,10 +210,10 @@ search:
         <a href="https://theodore.net/store" style="text-decoration: none;"><h2>Store <i class="fa-solid fa-arrow-right" style="float: right;"></i></h2></a>
         <!-- prices mirror the cheapest buyable variant in each docs/store/*.md (keep in sync if you change Stripe pricing) -->
         <div class="store-mini">
-          <a class="store-mini-card" href="/store/avian-visitors-kit/">
-            <div class="store-mini-img"><img src="/assets/images/AvianVisitors/heard-today.png" alt="Avian Visitors Kit"></div>
-            <p class="store-mini-title">Avian Visitors Kit</p>
-            <p class="store-mini-price" data-store-product="avian-visitors-kit" data-store-price="from $450"><span class="from">from</span>$450</p>
+          <a class="store-mini-card" href="/store/avian-visitors/">
+            <div class="store-mini-img"><img src="/assets/images/AvianVisitors/avianAssembledTop.png" alt="Avian Visitors"></div>
+            <p class="store-mini-title">Avian Visitors</p>
+            <p class="store-mini-price" data-store-product="avian-visitors" data-store-price="$699">Sold out</p>
           </a>
           <a class="store-mini-card" href="/store/avian-mic/">
             <div class="store-mini-img"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Bird Mic Kit"></div>

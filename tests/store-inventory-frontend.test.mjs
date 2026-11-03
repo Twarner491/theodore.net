@@ -402,3 +402,16 @@ test("a failed availability read is retried instead of leaving the batch looking
     { id: "avian-visitors", build: "assembled", qty: 7 },
   ]);
 });
+
+
+test("Batch 2 detail count opens only with confirmed stock and closes on sellout", () => {
+  const helpers = inventoryHelpers({ location: { hostname: "theodore.net" } });
+  const variant = { ...finiteVariant, inventorySku: "avian-gen3-batch-02", batchSize: 100, batchLabel: "Batch 2" };
+  assert.equal(helpers.batchAvailabilityText(variant), "");
+  assert.equal(helpers.buyable(variant), false);
+  helpers.setInventory({ "avian-gen3-batch-02": { available: 100, soldOut: false } }, true);
+  assert.equal(helpers.batchAvailabilityText(variant), "Batch 2, 100 out of 100 remaining");
+  helpers.setInventory({ "avian-gen3-batch-02": { available: 0, soldOut: true } }, true);
+  assert.equal(helpers.batchAvailabilityText(variant), "Batch 2, 0 out of 100 remaining");
+  assert.equal(helpers.buyable(variant), false);
+});
