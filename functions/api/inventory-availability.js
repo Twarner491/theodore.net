@@ -1,4 +1,5 @@
 import { readInventoryAvailability } from "../../lib/store-inventory.js";
+import { isVoucherQuotaSku } from "../../lib/store-vouchers.js";
 
 const HEADERS = {
   "content-type": "application/json",
@@ -9,6 +10,7 @@ export async function onRequestGet({ request, env }) {
   let skus = null;
   try {
     const requested = new URL(request.url).searchParams.getAll("sku");
+    if (requested.some(isVoucherQuotaSku)) return new Response(JSON.stringify({ error: "Bad request." }), { status: 400, headers: HEADERS });
     if (requested.length) skus = requested;
   } catch (error) {
     return new Response(JSON.stringify({ error: "Bad request." }), { status: 400, headers: HEADERS });
@@ -16,7 +18,7 @@ export async function onRequestGet({ request, env }) {
   try {
     const rows = await readInventoryAvailability(env, skus);
     return new Response(JSON.stringify({
-      inventory: rows.map((row) => ({
+      inventory: rows.filter((row) => !isVoucherQuotaSku(row.sku)).map((row) => ({
         sku: row.sku,
         available: row.available,
         soldOut: row.soldOut,

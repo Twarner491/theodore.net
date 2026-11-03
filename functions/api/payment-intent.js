@@ -28,7 +28,11 @@ import {
 import {
   InventorySoldOutError,
   readInventoryAvailability,
+  readInventoryReservation,
 } from "../../lib/store-inventory.js";
+import {
+  resolveVoucher, voucherInventoryDemand, voucherReply, VOUCHER_LABEL, VoucherUnavailableError,
+} from "../../lib/store-vouchers.js";
 
 const MAX_QTY = 99, MAX_LINES = 50;
 const DEFAULT_WEIGHT_LB = 2.0;       // fallback when a variant has no weight
@@ -264,6 +268,11 @@ export async function onRequestPost({ request, env }) {
     if (!tok || !ctEqual(tok, await signPi(piId, env.STRIPE_SECRET_KEY, inventoryScope))) {
       return reply({ error: "Could not update checkout." }, 400);
     }
+    if (inventoryDemand.length) {
+      try {
+        if (await readInventoryReservation(env, piId)) return reply({ error: "This payment is already being confirmed. Please wait for its result." }, 409);
+      } catch (error) { return inventoryUnavailable(reply, error); }
+    }
   }
   if (inventoryDemand.length) {
     try {
@@ -275,6 +284,12 @@ export async function onRequestPost({ request, env }) {
       return inventoryUnavailable(reply, error);
     }
   }
+  let voucher;
+  try { voucher = await resolveVoucher(env, body.voucherCode, checkoutBinding.manifest, catalog); }
+  catch (error) { return voucherReply(error, reply); }
+  // Token ownership is scoped to the physical cart; applying or removing a code
+  // can change its quota demand without invalidating the buyer's update token.
+  inventoryDemand = voucherInventoryDemand(inventoryDemand, voucher);
   const requiresContiguousGround = checkoutBinding.profile === CONTIGUOUS_US_GROUND;
   if (addr && requiresContiguousGround) {
     const destinationError = shippingDestinationError(CONTIGUOUS_US_GROUND, ship);
@@ -284,6 +299,7 @@ export async function onRequestPost({ request, env }) {
   const priceCache = {};
   const taxLines = [];
   let subtotal = 0, currency = "usd", totalLb = 0;
+  let discount = 0;
   for (const line of normalized) {
     const { id, build, priceId, weightLb, qty } = line;
     if (!priceCache[priceId]) {
@@ -297,13 +313,18 @@ export async function onRequestPost({ request, env }) {
     const lineTotal = price.unit_amount * qty;
     subtotal += lineTotal;
     totalLb += weightLb * qty;
-    taxLines.push({ amount: lineTotal, reference: (id + "|" + build).slice(0, 64) });
+    let lineDiscount = 0;
+    if (voucher && !discount && id === voucher.product_id && build === voucher.build_id) {
+      if (price.unit_amount < voucher.amount_off) return voucherReply(new VoucherUnavailableError(), reply);
+      lineDiscount = discount = voucher.amount_off;
+    }
+    taxLines.push({ amount: lineTotal - lineDiscount, reference: (id + "|" + build).slice(0, 64) });
   }
   if (subtotal <= 0) return reply({ error: "Your cart is empty." }, 400);
 
   // Shipping + tax need a US address. Before that, initialize a manual-capture
   // draft at the subtotal so Stripe Elements can mount without making it payable.
-  let shippingCents = null, taxCents = null, total = subtotal, calcId = "";
+  let shippingCents = null, taxCents = null, total = subtotal - discount, calcId = "";
   const intl = !!addr && addr.country !== "US";
   if (intl) {
     if (!Object.prototype.hasOwnProperty.call(INTL, addr.country)) return reply({ error: "We only ship within the US right now." }, 400);
@@ -337,6 +358,10 @@ export async function onRequestPost({ request, env }) {
   form.set("metadata[shipping_items]", checkoutBinding.manifestJson);
   form.set("metadata[shipping_items_sha256]", checkoutBinding.manifestSha256);
   form.set("metadata[shipping_catalog_sha256]", checkoutBinding.catalogSha256);
+  if (voucher || piId) {
+    form.set("metadata[voucher_campaign]", voucher ? voucher.id : "");
+    form.set("metadata[voucher_discount]", voucher ? String(discount) : "");
+  }
   let inventoryBinding = null;
   if (inventoryDemand.length && piId) {
     try {
@@ -393,7 +418,8 @@ export async function onRequestPost({ request, env }) {
   // NB: we deliberately do NOT set shipping[...] here. confirmPayment() sets the PI's
   // shipping from the Address Element (publishable key); a secret-key shipping set
   // would then block that client update. The address above is still used for tax.
-  const breakdown = { subtotal, shipping: shippingCents, tax: taxCents, total, currency };
+  const breakdown = { subtotal, shipping: shippingCents, tax: taxCents, total, currency,
+    ...(voucher ? { discount, discountLabel: VOUCHER_LABEL } : {}) };
 
   if (piId) {
     form.set("metadata[order_no]", piId.replace(/^pi_/, "").slice(0, 10).toUpperCase());   // searchable for the order-lookup page

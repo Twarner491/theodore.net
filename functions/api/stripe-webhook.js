@@ -138,7 +138,7 @@ export async function onRequestPost({ request, env }) {
       return new Response(JSON.stringify({ received: true, fulfilled: false, blocked: "catalog_or_manifest_mismatch" }), { status: 200, headers: { "content-type": "application/json" } });
     }
     try {
-      const currentInventory = await verifyCurrentInventoryBinding(pi, currentBinding, catalog);
+      const currentInventory = await verifyCurrentInventoryBinding(pi, currentBinding, catalog, env);
       if (!!currentInventory !== !!committedInventory) throw new Error("Inventory expectation changed");
     } catch (error) {
       console.log("fulfillment blocked: inventory or catalog binding mismatch", pi.id);

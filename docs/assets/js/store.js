@@ -1180,9 +1180,10 @@
     return '<div class="co-lines">' + cart.map(coLineHTML).join("") + "</div>" +
       '<hr class="co-rule">' +
       '<form class="co-voucher" novalidate><input type="text" placeholder="Voucher code" aria-label="Voucher code" autocomplete="off"><button type="submit" aria-label="Apply voucher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>' +
-      '<p class="co-voucher-msg" hidden></p>' +
+      '<p class="co-voucher-msg" role="status" hidden></p><button type="button" class="co-line-remove" data-remove-voucher hidden>Remove voucher</button>' +
       '<hr class="co-rule">' +
       '<div class="co-row"><span>Subtotal</span><span>' + money2(cartSubtotal()) + "</span></div>" +
+      '<div class="co-row co-discount-row" hidden><span>Discount</span><span class="co-discount"></span></div>' +
       '<div class="co-row co-muted"><span>Sales tax</span><span class="co-tax">&mdash;</span></div>' +
       '<div class="co-row co-muted"><span>Shipping</span><span class="co-ship">&mdash;</span></div>' +
       '<hr class="co-rule">' +
@@ -1214,21 +1215,30 @@
     };
   }
   function coWireSummary(host) {
-    $$(".co-line-qty button", host).forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.i; if (!cart[i]) return; setLineQty(i, cart[i].qty + (+b.dataset.q)); coRefreshSummary(host); }));
-    $$(".co-line-remove", host).forEach((b) => b.addEventListener("click", () => { setLineQty(+b.dataset.rm, 0); coRefreshSummary(host); }));
+    $$(".co-line-qty button", host).forEach((b) => b.addEventListener("click", () => { if (host.__checkoutBusy && host.__checkoutBusy()) return; const i = +b.dataset.i; if (!cart[i]) return; setLineQty(i, cart[i].qty + (+b.dataset.q)); coRefreshSummary(host); }));
+    $$(".co-line-remove[data-rm]", host).forEach((b) => b.addEventListener("click", () => { if (host.__checkoutBusy && host.__checkoutBusy()) return; setLineQty(+b.dataset.rm, 0); coRefreshSummary(host); }));
     const vf = $(".co-voucher", host);
-    if (vf) vf.addEventListener("submit", (e) => { e.preventDefault(); const input = $("input", vf), m = $(".co-voucher-msg", host); if (!m) return; if (input && !input.value.trim()) { m.hidden = true; return; } m.textContent = "Not an active voucher."; m.hidden = false; });
+    if (vf) {
+      vf.addEventListener("submit", (e) => { e.preventDefault(); if (host.__applyVoucher) host.__applyVoucher(($("input", vf).value || "").trim()); });
+      $("input", vf).addEventListener("input", () => { if (host.__editVoucher) host.__editVoucher(); });
+    }
+    const remove = $("[data-remove-voucher]", host);
+    if (remove) remove.addEventListener("click", () => { if (host.__applyVoucher) host.__applyVoucher(""); });
+    if (host.__paintVoucher) host.__paintVoucher();
   }
   function coRefreshSummary(host) {
-    if (!cart.length) { location.href = "/store/?cart=open"; return; }   // emptied here -> back to the cart
+    if (!cart.length) { location.href = "/store/?cart=open"; return; }
     $(".co-summary", host).innerHTML = coSummaryHTML();
     coWireSummary(host);
     swapProductImages();
-    if (host.__updateSubmit) host.__updateSubmit();   // keep the button label ("Continue to payment" / "Pay $X") correct
-    if (host.__recalc) host.__recalc();   // re-price (subtotal + shipping/tax if a US address is set) and sync the PaymentIntent
+    if (host.__cartChanged) host.__cartChanged();
+    else if (host.__updateSubmit) host.__updateSubmit();
   }
   async function renderCheckout() {
     const host = $("#checkout"); if (!host) return;
+    const renderId = (host.__renderId || 0) + 1; host.__renderId = renderId;
+    const current = () => host.__renderId === renderId;
+    for (const key of ["__applyVoucher", "__editVoucher", "__paintVoucher", "__cartChanged", "__recalc", "__updateSubmit", "__checkoutBusy"]) delete host[key];
     loadCart();
     if (!cart.length) { host.innerHTML = '<div class="co-empty"><p>Your cart is empty.</p><a class="cart-shop-link" href="/store">Go to store</a></div>'; return; }
     track("begin_checkout", { value: cartSubtotal() * 100 });
@@ -1258,13 +1268,30 @@
     const err = $(".co-error", host), submit = $(".co-submit", host);
     const paymentOpen = () => $('.co-section[data-sec="payment"]', host).classList.contains("is-open");
     let peReady = false, setupReady = false, addrComplete = false, processing = false, curShip = null, lastTotal = null;
+    // Voucher text stays only in this checkout's memory and request bodies, never storage or telemetry.
+    let voucherCode = "", voucherDiscount = 0, voucherState = "none", voucherMessage = "", voucherVersion = 0;
+    let priceVersion = 0, repricing = false, pricingQueue = Promise.resolve();
+    const voucherBlocked = () => voucherState !== "none" && voucherState !== "applied";
+    const paintVoucher = () => {
+      const input = $(".co-voucher input", host), apply = $(".co-voucher button", host);
+      const message = $(".co-voucher-msg", host), remove = $("[data-remove-voucher]", host);
+      if (input) { input.disabled = processing || !setupReady; if (input.value !== voucherCode) input.value = voucherCode; }
+      if (apply) apply.disabled = processing || !setupReady || voucherState === "checking";
+      if (message) { message.textContent = voucherMessage; message.hidden = !voucherMessage; }
+      if (remove) { remove.hidden = !voucherCode && voucherState === "none"; remove.disabled = processing || !setupReady; }
+      const row = $(".co-discount-row", host), amount = $(".co-discount", host);
+      if (row) { row.hidden = !voucherDiscount; row.style.display = voucherDiscount ? "" : "none"; }
+      if (amount) amount.textContent = voucherDiscount ? "-" + money2(voucherDiscount / 100) : "";
+      $$(".co-line-qty button, .co-line-remove[data-rm]", host).forEach((button) => { button.disabled = processing; });
+    };
     const updateSubmit = () => {
+      paintVoucher();
       const sp = submit.querySelector("span");
       if (processing) { if (sp) sp.textContent = "Processing…"; submit.disabled = true; return; }
       const onPay = paymentOpen();
       const amt = lastTotal != null ? lastTotal / 100 : cartSubtotal();
       if (sp) sp.textContent = onPay ? "Pay " + money2(amt) : "Continue to payment";
-      submit.disabled = !setupReady || (onPay && (!peReady || !addrComplete));   // can't pay until the Payment Element is ready and a US address gives the final total
+      submit.disabled = !setupReady || voucherBlocked() || repricing || (onPay && (!peReady || !addrComplete || lastTotal == null));   // can't pay until the Payment Element is ready and a US address gives the final total
     };
     const applyBreakdown = (d) => {
       const noAddr = d.shipping == null;   // no shipping/tax until a US address is entered
@@ -1286,6 +1313,7 @@
     try {
       const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.assign({ cart: cart }, evAttribution())) });
       data = await res.json().catch(() => ({}));
+      if (!current()) return;
       if (!res.ok || !data.clientSecret) { fail(data.item ? lineLabel(data.item) + " is no longer available. Please edit your cart." : (data.error || "Could not start checkout. Please try again.")); return; }
     } catch (e) { fail("Network error. Check your connection and try again."); return; }
     if (!data.publishableKey) { fail("Payment is not fully configured yet."); return; }
@@ -1300,35 +1328,104 @@
     const pe = elements.create("payment", { layout: "tabs", wallets: { applePay: "auto", googlePay: "auto" } });   // surface Apple Pay / Google Pay when eligible
     pe.mount("#payment-element");
     pe.on("ready", () => { peReady = true; updateSubmit(); });
-    // re-price the order: subtotal always, plus shipping + tax once a US address is known (amount stays server-authoritative)
-    const recalc = async () => {
+    const invalidatePrice = () => {
+      priceVersion += 1; repricing = false;
+      applyBreakdown({ shipping: null });
+    };
+    // Serialize updates to this PaymentIntent. A stale quote must never overwrite a newer voucher or cart.
+    const recalc = () => {
+      if (!curShip || !addrComplete || voucherBlocked()) return Promise.resolve(null);
+      const version = ++priceVersion;
+      const cartSnapshot = JSON.stringify(cart), codeSnapshot = voucherCode;
       const emailVal = (($("#co-email", host) || {}).value || "").trim();
-      const reqBody = { cart, paymentIntentId: piId, updateToken };
-      if (curShip) reqBody.shipping = curShip;
+      const reqBody = { cart: JSON.parse(cartSnapshot), paymentIntentId: piId, updateToken, shipping: curShip, voucherCode: codeSnapshot };
       if (emailVal.indexOf("@") > 0) reqBody.email = emailVal;
+      repricing = true; updateSubmit();
+      const task = pricingQueue.then(async () => {
+        if (!current() || version !== priceVersion) return null;
+        try {
+          const r = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(reqBody) });
+          const d = await r.json().catch(() => ({}));
+          if (!current() || version !== priceVersion || cartSnapshot !== JSON.stringify(cart) || codeSnapshot !== voucherCode) return null;
+          if (!r.ok) {
+            if (codeSnapshot && d.code === "discount_unavailable") {
+              voucherState = "invalid"; voucherMessage = d.error || "That code is not available for this order."; voucherDiscount = 0;
+            }
+            lastTotal = null;
+            fail(d.item ? lineLabel(d.item) + " is no longer available. Please edit your cart." : (d.error || "Could not update your order. Please try again.")); return null;
+          }
+          if ((d.discount || 0) !== voucherDiscount) {
+            lastTotal = null; voucherMessage = "Your discount changed. Apply your voucher again before paying."; fail(voucherMessage); voucherState = "invalid"; return null;
+          }
+          err.hidden = true; applyBreakdown(d);
+          try { await elements.fetchUpdates(); } catch (e) {}
+          if (!current() || version !== priceVersion || cartSnapshot !== JSON.stringify(cart) || codeSnapshot !== voucherCode) return null;
+          return d;
+        } catch (e) {
+          if (current() && version === priceVersion) { lastTotal = null; fail("Network error. Check your connection and try again."); }
+          return null;
+        } finally {
+          if (current() && version === priceVersion) { repricing = false; updateSubmit(); }
+        }
+      });
+      pricingQueue = task.catch(() => null);
+      return task;
+    };
+    const applyVoucher = async (code) => {
+      if (processing || !setupReady) return;
+      const version = ++voucherVersion;
+      voucherCode = code; voucherDiscount = 0;
+      voucherState = code ? "checking" : "none"; voucherMessage = code ? "Checking voucher…" : "";
+      invalidatePrice(); updateSubmit();
+      if (!code) { err.hidden = true; if (curShip && addrComplete) await recalc(); return; }
+      const cartSnapshot = JSON.stringify(cart);
       try {
-        const r = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(reqBody) });
-        const d = await r.json().catch(() => ({}));
-        if (!r.ok) { fail(d.item ? lineLabel(d.item) + " is no longer available. Please edit your cart." : (d.error || "Could not update your order. Please try again.")); return null; }
-        err.hidden = true; applyBreakdown(d);
-        try { elements.fetchUpdates(); } catch (e) {}   // keep amount-aware payment methods in sync with the new total
-        return d;
-      } catch (e) { fail("Network error. Check your connection and try again."); return null; }
+        const response = await fetch("/api/voucher", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ cart: JSON.parse(cartSnapshot), voucherCode: code }) });
+        const result = await response.json().catch(() => ({}));
+        if (!current() || version !== voucherVersion || cartSnapshot !== JSON.stringify(cart)) return;
+        if (!response.ok || !Number.isSafeInteger(result.discount) || result.discount <= 0) {
+          voucherState = "invalid"; voucherMessage = result.error || "That code is not available for this order."; updateSubmit(); return;
+        }
+        voucherDiscount = result.discount; voucherState = "applied";
+        voucherMessage = "Voucher applied: " + money2(result.discount / 100) + " off.";
+        err.hidden = true; updateSubmit();
+        if (curShip && addrComplete) await recalc();
+      } catch (e) {
+        if (current() && version === voucherVersion) { voucherState = "invalid"; voucherMessage = "Could not check your voucher. Try again."; updateSubmit(); }
+      }
+    };
+    host.__checkoutBusy = () => processing;
+    host.__paintVoucher = paintVoucher;
+    host.__applyVoucher = applyVoucher;
+    host.__editVoucher = () => {
+      if (processing) return;
+      voucherVersion += 1; voucherCode = (($(".co-voucher input", host) || {}).value || ""); voucherState = "editing"; voucherDiscount = 0;
+      voucherMessage = "Apply this voucher or remove it to continue."; invalidatePrice(); updateSubmit();
+    };
+    host.__cartChanged = () => {
+      if (voucherState === "editing") { invalidatePrice(); updateSubmit(); return; }
+      if (voucherCode) void applyVoucher(voucherCode);
+      else { invalidatePrice(); if (curShip && addrComplete) void recalc(); }
     };
     host.__recalc = recalc;
     addressEl.on("change", (e) => {
       addrComplete = !!e.complete;
-      if (e.complete && e.value) { curShip = { name: e.value.name, address: e.value.address }; recalc().then((d) => { if (d) openSection("payment"); }); }   // auto-advance once shipping is complete and priced
-      else updateSubmit();
+      invalidatePrice();
+      if (e.complete && e.value) { curShip = { name: e.value.name, address: e.value.address }; recalc().then((d) => { if (d && !processing) openSection("payment"); }); }
+      else { curShip = null; updateSubmit(); }
     });
 
     $("#co-form", host).addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (processing || voucherBlocked() || repricing) return;
       if (!addrComplete) { fail("Add your shipping address to continue."); openSection("shipping"); return; }   // shipping + tax need a US address
       if (!paymentOpen()) { err.hidden = true; openSection("payment"); return; }   // "Continue to payment" -> reveal payment, don't pay yet
       processing = true; updateSubmit(); err.hidden = true;
-      const synced = await recalc();   // final server-authoritative total (address + email) before charging
+      const paymentCart = JSON.stringify(cart), paymentVoucher = voucherCode, paymentShipping = JSON.stringify(curShip), paymentTotal = lastTotal;
+      const synced = await recalc();   // final server-authoritative total (address + email + voucher) before charging
+      if (paymentCart !== JSON.stringify(cart) || paymentVoucher !== voucherCode || paymentShipping !== JSON.stringify(curShip) || !addrComplete) { processing = false; fail("Your order changed. Review it before paying."); updateSubmit(); return; }
       if (!synced) { processing = false; updateSubmit(); return; }
+      if (synced.total !== paymentTotal) { processing = false; fail("Your total changed. Review it before paying."); updateSubmit(); return; }
       const email = (($("#co-email", host) || {}).value || "").trim();
       if ((($("#co-news", host) || {}).checked) && email) { try { fetch("/api/subscribe", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, tags: ["customer"] }), keepalive: true }); } catch (e3) {} }   // server-side Buttondown signup; keepalive lets it finish across the Stripe redirect (never broadcasts)
       const { error } = await stripe.confirmPayment({ elements, confirmParams: { return_url: location.origin + "/store/confirmation/" } });
@@ -1422,10 +1519,12 @@
       "</div>";
   }
   function renderOrder(host, d, back) {
+    if (d.status === "canceled" && d.discountUnavailable) { renderDiscountUnavailable(host); return; }
     back = back || backHome;
     const b = d.breakdown || {};
     const rows =
       (b.subtotal != null ? '<div class="co-row"><span>Subtotal</span><span>' + money2(b.subtotal / 100) + "</span></div>" : "") +
+      (b.discount > 0 ? '<div class="co-row"><span>Discount</span><span>-' + money2(b.discount / 100) + "</span></div>" : "") +
       (b.tax != null ? '<div class="co-row"><span>Sales tax</span><span>' + money2(b.tax / 100) + "</span></div>" : "") +
       (b.shipping != null ? '<div class="co-row"><span>Shipping</span><span>' + (b.shipping === 0 ? "Free" : money2(b.shipping / 100)) + "</span></div>" : "") +
       '<hr class="co-rule"><div class="co-row co-total-row"><span>Total</span><span>' + money2((b.total != null ? b.total : d.amount) / 100) + "</span></div>";
@@ -1460,6 +1559,9 @@
     host.innerHTML = '<div class="conf-back-top">' + backHome + '</div><div class="co-grid"><aside class="co-summary"><h2 class="co-h conf-title">' + msg + '</h2><p class="conf-note">' +
       (noteHtml || 'If you were charged, a receipt is on its way. Questions? <a href="mailto:support@theodore.net">support@theodore.net</a>') + '</p></aside><div class="co-detail">' + backHome + "</div></div>";
     reveal();
+  }
+  function renderDiscountUnavailable(host) {
+    renderMessage(host, "That voucher is no longer available", "Your card was not charged. Any pending hold will drop off your statement in a few days. <a href=\"/store/avian-visitors/\">Return to Avian Visitors</a> to review a new order.");
   }
   /* A limited-batch order is only an authorization when Stripe redirects here: the webhook's
      capture gate then reserves a unit and captures it a few seconds later, or cancels the
@@ -1532,7 +1634,8 @@
     }
     if (d.status === "canceled") {
       const first = (d.items || [])[0], again = first ? "/store/" + encodeURIComponent(migratedLine(first).id) + "/?join=1" : "/store/";
-      if (d.soldOut) renderMessage(host, "This batch sold out", "Every unit was claimed before your payment went through, so your card was not charged. The pending hold will drop off your statement in a few days. <a href=\"" + again + "\">Get on the list for the next batch</a>.");
+      if (d.discountUnavailable) renderDiscountUnavailable(host);
+      else if (d.soldOut) renderMessage(host, "This batch sold out", "Every unit was claimed before your payment went through, so your card was not charged. The pending hold will drop off your statement in a few days. <a href=\"" + again + "\">Get on the list for the next batch</a>.");
       else renderMessage(host, "Your payment did not go through", "Your card was not charged. Questions? " + help);
       return;
     }
