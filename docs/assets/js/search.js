@@ -36,7 +36,7 @@
   function productPrice(it) { return soldOut(productId(it)) ? 'Sold out' : price(it.price); }
   function refreshHomeStock() {
     document.querySelectorAll('[data-store-product]').forEach(function (el) {
-      el.textContent = soldOut(el.dataset.storeProduct) ? 'Sold out' : el.dataset.storePrice;
+      el.innerHTML = soldOut(el.dataset.storeProduct) ? 'Sold out' : esc(el.dataset.storePrice).replace(/^from /, '<span class="from">from</span>');
     });
   }
   async function loadProductAvailability(attempt) {

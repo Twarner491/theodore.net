@@ -152,7 +152,7 @@ const frameItem = { type: "product", id: frame.id, title: "Avian Visitors", pric
 
 test("live inventory updates homepage and search labels after sellout and restock", async () => {
   let available = 0;
-  const label = { dataset: { storeProduct: frame.id, storePrice: "$699" }, textContent: "Sold out" };
+  const label = { dataset: { storeProduct: frame.id, storePrice: "$699" }, innerHTML: "Sold out" };
   const renderers = searchRenderers({ products: [frame], labels: [label], fetch: async (url, options) => {
     assert.equal(url, "/api/inventory-availability?sku=avian-gen3-batch-01");
     assert.equal(options.cache, "no-store");
@@ -160,7 +160,7 @@ test("live inventory updates homepage and search labels after sellout and restoc
   } });
   for (available of [0, 3, 0]) {
     await renderers.loadProductAvailability(0);
-    assert.equal(label.textContent, available ? "$699" : "Sold out");
+    assert.equal(label.innerHTML, available ? "$699" : "Sold out");
     for (const render of [renderers.cardEl, renderers.rowEl]) {
       assert.match(render(frameItem).innerHTML, available ? /from \$699/ : /Sold out/);
     }
@@ -170,13 +170,13 @@ test("live inventory updates homepage and search labels after sellout and restoc
 
 test("unavailable or invalid inventory keeps finite products sold out without hiding ordinary prices", async () => {
   for (const body of [{ inventory: [] }, { inventory: [{ sku: "avian-gen3-batch-01", available: 0, soldOut: false }] }, null]) {
-    const label = { dataset: { storeProduct: frame.id, storePrice: "$699" }, textContent: "$699" };
+    const label = { dataset: { storeProduct: frame.id, storePrice: "$699" }, innerHTML: "$699" };
     const renderers = searchRenderers({ products: [frame], labels: [label], fetch: async () => {
       if (body === null) throw new Error("Offline");
       return { ok: true, json: async () => body };
     } });
     await renderers.loadProductAvailability(0);
-    assert.equal(label.textContent, "Sold out");
+    assert.equal(label.innerHTML, "Sold out");
     assert.match(renderers.cardEl(frameItem).innerHTML, /Sold out/);
     assert.match(renderers.rowEl(frameItem).innerHTML, /Sold out/);
     assert.match(renderers.rowEl(searchItem).innerHTML, /from \$180/);
