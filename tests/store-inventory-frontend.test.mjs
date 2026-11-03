@@ -171,10 +171,10 @@ const products = [{
   id: "avian-visitors", published: true, defaultBuild: "assembled", variants: [finiteVariant],
 }];
 
-test("finite storefront state fails sold out until a complete availability read succeeds", () => {
+test("unknown inventory stays unavailable without claiming a sellout", () => {
   const helpers = inventoryHelpers();
   helpers.setProducts(products);
-  assert.equal(helpers.statusOf(finiteVariant), "soldout");
+  assert.equal(helpers.statusOf(finiteVariant), "unavailable");
   assert.equal(helpers.buyable(finiteVariant), false);
 
   helpers.setInventory({ [SKU]: { available: 1, soldOut: false } }, true);
@@ -211,7 +211,7 @@ test("explicit local preview shows the finished finite product without weakening
 
   const production = inventoryHelpers({ location: { hostname: "theodore.net" } });
   production.setProducts([{ ...products[0], published: false, variants: [previewVariant] }]);
-  assert.equal(production.statusOf(previewVariant), "soldout");
+  assert.equal(production.statusOf(previewVariant), "unavailable");
   assert.equal(production.buyable(previewVariant), false);
 });
 
@@ -289,7 +289,7 @@ test("a never-resolving inventory read cannot block ordinary visibility or inter
   helpers.setProducts(mixedProducts);
 
   const pendingInventory = helpers.loadInventoryAvailability();
-  assert.equal(helpers.statusOf(finiteVariant), "soldout");
+  assert.equal(helpers.statusOf(finiteVariant), "loading");
   assert.equal(helpers.buyable(finiteVariant), false);
   assert.equal(helpers.statusOf(ordinaryVariant), "available");
   assert.equal(helpers.buyable(ordinaryVariant), true);
@@ -298,6 +298,7 @@ test("a never-resolving inventory read cannot block ordinary visibility or inter
   ]))), [{ id: "cable", build: "standard", qty: 1 }]);
 
   assert.equal(await pendingInventory, false);
+  assert.equal(helpers.statusOf(finiteVariant), "unavailable");
   assert.equal(timeoutMs, 2500);
   assert.equal(aborted, true);
 
