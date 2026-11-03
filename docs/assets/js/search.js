@@ -14,6 +14,7 @@
   var root, bar, input, hint, hintWord, clearBtn, panel, panelScroll, scrim, placeholder;
   var scope = null, activeIdx = -1, openState = false, openGen = 0;
   var debounce, openT, closeT, closeT2, hintT, hintFade, heightT, hintI = 0;
+  var inventory = Object.create(null);
 
   function isMobile() { return window.matchMedia('(max-width: 600px)').matches; }
   function isFullPage() { return window.matchMedia('(max-width: 1024px), (pointer: coarse) and (max-width: 1366px)').matches; }   // matches the full-page CSS
@@ -22,6 +23,51 @@
   // only ever navigate to same-origin paths from the (build-time) index
   function safeHref(u) { return (typeof u === 'string' && /^\/(?!\/)/.test(u)) ? u : '#'; }
   function price(p) { return typeof p === 'number' && isFinite(p) ? 'from $' + p : ''; }
+  function soldOut(id) {
+    var product = (window.STORE_PRODUCTS || []).find(function (p) { return p.id === id; });
+    var variants = product && product.variants || [];
+    return variants.length > 0 && variants.every(function (v) {
+      var status = v.status || (v.comingSoon ? 'comingSoon' : 'available');
+      if (status === 'soldout') return true;
+      if (status === 'comingSoon' || (v.launchAt != null && !(Date.parse(v.launchAt) <= Date.now()))) return false;
+      return !!v.inventorySku && (!inventory[v.inventorySku] || inventory[v.inventorySku].soldOut);
+    });
+  }
+  function productPrice(it) { return soldOut(productId(it)) ? 'Sold out' : price(it.price); }
+  function refreshHomeStock() {
+    document.querySelectorAll('[data-store-product]').forEach(function (el) {
+      el.textContent = soldOut(el.dataset.storeProduct) ? 'Sold out' : el.dataset.storePrice;
+    });
+  }
+  async function loadProductAvailability(attempt) {
+    refreshHomeStock();
+    var skus = [];
+    (window.STORE_PRODUCTS || []).forEach(function (p) {
+      if (!p.published) return;
+      (p.variants || []).forEach(function (v) {
+        if (v.inventorySku && skus.indexOf(v.inventorySku) < 0) skus.push(v.inventorySku);
+      });
+    });
+    if (!skus.length) return;
+    try {
+      var response = await fetch('/api/inventory-availability?' + skus.map(function (sku) { return 'sku=' + encodeURIComponent(sku); }).join('&'), {
+        cache: 'no-store', signal: AbortSignal.timeout(2500)
+      });
+      var body = await response.json();
+      if (!response.ok || !body || !Array.isArray(body.inventory) || body.inventory.length !== skus.length) throw new Error('Inventory unavailable');
+      var rows = Object.create(null);
+      body.inventory.forEach(function (row) {
+        if (!row || skus.indexOf(row.sku) < 0 || rows[row.sku] || !Number.isSafeInteger(row.available) || row.available < 0 ||
+            typeof row.soldOut !== 'boolean' || row.soldOut !== (row.available === 0)) throw new Error('Invalid inventory');
+        rows[row.sku] = row;
+      });
+      inventory = rows;
+      refreshHomeStock();
+      update();
+    } catch (e) {
+      if (attempt < 3) setTimeout(function () { loadProductAvailability(attempt + 1); }, 3000 * (attempt + 1));
+    }
+  }
   function isDark() { return (document.body.getAttribute('data-md-color-scheme') || document.documentElement.getAttribute('data-md-color-scheme')) === 'slate'; }
   // a thumbnail follows the Material theme: use the DARK sibling (only when the build found one) in dark mode
   function thumbImg(it, cls) {
@@ -118,7 +164,7 @@
     if (it.type === 'writing') {
       a.innerHTML = '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span></span>';   // title only
     } else if (it.type === 'product') {
-      a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span>' + (price(it.price) ? '<span class="tw-card-price">' + price(it.price) + '</span>' : '') + '</span>';
+      a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span>' + (productPrice(it) ? '<span class="tw-card-price">' + productPrice(it) + '</span>' : '') + '</span>';
     } else {
       a.innerHTML = thumb + '<span class="tw-card-body"><span class="tw-card-title">' + esc(it.title) + '</span><span class="tw-card-desc">' + esc(it.description) + '</span></span>';
     }
@@ -159,7 +205,7 @@
   // ---------- results (writings-index style) ----------
   function rowEl(it) {
     var a = document.createElement('a'); a.className = 'tw-row' + (it.type === 'product' ? ' tw-row-product' : ''); a.href = safeHref(it.url); a.setAttribute('role', 'option');
-    var aside = it.type === 'product' ? price(it.price) : esc(it.date || '');
+    var aside = it.type === 'product' ? productPrice(it) : esc(it.date || '');
     var sub = it.type === 'writing' ? esc(it.readtime || '') : '';
     var thumb = (it.type === 'product') ? thumbImg(it, 'tw-row-thumb') : '';   // products get an inline graphic; projects/writings stay text-only
     a.innerHTML = thumb +
@@ -445,7 +491,8 @@
   // ---------- lifecycle ----------
   function ready(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
   ready(inject);
-  var sub = setInterval(function () { if (typeof document$ !== 'undefined') { clearInterval(sub); document$.subscribe(function () { inject(); }); } }, 100);
+  ready(function () { loadProductAvailability(0); });
+  var sub = setInterval(function () { if (typeof document$ !== 'undefined') { clearInterval(sub); document$.subscribe(function () { inject(); refreshHomeStock(); }); } }, 100);
 
   // keep already-rendered search thumbnails matched to the theme on a live toggle
   function swapThumbs() {

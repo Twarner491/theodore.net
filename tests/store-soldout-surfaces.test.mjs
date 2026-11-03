@@ -4,17 +4,17 @@ import test from "node:test";
 import vm from "node:vm";
 
 
-function searchRenderers() {
+function searchRenderers({ products = [], labels = [], fetch } = {}) {
   const original = fs.readFileSync(new URL("../docs/assets/js/search.js", import.meta.url), "utf8");
   const source = original.replace(/\}\)\(\);\s*$/, `
-    globalThis.__searchRenderers = { cardEl: cardEl, rowEl: rowEl };
+    globalThis.__searchRenderers = { cardEl: cardEl, rowEl: rowEl, loadProductAvailability: loadProductAvailability };
   })();`);
   assert.notEqual(source, original, "search.js must remain one trailing IIFE");
 
   const document = {
     readyState: "loading",
     addEventListener() {},
-    querySelectorAll() { return []; },
+    querySelectorAll() { return labels; },
     createElement() {
       return {
         className: "",
@@ -28,9 +28,12 @@ function searchRenderers() {
   };
   const context = vm.createContext({
     document,
-    window: { addEventListener() {}, matchMedia() { return { matches: false }; } },
+    window: { STORE_PRODUCTS: products, addEventListener() {}, matchMedia() { return { matches: false }; } },
     MutationObserver: class { observe() {} },
     setInterval() { return 0; },
+    setTimeout() { return 0; },
+    AbortSignal,
+    fetch,
   });
   vm.runInContext(source, context, { filename: "search.js" });
   return context.__searchRenderers;
@@ -107,7 +110,6 @@ const searchItem = {
 };
 
 
-// Search shows a product's price only; availability lives on the product page.
 test("expanded search browse shows the product price", () => {
   const card = searchRenderers().cardEl(searchItem);
   assert.match(card.innerHTML, /from \$180/);
@@ -117,6 +119,68 @@ test("expanded search browse shows the product price", () => {
 test("typed search results show the product price", () => {
   const row = searchRenderers().rowEl(searchItem);
   assert.match(row.innerHTML, /from \$180/);
+});
+
+
+test("Polargraph is sold out in search cards and typed results", () => {
+  const item = { type: "product", id: "polargraph", title: "Polargraph Kit", price: 430 };
+  const renderers = searchRenderers({ products: [{ id: item.id, variants: [
+    { id: "electronics", status: "soldout" },
+    { id: "electronics-printed", status: "soldout" },
+  ] }] });
+  for (const render of [renderers.cardEl, renderers.rowEl]) {
+    assert.match(render(item).innerHTML, /Sold out/);
+    assert.doesNotMatch(render(item).innerHTML, /\$430/);
+  }
+});
+
+
+test("a product with an available variant still shows its price", () => {
+  const renderers = searchRenderers({ products: [{ id: "avian-mic", variants: [
+    { status: "soldout" }, { price: 180 },
+  ] }] });
+  assert.match(renderers.cardEl(searchItem).innerHTML, /from \$180/);
+  assert.match(renderers.rowEl(searchItem).innerHTML, /from \$180/);
+});
+
+
+const frame = {
+  id: "avian-visitors", published: true,
+  variants: [{ status: "available", price: 699, inventorySku: "avian-gen3-batch-01" }],
+};
+const frameItem = { type: "product", id: frame.id, title: "Avian Visitors", price: 699 };
+
+test("live inventory updates homepage and search labels after sellout and restock", async () => {
+  let available = 0;
+  const label = { dataset: { storeProduct: frame.id, storePrice: "$699" }, textContent: "Sold out" };
+  const renderers = searchRenderers({ products: [frame], labels: [label], fetch: async (url, options) => {
+    assert.equal(url, "/api/inventory-availability?sku=avian-gen3-batch-01");
+    assert.equal(options.cache, "no-store");
+    return { ok: true, json: async () => ({ inventory: [{ sku: "avian-gen3-batch-01", available, soldOut: available === 0 }] }) };
+  } });
+  for (available of [0, 3, 0]) {
+    await renderers.loadProductAvailability(0);
+    assert.equal(label.textContent, available ? "$699" : "Sold out");
+    for (const render of [renderers.cardEl, renderers.rowEl]) {
+      assert.match(render(frameItem).innerHTML, available ? /from \$699/ : /Sold out/);
+    }
+  }
+});
+
+
+test("unavailable or invalid inventory keeps finite products sold out without hiding ordinary prices", async () => {
+  for (const body of [{ inventory: [] }, { inventory: [{ sku: "avian-gen3-batch-01", available: 0, soldOut: false }] }, null]) {
+    const label = { dataset: { storeProduct: frame.id, storePrice: "$699" }, textContent: "$699" };
+    const renderers = searchRenderers({ products: [frame], labels: [label], fetch: async () => {
+      if (body === null) throw new Error("Offline");
+      return { ok: true, json: async () => body };
+    } });
+    await renderers.loadProductAvailability(0);
+    assert.equal(label.textContent, "Sold out");
+    assert.match(renderers.cardEl(frameItem).innerHTML, /Sold out/);
+    assert.match(renderers.rowEl(frameItem).innerHTML, /Sold out/);
+    assert.match(renderers.rowEl(searchItem).innerHTML, /from \$180/);
+  }
 });
 
 

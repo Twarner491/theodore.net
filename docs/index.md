@@ -213,7 +213,7 @@ search:
           <a class="store-mini-card" href="/store/avian-visitors/">
             <div class="store-mini-img"><img src="/assets/images/AvianVisitors/avianAssembledTop.png" alt="Avian Visitors"></div>
             <p class="store-mini-title">Avian Visitors</p>
-            <p class="store-mini-price">$699</p>
+            <p class="store-mini-price" data-store-product="avian-visitors" data-store-price="$699">Sold out</p>
           </a>
           <a class="store-mini-card" href="/store/avian-mic/">
             <div class="store-mini-img"><img src="/assets/images/AvianVisitors/bird-mic.png" alt="Bird Mic Kit"></div>
