@@ -438,11 +438,20 @@
   function evItemValue(p, b) { try { const v = variantById(p, b || (p.defaultBuild || (p.variants[0] || {}).id)); return v && v.price ? v.price * 100 : null; } catch (e) { return null; } }
   /* ---- GA4 ecommerce mirrors: the same moments the first-party beacon tracks,
      emitted as standard gtag ecommerce events so channel/conversion reporting works
-     in GA4 (and via Teddy's Meta<->GA link, for Shop traffic) without any new
-     tracking surface. gtag ships with the site's existing analytics; if it's
-     absent (blocked, local dev) these are silent no-ops and can never break the
-     store. item_id matches the Meta catalog feed ids ("<product>-<variant>"). ---- */
-  function ga4(name, params) { if (localRecovery && localRecovery.mode === "local") return; try { if (typeof window.gtag === "function") window.gtag("event", name, params); } catch (e) { /* never breaks the store */ } }
+     in GA4 without any new
+     tracking surface. Material queues its analytics in dataLayer without exposing
+     gtag. Without initialized analytics these are silent no-ops and never break
+     the store. item_id matches the Meta catalog feed ids ("<product>-<variant>"). ---- */
+  function ga4(name, params) {
+    if (DEV_SHOW_UNPUBLISHED || (localRecovery && localRecovery.mode === "local")) return;
+    try {
+      if (typeof window.gtag === "function") window.gtag("event", name, params);
+      else if (Array.isArray(window.dataLayer) && window.dataLayer.some((command) =>
+        command && command[0] === "config" && typeof command[1] === "string" && /^G-[A-Z0-9]+$/i.test(command[1]))) {
+        (function () { window.dataLayer.push(arguments); })("event", name, params);
+      }
+    } catch (e) { /* never breaks the store */ }
+  }
   function ga4Item(id, buildId, qty) {
     const identity = migrateCartIdentity(String(id || ""), String(buildId || "")); id = identity.id; buildId = identity.build;
     const p = getProduct(id);
