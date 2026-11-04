@@ -23,6 +23,7 @@ weight: 0.6   # est from packed weights; bare-kit scale data pending
 project: /projects/AvianVisitors/
 related:
   - avian-visitors
+  - avian-visitors-kit
 variants:
   - id: electronics
     image: birdMicElectronics.png
