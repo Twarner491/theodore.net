@@ -33,7 +33,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
         self.assertNotIn('localPreview', assembled_variant)
         self.assertEqual(assembled_variant['shippingProfile'], 'contiguous-us-ground')
         self.assertEqual(assembled_variant['inventorySku'], 'avian-gen3-batch-02')
-        self.assertEqual(assembled_variant['batchSize'], 100)
+        self.assertEqual(assembled_variant['batchSize'], 30)
         self.assertEqual(assembled_variant['maxQuantity'], 20)
         self.assertEqual(assembled_variant['status'], 'available')
         self.assertRegex(assembled_variant['stripePriceLive'], r'^price_[A-Za-z0-9]+$')
