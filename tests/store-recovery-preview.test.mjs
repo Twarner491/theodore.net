@@ -25,6 +25,7 @@ function harness({ hostname = "theodore.net", protocol = "http:", search = "", h
   })();`);
   const network = [], scripts = [], ga = [], order = [], redirects = [];
   const location = { hostname, protocol, pathname, search, hash, origin: protocol + "//" + hostname + (protocol === "http:" ? ":8892" : ""), assign: (url) => redirects.push(url) };
+  Object.defineProperty(location, "href", { get: () => location.origin + location.pathname + location.search + location.hash });
   const context = vm.createContext({
     document: { readyState: "loading", referrer: "", addEventListener() {}, querySelector() { return null; }, querySelectorAll() { return []; },
       createElement: () => ({}), head: { appendChild: (el) => scripts.push(el) } },
@@ -47,6 +48,8 @@ function harness({ hostname = "theodore.net", protocol = "http:", search = "", h
     const partial = readFileSync(new URL("../overrides/partials/store-restore-token.html", import.meta.url), "utf8");
     vm.runInContext(partial.match(/<script id="store-restore-token">([\s\S]*?)<\/script>/)[1], context);
   }
+  const analyticsTemplate = readFileSync(new URL("../overrides/partials/integrations/analytics/google.html", import.meta.url), "utf8");
+  vm.runInContext(analyticsTemplate.match(/<script>([\s\S]*?)<\/script>/)[1], context);
   vm.runInContext(code, context);
   return { helpers: context.helpers, get api() { return context.window.TheodoreRecoveryPreview; }, window: context.window, network, ga, scripts, sessionStorage, localStorage, order, location, redirects };
 }

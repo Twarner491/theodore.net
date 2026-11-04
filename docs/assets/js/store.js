@@ -445,6 +445,8 @@
   function ga4(name, params) {
     if (DEV_SHOW_UNPUBLISHED || (localRecovery && localRecovery.mode === "local")) return;
     try {
+      if (typeof window.__theodoreAnalyticsParams !== "function") return;
+      params = window.__theodoreAnalyticsParams(params);
       if (typeof window.gtag === "function") window.gtag("event", name, params);
       else if (Array.isArray(window.dataLayer) && window.dataLayer.some((command) =>
         command && command[0] === "config" && typeof command[1] === "string" && /^G-[A-Z0-9]+$/i.test(command[1]))) {
@@ -1673,14 +1675,26 @@
     // confirmation page dedupe server-side in GA4 and never double-count revenue.
     // Fire only on a server-confirmed success: an authorized limited-batch order
     // that later loses the race for the last unit must never count.
-    if (d.status === "succeeded")
-    ga4("purchase", {
-      transaction_id: pi, currency: "USD",
-      value: ((d.breakdown && d.breakdown.total != null ? d.breakdown.total : d.amount) || 0) / 100,
-      shipping: ((d.breakdown && d.breakdown.shipping) || 0) / 100,
-      tax: ((d.breakdown && d.breakdown.tax) || 0) / 100,
-      items: (d.items || []).map(function (it) { return ga4Item(it.id, it.build, it.qty); })
-    });
+    if (d.status === "succeeded") {
+      const purchase = {
+        transaction_id: pi, currency: "USD",
+        items: (d.items || []).map(function (it) {
+          const item = ga4Item(it.id, it.build, it.qty);
+          delete item.price;   // current catalog prices are not the order's paid prices
+          return item;
+        })
+      };
+      const b = d.breakdown, cents = (n) => Number.isSafeInteger(n) && n >= 0;
+      const discount = b && b.discount === undefined ? 0 : b && b.discount;
+      if (b && [b.subtotal, b.shipping, b.tax, b.total, discount, d.amount].every(cents) &&
+          discount <= b.subtotal && b.total === d.amount &&
+          b.subtotal - discount + b.shipping + b.tax === b.total) {
+        purchase.value = (b.subtotal - discount) / 100;
+        purchase.shipping = b.shipping / 100;
+        purchase.tax = b.tax / 100;
+      }
+      ga4("purchase", purchase);
+    }
     renderOrder(host, d);
   }
 
