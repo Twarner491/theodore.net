@@ -19,6 +19,7 @@ import {
   releaseInventory,
   verifyInventoryProviderEvidence,
 } from "../../lib/store-inventory.js";
+import { recordRecoveryPurchase } from "../../lib/store-recovery.js";
 const TOLERANCE = 300; // seconds; rejects replayed or stale events
 
 const json = (value, status = 200) => new Response(JSON.stringify(value), {
@@ -161,6 +162,29 @@ export async function onRequestPost({ request, env }) {
           pi.metadata.capture_address_sha256 !== finalAddressSha256) {
         console.log("fulfillment blocked: profiled authorization did not pass capture gate", pi.id);
         return new Response(JSON.stringify({ received: true, fulfilled: false, blocked: "capture_gate_not_approved" }), { status: 200, headers: { "content-type": "application/json" } });
+      }
+    }
+    // Only a signed, fully validated purchase can suppress recovery. Do this
+    // before the notification shortcut so retries can repair tracking without
+    // sending another receipt; a failure here asks Stripe to retry first.
+    if (env.STORE_RECOVERY_ENABLED === "1") {
+      const expectedLivemode = expectedStripeLivemode(env);
+      if (expectedLivemode === null || event.livemode !== expectedLivemode ||
+          pi.livemode !== expectedLivemode || pi.object !== "payment_intent" || pi.status !== "succeeded" ||
+          !/^evt_[A-Za-z0-9_]+$/.test(event.id || "") || !/^pi_[A-Za-z0-9_]+$/.test(pi.id || "") ||
+          !Number.isSafeInteger(event.created) || event.created <= 0 || event.created > Math.floor(Date.now() / 1000) ||
+          !Number.isSafeInteger(pi.amount) || pi.amount <= 0 || pi.currency !== "usd") {
+        return json({ received: false, fulfilled: false, blocked: "recovery_payment_evidence_invalid" }, 400);
+      }
+      try {
+        await recordRecoveryPurchase(env, {
+          eventId: event.id, eventCreated: event.created, paymentIntentId: pi.id,
+          journeyId: pi.metadata.recovery_journey,
+          email: pi.metadata.email || pi.receipt_email || "",
+          cart: currentBinding.manifest.lines.map(([id, build, qty]) => ({ id, build, qty })),
+        }, { requestUrl: request.url });
+      } catch (_) {
+        return json({ received: false, fulfilled: false, pending: true, blocked: "recovery_purchase_pending" }, 503);
       }
     }
     // Idempotency: Stripe delivers events at-least-once and payment_intent.succeeded can fire

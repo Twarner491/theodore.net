@@ -10,6 +10,19 @@
   const DEV_SHOW_UNPUBLISHED = typeof location !== "undefined" &&
     /^(localhost|127(?:\.\d{1,3}){3}|\[?::1\]?)$/.test(location.hostname || "");
   const CART_KEY = "store:cart:v3";
+  let localRecovery = null;
+  let recoveryBootstrapPending = false;
+  let recoveryBootstrapReady = null;
+  const recoveryEventBuffer = [];
+  function recordRecoveryEvent(type, extra) {
+    if (localRecovery) localRecovery.recordEvent(type, extra);
+    else if (recoveryBootstrapPending && recoveryEventBuffer.length < 50)
+      recoveryEventBuffer.push({ type, extra: extra || {} });
+  }
+  function recordRecoveryCart(value, type = "cart_updated") {
+    if (localRecovery) localRecovery.recordCart(value, type);
+    else recordRecoveryEvent(type, { cart: value.map((line) => ({ id: line.id, build: line.build, qty: line.qty })) });
+  }
 
   const ICON_CLOSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 6 18 18M18 6 6 18"/></svg>';
   const ICON_BAG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6h-2c0-2.8-2.2-5-5-5S7 3.2 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m-7-3c1.7 0 3 1.3 3 3H9c0-1.7 1.3-3 3-3m7 17H5V8h14zm-7-8c-1.7 0-3-1.3-3-3H7c0 2.8 2.2 5 5 5s5-2.2 5-5h-2c0 1.7-1.3 3-3 3"/></svg>';
@@ -277,7 +290,7 @@
     });
     return out;
   }
-  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} };
+  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} recordRecoveryCart(cart); };
   const loadCart = () => {
     try {
       const raw = JSON.parse(localStorage.getItem(CART_KEY));
@@ -285,6 +298,7 @@
       cart = sanitizeCart(raw);
       if (hadLegacyAvianKit) saveCart();   // make the one-time identity migration persistent
     } catch (e) { cart = []; }
+    recordRecoveryCart(cart, "cart_observed");
   };
   const cartCount = () => cart.reduce((n, l) => n + l.qty, 0);
   const cartSubtotal = () => cart.reduce((s, l) => { const p = getProduct(l.id); if (!p) return s; const v = variantById(p, l.build); return s + (v.price ? v.price * l.qty : 0); }, 0);
@@ -428,7 +442,7 @@
      tracking surface. gtag ships with the site's existing analytics; if it's
      absent (blocked, local dev) these are silent no-ops and can never break the
      store. item_id matches the Meta catalog feed ids ("<product>-<variant>"). ---- */
-  function ga4(name, params) { try { if (typeof window.gtag === "function") window.gtag("event", name, params); } catch (e) { /* never breaks the store */ } }
+  function ga4(name, params) { if (localRecovery && localRecovery.mode === "local") return; try { if (typeof window.gtag === "function") window.gtag("event", name, params); } catch (e) { /* never breaks the store */ } }
   function ga4Item(id, buildId, qty) {
     const identity = migrateCartIdentity(String(id || ""), String(buildId || "")); id = identity.id; buildId = identity.build;
     const p = getProduct(id);
@@ -444,6 +458,8 @@
       let host = ""; try { host = new URL(document.referrer).hostname; } catch (e) {}
       if (host) ev.r = host.slice(0, 128);
       if (ex) { if (ex.product) ev.p = String(ex.product).slice(0, 64); if (ex.build) ev.b = String(ex.build).slice(0, 40); if (ex.qty != null) ev.q = ex.qty; if (ex.value != null && isFinite(ex.value)) ev.v = Math.round(ex.value); }
+      recordRecoveryEvent(type, ex);
+      if (localRecovery && localRecovery.mode === "local") return;
       const body = JSON.stringify(ev);
       if (navigator.sendBeacon) navigator.sendBeacon(EV_URL, body);
       else fetch(EV_URL, { method: "POST", headers: { "content-type": "text/plain" }, body: body, keepalive: true }).catch(() => {});
@@ -1158,8 +1174,9 @@
     $(".cart-checkout", drawer).disabled = !cart.length || unavailableLines().length > 0;
     syncAccCards();   // keep any on-page accessory cards' +/counter in sync with the cart
   }
-  function checkout() {
+  async function checkout() {
     if (!cart.length) return;
+    if (localRecovery) { try { await localRecovery.flush(1000); } catch (e) {} }
     location.href = "/store/checkout/";   // on-site Payment Element checkout page
   }
 
@@ -1311,7 +1328,7 @@
     if (!window.Stripe) { fail("Payment could not load. Please refresh the page."); return; }
     let data;
     try {
-      const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.assign({ cart: cart }, evAttribution())) });
+      const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.assign({ cart: cart }, evAttribution(), await recoveryCheckoutContext())) });
       data = await res.json().catch(() => ({}));
       if (!current()) return;
       if (!res.ok || !data.clientSecret) { fail(data.item ? lineLabel(data.item) + " is no longer available. Please edit your cart." : (data.error || "Could not start checkout. Please try again.")); return; }
@@ -1344,6 +1361,8 @@
       const task = pricingQueue.then(async () => {
         if (!current() || version !== priceVersion) return null;
         try {
+          Object.assign(reqBody, await recoveryCheckoutContext());
+          if (!current() || version !== priceVersion) return null;
           const r = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(reqBody) });
           const d = await r.json().catch(() => ({}));
           if (!current() || version !== priceVersion || cartSnapshot !== JSON.stringify(cart) || codeSnapshot !== voucherCode) return null;
@@ -1782,6 +1801,212 @@
       });
     }, 3000 * attempt);
   }
+  /* Store recovery is enabled by the server; localhost uses an explicit preview. Only opaque
+     journey credentials survive navigation; emails, cart snapshots and codes do not. */
+  function createLocalRecoveryJourney({ storage, session, anon, source, mode = "local", transport = fetch, now = Date.now, randomId = evRid }) {
+    const key = "store:recovery-preview:journey:v2";
+    const types = new Set(["view_item", "view_item_list", "add_to_cart", "view_cart", "begin_checkout", "cart_observed", "cart_updated"]);
+    const token = (value) => typeof value === "string" && /^[a-z0-9][a-z0-9._-]{0,127}$/i.test(value) ? value : null;
+    const credential = (value) => typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
+    const lines = (value) => (Array.isArray(value) ? value : []).slice(0, 30).flatMap((line) =>
+      line && token(line.id) && token(line.build) && Number.isSafeInteger(line.qty) && line.qty > 0 && line.qty <= 99
+        ? [{ id: line.id, build: line.build, qty: line.qty }] : []);
+    let credentials = null, queue = Promise.resolve(), lastCart = "", stopped = false;
+    const mutations = new Map();
+    try {
+      const saved = JSON.parse(storage.getItem(key));
+      if (saved && saved.session === session && credential(saved.journeyId) && credential(saved.journeyToken) &&
+          Number.isSafeInteger(saved.expiresAt) && saved.expiresAt * 1000 > now()) {
+        credentials = { journeyId: saved.journeyId, journeyToken: saved.journeyToken, expiresAt: saved.expiresAt };
+      }
+    } catch (e) {}
+    async function request(payload) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const controller = typeof AbortController === "function" ? new AbortController() : null;
+          const timer = controller ? setTimeout(() => controller.abort(), ["newsletter", "cart_email"].includes(payload.action) ? 15000 : 5000) : null;
+          let response, result;
+          try {
+            response = await transport("/api/store-recovery", { method: "POST", headers: { "content-type": "application/json" },
+              body: JSON.stringify(payload), keepalive: true, ...(controller ? { signal: controller.signal } : {}) });
+            result = await response.json();
+          } finally { if (timer != null) clearTimeout(timer); }
+          if (!response.ok) {
+            if (response.status >= 500 && attempt === 0) continue;
+            const error = new Error(result.error || "Unable to save this request. Please try again.");
+            error.code = result.code; error.httpStatus = response.status; throw error;
+          }
+          if (!result || result.ok !== true) throw new Error("The server did not confirm this request. Please try again.");
+          return result;
+        } catch (error) { if (attempt || error.httpStatus) throw error; }
+      }
+    }
+    let ready = credentials ? Promise.resolve(credentials) : request({ action: "start", anon: token(anon), session: token(session), source: token(source) }).then((result) => {
+      if (!credential(result.journeyId) || !credential(result.journeyToken) || !Number.isSafeInteger(result.expiresAt) || result.expiresAt * 1000 <= now()) throw new Error("Unable to start this visit. Reload the page and try again.");
+      credentials = { journeyId: result.journeyId, journeyToken: result.journeyToken, expiresAt: result.expiresAt };
+      try { storage.setItem(key, JSON.stringify({ session, ...credentials })); } catch (e) {}
+      return credentials;
+    });
+    ready.catch(() => {});
+    function send(action, payload, requestId = randomId()) {
+      const task = queue.then(async () => {
+        if (stopped) throw new Error("This visit is closed.");
+        const identity = await ready;
+        return request({ action, journeyId: identity.journeyId, journeyToken: identity.journeyToken, requestId, ...payload });
+      });
+      queue = task.catch(() => {});
+      return task;
+    }
+    function mutation(action, payload) {
+      const fingerprint = JSON.stringify(payload);
+      let pending = mutations.get(action);
+      if (!pending || pending.fingerprint !== fingerprint) {
+        pending = { fingerprint, requestId: randomId() }; mutations.set(action, pending);
+      }
+      return send(action, payload, pending.requestId).then((result) => {
+        if (result.status !== (mode === "local" ? "queued_local" : action === "newsletter" ? "subscribed" : "sent")) throw new Error("The server did not confirm this request. Please try again.");
+        if (mode === "local" && action === "cart_email" && (!result.preview || typeof result.preview.subject !== "string" || typeof result.preview.text !== "string" || typeof result.preview.restoreUrl !== "string")) throw new Error("The server did not confirm your cart email. Please try again.");
+        if (mutations.get(action) === pending) mutations.delete(action);
+        return result;
+      });
+    }
+    async function bounded(promise, timeoutMs) {
+      if (!Number.isFinite(timeoutMs)) return promise;
+      let timer;
+      try { await Promise.race([promise.catch(() => {}), new Promise((resolve) => { timer = setTimeout(resolve, timeoutMs); })]); }
+      finally { clearTimeout(timer); }
+    }
+    function recordEvent(type, extra = {}) {
+      if (!types.has(type)) return;
+      const event = { type };
+      if (token(extra.product)) event.product = extra.product;
+      if (token(extra.build)) event.build = extra.build;
+      if (Number.isSafeInteger(extra.qty) && extra.qty > 0 && extra.qty <= 99) event.qty = extra.qty;
+      if (Array.isArray(extra.cart)) event.cart = lines(extra.cart);
+      void send("event", event).catch(() => {});
+    }
+    function recordCart(value, type = "cart_updated") {
+      const cart = lines(value), signature = JSON.stringify(cart);
+      if (signature === lastCart) return;
+      lastCart = signature;
+      recordEvent(type === "cart_observed" ? type : "cart_updated", { cart });
+    }
+    return {
+      mode, recordEvent, recordCart,
+      newsletter(email, context) {
+        if (!context || context.product !== "avian-visitors" || !token(context.build)) return Promise.reject(new Error("Newsletter signup is unavailable here."));
+        return mutation("newsletter", { email, product: "avian-visitors", build: context.build, copyVersion: "avian-newsletter-v1" });
+      },
+      cartEmail: (email, cart) => mutation("cart_email", { email, cart: lines(cart) }),
+      restore: (restoreToken) => request({ action: "restore", restoreToken, requestId: randomId() }),
+      flush: (timeoutMs) => bounded(queue, timeoutMs),
+      async checkoutContext(timeoutMs = 1000) {
+        await bounded(queue.then(() => ready), timeoutMs);
+        return credentials && credentials.expiresAt * 1000 > now() ? { journeyId: credentials.journeyId, journeyToken: credentials.journeyToken } : {};
+      },
+      snapshot: () => ({ ready: !!credentials, journeyId: credentials && credentials.journeyId }),
+      stop() { stopped = true; },
+    };
+  }
+  function takeRecoveryRestoreToken() {
+    let restoreToken = window.__theodoreRestoreToken || "";
+    delete window.__theodoreRestoreToken;
+    const fragment = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+    restoreToken = restoreToken || fragment.get("restore_cart") || "";
+    if (fragment.has("restore_cart")) {
+      fragment.delete("restore_cart");
+      const remaining = fragment.toString();
+      history.replaceState(null, "", location.pathname + location.search + (remaining ? "#" + remaining : ""));
+    }
+    return restoreToken;
+  }
+  function enableLocalRecoveryPreview({ mode = "local", restoreToken: capturedToken, features = {} } = {}) {
+    if (typeof location === "undefined") return false;
+    const loopback = ["localhost", "127.0.0.1"].includes(location.hostname);
+    if (mode === "local" ? !loopback : !["theodore.net", "www.theodore.net"].includes(location.hostname)) return false;
+    const flag = "store:recovery-preview:active:v1";
+    try {
+      let restoreToken = capturedToken === undefined ? takeRecoveryRestoreToken() : capturedToken;
+      if (mode === "local") {
+        const requested = new URLSearchParams(location.search).get("recovery-preview");
+        if (requested === "0") {
+          sessionStorage.removeItem(flag); sessionStorage.removeItem("store:recovery-preview:journey:v1"); sessionStorage.removeItem("store:recovery-preview:journey:v2"); return false;
+        }
+        if (requested === "1") sessionStorage.setItem(flag, "1");
+        if (sessionStorage.getItem(flag) !== "1") return false;
+      }
+      try { sessionStorage.removeItem("store:recovery-preview:journey:v1"); } catch (e) {}
+      localRecovery = createLocalRecoveryJourney({ storage: sessionStorage, session: evSess(), anon: evAnon(), source: evSource(), mode });
+      let restoreRequest = null;
+      const canonicalCart = (value) => JSON.stringify(sanitizeCart(value).sort((a, b) => (a.id + "|" + a.build).localeCompare(b.id + "|" + b.build)));
+      window.TheodoreRecoveryPreview = Object.freeze({ active: true, mode, newsletterEnabled: features.newsletter !== false, cartEmailEnabled: features.cartEmail !== false, hasRestore: !!restoreToken,
+        subscribe(email) {
+          if (!P || P.id !== "avian-visitors" || !exactVariant(P, build)) return Promise.reject(new Error("Newsletter signup is unavailable here."));
+          localRecovery.recordCart(cart, "cart_observed");
+          return localRecovery.newsletter(email, { product: P.id, build });
+        },
+        emailCart(email) { localRecovery.recordCart(cart, "cart_observed"); return localRecovery.cartEmail(email, cart); },
+        restorePending() {
+          if (!restoreRequest && restoreToken) { restoreRequest = localRecovery.restore(restoreToken); restoreToken = ""; }
+          return restoreRequest || Promise.resolve(null);
+        },
+        compareRestore(value) {
+          loadCart(); renderCart();
+          return { signature: canonicalCart(cart), conflict: cart.length > 0 && canonicalCart(cart) !== canonicalCart(value) };
+        },
+        applyRestore(value, expected) {
+          loadCart();
+          if (canonicalCart(cart) !== expected) return false;
+          cart = sanitizeCart(value); saveCart(); renderCart(); openCart();
+          return true;
+        },
+        keepCart() { loadCart(); renderCart(); openCart(); },
+        snapshot: () => localRecovery.snapshot(),
+      });
+      return true;
+    } catch (e) { return false; }
+  }
+  function loadRecoveryInterface() {
+    const style = document.createElement("link");
+    style.rel = "stylesheet"; style.href = "/assets/css/store-recovery-preview.css?v=20261103-1";
+    document.head.appendChild(style);
+    const script = document.createElement("script");
+    script.src = "/assets/js/store-recovery-preview.js?v=20261103-1";
+    document.head.appendChild(script);
+  }
+  async function enableLiveRecovery() {
+    if (typeof location === "undefined" || location.protocol !== "https:" ||
+        !["theodore.net", "www.theodore.net"].includes(location.hostname) || !/^\/store(?:\/|$)/.test(location.pathname)) return;
+    const restoreToken = takeRecoveryRestoreToken();
+    recoveryBootstrapPending = true;
+    const controller = typeof AbortController === "function" ? new AbortController() : null;
+    const timer = controller ? setTimeout(() => controller.abort(), 2500) : null;
+    try {
+      const response = await fetch("/api/store-recovery?status=1", { cache: "no-store", ...(controller ? { signal: controller.signal } : {}) });
+      const features = await response.json();
+      if (!response.ok || !features || !features.enabled || features.mode !== "live") return;
+      if (!enableLocalRecoveryPreview({ mode: "live", restoreToken, features })) return;
+      for (const event of recoveryEventBuffer) localRecovery.recordEvent(event.type, event.extra);
+      loadRecoveryInterface();
+    } catch (e) { /* Tracking and optional forms cannot block shopping. */ }
+    finally {
+      if (timer !== null) clearTimeout(timer);
+      recoveryBootstrapPending = false; recoveryEventBuffer.length = 0;
+    }
+  }
+  async function recoveryCheckoutContext() {
+    const deadline = Date.now() + 1000;
+    if (!localRecovery && recoveryBootstrapReady) {
+      let timer;
+      try { await Promise.race([recoveryBootstrapReady, new Promise((resolve) => { timer = setTimeout(resolve, 1000); })]); }
+      catch (e) { /* Optional tracking cannot stop payment. */ }
+      finally { clearTimeout(timer); }
+    }
+    if (!localRecovery) return {};
+    try { return await localRecovery.checkoutContext(Math.max(0, deadline - Date.now())); } catch (e) { return {}; }
+  }
+  const localRecoveryPreviewActive = enableLocalRecoveryPreview();
+  if (!localRecoveryPreviewActive) recoveryBootstrapReady = enableLiveRecovery();
   let booted = false;
   function boot() { if (booted) return; booted = true; void init(); }
   // Boot as soon as this (deferred) script runs so the checkout summary is painted
@@ -1790,4 +2015,5 @@
   if (typeof window.document$ !== "undefined" && window.document$.subscribe) window.document$.subscribe(boot);
   if (document.readyState !== "loading") boot();
   else document.addEventListener("DOMContentLoaded", boot);
+  if (localRecoveryPreviewActive) loadRecoveryInterface();
 })();

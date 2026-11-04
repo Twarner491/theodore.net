@@ -1,0 +1,145 @@
+/* Inline store signup and requested-cart email fields. */
+.newsletter-preview {
+  margin-block-start: 1.8em;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 300;
+  color: var(--md-default-fg-color);
+}
+#product-detail .newsletter-preview .newsletter-preview-description {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78em;
+  font-weight: 300;
+  color: var(--md-default-fg-color--light);
+  margin: 0 0 1.2em;
+  line-height: 1.6;
+}
+/* Match the project article's subscribe-form without loading its page-wide CSS. */
+.newsletter-preview-fields,
+.recovery-preview-fields {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1.2px solid var(--md-default-fg-color--lighter);
+  border-radius: 16px;
+  background: var(--md-default-bg-color);
+  transition: border-color 0.3s ease;
+}
+.newsletter-preview-fields:focus-within,
+.recovery-preview-fields:focus-within { border-color: var(--md-default-fg-color--light); }
+.newsletter-preview-fields input[type="email"],
+.recovery-preview-fields input[type="email"] {
+  flex: 1;
+  min-width: 0;
+  padding: 1em 0.4em 1em 1.3em;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--md-default-fg-color);
+  font: 400 0.8em "JetBrains Mono", monospace;
+}
+.newsletter-preview-fields input::placeholder,
+.recovery-preview-fields input::placeholder { color: var(--md-default-fg-color--light); }
+.newsletter-preview-fields button,
+.recovery-preview-fields button {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  margin-right: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
+}
+.newsletter-preview-fields button:hover,
+.recovery-preview-fields button:hover { opacity: 1; }
+.newsletter-preview-fields button svg,
+.recovery-preview-fields button svg { width: 17px; height: 17px; display: block; }
+#product-detail .newsletter-preview .newsletter-preview-message { margin: 0.65em 0 0; font-size: 0.74em; line-height: 1.6; }
+.newsletter-preview [hidden] { display: none !important; }
+#product-detail .newsletter-preview .newsletter-preview-status:empty { margin: 0; }
+@media (max-width: 600px) {
+  .newsletter-preview-fields input[type="email"],
+  .recovery-preview-fields input[type="email"] { font-size: 16px; }
+  #product-detail .newsletter-preview .newsletter-preview-description { font-size: 0.75em; margin-bottom: 1em; }
+}
+
+.recovery-preview,
+.recovery-preview-dialog {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 300;
+  color: var(--md-default-fg-color);
+}
+.recovery-preview [hidden],
+.recovery-preview[hidden] { display: none !important; }
+.recovery-preview button,
+.recovery-preview-dialog button { font-family: inherit; cursor: pointer; }
+.recovery-preview-toggle,
+.recovery-preview-show,
+.recovery-preview-close {
+  min-height: 40px;
+  padding: 0.5em 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 0.78em;
+  font-weight: 300;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.recovery-preview-toggle { display: block; width: 100%; margin-top: 0.3em; text-align: center; opacity: 0.55; transition: opacity 0.2s ease; }
+.recovery-preview-toggle:hover,
+.recovery-preview-toggle:focus-visible { opacity: 1; }
+.recovery-preview-form { margin: 0.5em 0 0; }
+.recovery-preview-error,
+.recovery-preview-status { font-size: 0.72em; line-height: 1.6; margin: 0.65em 0 0; }
+.recovery-preview-error { font-weight: 500; }
+.recovery-preview-status:empty { margin: 0; }
+.recovery-preview-toggle:focus-visible,
+.recovery-preview-show:focus-visible,
+.recovery-preview-dialog :focus-visible { outline: 2px solid var(--md-default-fg-color); outline-offset: 3px; }
+.cart-drawer:has(.recovery-preview:not([hidden])) .cart-foot { max-height: min(65%, calc(100dvh - 150px)); box-sizing: border-box; overflow-y: auto; flex-shrink: 0; }
+.cart-drawer:has(.recovery-preview:not([hidden])) .cart-items { min-height: 0; }
+.recovery-preview-dialog {
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  box-sizing: border-box;
+  overflow: auto;
+  margin: auto;
+  padding: 1.5em;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 20px;
+  background: var(--md-default-bg-color);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.recovery-preview-dialog::backdrop { background: rgb(0 0 0 / 35%); }
+.recovery-preview-dialog-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5em 1em; }
+.recovery-preview-dialog h2 { margin: 0; font-family: "Crimson Pro", serif; font-weight: 400; font-size: 1.6em; }
+.recovery-preview-disclaimer { margin: 0.7em 0 1.5em; font-size: 0.75em; }
+.recovery-preview-envelope { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.4em 1em; margin: 0; font-size: 0.78em; }
+.recovery-preview-envelope dt { font-weight: 500; }
+.recovery-preview-envelope dd { margin: 0; overflow-wrap: anywhere; }
+.recovery-preview-message { margin-top: 1.5em; padding-top: 0.5em; border-top: 1px solid var(--md-default-fg-color--lightest); font-size: 0.84em; }
+.recovery-preview-message p { margin: 1em 0; }
+.recovery-preview-lines { padding-left: 1.3em; }
+.recovery-preview-lines li { margin: 0.85em 0; }
+.recovery-preview-line-detail { display: block; font-size: 0.9em; margin-top: 0.25em; }
+.recovery-preview-return { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 400px) {
+  .recovery-preview-dialog { padding: 1.1em; }
+}
+@media (forced-colors: active) {
+  .recovery-preview-toggle:focus-visible,
+  .recovery-preview-show:focus-visible,
+  .recovery-preview-dialog :focus-visible { outline-color: Highlight; }
+}
+/* The cart field shares the newsletter action position: close when empty, send after typing. */
+.recovery-preview-message { white-space: pre-wrap; overflow-wrap: anywhere; }
+.recovery-restore-actions { display: flex; gap: 1.5em; flex-wrap: wrap; }
+.recovery-preview-dialog [hidden] { display: none !important; }

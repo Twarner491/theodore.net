@@ -47,13 +47,16 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective October 26, 2026</p>
+          <p class="draft">Effective November 3, 2026</p>
+          <p>This update explains optional emailed carts and how store signups can be linked to shopping activity.</p>
 
           <p>This policy describes how Things by Theodore LLC handles personal information for the theodore.net website and store and the Avian Visitors frame services at avianvisitors.com.</p>
 
           <h3>What we collect</h3>
           <p>Orders require your name, email address, billing address, and shipping address. Checkout is guest-only; the store does not create accounts. If you join a waitlist or newsletter, we collect your email address and the list tags used to send the updates you requested.</p>
           <p>We also collect basic site and checkout activity: pages viewed, store actions, referral source, approximate location, device and browser information, a random first-party visitor identifier, and a per-tab session identifier. Checkout-funnel events do not include your email address, but the visitor identifier and referral source are saved with payment records to link store activity to orders. Hosting and security providers also process IP addresses.</p>
+          <p>If you ask us to email your cart, we save your email and the items you selected to send that requested message. If you sign up for store updates, we record which product page you signed up on. We can associate an email you provide with that visit's cart and checkout activity and matching orders to understand where shoppers leave and improve the store. Email addresses are kept in private operational records, separate from analytics events. Anonymous visit identifiers do not tell us your name or email.</p>
+          <p>Requesting a cart email does not subscribe you to the newsletter. Newsletter signups receive the updates and deals they requested, with an unsubscribe option. Entering an email for checkout alone does not subscribe you to marketing emails.</p>
           <p>Stripe processes card payments. Your card details go directly to Stripe; we do not see or store your card number. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a>.</p>
 
           <p>Frame registration collects your email, frame identifier and name, source and display settings, and device diagnostics such as battery readings, firmware version, and connection timing. Settings may include a ZIP code, BirdWeather station ID, or custom source address. We use these records to prepare collages, manage frames through emailed sign-in links, and provide support.</p>
@@ -66,14 +69,14 @@ search:
             <li><strong>Cloudflare.</strong> Cloudflare hosts our site, store functions, analytics endpoint, frame services, and their records. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare's privacy policy</a>.</li>
             <li><strong>Stripe.</strong> Stripe processes payments, taxes, and order records. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a>.</li>
             <li><strong>Buttondown.</strong> Buttondown stores waitlist and newsletter subscriptions and sends those messages. Store signups include your public IP address for abuse prevention. See <a href="https://buttondown.com/legal/privacy" target="_blank" rel="noopener">Buttondown's privacy policy</a>.</li>
-            <li><strong>Resend.</strong> Resend delivers order and shipping emails and frame sign-in links. See <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">Resend's privacy policy</a>.</li>
+            <li><strong>Resend.</strong> Resend delivers requested cart emails, order and shipping emails, and frame sign-in links. See <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">Resend's privacy policy</a>.</li>
             <li><strong>Google Analytics.</strong> Google processes site-usage and shopping-event data as described below.</li>
             <li><strong>BirdWeather and Zippopotam.us.</strong> Selected postal areas or station IDs are used to find bird detections. Custom sources receive requests at the address you provide.</li>
           </ul>
           <p>We do not sell personal information or use waitlist email addresses for unrelated purposes.</p>
 
           <h3>Cookies, analytics, and Do Not Track</h3>
-          <p>Local storage and session storage hold a random first-party visitor identifier, a per-tab visit identifier, referral attribution, cart state, and navigation state.</p>
+          <p>Local storage and session storage hold a random first-party visitor identifier, a per-tab visit identifier, referral attribution, cart state, navigation state, and short-lived store-visit credentials. Signup and cart-email fields do not store your email address in browser storage.</p>
           <p>Google Analytics collects standard usage data, including pages viewed, approximate location, and device and browser information. This data uses identifiers; first-party store identifiers can be linked to orders as described above. Google and the other providers listed above may collect information when you use the site. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.</p>
           <p>You can opt out with <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google's browser add-on</a> or block cookies and site storage in your browser. We do not respond to Do Not Track signals.</p>
 
@@ -83,6 +86,7 @@ search:
           <ul>
             <li><strong>Order records.</strong> Seven years for tax compliance</li>
             <li><strong>Server logs.</strong> 60 days</li>
+            <li><strong>Linked store-visit and emailed-cart records.</strong> Records older than 90 days are removed during routine cleanup. Saved-cart links expire after seven days. We retain minimal suppression records to honor requests to stop emails.</li>
             <li><strong>Waitlist and newsletter records.</strong> Until you unsubscribe or request deletion, except for the minimal suppression record needed to honor an unsubscribe</li>
           </ul>
 

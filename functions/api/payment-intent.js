@@ -33,6 +33,7 @@ import {
 import {
   resolveVoucher, voucherInventoryDemand, voucherReply, VOUCHER_LABEL, VoucherUnavailableError,
 } from "../../lib/store-vouchers.js";
+import { resolveRecoveryAssociation, recordRecoveryCheckout } from "../../lib/store-recovery.js";
 
 const MAX_QTY = 99, MAX_LINES = 50;
 const DEFAULT_WEIGHT_LB = 2.0;       // fallback when a variant has no weight
@@ -347,7 +348,28 @@ export async function onRequestPost({ request, env }) {
     taxCents = tax.tax; total = tax.total; calcId = tax.id;
   }
 
+  // Recovery is optional. A missing, forged, or unavailable journey must never
+  // prevent checkout, and only a server-validated journey reaches Stripe.
+  let recoveryAssociation = null;
+  if (env.STORE_RECOVERY_ENABLED === "1") {
+    try {
+      recoveryAssociation = await resolveRecoveryAssociation(env, {
+        journeyId: body.journeyId, journeyToken: body.journeyToken, paymentIntentId: piId,
+      }, { requestUrl: request.url });
+    } catch (_) { /* Purchase remains available when recovery is unavailable. */ }
+  }
+  const recordCheckout = async (paymentIntentId) => {
+    if (!recoveryAssociation) return;
+    try {
+      await recordRecoveryCheckout(env, {
+        journeyId: recoveryAssociation.journeyId, paymentIntentId,
+        cart: normalized.map(({ id, build, qty }) => ({ id, build, qty })), email,
+      }, { requestUrl: request.url });
+    } catch (_) { /* The verified purchase webhook can recover this association. */ }
+  };
+
   const form = new URLSearchParams();
+  if (recoveryAssociation) form.set("metadata[recovery_journey]", recoveryAssociation.journeyId);
   form.set("amount", String(total));
   form.set("metadata[items]", checkoutBinding.legacyItems);
   form.set("metadata[breakdown]", subtotal + "|" + (shippingCents || 0) + "|" + (taxCents || 0) + "|" + total);   // cents, for the confirmation page receipt
@@ -436,6 +458,7 @@ export async function onRequestPost({ request, env }) {
         return inventoryUnavailable(reply, error);
       }
     }
+    await recordCheckout(piId);
     return reply({ updated: true, ...breakdown });
   }
 
@@ -475,5 +498,6 @@ export async function onRequestPost({ request, env }) {
     }
   }
   const updateToken = await signPi(pi.id, env.STRIPE_SECRET_KEY, inventoryScope);
+  await recordCheckout(pi.id);
   return reply({ clientSecret: pi.client_secret, publishableKey: env.STRIPE_PUBLISHABLE_KEY || null, updateToken, ...breakdown });
 }

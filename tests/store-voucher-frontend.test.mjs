@@ -23,7 +23,7 @@ function element() {
   };
 }
 
-async function harness({ respond, fetchUpdates } = {}) {
+async function harness({ respond, fetchUpdates, recoveryContext } = {}) {
   const fields = {};
   for (const name of [".co-summary", ".co-voucher", ".co-voucher input", ".co-voucher button", ".co-voucher-msg", "[data-remove-voucher]", ".co-discount-row", ".co-discount", ".co-error", ".co-submit", ".co-total-val", ".co-tax", ".co-ship", "#co-email", "#co-news", "#co-form"]) fields[name] = element();
   fields[".co-submit"].span = element();
@@ -49,6 +49,7 @@ async function harness({ respond, fetchUpdates } = {}) {
     renderCart = function () {}; swapProductImages = function () {}; reveal = function () {}; updateBadge = function () {};
     track = function (...args) { globalThis.telemetry.push(args); }; ga4 = function (...args) { globalThis.telemetry.push(args); }; evAttribution = function () { return {}; };
     checkoutAppearance = function () { return {}; };
+    if (globalThis.recoveryContext) localRecovery = { checkoutContext: globalThis.recoveryContext, recordCart() {} };
     globalThis.runCheckout = renderCheckout;
     globalThis.runConfirmation = renderConfirmation;
     globalThis.runOrder = function (data) { renderOrder(globalThis.confirmation, data); };
@@ -63,8 +64,8 @@ async function harness({ respond, fetchUpdates } = {}) {
     window: { addEventListener() {}, Stripe() { return { elements: () => stripeElements, confirmPayment: async () => { confirmations += 1; return { error: { message: "Test confirmation complete" } }; } }; } },
     localStorage: { getItem(key) { return key === "store:cart:v3" ? JSON.stringify([cartLine]) : null; }, setItem(...args) { stored.push(args); } },
     location: { origin: "https://example.test", pathname: "/store/checkout/", search: "", hostname: "example.test" },
-    URLSearchParams, MutationObserver: class { observe() {} },
-    host, cartLine: { ...cartLine }, confirmation, telemetry,
+    URLSearchParams, setTimeout, clearTimeout, MutationObserver: class { observe() {} },
+    host, cartLine: { ...cartLine }, confirmation, telemetry, recoveryContext,
     fetch: async (url, options) => {
       const body = JSON.parse(options.body); requests.push({ url, body });
       if (respond) { const response = await respond(url, body); if (response) return response; }
@@ -79,6 +80,7 @@ async function harness({ respond, fetchUpdates } = {}) {
   });
   vm.runInContext(source, context, { filename: "store.js" });
   await context.runCheckout();
+  assert.equal(typeof host.__applyVoucher, "function", fields[".co-error"].textContent || "checkout initialization should finish before using the voucher field");
   return {
     host, fields, requests, telemetry, stored, confirmation,
     apply: (code) => host.__applyVoucher(code),
@@ -232,4 +234,18 @@ test("a changed final total requires review and a second click before payment", 
   assert.equal(checkout.fields[".co-submit"].span.textContent, "Pay $615.00");
   await checkout.pay();
   assert.equal(checkout.confirmations(), 1);
+});
+
+
+test("all PaymentIntent creates and updates carry the same local recovery credentials", async () => {
+  const identity = { journeyId: "a".repeat(64), journeyToken: "b".repeat(64) };
+  const checkout = await harness({ recoveryContext: async () => identity });
+  checkout.shipping(); await settle(); await checkout.pay();
+  const requests = checkout.requests.filter((request) => request.url === "/api/payment-intent");
+  assert.equal(requests.length, 3);
+  for (const { body } of requests) {
+    assert.equal(body.journeyId, identity.journeyId); assert.equal(body.journeyToken, identity.journeyToken);
+  }
+  assert.ok(!JSON.stringify(checkout.telemetry).includes(identity.journeyToken));
+  assert.ok(!JSON.stringify(checkout.stored).includes(identity.journeyToken));
 });

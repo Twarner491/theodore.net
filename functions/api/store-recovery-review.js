@@ -1,0 +1,18 @@
+import { reviewRecovery } from "../../lib/store-recovery.js";
+
+const escape = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]));
+const date = (value) => new Date(value * 1000).toISOString().replace("T", " ").slice(0, 19) + " UTC";
+const cart = (lines) => lines.map((line) => `${line.id} / ${line.build} × ${line.qty}`).join(", ") || "Empty cart";
+
+// The same strict local-mode and loopback checks as the JSON review apply here.
+export async function onRequestGet({ request, env }) {
+  const headers = { "cache-control": "no-store", "referrer-policy": "no-referrer", "x-content-type-options": "nosniff", "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; frame-ancestors 'none'" };
+  try {
+    const report = await reviewRecovery(env, { requestUrl: request.url });
+    const visits = report.visits.map((visit) => `<article><h3>${escape(visit.classification.replaceAll("_", " "))}</h3><p>${escape(cart(visit.cart))}</p><p class="muted">${escape(date(visit.createdAt))} · Source: ${escape(visit.source)} · Purchase: ${escape(visit.purchaseStatus)}</p><ul>${visit.contacts.map((contact) => `<li>${escape(contact.email)}<br><span class="muted">${escape(contact.purpose)} / ${escape(contact.placement)}${contact.product ? " / " + escape(contact.product) : ""}${contact.copy_version ? " / " + escape(contact.copy_version) : ""}</span></li>`).join("")}</ul><details><summary>Activity (${visit.events.length})</summary><ol>${visit.events.map((event) => `<li>${escape(date(event.at))} ${escape(event.type)}${event.cart ? "<br>" + escape(cart(event.cart)) : ""}</li>`).join("")}</ol></details></article>`).join("");
+    const outbox = report.outbox.map((message) => `<article><h3>${escape(message.subject)}</h3><p>To: ${escape(message.to)}<br><span class="muted">${escape(message.kind)} / ${escape(message.status)} / ${escape(date(message.createdAt))}</span></p><details><summary>Preview saved message</summary><pre>${escape(message.text)}</pre>${message.restoreUrl ? `<p><a href="${escape(message.restoreUrl)}">Open saved cart</a></p>` : ""}</details></article>`).join("");
+    return new Response(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Local store recovery review</title><style>body{font:16px/1.6 system-ui,sans-serif;max-width:1000px;margin:40px auto;padding:0 20px;color:#262626;background:#faf9f6}h1,h2,h3{font-weight:500}h1{font-size:28px}h2{margin-top:40px}h3{font-size:17px;margin:0}article{padding:20px 0;border-top:1px solid #ddd}p{margin:8px 0}.muted{color:#626262;font-size:14px}pre{font:14px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}summary{cursor:pointer}li{margin:8px 0}a{color:inherit}code{overflow-wrap:anywhere}</style><h1>Local store recovery review</h1><p>These records are in the local database. No emails have been sent.</p><p class="muted">A cart becomes inactive after 24 hours without activity. Purchases require verified Stripe payment evidence. Follow-up messages are disabled. Reload to see new activity.</p><p><a href="/store/avian-visitors/?recovery-preview=1">Back to Avian Visitors</a></p><h2>Visits (${report.visits.length})</h2>${visits || "<p>No visits yet.</p>"}<h2>Local outbox (${report.outbox.length})</h2>${outbox || "<p>No requests yet.</p>"}</html>`, { headers: { ...headers, "content-type": "text/html; charset=utf-8" } });
+  } catch (error) {
+    return new Response(error.status ? error.message : "Review unavailable.", { status: error.status || 503, headers: { ...headers, "content-type": "text/plain; charset=utf-8" } });
+  }
+}

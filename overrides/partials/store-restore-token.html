@@ -1,0 +1,15 @@
+{# Capture and remove cart credentials before any analytics script sees the URL. #}
+<script id="store-restore-token">
+(function () {
+  if (!/^\/store(?:\/|$)/.test(location.pathname)) return;
+  var fragment = (location.hash || "").slice(1);
+  var params = new URLSearchParams(fragment);
+  if (!params.has("restore_cart")) return;
+  var token = params.get("restore_cart") || "";
+  var remaining = fragment.split("&").filter(function (part) {
+    return !new URLSearchParams(part).has("restore_cart");
+  }).join("&");
+  history.replaceState(history.state, "", location.pathname + location.search + (remaining ? "#" + remaining : ""));
+  if (/^[a-f0-9]{64}$/.test(token)) window.__theodoreRestoreToken = token;
+})();
+</script>
