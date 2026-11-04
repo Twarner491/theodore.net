@@ -1829,12 +1829,12 @@
           try {
             response = await transport("/api/store-recovery", { method: "POST", headers: { "content-type": "application/json" },
               body: JSON.stringify(payload), keepalive: true, ...(controller ? { signal: controller.signal } : {}) });
-            result = await response.json();
+            try { result = await response.json(); } catch (e) { result = null; }
           } finally { if (timer != null) clearTimeout(timer); }
           if (!response.ok) {
             if (response.status >= 500 && attempt === 0) continue;
-            const error = new Error(result.error || "Unable to save this request. Please try again.");
-            error.code = result.code; error.httpStatus = response.status; throw error;
+            const error = new Error(result && typeof result.error === "string" ? result.error : "Unable to save this request. Please try again.");
+            error.code = result && result.code; error.httpStatus = response.status; throw error;
           }
           if (!result || result.ok !== true) throw new Error("The server did not confirm this request. Please try again.");
           return result;

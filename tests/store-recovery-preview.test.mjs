@@ -183,6 +183,36 @@ test("transient retries reuse the request ID and validation errors remain failur
   assert.equal(requests.filter((body) => body.action === "newsletter").length, 1);
 });
 
+test("HTML and malformed responses show a retry message while retaining email and the same request ID", async () => {
+  for (const action of ["newsletter", "cart_email"]) {
+    for (const status of [502, 400, 200]) {
+      const requests = [], h = harness(); let failing = true, number = 0;
+      const journey = h.helpers.model({ mode: "live", storage: memory(), session: "session1", randomId: () => "request" + (++number).toString().padStart(5, "0"),
+        transport: async (_url, options) => {
+          const body = JSON.parse(options.body); requests.push(body);
+          if (body.action === "start") return json({ ok: true, ...credentials });
+          if (failing) return { ok: status < 400, status, json: async () => { throw new SyntaxError("Unexpected token '<', <!DOCTYPE html> is not valid JSON"); } };
+          return json({ ok: true, status: action === "newsletter" ? "subscribed" : "sent" });
+        } });
+      const ui = uiHarness({ mode: "live",
+        subscribe: (email) => journey.newsletter(email, { product: line.id, build: line.build }),
+        emailCart: (email) => journey.cartEmail(email, [line]) });
+      const host = action === "newsletter" ? ui.newsletter : ui.host;
+      const form = action === "newsletter" ? host : host.querySelector("form"), email = host.querySelector("input");
+      const error = host.querySelector(action === "newsletter" ? "#newsletter-preview-error" : ".recovery-preview-error");
+      const result = host.querySelector(action === "newsletter" ? ".newsletter-preview-status" : ".recovery-preview-status");
+      email.value = "person@example.com"; await form.emit("submit");
+      assert.equal(email.value, "person@example.com"); assert.equal(email.disabled, false);
+      assert.equal(error.hidden, false); assert.match(error.textContent, /Please try again/);
+      assert.doesNotMatch(error.textContent, /Unexpected token|DOCTYPE|JSON|SyntaxError/); assert.equal(result.textContent, "");
+      assert.equal(requests.filter((body) => body.action === action).length, status === 400 ? 1 : 2);
+      failing = false; await form.emit("submit");
+      assert.equal(email.value, ""); assert.equal(error.hidden, true); assert.notEqual(result.textContent, "");
+      assert.equal(new Set(requests.filter((body) => body.action === action).map((body) => body.requestId)).size, 1);
+    }
+  }
+});
+
 test("live mutations require delivery acknowledgements and pass through signup confirmation status", async () => {
   const h = harness(); let response = { ok: true, status: "queued_local" };
   const journey = h.helpers.model({ mode: "live", storage: memory(), session: "session1",

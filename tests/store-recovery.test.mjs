@@ -366,3 +366,46 @@ test("a newly created ineligible Buttondown subscriber is not reported as enroll
   } });
   assert.equal(result.suppressed, true); assert.equal(patches, 0);
 });
+
+
+test("Buttondown tag creation supplies the required color and merges a concurrently created tag ID", async (t) => {
+  const h = setup(t, true), j = await start(h), queued = await h.post(signup(j));
+  const createdTags = []; let patched;
+  const result = await deliverRecoveryOutbox({ ...h.env, STORE_RECOVERY_SEND_ENABLED: "1", BUTTONDOWN_API_KEY: "test_only" }, queued.outboxId, { ...h.options, fetchFn: async (url, init) => {
+    if (url.endsWith("/tags") && init.method === "POST") {
+      const tag = JSON.parse(init.body); createdTags.push(tag);
+      if (!tag.color) return response({ code: "invalid_data", detail: "color is required" }, 400);
+      return tag.name === "newsletter" ? response({ id: "tag_news", ...tag }, 201) : response({ code: "name_already_exists", metadata: { tag_id: "tag_avian" } }, 400);
+    }
+    if (url.endsWith("/tags")) return response({ results: [] });
+    if (init.method === "PATCH") { patched = JSON.parse(init.body); return response({ id: "subscriber_existing" }); }
+    return response({ id: "subscriber_existing", type: "regular", tags: ["unrelated_tag_id"] });
+  } });
+  assert.equal(result.id, "subscriber_existing");
+  assert.deepEqual(createdTags, [{ name: "newsletter", color: "#808080" }, { name: "avian-visitors-product", color: "#808080" }]);
+  assert.deepEqual(new Set(patched.tags), new Set(["unrelated_tag_id", "tag_news", "tag_avian"]));
+});
+
+test("Buttondown existing tag names match without case sensitivity or duplicate create calls", async (t) => {
+  const h = setup(t, true), j = await start(h), queued = await h.post(signup(j));
+  let patched;
+  const result = await deliverRecoveryOutbox({ ...h.env, STORE_RECOVERY_SEND_ENABLED: "1", BUTTONDOWN_API_KEY: "test_only" }, queued.outboxId, { ...h.options, fetchFn: async (url, init) => {
+    assert.notEqual(init.method, "POST", "existing tags must not be recreated");
+    if (url.endsWith("/tags")) return response({ results: [{ id: "tag_news", name: "Newsletter" }, { id: "tag_avian", name: "Avian-Visitors-Product" }, { id: "tag_else", name: "Other" }] });
+    if (init.method === "PATCH") { patched = JSON.parse(init.body); return response({}); }
+    return response({ id: "subscriber_existing", type: "regular", tags: ["OTHER"] });
+  } });
+  assert.equal(result.id, "subscriber_existing");
+  assert.deepEqual(new Set(patched.tags), new Set(["tag_else", "tag_news", "tag_avian"]));
+});
+
+test("Buttondown tag failures keep a useful HTTP code without retaining provider error details", async (t) => {
+  const h = setup(t, true), j = await start(h), queued = await h.post(signup(j));
+  const result = await deliverRecoveryOutbox({ ...h.env, STORE_RECOVERY_SEND_ENABLED: "1", BUTTONDOWN_API_KEY: "test_only" }, queued.outboxId, { ...h.options, fetchFn: async (url, init) => {
+    if (url.endsWith("/tags") && init.method === "POST") return response({ code: "invalid_data", detail: "private provider detail" }, 400);
+    if (url.endsWith("/tags")) return response({ results: [] });
+    return response({ id: "subscriber_existing", type: "regular", tags: [] });
+  } });
+  assert.deepEqual(result, { retry: true });
+  assert.equal(h.db.sqlite.prepare("SELECT last_error FROM store_recovery_outbox").get().last_error, "newsletter_tag_http_400");
+});
