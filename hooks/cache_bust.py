@@ -1,5 +1,5 @@
 """
-MkDocs hook: cache-bust storefront JavaScript references.
+MkDocs hook: cache-bust storefront asset references.
 
 store.js is referenced as a plain <script src="/assets/js/store.js"> on every store + legal page and is
 served from the edge with a long TTL (max-age=604800), so a code change can sit behind a stale CDN object
@@ -64,7 +64,7 @@ def on_config(config):
 
 def on_post_page(output, page, config):
     # These card assets also have absolute references authored directly in templates.
-    for asset in ("assets/js/index.js", "assets/css/projects/project.css"):
+    for asset in ("assets/js/index.js", "assets/css/projects/project.css", "assets/css/store.css"):
         reference = '/' + asset + '"'
         if reference in output:
             version = _source_hash(config, [Path("docs") / asset])
