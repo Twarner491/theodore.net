@@ -37,13 +37,15 @@ const request = (body, url = "http://127.0.0.1:8788/api/store-recovery", overrid
 });
 function setup(t, live = false) {
   const db = new Database(), catalog = structuredClone(CATALOG), calls = [];
+  const signupCatalog = { ...Object.fromEntries(Object.entries(catalog).map(([id, product]) => [id, Object.keys(product.variants)])),
+    "avian-mic": ["electronics", "electronics-printed"], polargraph: ["electronics", "electronics-printed"] };
   const env = { STORE_RECOVERY_ENABLED: "1", STORE_RECOVERY_MODE: live ? "live" : "local", STORE_INVENTORY: db };
   const url = live ? "https://example.test/api/store-recovery" : "http://127.0.0.1:8788/api/store-recovery";
   const old = globalThis.fetch;
-  globalThis.fetch = async (url) => { calls.push(String(url)); assert.ok(String(url).endsWith("/store-catalog.json"), "only catalog reads are permitted"); return response(catalog); };
+  globalThis.fetch = async (url) => { calls.push(String(url)); assert.match(String(url), /\/store-(signup-)?catalog\.json$/, "only catalog reads are permitted"); return response(String(url).endsWith("/store-signup-catalog.json") ? signupCatalog : catalog); };
   t.after(() => { globalThis.fetch = old; db.sqlite.close(); });
   const post = (body, now = NOW) => handleRecoveryRequest(env, request(body, url), { now });
-  return { db, env, url, post, catalog, calls, options: { requestUrl: url, now: NOW } };
+  return { db, env, url, post, catalog, signupCatalog, calls, options: { requestUrl: url, now: NOW } };
 }
 const start = (h, overrides) => h.post({ action: "start", anon: "anon_test", session: "session_test", source: "substack", ...overrides });
 const signup = (j, extra = {}) => ({ action: "newsletter", journeyId: j.journeyId, journeyToken: j.journeyToken, requestId: "signup_request_1", email: "Reader@Example.com", copyVersion: "avian-newsletter-v1", product: "avian-visitors", build: "assembled-batch-2", ...extra });
@@ -86,6 +88,42 @@ test("newsletter is durable, fixed-source, idempotent and separate from a reques
   await h.post(cartEmail(j, { email: "cartonly@example.com" }));
   assert.equal(h.db.sqlite.prepare("SELECT count(*) AS n FROM store_recovery_journey_contacts j JOIN store_recovery_contacts c USING(email_hash) WHERE c.email='cartonly@example.com' AND purpose='newsletter'").get().n, 0);
   assert.equal(h.calls.some((u) => /buttondown|resend/.test(u)), false);
+});
+
+test("each product signup records its real origin, including a sold-out product", async (t) => {
+  const h = setup(t), j = await start(h);
+  for (const product of ["avian-mic", "polargraph"]) {
+    const result = await h.post(signup(j, { requestId: "signup_" + product, email: product + "@example.com", product, build: "electronics", copyVersion: "store-newsletter-v1",
+      tags: ["waitlist", "avian-visitors-product"], placement: "avian-visitors-product", path: "/store/avian-visitors/" }));
+    assert.equal(result.status, "queued_local");
+    const association = h.db.sqlite.prepare("SELECT * FROM store_recovery_journey_contacts WHERE product=?").get(product);
+    assert.equal(association.build, "electronics"); assert.equal(association.placement, product + "-product"); assert.equal(association.copy_version, "store-newsletter-v1");
+    const expected = { product, build: "electronics", placement: product + "-product", path: "/store/" + product + "/", copyVersion: "store-newsletter-v1", tags: ["newsletter", product + "-product"] };
+    assert.deepEqual(JSON.parse(h.db.sqlite.prepare("SELECT payload_json FROM store_recovery_outbox WHERE id=?").get(result.outboxId).payload_json), expected);
+    assert.deepEqual(JSON.parse(h.db.sqlite.prepare("SELECT detail_json FROM store_recovery_events WHERE id=? AND type='newsletter_requested'").get(result.outboxId).detail_json), expected);
+  }
+  assert.equal(Object.hasOwn(h.catalog, "polargraph"), false, "sold-out signup does not make a product available for checkout");
+  assert.ok(h.calls.every((url) => url.endsWith("/store-signup-catalog.json")));
+  assert.ok((await reviewRecovery(h.env, h.options)).outbox.every((row) => row.text === "Requested store newsletter signup."));
+});
+
+test("newsletter rejects unknown products, builds, inherited properties and mismatched copy", async (t) => {
+  const h = setup(t), j = await start(h);
+  h.signupCatalog.malformed = { electronics: true };
+  const invalid = [
+    { product: "invented", build: "electronics" },
+    { product: "constructor", build: "electronics" },
+    { product: "avian-mic", build: "constructor" },
+    { product: "avian-mic", build: "invented" },
+    { product: "malformed", build: "electronics" },
+    { product: "avian-visitors", build: "assembled-batch-2" },
+    { product: "avian-visitors", build: "assembled", copyVersion: "avian-newsletter-v1" },
+    { product: "avian-mic", build: "electronics", copyVersion: "avian-newsletter-v1" },
+  ];
+  for (const [index, context] of invalid.entries())
+    await assert.rejects(h.post(signup(j, { requestId: "invalid_signup_" + index, copyVersion: "store-newsletter-v1", ...context })), { status: 400 });
+  assert.equal(h.db.sqlite.prepare("SELECT count(*) AS n FROM store_recovery_outbox").get().n, 0);
+  assert.equal(h.db.sqlite.prepare("SELECT count(*) AS n FROM store_recovery_contacts").get().n, 0);
 });
 
 test("local cart email has an immutable preview, secure reusable restore and server validation", async (t) => {
@@ -192,6 +230,8 @@ test("Buttondown never reactivates unsubscribed addresses and no cart email enro
 
 test("Buttondown creation preserves double opt-in and tags only the requested newsletter origin", async (t) => {
   const h = setup(t, true), j = await start(h), queued = await h.post(signup(j)), writes = [];
+  delete h.signupCatalog["avian-visitors"];
+  assert.deepEqual(await h.post(signup(j)), queued, "a cached Avian request and its durable outbox remain deliverable without revalidating the catalog");
   const result = await deliverRecoveryOutbox({ ...h.env, STORE_RECOVERY_SEND_ENABLED: "1", BUTTONDOWN_API_KEY: "test_only" }, queued.outboxId, { ...h.options, fetchFn: async (url, options) => {
     if (options.method) writes.push(JSON.parse(options.body));
     if (url.endsWith("/tags")) return response([{ id: "tag_news", name: "newsletter" }, { id: "tag_avian", name: "avian-visitors-product" }]);
@@ -202,7 +242,26 @@ test("Buttondown creation preserves double opt-in and tags only the requested ne
   assert.equal(result.id, "subscriber_new");
   assert.equal(writes[0].type, undefined);
   assert.deepEqual(writes[1].tags, ["tag_news", "tag_avian"]);
+  assert.deepEqual(writes[1].metadata, { store_signup_origin: "/store/avian-visitors/", store_signup_product: "avian-visitors", store_signup_copy: "avian-newsletter-v1",
+    avian_signup_origin: "/store/avian-visitors/", avian_signup_copy: "avian-newsletter-v1" });
   assert.doesNotMatch(JSON.stringify(writes), /waitlist/);
+});
+
+test("generic Buttondown signup adds only its product tags and preserves legacy Avian metadata", async (t) => {
+  const h = setup(t, true), j = await start(h), queued = await h.post(signup(j, { product: "avian-mic", build: "electronics", copyVersion: "store-newsletter-v1",
+    tags: ["waitlist", "avian-visitors-product"], path: "/forged/" }));
+  const metadata = { existing: "keep", avian_signup_origin: "/store/avian-visitors/", avian_signup_copy: "avian-newsletter-v1" };
+  let patched;
+  const result = await deliverRecoveryOutbox({ ...h.env, STORE_RECOVERY_SEND_ENABLED: "1", BUTTONDOWN_API_KEY: "test_only" }, queued.outboxId, { ...h.options, fetchFn: async (url, options) => {
+    assert.notEqual(options.method, "POST", "an existing subscriber and tags must not be recreated");
+    if (options.method === "PATCH") { patched = JSON.parse(options.body); return response({ id: "subscriber_existing" }); }
+    if (url.endsWith("/tags")) return response([{ id: "tag_news", name: "newsletter" }, { id: "tag_mic", name: "avian-mic-product" }, { id: "tag_avian", name: "avian-visitors-product" }]);
+    return response({ id: "subscriber_existing", type: "regular", tags: ["tag_avian", "unrelated_id"], metadata });
+  } });
+  assert.equal(result.id, "subscriber_existing"); assert.equal(result.confirmationRequired, false);
+  assert.deepEqual(patched.tags, ["tag_avian", "unrelated_id", "tag_news", "tag_mic"]);
+  assert.deepEqual(patched.metadata, { ...metadata, store_signup_origin: "/store/avian-mic/", store_signup_product: "avian-mic", store_signup_copy: "store-newsletter-v1" });
+  assert.doesNotMatch(JSON.stringify(patched), /waitlist|forged/);
 });
 
 test("a new cart remains sendable after an older purchase, while a later matching purchase suppresses it", async (t) => {

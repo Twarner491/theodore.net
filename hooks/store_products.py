@@ -101,6 +101,19 @@ def _sellable(v):
     return s in ('available', 'backorder', 'preorder')
 
 
+def _signup_catalog(products):
+    """Visible product/build pairs may accept signups even when checkout is closed."""
+    out = {}
+    for p in products:
+        if not p.get('published') or not p.get('id'):
+            continue
+        variants = [v['id'] for v in (p.get('variants') or [])
+                    if isinstance(v, dict) and isinstance(v.get('id'), str) and v['id']]
+        if variants:
+            out[p['id']] = variants
+    return out
+
+
 def _shipping_profile(v):
     """Validate the optional fulfillment boundary carried into the trusted catalog."""
     if 'shippingProfile' not in v:
@@ -349,6 +362,7 @@ def on_files(files, config):
         print('WARNING [store_products]: STRIPE_MODE=live but these sellable variants have no '
               'stripePriceLive and were dropped from store-catalog.json: ' + ', '.join(missing))
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
+    files.append(File.generated(config, 'store-signup-catalog.json', content=json.dumps(_signup_catalog(products), ensure_ascii=False)))
     files.append(File.generated(config, 'store-launches.json', content=json.dumps(_launches(products), ensure_ascii=False)))
     # Meta (Instagram Shop) catalog feed -- same frontmatter source of truth, so
     # prices/availability can never drift from the site (the #1 commerce-review rejection).

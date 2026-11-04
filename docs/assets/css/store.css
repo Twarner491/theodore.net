@@ -191,6 +191,18 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pe-dot.active { opacity: 0.7; }
 
 .pd-info { grid-area: info; padding-top: 0.2em; }
+#product-detail .acc-heading { margin-top: 0; }
+/* Add-ons follow the image on desktop without waiting for the details column. */
+@media (min-width: 861px) {
+  #product-detail:has(> .pd-accessories) {
+    grid-template-areas: "media back" "media info" "accessories info";
+    grid-template-rows: min-content min-content 1fr;
+  }
+  #product-detail > .pd-accessories { grid-area: accessories; width: 100%; margin: 3.5em 0 0; }
+  /* Match the image edge inside the 26px carousel arrows and 8px gaps. */
+  #product-detail:has(.pe-carousel:not(.is-single)) > .pd-accessories { width: calc(100% - 68px); margin-inline: 34px; }
+  #product-detail > .pd-accessories .acc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 /* the detail renders inside .md-typeset, so the text rules are id-scoped to
    out-specify Material's element styles (h2, p, li) */
 #product-detail .pe-title { font-family: "Crimson Pro"; font-size: 2.4em; font-weight: 400; line-height: 1.05; margin: 0 0 0.3em; color: var(--md-default-fg-color); }
@@ -382,6 +394,9 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
   .pc-imgwrap img { object-fit: contain; }
   /* stacked detail: swipe the carousel (no arrows), tighten the buy grid */
   #product-detail { grid-template-columns: 1fr; grid-template-areas: "back" "media" "info"; gap: 1.6em; }
+  #product-detail:has(> .pd-accessories) { grid-template-areas: "back" "media" "info" "accessories"; }
+  /* Together with the 1.6em grid gap, preserve the existing 2.8em mobile spacing. */
+  #product-detail > .pd-accessories { grid-area: accessories; width: 100%; margin: 1.2em 0 0; }
   .pe-frame { aspect-ratio: 1 / 1; background: #fff; }
   .pe-slide img { object-fit: contain; }
   .pe-arrow { display: none; }

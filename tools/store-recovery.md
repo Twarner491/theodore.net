@@ -1,6 +1,6 @@
 # Store signup and requested cart email
 
-The store supports an inline Avian Visitors newsletter signup, a requested cart email, and private visit/cart/checkout/purchase associations. There are no automated abandonment reminders, discount offers or marketing campaigns. Requesting a cart email does not subscribe its recipient to the newsletter, and entering an email at checkout is not marketing consent.
+The store supports an inline newsletter signup on every product page, a requested cart email, and private visit/cart/checkout/purchase associations. There are no automated abandonment reminders, discount offers or marketing campaigns. Requesting a cart email does not subscribe its recipient to the newsletter, and entering an email at checkout is not marketing consent.
 
 ## Production configuration
 
@@ -12,7 +12,7 @@ STORE_RECOVERY_MODE=live
 STORE_RECOVERY_SEND_ENABLED=1
 ```
 
-- Newsletter: `BUTTONDOWN_API_KEY`. New subscribers retain Buttondown's confirmation behavior. Existing opt-outs are respected; unrelated tags are preserved. Signups receive `newsletter` and `avian-visitors-product` tags plus signup-page metadata.
+- Newsletter: `BUTTONDOWN_API_KEY`. New subscribers retain Buttondown's confirmation behavior. Existing opt-outs are respected; unrelated tags are preserved. Signups receive `newsletter` and a server-derived `<product-id>-product` tag plus signup-page metadata. Avian Visitors keeps its existing `avian-visitors-product` flag. The signup catalog includes published sold-out products without making them available in the separate checkout catalog.
 - Requested cart email: `RESEND_API_KEY` and a nonempty `STORE_MAILING_ADDRESS` for the postal footer. `STORE_FROM_EMAIL` is optional and defaults to `store@theodore.net`; its domain must be verified with Resend.
 - Keep existing Stripe keys, sender settings, bindings and other secrets intact. Update only the required production settings, using `wrangler pages secret put` or a narrowly scoped `pages secret bulk --project-name theodore-net --env production` payload. Do not replace the full project configuration or put credentials into source control.
 
@@ -27,12 +27,12 @@ STORE_RECOVERY_SEND_ENABLED=1
    ```
 
 2. Verify the recovery tables and provider prerequisites, review the scoped diff, and run `npm test`, the site build, and `git diff --check`. Confirm generated store HTML places `store-restore-token` before analytics execution.
-3. Configure the production flags and deploy the reviewed build. At this handoff, all three flags are configured as production secrets and deployment is pending. `STORE_MAILING_ADDRESS` is still missing, so `cartEmail` remains false until a postal address is configured.
+3. Configure the production flags and deploy the reviewed build. All three flags and the approved `STORE_MAILING_ADDRESS` were configured as production secrets on November 3, 2026. Both email capabilities are enabled.
 4. Check production capabilities, both field interactions, review-endpoint denial, and unchanged inventory availability. If testing actual submissions, use an authorized test address and verify provider records. A successful API response means the provider accepted the request, not that the email reached the inbox.
 
 Setting `STORE_RECOVERY_ENABLED=0` disables new recovery requests and purchase tracking. Setting only `STORE_RECOVERY_SEND_ENABLED=0` hides both email fields and stops provider sends while leaving visit tracking available.
 
-Pre-deployment checks on November 3, 2026: 275 Node tests and 40 Python tests passed; the production-mode build succeeded, with the restore-token scrubber before analytics in generated HTML. Local browser checks confirmed right-side X, typed arrow, clearing back to X, and closing. Production has all ten recovery tables; Batch 2 remains capacity 30, sold 3, reserved 0. These checks do not establish production deployment or inbox delivery.
+Initial production verification on November 3, 2026 confirmed the requested cart email reached the authorized inbox, its restore link worked, and an existing Buttondown subscriber received the Avian Visitors flag. A live uncharged PaymentIntent carried the same opaque visit association. The new-subscriber test alias was rejected by Buttondown’s firewall, so actual confirmation delivery for a new subscriber remains unverified; a clearly labeled copy preview was delivered separately. Keep provider acceptance, copy previews and actual confirmation delivery distinct.
 
 ## Local review
 

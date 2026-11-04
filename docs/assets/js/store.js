@@ -812,7 +812,7 @@
     const sec = document.createElement("section");
     sec.className = "pd-accessories";
     sec.innerHTML = '<h3 class="acc-heading">Accessories</h3><div class="acc-grid" style="--acc-cols:' + Math.min(cards.length, 4) + '">' + cards.join("") + "</div>";
-    root.insertAdjacentElement("afterend", sec);
+    root.insertAdjacentElement("beforeend", sec);
     sec.addEventListener("click", (e) => {
       const card = e.target.closest(".product-card--mini"); if (!card) return;
       const a = getProduct(card.dataset.acc); if (!a) return;
@@ -1807,6 +1807,7 @@
     const key = "store:recovery-preview:journey:v2";
     const types = new Set(["view_item", "view_item_list", "add_to_cart", "view_cart", "begin_checkout", "cart_observed", "cart_updated"]);
     const token = (value) => typeof value === "string" && /^[a-z0-9][a-z0-9._-]{0,127}$/i.test(value) ? value : null;
+    const slug = (value) => typeof value === "string" && value.length <= 128 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
     const credential = (value) => typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
     const lines = (value) => (Array.isArray(value) ? value : []).slice(0, 30).flatMap((line) =>
       line && token(line.id) && token(line.build) && Number.isSafeInteger(line.qty) && line.qty > 0 && line.qty <= 99
@@ -1894,8 +1895,8 @@
     return {
       mode, recordEvent, recordCart,
       newsletter(email, context) {
-        if (!context || context.product !== "avian-visitors" || !token(context.build)) return Promise.reject(new Error("Newsletter signup is unavailable here."));
-        return mutation("newsletter", { email, product: "avian-visitors", build: context.build, copyVersion: "avian-newsletter-v1" });
+        if (!context || !slug(context.product) || !slug(context.build)) return Promise.reject(new Error("Newsletter signup is unavailable here."));
+        return mutation("newsletter", { email, product: context.product, build: context.build, copyVersion: context.product === "avian-visitors" ? "avian-newsletter-v1" : "store-newsletter-v1" });
       },
       cartEmail: (email, cart) => mutation("cart_email", { email, cart: lines(cart) }),
       restore: (restoreToken) => request({ action: "restore", restoreToken, requestId: randomId() }),
@@ -1941,7 +1942,7 @@
       const canonicalCart = (value) => JSON.stringify(sanitizeCart(value).sort((a, b) => (a.id + "|" + a.build).localeCompare(b.id + "|" + b.build)));
       window.TheodoreRecoveryPreview = Object.freeze({ active: true, mode, newsletterEnabled: features.newsletter !== false, cartEmailEnabled: features.cartEmail !== false, hasRestore: !!restoreToken,
         subscribe(email) {
-          if (!P || P.id !== "avian-visitors" || !exactVariant(P, build)) return Promise.reject(new Error("Newsletter signup is unavailable here."));
+          if (!P || !exactVariant(P, build)) return Promise.reject(new Error("Newsletter signup is unavailable here."));
           localRecovery.recordCart(cart, "cart_observed");
           return localRecovery.newsletter(email, { product: P.id, build });
         },
@@ -1968,10 +1969,10 @@
   }
   function loadRecoveryInterface() {
     const style = document.createElement("link");
-    style.rel = "stylesheet"; style.href = "/assets/css/store-recovery-preview.css?v=20261103-1";
+    style.rel = "stylesheet"; style.href = "/assets/css/store-recovery-preview.css?v=20261103-2";
     document.head.appendChild(style);
     const script = document.createElement("script");
-    script.src = "/assets/js/store-recovery-preview.js?v=20261103-1";
+    script.src = "/assets/js/store-recovery-preview.js?v=20261103-2";
     document.head.appendChild(script);
   }
   async function enableLiveRecovery() {

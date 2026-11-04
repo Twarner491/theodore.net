@@ -74,6 +74,7 @@ function stripeMock() {
     const target = String(url), form = options.body instanceof URLSearchParams ? options.body : null;
     requests.push({ target, method: options.method || "GET", body: form ? form.toString() : "" });
     if (target.endsWith("/store-catalog.json")) return reply(CATALOG);
+    if (target.endsWith("/store-signup-catalog.json")) return reply(Object.fromEntries(Object.entries(CATALOG).map(([id, product]) => [id, Object.keys(product.variants)])));
     if (target.endsWith("/v1/prices/price_frame")) return reply({ active: true, unit_amount: 69900, currency: "usd" });
     if (target.endsWith("/v1/prices/price_cable")) return reply({ active: true, unit_amount: 1200, currency: "usd" });
     if (target.endsWith("/v1/tax/calculations")) {

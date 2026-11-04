@@ -21,7 +21,7 @@ function harness({ hostname = "theodore.net", protocol = "http:", search = "", h
     P = PRODUCTS[0]; build = P.defaultBuild;
     renderCart = function () {}; updateBadge = function () {}; openCart = function () {};
     globalThis.helpers = { model: createLocalRecoveryJourney, track, ga4, addToCart, setLineQty, loadCart, recoveryCheckoutContext, checkout,
-      setProduct: function (product) { P = product; }, getCart: function () { return cart; } };
+      setProduct: function (product, selectedBuild) { P = product; build = selectedBuild || (product && product.defaultBuild); }, getCart: function () { return cart; } };
   })();`);
   const network = [], scripts = [], ga = [], order = [], redirects = [];
   const location = { hostname, protocol, pathname, search, hash, origin: protocol + "//" + hostname + (protocol === "http:" ? ":8892" : ""), assign: (url) => redirects.push(url) };
@@ -162,7 +162,7 @@ test("outbound data is whitelisted and unknown events never become purchases or 
     transport: async (_url, options) => { const body = JSON.parse(options.body); requests.push(body); return json(body.action === "start" ? { ok: true, ...credentials } : { ok: true }); } });
   journey.recordEvent("purchase", { email: "private@example.com" }); journey.recordEvent("unknown");
   journey.recordCart([{ ...line, email: "private@example.com", voucherCode: "PRIVATE_FIXTURE" }, { ...line, qty: Infinity }, { ...line, id: "private@example.com" }]);
-  await assert.rejects(journey.newsletter("private@example.com", { product: "other", build: line.build }), /unavailable/);
+  await assert.rejects(journey.newsletter("private@example.com", { product: "private@example.com", build: line.build }), /unavailable/);
   await journey.flush();
   assert.equal(requests.length, 2); assert.deepEqual(requests[1].cart, [line]);
   assert.doesNotMatch(JSON.stringify(requests), /private@|PRIVATE_FIXTURE|purchase|consent/);
@@ -317,7 +317,7 @@ test("restore is idempotent and never silently replaces a different or newly cha
 });
 
 // Minimal DOM exercising actual event handlers without a browser or additional dependency.
-function uiHarness({ mode = "local", newsletterEnabled = true, cartEmailEnabled = true, subscribe, emailCart, hasRestore = false, restorePending, compareRestore, applyRestore } = {}) {
+function uiHarness({ mode = "local", product = "avian-visitors", pathname = "/store/avian-visitors/", newsletterEnabled = true, cartEmailEnabled = true, subscribe, emailCart, hasRestore = false, restorePending, compareRestore, applyRestore } = {}) {
   let activeElement = null;
   class Element {
     constructor(tag = "div") { this.tag = tag; this.handlers = {}; this.attributes = {}; this.children = []; this.value = ""; this.textContent = ""; this.hidden = false; this.disabled = false; this.open = false; this.validity = { valid: true }; this.className = ""; this.classList = { contains: (name) => this.className.split(" ").includes(name) }; }
@@ -348,11 +348,15 @@ function uiHarness({ mode = "local", newsletterEnabled = true, cartEmailEnabled 
   checkout.insertAdjacentElement = (_where, el) => { slots[".recovery-preview"] = el; };
   const body = new Element(), callbacks = [];
   const document = { readyState: "complete", body, get activeElement() { return activeElement; }, createElement: (tag) => new Element(tag),
-    querySelector: (selector) => selector === ".cart-drawer" ? drawer : selector.includes("#product-detail") ? info : null };
+    querySelector(selector) {
+      if (selector === ".cart-drawer") return drawer;
+      const detail = selector.match(/^#product-detail\[data-product(?:="([^"]*)")?\] \.pd-info$/);
+      return detail && product && (!detail[1] || detail[1] === product) ? info : null;
+    } };
   const calls = [], recovery = { active: true, mode, newsletterEnabled, cartEmailEnabled, hasRestore, subscribe: async (email) => { calls.push({ action: "newsletter", email }); return subscribe ? subscribe(email) : { ok: true, status: mode === "live" ? "subscribed" : "queued_local" }; },
     emailCart: async (email) => { calls.push({ action: "cart_email", email }); return emailCart ? emailCart(email) : mode === "live" ? { ok: true, status: "sent" } : { ok: true, status: "queued_local", preview: { subject: "Your cart", text: "Saved cart", restoreUrl: "http://localhost:8892/store/?recovery-preview=1#restore_cart=" + "c".repeat(64) } }; },
     restorePending, compareRestore, applyRestore, keepCart() { calls.push({ action: "keep" }); } };
-  const context = vm.createContext({ window: { TheodoreRecoveryPreview: recovery }, document, location: { hostname: mode === "live" ? "theodore.net" : "localhost", origin: mode === "live" ? "https://theodore.net" : "http://localhost:8892" }, URL, URLSearchParams,
+  const context = vm.createContext({ window: { TheodoreRecoveryPreview: recovery }, document, location: { pathname, hostname: mode === "live" ? "theodore.net" : "localhost", origin: mode === "live" ? "https://theodore.net" : "http://localhost:8892" }, URL, URLSearchParams,
     MutationObserver: class { constructor(fn) { callbacks.push(fn); } observe() {} disconnect() {} } });
   vm.runInContext(readFileSync(new URL("../docs/assets/js/store-recovery-preview.js", import.meta.url), "utf8"), context);
   const host = slots[".recovery-preview"];
@@ -397,6 +401,52 @@ test("newsletter uses the real submission with approved copy and truthfully ackn
   assert.match(h.newsletter.innerHTML, /Sign up for new releases, restocks and deals\./);
   await h.newsletter.emit("submit"); assert.deepEqual(h.calls, [{ action: "newsletter", email: "person@example.com" }]);
   assert.equal(email.value, ""); assert.match(h.newsletter.querySelector(".newsletter-preview-status").textContent, /saved locally\. No email was sent/);
+});
+
+test("product newsletter mounts and sends the current product and selected variant for frames, kits and accessories", async () => {
+  for (const fixture of [
+    { id: "avian-visitors", build: "assembled-batch-2" },
+    { id: "avian-visitors-kit", build: "electronics-printed", defaultBuild: "electronics" },
+    { id: "polargraph", build: "electronics", status: "sold_out" },
+    { id: "mic-mount", build: "default", accessory: true },
+  ]) {
+    const h = harness({ hostname: "localhost", search: "?recovery-preview=1", pathname: "/store/" + fixture.id + "/" });
+    const variants = [...new Set([fixture.defaultBuild || fixture.build, fixture.build])].map((id) => ({ id, status: fixture.status || "available" }));
+    h.helpers.setProduct({ id: fixture.id, defaultBuild: fixture.defaultBuild || fixture.build, accessory: fixture.accessory, variants }, fixture.build);
+    const ui = uiHarness({ product: fixture.id, pathname: "/store/" + fixture.id + "/", subscribe: h.api.subscribe });
+    assert.ok(ui.newsletter, fixture.id + " has an inline signup");
+    assert.match(ui.newsletter.innerHTML, /Sign up for new releases, restocks and deals\./);
+    ui.newsletter.querySelector("input").value = "person@example.com"; await ui.newsletter.emit("submit");
+    const sent = h.network.filter((request) => request.body?.action === "newsletter");
+    assert.equal(sent.length, 1); assert.equal(sent[0].body.product, fixture.id); assert.equal(sent[0].body.build, fixture.build);
+    assert.equal(sent[0].body.copyVersion, fixture.id === "avian-visitors" ? "avian-newsletter-v1" : "store-newsletter-v1");
+    assert.equal(ui.newsletter.querySelector("input").value, "");
+  }
+});
+
+test("newsletter does not mount on store index, checkout or non-product pages", () => {
+  for (const pathname of ["/store/", "/store/checkout/", "/projects/avian-visitors/"]) {
+    const h = uiHarness({ mode: "live", product: null, pathname });
+    assert.equal(h.newsletter, undefined); assert.equal(h.calls.length, 0);
+  }
+});
+
+test("newsletter requires a current product and its exact selected variant, with valid product and build slugs", async () => {
+  const h = harness({ hostname: "localhost", search: "?recovery-preview=1" });
+  h.helpers.setProduct(null);
+  await assert.rejects(h.api.subscribe("person@example.com"), /unavailable/);
+  h.helpers.setProduct({ id: "avian-visitors-kit", defaultBuild: "electronics", variants: [{ id: "electronics" }] }, "unknown-variant");
+  await assert.rejects(h.api.subscribe("person@example.com"), /unavailable/);
+  assert.equal(h.network.filter((request) => request.body?.action === "newsletter").length, 0);
+  const requests = [], journey = h.helpers.model({ storage: memory(), session: "session1",
+    transport: async (_url, options) => { const body = JSON.parse(options.body); requests.push(body); return json({ ok: true, ...credentials }); } });
+  for (const context of [null, {}, { product: "avian-visitors-kit" }, { product: "", build: "default" },
+    { product: "private@example.com", build: "default" }, { product: "../mic-mount", build: "default" },
+    { product: "mic-mount", build: "../default" }, { product: "mic-mount", build: "" },
+    { product: "x".repeat(129), build: "default" }]) {
+    await assert.rejects(journey.newsletter("person@example.com", context), /unavailable/);
+  }
+  await journey.flush(); assert.equal(requests.length, 1); assert.equal(requests[0].action, "start");
 });
 
 test("live newsletter waits for acknowledgement and distinguishes confirmed from pending subscriptions", async () => {

@@ -347,8 +347,58 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
                 generated = next(file for file in files if file.src_uri == 'store-catalog.json')
                 catalog = json.loads(generated.content_string)
                 self.assertEqual({k: sorted(v['variants']) for k, v in catalog.items()}, expected)
+                signup_file = next(file for file in files if file.src_uri == 'store-signup-catalog.json')
+                signup = json.loads(signup_file.content_string)
+                self.assertEqual(signup['polargraph'], ['electronics', 'electronics-printed'])
+                self.assertNotIn('polargraph', catalog)
+                self.assertEqual(signup['avian-visitors'], ['assembled-batch-2'])
+                for product_id in ('avian-visitors-kit', 'mic-mount'):
+                    self.assertEqual(signup[product_id], expected[product_id])
                 launches = next(file for file in files if file.src_uri == 'store-launches.json')
                 self.assertEqual(json.loads(launches.content_string), {})
+
+    def test_signup_catalog_uses_only_published_product_pages_and_visible_builds(self):
+        variant = {'id': 'current', 'stripePrice': 'price_current', 'price': 10}
+        retired = {'id': 'retired', 'stripePrice': 'price_retired', 'price': 10}
+        products = [
+            {'id': 'soldout', 'variants': [{**variant, 'status': 'soldout'}]},
+            {'id': 'upcoming', 'variants': [{**variant, 'comingSoon': True}]},
+            {'id': 'kit', 'variants': [variant], 'retiredVariants': [retired]},
+            {'id': 'accessory', 'accessory': True, 'variants': [variant]},
+            {'id': 'hidden', 'published': False, 'variants': [variant]},
+            {'id': 'article', 'product': False, 'variants': [variant]},
+        ]
+        with tempfile.TemporaryDirectory() as root:
+            docs_dir = Path(root) / 'docs'
+            store_dir = docs_dir / 'store'
+            store_dir.mkdir(parents=True)
+            for product in products:
+                frontmatter = {'product': True, 'published': True, **product}
+                (store_dir / (product['id'] + '.md')).write_text(
+                    '---\n' + json.dumps(frontmatter) + '\n---\n', encoding='utf-8')
+
+            class HookConfig(dict):
+                site_dir = str(Path(root) / 'site')
+                use_directory_urls = True
+                plugins = SimpleNamespace(_current_plugin='test')
+
+                @property
+                def docs_dir(self):
+                    return self['docs_dir']
+
+            files = []
+            with patch.dict(os.environ, {'STRIPE_MODE': 'test'}):
+                on_files(files, HookConfig(docs_dir=str(docs_dir)))
+
+        generated = {file.src_uri: file.content_string for file in files}
+        self.assertEqual(json.loads(generated['store-signup-catalog.json']), {
+            'soldout': ['current'], 'upcoming': ['current'],
+            'kit': ['current'], 'accessory': ['current'],
+        })
+        checkout = json.loads(generated['store-catalog.json'])
+        self.assertEqual(set(checkout), {'kit', 'accessory'})
+        self.assertEqual(set(checkout['kit']['variants']), {'current', 'retired'})
+        self.assertEqual(checkout['kit']['retiredBuilds'], ['retired'])
 
 
 if __name__ == '__main__':

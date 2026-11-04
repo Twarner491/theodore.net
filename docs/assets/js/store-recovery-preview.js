@@ -10,7 +10,7 @@
 
   function setupNewsletter() {
     if (recovery.newsletterEnabled === false) return;
-    const info = document.querySelector('#product-detail[data-product="avian-visitors"] .pd-info');
+    const info = document.querySelector('#product-detail[data-product] .pd-info');
     if (!info || info.querySelector(".newsletter-preview")) return;
     const form = document.createElement("form");
     form.className = "newsletter-preview";
