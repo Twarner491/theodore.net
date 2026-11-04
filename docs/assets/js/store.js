@@ -10,6 +10,14 @@
   const DEV_SHOW_UNPUBLISHED = typeof location !== "undefined" &&
     /^(localhost|127(?:\.\d{1,3}){3}|\[?::1\]?)$/.test(location.hostname || "");
   const CART_KEY = "store:cart:v3";
+  const GIFT_KEY = "store:gift:v1";
+  function giftDraft() {
+    try { const d = JSON.parse(sessionStorage.getItem(GIFT_KEY)); return d && d.gift === true ? { gift: true, giftFrom: typeof d.giftFrom === "string" ? d.giftFrom.slice(0, 160) : "" } : { gift: false, giftFrom: "" }; }
+    catch (_) { return { gift: false, giftFrom: "" }; }
+  }
+  function saveGiftDraft(gift) {
+    try { if (gift.gift) sessionStorage.setItem(GIFT_KEY, JSON.stringify(gift)); else sessionStorage.removeItem(GIFT_KEY); } catch (_) {}
+  }
   let localRecovery = null;
   let recoveryBootstrapPending = false;
   let recoveryBootstrapReady = null;
@@ -290,7 +298,7 @@
     });
     return out;
   }
-  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} recordRecoveryCart(cart); };
+  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} if (!cart.length) saveGiftDraft({ gift: false }); recordRecoveryCart(cart); };
   const loadCart = () => {
     try {
       const raw = JSON.parse(localStorage.getItem(CART_KEY));
@@ -298,6 +306,7 @@
       cart = sanitizeCart(raw);
       if (hadLegacyAvianKit) saveCart();   // make the one-time identity migration persistent
     } catch (e) { cart = []; }
+    if (!cart.length) saveGiftDraft({ gift: false });
     recordRecoveryCart(cart, "cart_observed");
   };
   const cartCount = () => cart.reduce((n, l) => n + l.qty, 0);
@@ -1209,6 +1218,8 @@
       '<hr class="co-rule">' +
       '<form class="co-voucher" novalidate><input type="text" placeholder="Voucher code" aria-label="Voucher code" autocomplete="off"><button type="submit" aria-label="Apply voucher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>' +
       '<p class="co-voucher-msg" role="status" hidden></p><button type="button" class="co-line-remove" data-remove-voucher hidden>Remove voucher</button>' +
+      '<div class="co-gift"><label class="co-check" for="co-gift"><input type="checkbox" id="co-gift" name="gift" form="co-form" aria-controls="co-gift-details"><span>This is a gift</span></label>' +
+        '<div id="co-gift-details" hidden><label class="co-field-label" for="co-gift-from">From</label><input class="co-email" id="co-gift-from" name="giftFrom" form="co-form" type="text" autocomplete="off" maxlength="160" aria-describedby="co-gift-error" disabled><p id="co-gift-error" class="co-gift-error" role="alert" hidden></p></div></div>' +
       '<hr class="co-rule">' +
       '<div class="co-row"><span>Subtotal</span><span>' + money2(cartSubtotal()) + "</span></div>" +
       '<div class="co-row co-discount-row" hidden><span>Discount</span><span class="co-discount"></span></div>' +
@@ -1253,6 +1264,7 @@
     const remove = $("[data-remove-voucher]", host);
     if (remove) remove.addEventListener("click", () => { if (host.__applyVoucher) host.__applyVoucher(""); });
     if (host.__paintVoucher) host.__paintVoucher();
+    if (host.__wireGift) host.__wireGift();
   }
   function coRefreshSummary(host) {
     if (!cart.length) { location.href = "/store/?cart=open"; return; }
@@ -1266,9 +1278,9 @@
     const host = $("#checkout"); if (!host) return;
     const renderId = (host.__renderId || 0) + 1; host.__renderId = renderId;
     const current = () => host.__renderId === renderId;
-    for (const key of ["__applyVoucher", "__editVoucher", "__paintVoucher", "__cartChanged", "__recalc", "__updateSubmit", "__checkoutBusy"]) delete host[key];
+    for (const key of ["__applyVoucher", "__editVoucher", "__paintVoucher", "__cartChanged", "__recalc", "__updateSubmit", "__checkoutBusy", "__wireGift"]) delete host[key];
     loadCart();
-    if (!cart.length) { host.innerHTML = '<div class="co-empty"><p>Your cart is empty.</p><a class="cart-shop-link" href="/store">Go to store</a></div>'; return; }
+    if (!cart.length) { saveGiftDraft({ gift: false }); host.innerHTML = '<div class="co-empty"><p>Your cart is empty.</p><a class="cart-shop-link" href="/store">Go to store</a></div>'; return; }
     track("begin_checkout", { value: cartSubtotal() * 100 });
     ga4("begin_checkout", { currency: "USD", value: cartSubtotal(), items: cart.map(function (l) { return ga4Item(l.id, l.build, l.qty); }) });
     host.innerHTML =
@@ -1296,6 +1308,47 @@
     const err = $(".co-error", host), submit = $(".co-submit", host);
     const paymentOpen = () => $('.co-section[data-sec="payment"]', host).classList.contains("is-open");
     let peReady = false, setupReady = false, addrComplete = false, processing = false, curShip = null, lastTotal = null;
+    let giftCheck, giftFrom, giftDetails, giftError;
+    let gift = giftDraft(), giftErrorMessage = "";
+    const giftValue = () => ({ gift: gift.gift, giftFrom: gift.gift ? gift.giftFrom.normalize("NFC").trim().replace(/\s+/g, " ") : "" });
+    const paintGift = () => {
+      if (!giftCheck) return;
+      giftCheck.checked = gift.gift; giftCheck.disabled = processing;
+      giftDetails.hidden = !gift.gift; giftFrom.disabled = !gift.gift || processing;
+      if (giftFrom.value !== gift.giftFrom) giftFrom.value = gift.giftFrom;
+      giftError.hidden = !giftErrorMessage; giftError.textContent = giftErrorMessage;
+      if (giftErrorMessage) giftFrom.setAttribute("aria-invalid", "true");
+      else giftFrom.removeAttribute("aria-invalid");
+    };
+    const clearGiftError = () => { giftErrorMessage = ""; paintGift(); };
+    const giftProblem = () => {
+      if (gift.gift && /[\u0000-\u001f\u007f-\u009f\u2028\u2029]/.test(gift.giftFrom)) return "Enter the sender names on one line.";
+      if (gift.gift && Array.from(giftValue().giftFrom).length > 80) return "Use 80 characters or fewer for the sender names.";
+      return "";
+    };
+    const validateGift = () => {
+      const message = giftProblem();
+      if (!message) { clearGiftError(); return true; }
+      giftErrorMessage = message; paintGift();
+      if (giftFrom) giftFrom.focus();
+      return false;
+    };
+    const wireGift = () => {
+      giftCheck = $("#co-gift", host); giftFrom = $("#co-gift-from", host);
+      giftDetails = $("#co-gift-details", host); giftError = $("#co-gift-error", host);
+      if (!giftCheck) return;
+      giftCheck.addEventListener("change", () => {
+        if (processing) return;
+        gift = { gift: giftCheck.checked, giftFrom: giftCheck.checked ? gift.giftFrom : "" };
+        saveGiftDraft(gift); clearGiftError();
+      });
+      giftFrom.addEventListener("input", () => {
+        if (processing) return;
+        gift.giftFrom = giftFrom.value; saveGiftDraft(gift); clearGiftError();
+      });
+      paintGift();
+    };
+    host.__wireGift = wireGift; wireGift();
     // Voucher text stays only in this checkout's memory and request bodies, never storage or telemetry.
     let voucherCode = "", voucherDiscount = 0, voucherState = "none", voucherMessage = "", voucherVersion = 0;
     let priceVersion = 0, repricing = false, pricingQueue = Promise.resolve();
@@ -1313,7 +1366,7 @@
       $$(".co-line-qty button, .co-line-remove[data-rm]", host).forEach((button) => { button.disabled = processing; });
     };
     const updateSubmit = () => {
-      paintVoucher();
+      paintVoucher(); paintGift();
       const sp = submit.querySelector("span");
       if (processing) { if (sp) sp.textContent = "Processing…"; submit.disabled = true; return; }
       const onPay = paymentOpen();
@@ -1364,9 +1417,10 @@
     const recalc = () => {
       if (!curShip || !addrComplete || voucherBlocked()) return Promise.resolve(null);
       const version = ++priceVersion;
-      const cartSnapshot = JSON.stringify(cart), codeSnapshot = voucherCode;
+      // In-progress sender text must not block an address quote. Submit validates it before the final sync.
+      const cartSnapshot = JSON.stringify(cart), codeSnapshot = voucherCode, giftSnapshot = JSON.stringify(giftProblem() ? { gift: gift.gift, giftFrom: "" } : giftValue());
       const emailVal = (($("#co-email", host) || {}).value || "").trim();
-      const reqBody = { cart: JSON.parse(cartSnapshot), paymentIntentId: piId, updateToken, shipping: curShip, voucherCode: codeSnapshot };
+      const reqBody = Object.assign({ cart: JSON.parse(cartSnapshot), paymentIntentId: piId, updateToken, shipping: curShip, voucherCode: codeSnapshot }, JSON.parse(giftSnapshot));
       if (emailVal.indexOf("@") > 0) reqBody.email = emailVal;
       repricing = true; updateSubmit();
       const task = pricingQueue.then(async () => {
@@ -1448,12 +1502,13 @@
     $("#co-form", host).addEventListener("submit", async (e) => {
       e.preventDefault();
       if (processing || voucherBlocked() || repricing) return;
+      if (!validateGift()) return;
       if (!addrComplete) { fail("Add your shipping address to continue."); openSection("shipping"); return; }   // shipping + tax need a US address
       if (!paymentOpen()) { err.hidden = true; openSection("payment"); return; }   // "Continue to payment" -> reveal payment, don't pay yet
       processing = true; updateSubmit(); err.hidden = true;
-      const paymentCart = JSON.stringify(cart), paymentVoucher = voucherCode, paymentShipping = JSON.stringify(curShip), paymentTotal = lastTotal;
+      const paymentCart = JSON.stringify(cart), paymentVoucher = voucherCode, paymentShipping = JSON.stringify(curShip), paymentTotal = lastTotal, paymentGift = JSON.stringify(giftValue());
       const synced = await recalc();   // final server-authoritative total (address + email + voucher) before charging
-      if (paymentCart !== JSON.stringify(cart) || paymentVoucher !== voucherCode || paymentShipping !== JSON.stringify(curShip) || !addrComplete) { processing = false; fail("Your order changed. Review it before paying."); updateSubmit(); return; }
+      if (paymentCart !== JSON.stringify(cart) || paymentVoucher !== voucherCode || paymentShipping !== JSON.stringify(curShip) || paymentGift !== JSON.stringify(giftValue()) || !addrComplete) { processing = false; fail("Your order changed. Review it before paying."); updateSubmit(); return; }
       if (!synced) { processing = false; updateSubmit(); return; }
       if (synced.total !== paymentTotal) { processing = false; fail("Your total changed. Review it before paying."); updateSubmit(); return; }
       const email = (($("#co-email", host) || {}).value || "").trim();
@@ -1566,6 +1621,7 @@
     const shipBlock = a ? '<div class="conf-block"><p class="conf-block-h">Shipping to</p><p class="conf-addr">' +
       [d.shipping.name, a.line1, a.line2, ((a.city ? a.city + ", " : "") + (a.state || "") + " " + (a.postal_code || "")).trim()].filter(Boolean).map(escapeHtml).join("<br>") +
       '</p><p class="conf-note">The dispatch estimate shown when you ordered applies to your order. You’ll get a tracking link by email when it ships.</p>' + projNote + '</div>' : "";
+    const giftBlock = d.gift ? '<div class="conf-block"><p class="conf-block-h">Gift</p>' + (d.giftFrom ? '<p class="conf-row2">From: ' + escapeHtml(d.giftFrom) + '</p>' : '') + '</div>' : '';
     const pay = d.payment, brand = pay && pay.brand ? pay.brand.charAt(0).toUpperCase() + pay.brand.slice(1) : "";
     const payBlock = '<div class="conf-block"><p class="conf-block-h">Payment</p>' +
       (pay && pay.last4 ? '<p class="conf-row2">' + escapeHtml(brand) + " ending in " + escapeHtml(pay.last4) + "</p>" : "") +
@@ -1579,7 +1635,7 @@
           '<p class="conf-order">Order #' + escapeHtml(d.orderNo || "") + "</p>" +
           '<div class="co-lines">' + (d.items || []).map(confLineHTML).join("") + '</div><hr class="co-rule">' + rows +
         "</aside>" +
-        '<div class="co-detail">' + back + timelineHTML(d) + shipBlock + payBlock +
+        '<div class="co-detail">' + back + timelineHTML(d) + shipBlock + giftBlock + payBlock +
           '<p class="conf-help">Questions? <a href="mailto:support@theodore.net">support@theodore.net</a></p>' +
         "</div>" +
       "</div>";
@@ -1676,6 +1732,7 @@
     // Fire only on a server-confirmed success: an authorized limited-batch order
     // that later loses the race for the last unit must never count.
     if (d.status === "succeeded") {
+      saveGiftDraft({ gift: false });
       const purchase = {
         transaction_id: pi, currency: "USD",
         items: (d.items || []).map(function (it) {

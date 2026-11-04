@@ -33,6 +33,7 @@ import {
 import {
   resolveVoucher, voucherInventoryDemand, voucherReply, VOUCHER_LABEL, VoucherUnavailableError,
 } from "../../lib/store-vouchers.js";
+import { parseGiftInput } from "../../lib/order-gift.js";
 import { resolveRecoveryAssociation, recordRecoveryCheckout } from "../../lib/store-recovery.js";
 
 const MAX_QTY = 99, MAX_LINES = 50;
@@ -212,6 +213,9 @@ export async function onRequestPost({ request, env }) {
 
   let body;
   try { body = await request.json(); } catch (e) { return reply({ error: "Bad request." }, 400); }
+  let gift;
+  try { gift = parseGiftInput(body); }
+  catch (error) { return reply({ error: error.message, field: "giftFrom" }, 400); }
   const cart = body && body.cart;
   const piId = (body && typeof body.paymentIntentId === "string" && body.paymentIntentId.startsWith("pi_")) ? body.paymentIntentId : "";
   const email = (body && typeof body.email === "string" && body.email.indexOf("@") > 0) ? body.email.trim().slice(0, 200) : "";
@@ -369,6 +373,8 @@ export async function onRequestPost({ request, env }) {
   };
 
   const form = new URLSearchParams();
+  form.set("metadata[gift]", gift.gift ? "1" : "");
+  form.set("metadata[gift_from]", gift.giftFrom);
   if (recoveryAssociation) form.set("metadata[recovery_journey]", recoveryAssociation.journeyId);
   form.set("amount", String(total));
   form.set("metadata[items]", checkoutBinding.legacyItems);

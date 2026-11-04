@@ -484,11 +484,18 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .co-email:focus { border-color: var(--md-default-fg-color); }
 .co-check { display: flex; align-items: center; gap: 0.6em; font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; opacity: 0.7; margin-bottom: 1.4em; cursor: pointer; }
 .co-check input { accent-color: var(--md-default-fg-color); flex: none; }
+.co-gift { margin: 1.1em 0; }
+.co-gift .co-check { min-height: 24px; margin-bottom: 0; }
+.co-gift [hidden] { display: none; }
+#co-gift-details { padding-top: 0.9em; }
+#co-gift-from { margin-bottom: 0; }
+#co-gift-from:focus-visible, #co-gift:focus-visible { outline: 2px solid var(--md-default-fg-color); outline-offset: 3px; }
+@media (max-width: 700px) { #co-gift-from { font-size: 16px; } }
 
 .co-submit { width: 100%; margin-top: 1.4em; border: 1.2px solid var(--md-default-fg-color); border-radius: 16px; background: var(--md-default-fg-color); color: var(--md-default-bg-color); font-family: "JetBrains Mono"; font-size: 0.84em; font-weight: 500; letter-spacing: 0.04em; padding: 1.05em; cursor: pointer; transition: transform 0.3s ease; }
 .co-submit:hover:not(:disabled) { transform: scale(0.99); }
 .co-submit:disabled { opacity: 0.4; cursor: default; }
-.co-error { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; line-height: 1.4; color: #d64545; margin: 1em 0 0; }
+.co-error, .co-gift-error { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; line-height: 1.4; color: #d64545; margin: 1em 0 0; }
 .co-terms { font-family: "JetBrains Mono"; font-size: min(0.68em, 12px); font-weight: 300; line-height: 1.5; opacity: 0.45; text-align: center; margin: 1.1em 0 0; }   /* cap growth so it can't outgrow the width-capped column on very wide monitors */
 .co-terms a { color: var(--md-default-fg-color); text-decoration: underline; }
 
