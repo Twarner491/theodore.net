@@ -314,7 +314,7 @@ This will verify your servo moves between pen-up (~90°) and pen-down (~40°) po
     <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/ZFyQTihnSG4" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </div></div>
 
-If you're building a machine of your own, you can set/refine your dimensions easily with this little [`calibrate.py`](https://github.com/Twarner491/polargraph/blob/main/tools/calibrate.py) script I wrote (this is also in the /settings tab on [plotter dot local](#plotter-dot-local), more on that UI later). I found even while building my machine to scale set in CAD, my actual machine dimensions were ever so slightly off, which can have a notable impact on the polar grid. Easy fix, properly calibrate your machine!
+Your frame won't match my CAD to the millimeter, and it doesn't need to. Once the Pi is up, the [setup wizard](#setup-wizard) takes two tape readings and a pencil mark, and works out the geometry from there.
 
 ---
 
@@ -495,6 +495,68 @@ As a final step, we'll set up this Flask server to auto-run upon boot.
   ```
 
 After reboot, http://plotter.local should be live automatically!
+
+#### Setup wizard
+
+The wizard lives under Settings on `plotter.local` (or go straight to `plotter.local/#setup`). It's four steps, each with a drawing of the machine that fills in your real numbers as you type. Run it again any time you change the frame.
+
+First, the width. Hook the tape on the outside edge of one motor cover and read it at the outside edge of the other, above the switch bulge. The wizard knows the shape of the stock covers and subtracts their offsets, so enter the raw reading. If you've modified the covers, those offsets won't hold.
+
+{.marginnote}Step 1, the outside width of the motor covers{/.marginnote}
+
+<figure markdown="1">
+
+![](../assets/images/Polargraph/setupWidth.png){ width="80%" }
+
+</figure>
+
+Then the height, from the top of a motor cover straight down to the inner top edge of the bottom rail. Not the paper, and not the outside of the frame.
+
+{.marginnote}Step 2, cover to bottom rail{/.marginnote}
+
+<figure markdown="1">
+
+![](../assets/images/Polargraph/setupHeight.png){ width="80%" }
+
+</figure>
+
+Third, the center mark. The wizard halves both readings and draws them on the machine. Make a small cross there, turn the motors off, pull the pen, and slide the gondola over until the pen hole sits on the cross. Power back on without bumping it.
+
+{.marginnote}Step 3, half of each reading{/.marginnote}
+
+<figure markdown="1">
+
+![](../assets/images/Polargraph/setupMark.png){ width="80%" }
+
+</figure>
+
+Last, homing. The machine finds both switches, then drives slowly back to your mark. Stay by the power switch for this one. If the pen hole lands back on the cross, save. The wizard writes the geometry to the controller and reads it back to make sure it stuck.
+
+{.marginnote}Step 4, home and return{/.marginnote}
+
+<figure markdown="1">
+
+![](../assets/images/Polargraph/setupHome.png){ width="80%" }
+
+</figure>
+
+Keep the mark around. After a power cycle, home again and check that the gondola comes back to it.
+
+#### Advanced calibration
+
+Setup is plenty for a first plot. Advanced calibration is for finding out how accurate the machine really is out toward the edges. It drives to eight points around your center mark. At each one, mark the pen hole, let the gondola move aside, and measure X and Y from the center cross with a tape and a square. Right and up are positive. Measure along each axis, never the diagonal.
+
+{.marginnote}Eight points, measured square from the center mark{/.marginnote}
+
+<figure markdown="1">
+
+![](../assets/images/Polargraph/advancedCalibration.png){ width="80%" }
+
+</figure>
+
+Six of the points fit a corrected geometry, and the other two check it. For now the result is only a preview, so nothing gets written to the machine. On my build, rereading the same mark could drift a few millimeters, and the fitted geometry made both check points worse, so I kept the saved setup. Careful measuring beats a clever fit here.
+
+For your first drawing, start small near the center with a square or a grid, and measure its sides and diagonals before going big. The [full setup guide](https://github.com/Twarner491/polargraph/blob/main/docs/calibration/setup-guide.md) lives in the repo.
 
 <div class="embed-frame"><div class="embed-inner">
     <iframe width="100%" height="100" style="width:100%;height:100%;position:absolute;left:0px;top:0px;" src="https://www.youtube.com/embed/8UEqEzWdhAY" title="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
