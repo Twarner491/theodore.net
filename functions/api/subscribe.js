@@ -28,7 +28,8 @@ export async function onRequestPost(context) {
   const email = (body && typeof body.email === "string" ? body.email : "").trim().toLowerCase().slice(0, 200);
   if (email.length < 3 || email.indexOf("@") < 1 || email.lastIndexOf(".") < email.indexOf("@")) return reply({ error: "Enter a valid email." }, 400);
   const tags = Array.isArray(body && body.tags)
-    ? body.tags.filter((t) => typeof t === "string").map((t) => t.trim().slice(0, 60)).filter(Boolean).slice(0, 5)
+    ? Array.from(new Set(body.tags.filter((t) => typeof t === "string").map((t) => t.trim().toLowerCase())))
+        .filter((t) => /^[a-z0-9][a-z0-9-]{0,59}$/.test(t)).slice(0, 5)   // slugs only: tags get auto-created
     : [];
 
   // Never tell a visitor they joined when the upstream enrollment cannot run.
@@ -39,24 +40,48 @@ export async function onRequestPost(context) {
   // Buttondown associates tags by ID, not name (passing a name silently no-ops), so resolve each
   // requested name to its id, creating any that don't exist yet. Returns the ids to apply plus a
   // name->id map of the whole tag catalog (used to translate the subscriber's existing tags).
-  async function resolveTags(names) {
+  // Every store product sends its own id as a tag, so a newly sold-out product creates its tag here
+  // on its first signup; no Buttondown setup is needed per product.
+  async function listTags() {
     const map = {};
-    const listResponse = await fetch(`${API}/tags`, { headers });
-    if (!listResponse.ok) throw new Error(`tag list ${listResponse.status}`);
-    const list = await listResponse.json();
-    for (const t of (list && list.results) || []) if (t && t.name) map[String(t.name).toLowerCase()] = t.id;
+    let url = `${API}/tags`;
+    for (let page = 0; url && page < 20; page++) {
+      const listResponse = await fetch(url, { headers });
+      if (!listResponse.ok) throw new Error(`tag list ${listResponse.status}`);
+      const list = await listResponse.json();
+      for (const t of (list && list.results) || []) if (t && t.name) map[String(t.name).toLowerCase()] = t.id;
+      // follow Buttondown's pagination, but only to its own API host (the token rides along)
+      const next = list && typeof list.next === "string" ? list.next : null;
+      url = next && next.startsWith(`${API}/`) ? next : null;
+    }
+    return map;
+  }
+  async function resolveTags(names) {
+    let map = await listTags();
     const ids = [];
     for (const n of names) {
       let id = map[n.toLowerCase()];
       if (!id) {
-        const createResponse = await fetch(`${API}/tags`, { method: "POST", headers, body: JSON.stringify({ name: n }) });
-        if (!createResponse.ok) throw new Error(`tag create ${createResponse.status}`);
-        const created = await createResponse.json();
-        id = created && created.id;
-        if (!id) throw new Error("tag create returned no id");
+        // Buttondown requires `color` on tag create (a name-only POST is a 422).
+        const description = n === "waitlist" ? "Signed up on a sold-out store product" : `Store interest: ${n}`;
+        const createResponse = await fetch(`${API}/tags`, {
+          method: "POST", headers, body: JSON.stringify({ name: n, color: "#6b7280", description }),
+        });
+        const created = await createResponse.json().catch(() => ({}));
+        if (createResponse.ok) {
+          id = created && created.id;
+        } else if (created && created.code === "name_already_exists" && created.metadata && typeof created.metadata.tag_id === "string") {
+          id = created.metadata.tag_id;   // a concurrent signup created it first
+        } else {
+          // anything else: re-read the catalog once before giving up
+          console.log("subscribe tag create failed:", n, createResponse.status, JSON.stringify(created).slice(0, 200));
+          map = await listTags();
+          id = map[n.toLowerCase()];
+        }
+        if (!id) throw new Error(`tag create ${n} failed`);
         map[n.toLowerCase()] = id;
       }
-      if (id) ids.push(id);
+      ids.push(id);
     }
     return { ids, map };
   }
