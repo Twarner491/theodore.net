@@ -16,7 +16,7 @@ search:
   <!-- Primary Meta Tags -->
   <meta name="title" content="Projects - Teddy Warner">
   <meta name="description" content="Here's some of the stuff I've been up to.">
-  <meta name="keywords" content="Digital fabrication, PCB development, Mechatronics engineering, USC Iovine and Young Academy, Engineering design, Fab Academy, Hardware engineering, Rapid prototyping, CAD design, Physical computing, Electronics design, IoT development, Wearable technology, Engineering portfolio">
+  <meta name="keywords" content="Teddy Warner projects, Avian Visitors, Stratolink, Generative Pen-trained Transformer, polargraph, consumer electronics, stratospheric balloons, drawing machines, rapid prototyping, PCB design, digital fabrication, open-source hardware">
   <meta name="author" content="Teddy Warner">
   <meta name="robots" content="index, follow">
   

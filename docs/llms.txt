@@ -1,39 +1,45 @@
 # Teddy Warner
 
-> Thiel Fellow and founder of Intempus, building machines for conviviality. Engineer specializing in rapid prototyping and PCB design, based in San Francisco.
+> Teddy Warner is an inventor and Thiel Fellow based in San Francisco. He created Avian Visitors, an e-paper frame that collages nearby birds, and is building Stratolink, an open-source network of stratospheric balloons.
 
-Teddy Warner is the Founder and CEO of Intempus, a company researching the ways machines may interact with the world. He is a 2025 Thiel Fellow and a graduate of the Fab Academy.
+Teddy specializes in rapid prototyping and enjoys thinking about design. His work ranges from consumer electronics to balloon networks and art machines: things made to bring the world a little closer, or just make it more interesting.
 
-Previously, Teddy worked at Midjourney conducting research for their internal hardware effort. His expertise spans mechatronics engineering, PCB development, CAD design, physical computing, and rapid prototyping.
+He is a 2025 Thiel Fellow and a graduate of the Fab Academy. He previously did hardware research at Midjourney and founded Intempus.
 
-His technical work includes Stratolink (an upper atmospheric pico balloon fleet), the Generative Pen-Trained Transformer (a web accessible, wall-mounted polargraph pen plotter), the Assistive Aquaponics fish tank (Automated aquaponics ecosystem monitoring system for the home), UPDI Serial Programers, and many other fun, more whimsical projects. He writes essays exploring philosophy, social science, art, and the way to live.
+## Projects
+
+- [Avian Visitors](https://theodore.net/projects/AvianVisitors/): A battery-powered e-paper frame that collages birds heard near your ZIP code.
+- [Stratolink](https://stratolink.org/): An open-source network of small, solar-powered balloons built to collect and share data from the stratosphere. Anyone can build and launch a payload.
+- [Generative Pen-trained Transformer](https://theodore.net/projects/Polargraph/): A wall-mounted drawing machine that makes generative art with a pen.
+- [Von Niemann Probe](https://theodore.net/projects/VonNiemannProbe/): A chess cheating investigation device.
+- [Assistive Aquaponics](https://theodore.net/projects/AssistiveAquaponics/): An automated ecosystem monitoring system.
+- [UPDI Serial Programming](https://theodore.net/projects/SerialUPDI/): Low-cost, high-speed AVR programming.
 
 ## Key Facts
-- Role: CEO & Founder of Intempus
+
+- Role: Inventor
 - Recognition: 2025 Thiel Fellow
 - Education: Fab Academy graduate
-- Previous: Midjourney (hardware research)
-- Location: San Francisco, CA
-- Specialties: Robotics, rapid prototyping, applied AI, digital fabrication
+- Previous work: Hardware research at Midjourney; founder of Intempus
+- Location: San Francisco, California
+- Interests: Rapid prototyping, design, electronics, digital fabrication, and machines
 
 ## Links
-- [theodore.net](https://theodore.net): Portfolio, projects, and writings
-- [Intempus](https://intempus.org): Company building emotionally intelligent robots
-- [Projects](https://theodore.net/projects): Engineering and fabrication work
-- [Writing](https://theodore.net/writings): Essays on philosophy, social science, and the way to live
+
+- [theodore.net](https://theodore.net/): Projects and writings
+- [Projects](https://theodore.net/projects/): Engineering, art, and fabrication work
+- [Writing](https://theodore.net/writings/): Essays on philosophy, social science, art, and the way to live
 
 ## Contact
-- [X/Twitter](https://x.com/WarnerTeddy): @WarnerTeddy
+
 - [Instagram](https://www.instagram.com/teddymakesstuff/): @teddymakesstuff
+- [X/Twitter](https://x.com/WarnerTeddy): @WarnerTeddy
+- [TikTok](https://www.tiktok.com/@teddymakesstuff): @teddymakesstuff
+- [YouTube](https://www.youtube.com/@teddywarner): @teddywarner
 - [LinkedIn](https://www.linkedin.com/in/teddywarner/)
 - [GitHub](https://github.com/Twarner491)
 - Email: teddy [at] theodore [dot] net
 
-## Notable Projects
-- [Generative Pen-Trained Transformer](https://theodore.net/projects/Polargraph/): a web accessible, wall-mounted polargraph pen plotter
-- [Von Niemann Probe](https://theodore.net/projects/VonNiemannProbe): Chess cheating investigation device
-- [Assistive Aquaponics](https://theodore.net/projects/AssistiveAquaponics): Automated ecosystem monitoring system
-- [UPDI Serial Programming](https://theodore.net/projects/SerialUPDI): Low-cost, high-speed AVR programming
-
 ## Press Coverage
+
 - TechCrunch, Inc. Magazine, Business Wire, Hackaday, Adafruit, Hackster.io, Chicago Tribune

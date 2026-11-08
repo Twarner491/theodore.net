@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /llms.txt
 
 # Draft pages (update manually when sharing new drafts)
 Disallow: /writings/otherness-and-belonging/

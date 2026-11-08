@@ -16,7 +16,7 @@ search:
   <!-- Primary Meta Tags -->
   <meta name="title" content="Writings - Teddy Warner">
   <meta name="description" content="A conglomerate of my thoughts and essays.">
-  <meta name="keywords" content="Engineering essays, Technical writing, Philosophy analysis, Neuroscience writing, Personal development, Engineering blog, Technical analysis, Engineering philosophy, Learning experiences, Engineering insights, Personal growth, Technical documentation, Engineering perspective, Design thinking, Innovation writing">
+  <meta name="keywords" content="Teddy Warner essays, philosophy, social science, art, design, technology, the way to live">
   <meta name="author" content="Teddy Warner">
   <meta name="robots" content="index, follow">
   

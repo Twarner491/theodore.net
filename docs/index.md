@@ -1,6 +1,6 @@
 ---
-description: causa sui. // @WarnerTeddy
-og_description: i make machines. // @WarnerTeddy
+description: Teddy Warner is an inventor and Thiel Fellow. He created Avian Visitors, a bird-collage frame, and is building a network of stratospheric balloons.
+og_description: Teddy Warner is an inventor and Thiel Fellow. He created Avian Visitors, a bird-collage frame, and is building a network of stratospheric balloons.
 hide:
   - navigation
   - toc
@@ -18,8 +18,7 @@ search:
   
   <!-- Primary Meta Tags -->
   <meta name="title" content="Teddy Warner">
-  <meta name="description" content="i make machines. // @WarnerTeddy">
-  <meta name="keywords" content="Digital fabrication, PCB development, Mechatronics engineering, Thiel Fellow, Robotics, Intempus, USC Iovine and Young Academy, Engineering design, Fab Academy, Hardware engineering, Rapid prototyping, CAD design, Physical computing, Electronics design, IoT development, Wearable technology, Engineering portfolio">
+  <meta name="keywords" content="Teddy Warner, inventor, Avian Visitors, Stratolink, Generative Pen-trained Transformer, Thiel Fellow, rapid prototyping, design, hardware, digital fabrication">
   <meta name="author" content="Teddy Warner">
   <meta name="robots" content="index, follow">
   
@@ -41,6 +40,10 @@ search:
   <link rel="stylesheet" href="/assets/css/header.css">
 
   <link href="https://github.com/Twarner491" rel="me">
+  <link href="https://www.instagram.com/teddymakesstuff/" rel="me">
+  <link href="https://x.com/WarnerTeddy" rel="me">
+  <link href="https://www.tiktok.com/@teddymakesstuff" rel="me">
+  <link href="https://www.youtube.com/@teddywarner" rel="me">
   
   <script type="application/ld+json">
   {
@@ -51,18 +54,22 @@ search:
     "alternateName": "Theodore Warner",
     "url": "https://theodore.net",
     "image": "https://theodore.net/assets/images/thumb.png",
-    "description": "Founder of Intempus. Thiel Fellow.",
-    "jobTitle": "Chief Executive Officer",
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Intempus",
-      "url": "https://intempus.org"
-    },
+    "description": "Teddy Warner is a San Francisco-based inventor and Thiel Fellow. He created Avian Visitors, an e-paper frame that collages nearby birds, and is building Stratolink, an open-source network of stratospheric balloons.",
+    "jobTitle": "Inventor",
     "award": "Thiel Fellowship",
+    "homeLocation": {
+      "@type": "Place",
+      "name": "San Francisco, California"
+    },
+    "knowsAbout": ["Rapid prototyping", "Design", "Consumer electronics", "Stratospheric balloons", "Drawing machines", "Digital fabrication"],
     "sameAs": [
-      "https://x.com/WarnerTeddy",
       "https://www.instagram.com/teddymakesstuff/",
-      "https://github.com/Twarner491"
+      "https://x.com/WarnerTeddy",
+      "https://www.tiktok.com/@teddymakesstuff",
+      "https://www.youtube.com/@teddywarner",
+      "https://github.com/Twarner491",
+      "https://www.wikidata.org/wiki/Q137188908",
+      "https://www.linkedin.com/in/teddywarner/"
     ]
   }
   </script>
