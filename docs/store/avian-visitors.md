@@ -10,6 +10,7 @@ title: Avian Visitors
 product: true
 order: 1
 id: avian-visitors
+metaCatalogId: avian-visitors
 published: true
 teaser: A battery-powered e-paper frame that collages birds heard near your ZIP code.
 sub: A battery-powered e-paper frame that collages birds heard near your ZIP code.

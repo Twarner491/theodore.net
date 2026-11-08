@@ -30,7 +30,7 @@ except Exception:
 # keys copied verbatim from frontmatter into the runtime product object
 KEYS = ['id', 'published', 'title', 'teaser', 'sub', 'imageBase', 'images',
         'defaultBuild', 'variants', 'retiredVariants', 'softwareNote', 'sections', 'colophon', 'weight',
-        'accessory', 'parentId', 'icon', 'related', 'project', 'storeListings']
+        'accessory', 'parentId', 'icon', 'related', 'project', 'storeListings', 'metaCatalogId']
 
 DEFAULT_WEIGHT_LB = 2.0
 DEFAULT_MAX_QTY = 10
@@ -177,21 +177,19 @@ def _launches(products):
     return out
 
 
-def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
-    """Meta Commerce catalog feed (one row per sellable, priced variant), served at
-    /meta-catalog.csv for Commerce Manager's scheduled fetch. Columns are Meta's
-    required set. Feed ids must never contain ':' (Meta's checkout URL encodes
-    id:qty pairs), and coming-soon/soldout variants are excluded the same way the
-    checkout catalog excludes them -- a tagged product that can't be bought is a
-    commerce-review flag."""
+META_FIELDS = ['id', 'title', 'description', 'availability', 'condition', 'price',
+               'link', 'image_link', 'brand', 'quantity_to_sell_on_facebook', 'additional_image_link']
+
+
+def _meta_catalog_items(products, price_field='stripePrice', docs_dir=None):
+    """Public metadata for the Pages Function's live inventory overlay.
+
+    Sold-out rows stay present so Meta clears old stock. metaCatalogId opts a
+    product into one stable listing for its default build, even across batches.
+    Product-only feed ids resolve to defaultBuild in the checkout handoff.
+    """
     base = 'https://theodore.net'
-    out = io.StringIO()
-    w = csv.writer(out)
-    # quantity_to_sell_on_facebook: without it, the Instagram shop surface renders
-    # items "Sold out" even when availability says in stock (Meta help 560696898000137).
-    # Kits are made to order, so this is a display/eligibility field, not real inventory.
-    w.writerow(['id', 'title', 'description', 'availability', 'condition',
-                'price', 'link', 'image_link', 'brand', 'quantity_to_sell_on_facebook'])
+    items = []
     for p in products:
         if not p.get('published') or not p.get('id'):
             continue
@@ -200,16 +198,9 @@ def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
         images = p.get('images') or []
         first_img = images[0] if images else ''
         for v in (p.get('variants') or []):
-            if not (isinstance(v, dict) and _sellable(v)):
+            if not isinstance(v, dict):
                 continue
-            # Finite inventory cannot be represented safely by Meta's static
-            # quantity field. Keep it out of the external feed until that feed
-            # has an authoritative inventory integration.
-            if v.get('inventorySku'):
-                continue
-            # Meta has no timed availability either; a drop joins the feed on the first
-            # build after it opens.
-            if not _launch_open(v):
+            if p.get('metaCatalogId') and v.get('id') != p.get('defaultBuild'):
                 continue
             price = v.get('price')
             if not isinstance(price, (int, float)):
@@ -220,12 +211,13 @@ def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
                 continue
             status = v.get('status') or ('comingSoon' if v.get('comingSoon') else 'available')
             availability = {'available': 'in stock', 'backorder': 'available for order',
-                            'preorder': 'preorder'}.get(status, 'in stock')
+                            'preorder': 'preorder'}.get(status, 'out of stock')
             img = v.get('image') or first_img
-            image_link = ''
-            if img:
+            def image_url(img):
+                if not img:
+                    return ''
                 img = str(img)
-                image_link = img if img.startswith('http') else base + img_base + img
+                url = img if img.startswith('http') else base + img_base + img
                 # Meta caches catalog images by URL, so a replaced photo under the same
                 # filename would never refresh in the shop. Version the URL by content
                 # hash: any image swap yields a new URL and Meta re-downloads on the
@@ -234,23 +226,34 @@ def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
                     try:
                         fp = Path(docs_dir) / (img_base + img).lstrip('/')
                         if fp.exists():
-                            image_link += '?v=' + hashlib.sha1(fp.read_bytes()).hexdigest()[:8]
+                            url += '?v=' + hashlib.sha1(fp.read_bytes()).hexdigest()[:8]
                     except Exception:
                         pass
+                return url
             title = str(p.get('title', p['id']))
             label = str(v.get('label', v.get('id', '')))
-            w.writerow([
-                p['id'] + '-' + str(v.get('id', '')),
-                title if (not label or label == title) else title + ' - ' + label,
-                desc,
-                availability,
-                'new',
-                '%.2f USD' % float(price),
-                base + '/store/' + p['id'] + '/',
-                image_link,
-                'theodore.net',
-                25,
-            ])
+            items.append(dict(zip(META_FIELDS, [
+                p.get('metaCatalogId') or p['id'] + '-' + str(v.get('id', '')),
+                title if (p.get('metaCatalogId') or not label or label == title) else title + ' - ' + label,
+                desc, availability, 'new', '%.2f USD' % float(price),
+                base + '/store/' + p['id'] + '/', image_url(img), 'theodore.net',
+                0 if availability == 'out of stock' else 25,
+                ','.join(image_url(x) for x in images if x != img),
+            ]), inventorySku=v.get('inventorySku'), launchAt=_launch_at(v)))
+    return items
+
+
+def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
+    """Safe static fallback: finite stock is unavailable until read at request time."""
+    out = io.StringIO()
+    w = csv.DictWriter(out, fieldnames=META_FIELDS, extrasaction='ignore')
+    w.writeheader()
+    for item in _meta_catalog_items(products, price_field, docs_dir):
+        if item['launchAt'] and not _launch_open({'launchAt': item['launchAt']}):
+            continue
+        if item['inventorySku']:
+            item.update(availability='out of stock', quantity_to_sell_on_facebook=0)
+        w.writerow(item)
     return out.getvalue()
 
 
@@ -364,8 +367,9 @@ def on_files(files, config):
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
     files.append(File.generated(config, 'store-signup-catalog.json', content=json.dumps(_signup_catalog(products), ensure_ascii=False)))
     files.append(File.generated(config, 'store-launches.json', content=json.dumps(_launches(products), ensure_ascii=False)))
-    # Meta (Instagram Shop) catalog feed -- same frontmatter source of truth, so
-    # prices/availability can never drift from the site (the #1 commerce-review rejection).
+    # Public metadata for the dynamic Meta feed; never includes Stripe Price ids.
+    files.append(File.generated(config, 'meta-catalog-source.json', content=json.dumps(
+        _meta_catalog_items(products, price_field, config['docs_dir']), ensure_ascii=False)))
     files.append(File.generated(config, 'meta-catalog.csv', content=_meta_catalog_csv(products, price_field, config['docs_dir'])))
     return files
 
