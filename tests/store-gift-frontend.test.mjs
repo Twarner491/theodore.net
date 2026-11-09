@@ -30,6 +30,8 @@ function element() {
 async function harness({ respond, fetchUpdates, recoveryContext, sessionValues = new Map() } = {}) {
   const fields = {};
   for (const name of [".co-summary", ".co-voucher", ".co-voucher input", ".co-voucher button", ".co-voucher-msg", "[data-remove-voucher]", ".co-discount-row", ".co-discount", ".co-error", ".co-submit", ".co-total-val", ".co-tax", ".co-ship", "#co-email", "#co-news", "#co-form", "#co-gift", "#co-gift-from", "#co-gift-details", "#co-gift-error"]) fields[name] = element();
+  fields["#co-email"].value = "buyer@example.com";
+  fields["#co-email"].reportValidity = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields["#co-email"].value);
   let summaryHtml = "";
   Object.defineProperty(fields[".co-summary"], "innerHTML", {
     get() { return summaryHtml; },
@@ -118,6 +120,24 @@ async function harness({ respond, fetchUpdates, recoveryContext, sessionValues =
     order: (data) => context.runOrder(data),
   };
 }
+
+test("checkout stops at the receipt field and only confirms after saving a valid email", async () => {
+  const h = await harness();
+  h.fields["#co-email"].value = "";
+  h.shipping();
+  await settle();
+  await h.pay();
+  assert.equal(h.confirmations(), 0);
+  assert.equal(h.requests.some((r) => r.body.finalize), false);
+  h.fields["#co-email"].value = "buyer@example";
+  await h.pay();
+  assert.equal(h.confirmations(), 0);
+  h.fields["#co-email"].value = "buyer@example.com";
+  await h.pay();
+  assert.equal(h.confirmations(), 1);
+  assert.equal(h.requests.at(-1).body.finalize, true);
+  assert.equal(h.requests.at(-1).body.email, "buyer@example.com");
+});
 
 test("gift selection persists through a reload and reaches final payment without telemetry", async () => {
   const checkout = await harness();

@@ -5,6 +5,7 @@
 // The signing secret comes from env (.dev.vars locally, a Cloudflare secret in
 // production), never from the repo.
 import { buildOrder, receiptHtml, operatorHtml, sendEmail } from "../../lib/emails.js";
+import { receiptEmail } from "../../lib/receipt-email.js";
 import { verifyCheckoutBinding } from "../../lib/shipping-binding.js";
 import { CONTIGUOUS_US_GROUND, canonicalShippingJson, sha256Hex, shippingDestinationError } from "../../lib/shipping-profile.js";
 import { captureProfiledAuthorization } from "../../lib/shipping-capture-gate.js";
@@ -187,49 +188,76 @@ export async function onRequestPost({ request, env }) {
         return json({ received: false, fulfilled: false, pending: true, blocked: "recovery_purchase_pending" }, 503);
       }
     }
-    // Idempotency: Stripe delivers events at-least-once and payment_intent.succeeded can fire
-    // more than once, so guard fulfillment on a per-PI flag to avoid double receipts / double
-    // operator alerts on a retry. (Best-effort, not perfectly atomic, but right at this volume.)
-    if (pi.metadata && pi.metadata.notified === "1") {
-      return new Response(JSON.stringify({ received: true, duplicate: true }), { status: 200, headers: { "content-type": "application/json" } });
-    }
-    // record the Stripe Tax transaction for filing (best-effort; a retry's duplicate reference just no-ops)
-    const calc = pi.metadata && pi.metadata.tax_calculation;
-    if (calc && env.STRIPE_SECRET_KEY) {
-      try {
-        const r = await fetch("https://api.stripe.com/v1/tax/transactions/create_from_calculation", {
-          method: "POST",
-          headers: { authorization: "Bearer " + env.STRIPE_SECRET_KEY, "content-type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({ calculation: calc, reference: pi.id }),
-        });
-        if (!r.ok) console.log("tax transaction failed:", r.status, await r.text().catch(() => ""));
-      } catch (e) { console.log("tax transaction error:", e && e.message); }
-    }
-    // order emails: receipt to the customer, notification to the operator (best-effort; never fail the webhook)
-    try {
-      const order = buildOrder(pi, catalog);
-      if (order.email) await sendEmail(env, { to: order.email, subject: "Order confirmed (#" + order.orderNo + ")", html: receiptHtml(order) });
-      if (env.OPERATOR_EMAIL) await sendEmail(env, { to: env.OPERATOR_EMAIL, replyTo: order.email || undefined, subject: "New order #" + order.orderNo, html: operatorHtml(order, { opsUrl: env.OPS_URL || "https://ops.theodore.net" }) });
-    } catch (e) { console.log("order email error:", e && e.message); }
-    // mark fulfilled (idempotency flag) + ensure the order-lookup key exists, in one PI update.
-    // Set AFTER emails so a failure before this point lets a Stripe retry re-send rather than drop the receipt.
-    if (env.STRIPE_SECRET_KEY) {
-      try {
-        const md = new URLSearchParams({ "metadata[notified]": "1" });
-        if (!(pi.metadata && pi.metadata.order_no)) md.set("metadata[order_no]", String(pi.id).replace(/^pi_/, "").slice(0, 10).toUpperCase());
-        await fetch("https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(pi.id), {
-          method: "POST",
-          headers: { authorization: "Bearer " + env.STRIPE_SECRET_KEY, "content-type": "application/x-www-form-urlencoded" },
-          body: md,
-        });
-      } catch (e) { console.log("fulfillment flag error:", e && e.message); }
-    }
+    return notifyPaidOrder(pi, catalog, env);
   } else if (event.type === "checkout.session.completed") {
     const s = (event.data && event.data.object) || {};
     console.log("hosted checkout fulfillment blocked: no strict item/address capture binding", s.id);
     return new Response(JSON.stringify({ received: true, fulfilled: false, blocked: "legacy_hosted_checkout_unbound" }), { status: 200, headers: { "content-type": "application/json" } });
   }
   return new Response(JSON.stringify({ received: true }), { status: 200, headers: { "content-type": "application/json" } });
+}
+
+async function notifyPaidOrder(pi, catalog, env) {
+  const duplicate = () => json({ received: true, duplicate: true });
+  const pending = () => json({ received: false, pending: true, blocked: "order_email_pending" }, 503);
+  if (pi.metadata.notified === "1") return duplicate();
+
+  const order = buildOrder(pi, catalog);
+  const email = receiptEmail(order.email);
+  const operator = env.OPERATOR_EMAIL;
+  const intentUrl = "https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(pi.id);
+  const headers = { authorization: "Bearer " + env.STRIPE_SECRET_KEY, "content-type": "application/x-www-form-urlencoded" };
+  let state = pi.metadata;
+  if (email || operator) {
+    if (!env.STRIPE_SECRET_KEY) return pending();
+    // The event is a snapshot. Read current flags so a replay can retry only
+    // the email that failed, including after Resend's deduplication window.
+    try {
+      const response = await fetch(intentUrl, { headers });
+      if (!response.ok) return pending();
+      const current = await response.json();
+      if (current.id !== pi.id || !current.metadata) return pending();
+      state = current.metadata;
+    } catch (_) { return pending(); }
+    if (state.notified === "1") return duplicate();
+  }
+
+  const md = new URLSearchParams();
+  if (env.STRIPE_SECRET_KEY && state.store_tax_recorded !== "1") {
+    try {
+      const r = await fetch("https://api.stripe.com/v1/tax/transactions/create_from_calculation", {
+        method: "POST", headers: { ...headers, "Idempotency-Key": "store-tax/" + pi.id },
+        body: new URLSearchParams({ calculation: pi.metadata.tax_calculation, reference: pi.id }),
+      });
+      if (r.ok) md.set("metadata[store_tax_recorded]", "1");
+      else console.log("tax transaction failed:", r.status);
+    } catch (_) { console.log("tax transaction request failed:", pi.id); }
+  }
+
+  async function attempt(key, message) {
+    if (state[key] === "1") return true;
+    try {
+      const result = await sendEmail(env, { ...message, idempotencyKey: "store-" + key + "/" + pi.id });
+      if (result.ok) { md.set("metadata[" + key + "]", "1"); return true; }
+    } catch (_) { console.log("order email request failed:", key, pi.id); }
+    return false;
+  }
+
+  if (!email) console.log("order receipt missing address:", pi.id);
+  const receiptSent = email && await attempt("receipt_sent", { to: email, subject: "Order confirmed (#" + order.orderNo + ")", html: receiptHtml(order) });
+  const operatorSent = !operator || await attempt("operator_notified", {
+    to: operator, replyTo: email || undefined, subject: "New order #" + order.orderNo,
+    html: operatorHtml(order, { opsUrl: env.OPS_URL || "https://ops.theodore.net" }),
+  });
+  if (receiptSent && operatorSent) md.set("metadata[notified]", "1");
+  if ((email || operator) && !state.order_no) md.set("metadata[order_no]", order.orderNo);
+  if (md.size) {
+    try {
+      const response = await fetch(intentUrl, { method: "POST", headers, body: md });
+      if (!response.ok) return pending();
+    } catch (_) { return pending(); }
+  }
+  return (email && !receiptSent) || !operatorSent ? pending() : json({ received: true });
 }
 
 async function verify(body, header, secret) {

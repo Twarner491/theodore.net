@@ -38,7 +38,7 @@ async function run(cart, address) {
     throw new Error("unexpected fetch: " + u);
   };
   try {
-    const res = await paymentIntent({ request: post({ cart, shipping: { name: "Test Buyer", address } }), env: ENV });
+    const res = await paymentIntent({ request: post({ cart, email: "buyer@example.com", shipping: { name: "Test Buyer", address } }), env: ENV });
     return { status: res.status, body: await res.json(), ...seen };
   } finally { globalThis.fetch = original; }
 }

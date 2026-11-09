@@ -73,6 +73,7 @@ function stripeMock() {
   const fetch = async (url, options = {}) => {
     const target = String(url), form = options.body instanceof URLSearchParams ? options.body : null;
     requests.push({ target, method: options.method || "GET", body: form ? form.toString() : "" });
+    if (target === "https://api.resend.com/emails") return reply({ id: "resend_recovery_fixture" });
     if (target.endsWith("/store-catalog.json")) return reply(CATALOG);
     if (target.endsWith("/store-signup-catalog.json")) return reply(Object.fromEntries(Object.entries(CATALOG).map(([id, product]) => [id, Object.keys(product.variants)])));
     if (target.endsWith("/v1/prices/price_frame")) return reply({ active: true, unit_amount: 69900, currency: "usd" });
@@ -111,7 +112,7 @@ async function setup(t, options = {}) {
   const db = new Database(); t.after(() => db.close());
   const env = { STORE_INVENTORY: db, STORE_RECOVERY_ENABLED: "1", STORE_RECOVERY_MODE: "local",
     STRIPE_SECRET_KEY: "sk_test_recovery_fixture", STRIPE_PUBLISHABLE_KEY: "pk_test_recovery_fixture",
-    STRIPE_WEBHOOK_SECRET: SECRET, ...options };
+    STRIPE_WEBHOOK_SECRET: SECRET, RESEND_API_KEY: "re_fixture", ...options };
   const stripe = stripeMock(), previous = globalThis.fetch;
   globalThis.fetch = stripe.fetch; t.after(() => { globalThis.fetch = previous; });
   return { db, env, stripe };
@@ -142,10 +143,72 @@ async function journey(env) {
 }
 function count(db, table) { return db.sqlite.prepare("SELECT count(*) AS count FROM " + table).get().count; }
 
+test("ordinary and assembled checkout can quote without an email but cannot finalize until it is valid", async (t) => {
+  const { env, stripe } = await setup(t);
+  for (const cart of [CABLE, CART]) {
+    const draft = await create(env, { cart, shipping: SHIPPING });
+    const pi = stripe.intents.get(draft.id);
+    assert.equal(pi.metadata.checkout_ready, "0");
+    assert.equal(pi.capture_method, "manual");
+    const update = { cart, shipping: SHIPPING, paymentIntentId: draft.id, updateToken: draft.updateToken };
+    for (const email of [undefined, "buyer@example", "buyer@bad..example", "buyer@example.com\nother@example.com"]) {
+      const response = await paymentIntent({ env, request: request("payment-intent", { ...update, finalize: true, email }) });
+      assert.equal(response.status, 400);
+      assert.equal((await response.json()).field, "email");
+      assert.equal(pi.metadata.checkout_ready, "0");
+    }
+    const ready = await paymentIntent({ env, request: request("payment-intent", {
+      ...update, finalize: true, email: "  buyer+avian@example.com  ",
+    }) });
+    assert.equal(ready.status, 200);
+    assert.equal(pi.metadata.checkout_ready, "1");
+    assert.equal(pi.metadata.email, "buyer+avian@example.com");
+    assert.equal(pi.capture_method, cart === CABLE ? "automatic" : "manual");
+    assert.equal((await paymentIntent({ env, request: request("payment-intent", update) })).status, 200);
+    assert.equal(pi.metadata.email, undefined);
+    assert.equal(pi.metadata.checkout_ready, "0");
+  }
+});
+
+for (const kind of ["receipt", "operator"]) {
+  test(`failed ${kind} email retries without resending the accepted email on a stale Stripe event`, async (t) => {
+    const { env, stripe } = await setup(t, { RESEND_API_KEY: "re_fixture", OPERATOR_EMAIL: "operator@example.com" });
+    const draft = await create(env, { shipping: SHIPPING, email: "buyer@example.com" });
+    const pi = authorize(stripe, draft.id);
+    assert.equal((await event(env, pi, "payment_intent.amount_capturable_updated")).status, 200);
+    const original = structuredClone(pi);
+    const sends = [];
+    globalThis.fetch = async (url, options = {}) => {
+      if (String(url) !== "https://api.resend.com/emails") return stripe.fetch(url, options);
+      const message = JSON.parse(options.body);
+      const role = message.to[0] === "buyer@example.com" ? "receipt" : "operator";
+      const previous = sends.filter((x) => x.role === role).length;
+      sends.push({ role, key: new Headers(options.headers).get("idempotency-key") });
+      if (role === kind && !previous) {
+        if (role === "receipt") throw new Error("simulated network timeout");
+        return reply({ error: "temporary" }, 503);
+      }
+      return reply({ id: `resend_${role}` });
+    };
+    assert.equal((await event(env, original)).status, 503);
+    assert.equal(pi.metadata.notified, undefined);
+    assert.equal((await event(env, original)).status, 200);
+    assert.equal(pi.metadata.notified, "1");
+    assert.equal((await event(env, original)).status, 200);
+    assert.equal(sends.length, 3);
+    const attempted = sends.filter((x) => x.role === kind);
+    assert.equal(attempted.length, 2);
+    assert.ok(attempted[0].key);
+    assert.equal(attempted[0].key, attempted[1].key);
+    assert.notEqual(attempted[0].key, sends.find((x) => x.role !== kind).key);
+    assert.equal(stripe.requests.filter((r) => r.target.endsWith("/transactions/create_from_calculation")).length, 1);
+  });
+}
+
 // All provider traffic is intercepted. No email, charge, or external Stripe request occurs.
 test("recovery stays inert without its feature flag, including untrusted journey fields", async (t) => {
   const { db, env, stripe } = await setup(t, { STORE_RECOVERY_ENABLED: undefined });
-  const draft = await create(env, { cart: CABLE, shipping: SHIPPING, journeyId: "forged", journeyToken: "forged" });
+  const draft = await create(env, { cart: CABLE, shipping: SHIPPING, email: "buyer@example.com", journeyId: "forged", journeyToken: "forged" });
   const pi = stripe.intents.get(draft.id); pi.status = "succeeded"; pi.shipping = SHIPPING;
   assert.equal(pi.metadata.recovery_journey, undefined);
   assert.equal(count(db, "store_recovery_checkouts"), 0);
@@ -212,7 +275,7 @@ test("only verified succeeded events after the capture gate record a purchase, i
 test("forged signatures, wrong modes and non-succeeded objects never mark an ordinary order paid", async (t) => {
   const { db, env, stripe } = await setup(t);
   const identity = await journey(env);
-  const draft = await create(env, { ...identity, cart: CABLE, shipping: SHIPPING });
+  const draft = await create(env, { ...identity, cart: CABLE, shipping: SHIPPING, email: "buyer@example.com" });
   const pi = stripe.intents.get(draft.id); pi.status = "succeeded"; pi.shipping = SHIPPING;
   assert.equal((await event(env, pi, "payment_intent.succeeded", {}, true)).status, 400);
   assert.equal((await event(env, pi, "payment_intent.succeeded", { livemode: true })).status, 400);
@@ -227,7 +290,7 @@ test("forged signatures, wrong modes and non-succeeded objects never mark an ord
 test("a profiled success without capture approval cannot mark a journey purchased", async (t) => {
   const { db, env, stripe } = await setup(t);
   const identity = await journey(env);
-  const draft = await create(env, { ...identity, shipping: SHIPPING });
+  const draft = await create(env, { ...identity, shipping: SHIPPING, email: "buyer@example.com" });
   const pi = authorize(stripe, draft.id);
   await event(env, pi, "payment_intent.amount_capturable_updated");
   pi.metadata.capture_gate = "pending";
@@ -239,7 +302,7 @@ test("a profiled success without capture approval cannot mark a journey purchase
 test("purchase tracking failure retries before receipts and repairs even an already-notified order", async (t) => {
   const { db, env, stripe } = await setup(t);
   const identity = await journey(env);
-  const draft = await create(env, { ...identity, cart: CABLE, shipping: SHIPPING });
+  const draft = await create(env, { ...identity, cart: CABLE, shipping: SHIPPING, email: "buyer@example.com" });
   const pi = stripe.intents.get(draft.id); pi.status = "succeeded"; pi.shipping = SHIPPING;
   db.sqlite.exec("DROP TABLE store_recovery_purchases");
   const pending = await event(env, pi);
@@ -276,11 +339,13 @@ test("a verified purchase matches the same contact and product in another journe
   assert.ok(review.visits.every((visit) => visit.purchaseStatus === "purchased" && visit.followUpEligible === false));
 });
 
-test("an unusable optional email cannot trap verified purchase tracking in permanent retry", async (t) => {
+test("an unusable email on a historical payment does not trap verified purchase tracking in retry", async (t) => {
   const { db, env, stripe } = await setup(t);
   const identity = await journey(env);
   const draft = await create(env, { ...identity, cart: CABLE, shipping: SHIPPING, email: "fixture@localhost" });
   const pi = stripe.intents.get(draft.id); pi.status = "succeeded"; pi.shipping = SHIPPING;
+  // Earlier checkouts could capture with an invalid receipt email.
+  Object.assign(pi.metadata, { checkout_ready: "1", email: "fixture@localhost" });
   const response = await event(env, pi);
   assert.equal(response.status, 200, JSON.stringify(await response.json()));
   assert.equal(count(db, "store_recovery_purchases"), 1);
@@ -302,7 +367,7 @@ test("an existing payment keeps its validated journey when another valid journey
 test("verified success repairs a missing checkout map using the server-stamped journey", async (t) => {
   const { db, env, stripe } = await setup(t);
   const identity = await journey(env);
-  const draft = await create(env, { ...identity, cart: CABLE, shipping: SHIPPING });
+  const draft = await create(env, { ...identity, cart: CABLE, shipping: SHIPPING, email: "buyer@example.com" });
   db.sqlite.prepare("DELETE FROM store_recovery_checkouts WHERE payment_intent_id=?").run(draft.id);
   const pi = stripe.intents.get(draft.id); pi.status = "succeeded"; pi.shipping = SHIPPING;
   assert.equal((await event(env, pi)).status, 200);

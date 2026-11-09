@@ -26,6 +26,8 @@ function element() {
 async function harness({ respond, fetchUpdates, recoveryContext } = {}) {
   const fields = {};
   for (const name of [".co-summary", ".co-voucher", ".co-voucher input", ".co-voucher button", ".co-voucher-msg", "[data-remove-voucher]", ".co-discount-row", ".co-discount", ".co-error", ".co-submit", ".co-total-val", ".co-tax", ".co-ship", "#co-email", "#co-news", "#co-form"]) fields[name] = element();
+  fields["#co-email"].value = "buyer@example.com";
+  fields["#co-email"].reportValidity = () => true;
   fields[".co-submit"].span = element();
   fields[".co-submit"].querySelector = () => fields[".co-submit"].span;
   fields[".co-voucher"].querySelector = (selector) => fields[".co-voucher " + selector];

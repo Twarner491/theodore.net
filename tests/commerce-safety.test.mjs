@@ -101,7 +101,7 @@ test("payment-intent fails closed when Stripe Tax is unavailable", async () => {
   assert.equal(calls.some((url) => /\/v1\/payment_intents(?:\/|$)/.test(url)), false);
 });
 
-test("payment-intent marks only a successful server-side Tax calculation ready", async () => {
+test("payment-intent marks a validated receipt email and successful Tax calculation ready", async () => {
   let intentForm;
   const response = await withFetch(async (url, options = {}) => {
     const target = String(url);
@@ -117,7 +117,7 @@ test("payment-intent marks only a successful server-side Tax calculation ready",
       return okJson({ id: "pi_launch", client_secret: "pi_launch_secret_test" });
     }
     throw new Error("unexpected fetch: " + url);
-  }, () => paymentIntent({ request: post({ cart: [line()], shipping }), env: ENV }));
+  }, () => paymentIntent({ request: post({ cart: [line()], shipping, email: "buyer@example.com" }), env: ENV }));
 
   assert.equal(response.status, 200);
   assert.equal(intentForm.get("amount"), "76831");
@@ -140,7 +140,7 @@ test("payment-intent carries the trusted ground profile after accepting a contig
       return okJson({ id: "pi_profile", client_secret: "pi_profile_secret_test" });
     }
     throw new Error("unexpected fetch: " + url);
-  }, () => paymentIntent({ request: post({ cart: [line()], shipping }), env: ENV }));
+  }, () => paymentIntent({ request: post({ cart: [line()], shipping, email: "buyer@example.com" }), env: ENV }));
 
   assert.equal(response.status, 200);
   assert.equal(intentForm.get("metadata[shipping_profile]"), "contiguous-us-ground");
@@ -207,7 +207,7 @@ test("ordinary products keep their existing Alaska and PO-box behavior", async (
       return okJson({ id: "pi_ordinary", client_secret: "pi_ordinary_secret_test" });
     }
     throw new Error("unexpected fetch: " + url);
-  }, () => paymentIntent({ request: post({ cart: [line()], shipping: alaskaPoBox }), env: ENV }));
+  }, () => paymentIntent({ request: post({ cart: [line()], shipping: alaskaPoBox, email: "buyer@example.com" }), env: ENV }));
 
   assert.equal(response.status, 200);
   assert.equal(intentForm.get("metadata[shipping_profile]"), "none");

@@ -5,7 +5,7 @@
 //   - shipping comes from the cart weight + the customer's destination
 //   - sales tax comes from Stripe Tax (charged only where you're registered)
 // US shipping, plus the two kits to Canada, Australia and the UK (INTL below). The client sends the
-// cart, the (optional) shipping address, and an optional receipt email -- never amounts.
+// cart and checkout details, including a receipt email before payment -- never amounts.
 import {
   CONTIGUOUS_US_GROUND,
   canonicalShippingJson,
@@ -34,6 +34,7 @@ import {
   resolveVoucher, voucherInventoryDemand, voucherReply, VOUCHER_LABEL, VoucherUnavailableError,
 } from "../../lib/store-vouchers.js";
 import { parseGiftInput } from "../../lib/order-gift.js";
+import { receiptEmail } from "../../lib/receipt-email.js";
 import { resolveRecoveryAssociation, recordRecoveryCheckout } from "../../lib/store-recovery.js";
 
 const MAX_QTY = 99, MAX_LINES = 50;
@@ -218,7 +219,9 @@ export async function onRequestPost({ request, env }) {
   catch (error) { return reply({ error: error.message, field: "giftFrom" }, 400); }
   const cart = body && body.cart;
   const piId = (body && typeof body.paymentIntentId === "string" && body.paymentIntentId.startsWith("pi_")) ? body.paymentIntentId : "";
-  const email = (body && typeof body.email === "string" && body.email.indexOf("@") > 0) ? body.email.trim().slice(0, 200) : "";
+  const email = receiptEmail(body && body.email);
+  const finalize = body && body.finalize === true;
+  if (finalize && !email) return reply({ error: "Enter a valid email for your receipt.", field: "email" }, 400);
   const ship = body && typeof body.shipping === "object" && body.shipping ? body.shipping : null;
   const addr = ship && typeof ship.address === "object" && ship.address ? ship.address : null;
   // First-party funnel attribution (no PII): a random visitor id + a channel token the storefront derived.
@@ -372,6 +375,8 @@ export async function onRequestPost({ request, env }) {
     } catch (_) { /* The verified purchase webhook can recover this association. */ }
   };
 
+  const ready = !!(haveAddress && calcId && email);
+  if (finalize && !ready) return reply({ error: "Add your shipping address before paying." }, 400);
   const form = new URLSearchParams();
   form.set("metadata[gift]", gift.gift ? "1" : "");
   form.set("metadata[gift_from]", gift.giftFrom);
@@ -381,7 +386,7 @@ export async function onRequestPost({ request, env }) {
   form.set("metadata[breakdown]", subtotal + "|" + (shippingCents || 0) + "|" + (taxCents || 0) + "|" + total);   // cents, for the confirmation page receipt
   form.set("metadata[weight]", String(Math.round(totalLb * 10) / 10));   // lb, for the operator's carrier call
   if (calcId) form.set("metadata[tax_calculation]", calcId);   // the webhook records the tax transaction from this
-  form.set("metadata[checkout_ready]", haveAddress && calcId ? "1" : "0");
+  form.set("metadata[checkout_ready]", ready ? "1" : "0");
   form.set("metadata[shipping_profile]", checkoutBinding.metadataProfile);
   form.set("metadata[shipping_items]", checkoutBinding.manifestJson);
   form.set("metadata[shipping_items_sha256]", checkoutBinding.manifestSha256);
@@ -434,13 +439,10 @@ export async function onRequestPost({ request, env }) {
       form.set("metadata[" + key + "]", "");
     }
   }
-  // The initial subtotal-only intent exists only so Stripe Elements can mount.
-  // Keep it manual-capture until a server-side address + Tax calculation has
-  // finalized the total. capture_method is secret-key-only, so a caller that
-  // confirms the draft directly can at most create an expiring authorization;
-  // it cannot capture an untaxed subtotal or trigger fulfillment.
-  form.set("capture_method", (requiresContiguousGround || inventoryDemand.length) ? "manual" : (haveAddress && calcId ? "automatic" : "manual"));
-  if (email) form.set("metadata[email]", email);   // our own receipt + order lookup use this; NOT receipt_email, which makes Stripe ALSO send its own receipt
+  // Drafts and address quotes cannot capture. Readiness requires server-side
+  // shipping, tax and a receipt address. An empty update removes any stale email.
+  form.set("capture_method", !ready || requiresContiguousGround || inventoryDemand.length ? "manual" : "automatic");
+  if (email || piId) form.set("metadata[email]", email); // branded receipt and order lookup; don't trigger Stripe's separate receipt
   if (anon) form.set("metadata[anon]", anon);       // first-party visitor id -> joins this order back to its funnel session
   if (src) form.set("metadata[src]", src);          // first-party channel (x / instagram / direct / <go-slug>) for revenue attribution
   // NB: we deliberately do NOT set shipping[...] here. confirmPayment() sets the PI's

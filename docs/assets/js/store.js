@@ -1293,7 +1293,7 @@
             '<section class="co-section is-open" data-sec="shipping"><button class="co-section-head" type="button"><span class="co-h">Shipping</span><i class="fa-solid fa-chevron-down co-chev" aria-hidden="true"></i></button><div class="co-section-body"><div id="address-element"></div></div></section>' +
             '<section class="co-section" data-sec="payment"><button class="co-section-head" type="button"><span class="co-h">Payment</span><i class="fa-solid fa-chevron-down co-chev" aria-hidden="true"></i></button><div class="co-section-body">' +
               '<label class="co-field-label" for="co-email">Email for your receipt</label>' +
-              '<input class="co-email" id="co-email" type="email" placeholder="you@email.com" autocomplete="email">' +
+              '<input class="co-email" id="co-email" type="email" placeholder="you@email.com" autocomplete="email" required maxlength="200" pattern="[^\\s@]+@[^\\s@]+\\.[^\\s@]+">' +
               '<label class="co-check"><input type="checkbox" id="co-news"><span>Email me occasional updates and offers</span></label>' +
               '<div id="payment-element"></div>' +
             "</div></section>" +
@@ -1414,14 +1414,15 @@
       applyBreakdown({ shipping: null });
     };
     // Serialize updates to this PaymentIntent. A stale quote must never overwrite a newer voucher or cart.
-    const recalc = () => {
+    const recalc = (finalize = false) => {
       if (!curShip || !addrComplete || voucherBlocked()) return Promise.resolve(null);
       const version = ++priceVersion;
       // In-progress sender text must not block an address quote. Submit validates it before the final sync.
       const cartSnapshot = JSON.stringify(cart), codeSnapshot = voucherCode, giftSnapshot = JSON.stringify(giftProblem() ? { gift: gift.gift, giftFrom: "" } : giftValue());
       const emailVal = (($("#co-email", host) || {}).value || "").trim();
       const reqBody = Object.assign({ cart: JSON.parse(cartSnapshot), paymentIntentId: piId, updateToken, shipping: curShip, voucherCode: codeSnapshot }, JSON.parse(giftSnapshot));
-      if (emailVal.indexOf("@") > 0) reqBody.email = emailVal;
+      if (emailVal) reqBody.email = emailVal;
+      if (finalize) reqBody.finalize = true;
       repricing = true; updateSubmit();
       const task = pricingQueue.then(async () => {
         if (!current() || version !== priceVersion) return null;
@@ -1505,13 +1506,15 @@
       if (!validateGift()) return;
       if (!addrComplete) { fail("Add your shipping address to continue."); openSection("shipping"); return; }   // shipping + tax need a US address
       if (!paymentOpen()) { err.hidden = true; openSection("payment"); return; }   // "Continue to payment" -> reveal payment, don't pay yet
+      const emailInput = $("#co-email", host);
+      if (!emailInput.reportValidity()) return;
+      const email = emailInput.value.trim();
       processing = true; updateSubmit(); err.hidden = true;
       const paymentCart = JSON.stringify(cart), paymentVoucher = voucherCode, paymentShipping = JSON.stringify(curShip), paymentTotal = lastTotal, paymentGift = JSON.stringify(giftValue());
-      const synced = await recalc();   // final server-authoritative total (address + email + voucher) before charging
-      if (paymentCart !== JSON.stringify(cart) || paymentVoucher !== voucherCode || paymentShipping !== JSON.stringify(curShip) || paymentGift !== JSON.stringify(giftValue()) || !addrComplete) { processing = false; fail("Your order changed. Review it before paying."); updateSubmit(); return; }
+      const synced = await recalc(true);   // final server-authoritative total (address + email + voucher) before charging
+      if (paymentCart !== JSON.stringify(cart) || paymentVoucher !== voucherCode || paymentShipping !== JSON.stringify(curShip) || paymentGift !== JSON.stringify(giftValue()) || email !== emailInput.value.trim() || !addrComplete) { processing = false; fail("Your order changed. Review it before paying."); updateSubmit(); return; }
       if (!synced) { processing = false; updateSubmit(); return; }
       if (synced.total !== paymentTotal) { processing = false; fail("Your total changed. Review it before paying."); updateSubmit(); return; }
-      const email = (($("#co-email", host) || {}).value || "").trim();
       if ((($("#co-news", host) || {}).checked) && email) { try { fetch("/api/subscribe", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, tags: ["customer"] }), keepalive: true }); } catch (e3) {} }   // server-side Buttondown signup; keepalive lets it finish across the Stripe redirect (never broadcasts)
       const { error } = await stripe.confirmPayment({ elements, confirmParams: { return_url: location.origin + "/store/confirmation/" } });
       if (error) { processing = false; fail(error.message || "Payment failed. Please try again."); updateSubmit(); }
@@ -1626,7 +1629,7 @@
     const payBlock = '<div class="conf-block"><p class="conf-block-h">Payment</p>' +
       (pay && pay.last4 ? '<p class="conf-row2">' + escapeHtml(brand) + " ending in " + escapeHtml(pay.last4) + "</p>" : "") +
       '<p class="conf-row2">Total paid ' + money2((b.total != null ? b.total : d.amount) / 100) + "</p>" +
-      (d.email ? '<p class="conf-note">Receipt sent to ' + escapeHtml(d.email) + "</p>" : "") + "</div>";
+      (d.email ? '<p class="conf-note">Receipt email: ' + escapeHtml(d.email) + "</p>" : "") + "</div>";
     host.innerHTML =
       '<div class="conf-back-top">' + back + "</div>" +
       '<div class="co-grid">' +

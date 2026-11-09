@@ -82,6 +82,7 @@ function stripeMock() {
   const fetch = async (url, options = {}) => {
     const target = String(url), form = options.body instanceof URLSearchParams ? options.body : null;
     requests.push({ target, method: options.method || "GET", body: form ? form.toString() : "" });
+    if (target === "https://api.resend.com/emails") return reply({ id: "resend_voucher_fixture" });
     if (target.endsWith("/store-catalog.json")) return reply(CATALOG);
     if (target.endsWith("/v1/prices/price_frame")) return reply({ active: true, unit_amount: 69900, currency: "usd" });
     if (target.endsWith("/v1/prices/price_cable")) return reply({ active: true, unit_amount: 1200, currency: "usd" });
@@ -123,7 +124,7 @@ function stripeMock() {
 async function setup(t, options) {
   const db = new Database(options); t.after(() => db.close());
   const env = { STORE_INVENTORY: db, STRIPE_SECRET_KEY: "sk_test_voucher_fixture",
-    STRIPE_PUBLISHABLE_KEY: "pk_test_voucher_fixture", STRIPE_WEBHOOK_SECRET: SECRET };
+    STRIPE_PUBLISHABLE_KEY: "pk_test_voucher_fixture", STRIPE_WEBHOOK_SECRET: SECRET, RESEND_API_KEY: "re_fixture" };
   const stripe = stripeMock(), previous = globalThis.fetch;
   globalThis.fetch = stripe.fetch; t.after(() => { globalThis.fetch = previous; });
   return { db, env, stripe };
@@ -133,7 +134,9 @@ async function counts(env) {
     .map((row) => [row.sku, { reserved: row.reserved, sold: row.sold, available: row.available }]));
 }
 async function create(env, body = {}) {
-  const response = await paymentIntent({ env, request: request("payment-intent", { cart: [frame()], voucherCode: CODE, ...body }) });
+  const response = await paymentIntent({ env, request: request("payment-intent", {
+    cart: [frame()], voucherCode: CODE, ...(body.shipping ? { email: "buyer@example.com" } : {}), ...body,
+  }) });
   const data = await response.json(); assert.equal(response.status, 200, JSON.stringify(data));
   return { ...data, id: data.clientSecret.split("_secret_")[0] };
 }
