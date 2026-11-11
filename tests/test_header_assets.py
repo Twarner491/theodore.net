@@ -39,6 +39,7 @@ class HeaderAssetTests(unittest.TestCase):
 <script src="../../assets/javascripts/bundle.example.js"></script>
 <script src="../../assets/js/error-suppressor.js"></script>
 <script src="../../assets/js/attribution.js"></script>
+<script src="../../assets/js/meta-tracking.js"></script>
 <script src="../../assets/js/store-data.js?h=456"></script>
 <script src="../../assets/js/index.js"></script>
 <script src="../../assets/js/search.js"></script>
@@ -47,8 +48,8 @@ class HeaderAssetTests(unittest.TestCase):
         page = SimpleNamespace(file=SimpleNamespace(src_uri='store/avian-visitors.md'))
         result = on_post_page(html, page, None)
         sources = re.findall(r'<script[^>]+src="([^"]+)"[^>]*>', result)
-        self.assertEqual([url.split('?')[0].rsplit('/', 1)[-1] for url in sources[:6]], [
-            'error-suppressor.js', 'attribution.js', 'store-data.js', 'store.js', 'header.js', 'search.js'])
+        self.assertEqual([url.split('?')[0].rsplit('/', 1)[-1] for url in sources[:7]], [
+            'error-suppressor.js', 'attribution.js', 'meta-tracking.js', 'store-data.js', 'store.js', 'header.js', 'search.js'])
         self.assertLess(result.index('/assets/js/search.js'), result.index('</head>'))
         self.assertIn('<script src="../../assets/javascripts/bundle.example.js" defer>', result)
         self.assertIn('<script src="../../assets/js/index.js" defer>', result)

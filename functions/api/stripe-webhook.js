@@ -23,6 +23,7 @@ import {
 import { recordRecoveryPurchase } from "../../lib/store-recovery.js";
 import { productionDemand, allocateProductionPayment } from "../../lib/production-batch-commerce.js";
 import { readProductionBatch, syncLegacyProductionBatches } from "../../lib/store-production-batches.js";
+import { queueMetaPurchase } from "../../lib/meta-purchase.js";
 const TOLERANCE = 300; // seconds; rejects replayed or stale events
 
 const json = (value, status = 200) => new Response(JSON.stringify(value), {
@@ -205,6 +206,13 @@ export async function onRequestPost({ request, env }) {
       } catch (_) {
         return json({ received: false, fulfilled: false, pending: true, blocked: "recovery_purchase_pending" }, 503);
       }
+    }
+    // Persist before the receipt shortcut. Delivery runs independently, so Meta
+    // outages never delay payment capture or cause a second customer receipt.
+    try {
+      await queueMetaPurchase(env, event, pi, currentBinding.manifest, { requestUrl: request.url });
+    } catch (_) {
+      return json({ received: false, fulfilled: false, pending: true, blocked: "meta_purchase_queue_pending" }, 503);
     }
     return notifyPaidOrder(pi, catalog, env);
   } else if (event.type === "checkout.session.completed") {

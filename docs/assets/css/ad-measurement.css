@@ -1,0 +1,23 @@
+body:has(.ad-choice) { padding-bottom: var(--ad-choice-space, 0px); }
+.ad-choice {
+  position: fixed; z-index: 1200; bottom: 12px; left: 50%; transform: translateX(-50%);
+  width: min(680px, calc(100% - 24px)); box-sizing: border-box; padding: 16px 18px;
+  display: flex; align-items: center; gap: 20px; border-radius: 18px;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  background: var(--md-default-bg-color); color: var(--md-default-fg-color);
+  font-family: "JetBrains Mono", monospace; font-size: 12px; line-height: 1.6;
+}
+.ad-choice strong { font-weight: 500; }
+.ad-choice p { margin: 4px 0 0; }
+.ad-choice a { color: inherit; text-decoration: underline; }
+.ad-choice-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.ad-choice button, .ad-measurement-controls button {
+  font: inherit; color: inherit; background: transparent; border: 1px solid currentColor;
+  border-radius: 8px; padding: 10px 12px; min-height: 44px; cursor: pointer;
+}
+.ad-choice button:focus-visible, .ad-choice a:focus-visible, .ad-measurement-controls button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.ad-measurement-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+@media (max-width: 600px) {
+  .ad-choice { align-items: stretch; flex-direction: column; gap: 12px; padding: 14px 16px; }
+  .ad-choice-actions button { flex: 1; }
+}

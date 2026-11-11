@@ -1,0 +1,14 @@
+# Review and configure separately before deployment. No credentials belong here.
+name = "theodore-meta-purchase-delivery"
+main = "meta-purchase-delivery.js"
+compatibility_date = "2026-08-31"
+
+[vars]
+META_CAPI_ENABLED = "0"
+META_CAPI_MODE = "disabled"
+# META_DATASET_ID = "..."
+# Set META_CAPI_ACCESS_TOKEN with Wrangler secrets. Delivery needs no Stripe key.
+# Bind STORE_INVENTORY to the same approved production D1 as the Pages project.
+
+[triggers]
+crons = ["*/5 * * * *"]
