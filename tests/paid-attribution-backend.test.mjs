@@ -9,6 +9,7 @@ import { onRequestPost as paymentIntent } from '../functions/api/payment-intent.
 import { onRequestPost as webhook } from '../functions/api/stripe-webhook.js';
 import { onRequestGet as adConfig } from '../functions/api/ad-config.js';
 import { onRequestPost as arrival } from '../functions/api/ad-attribution.js';
+import metaDeliveryWorker from '../workers/meta-purchase-delivery.js';
 
 const NOW = Math.floor(Date.now() / 1000), ORIGIN = 'http://127.0.0.1:8892', SECRET = 'whsec_meta_fixture';
 const ARM_TAGS = { 'reel-a': 'av3-meta-reel-a', species: 'av3-meta-species', photo: 'av3-meta-photo' };
@@ -235,6 +236,76 @@ test('concurrent dispatchers claim one row once', async (t) => {
   const fake = async () => { calls++; await Promise.resolve(); return response({ events_received: 1 }); };
   const summaries = await Promise.all([dispatchMetaPurchases(env, { now: NOW, fetch: fake }), dispatchMetaPurchases(env, { now: NOW, fetch: fake })]);
   assert.equal(calls, 1); assert.equal(summaries.reduce((sum, x) => sum + x.sent, 0), 1);
+});
+
+test('slow sequential delivery keeps later leases live against an overlapping dispatcher', async (t) => {
+  const db = setupDb(t), env = liveEnv(db), requests = [];
+  for (let i = 0; i < 15; i++) {
+    const pi = piFixture({ id: 'pi_slow_' + String(i).padStart(2, '0'), livemode: true });
+    await queueMetaPurchase(env, success(pi, { id: 'evt_slow_' + i }), pi, manifest,
+      { now: NOW, requestUrl: 'https://theodore.net/api/stripe-webhook' });
+  }
+  let current = NOW, calls = 0, overlapping;
+  t.mock.method(Date, 'now', () => current * 1000);
+  const fake = async (_url, options) => {
+    requests.push(JSON.parse(options.body).data[0]); calls++;
+    if (calls === 15) {
+      overlapping = await dispatchMetaPurchases(env, { fetch: async (_url, options) => {
+        requests.push(JSON.parse(options.body).data[0]); return response({ events_received: 1 });
+      } });
+    }
+    current += 9;
+    return response({ events_received: 1 });
+  };
+  const summary = await dispatchMetaPurchases(env, { fetch: fake });
+  assert.equal(requests.length, 15, 'a later claim must not inherit an already-expired batch-start lease');
+  assert.equal(new Set(requests.map((event) => event.event_id)).size, 15);
+  assert.equal(summary.sent, 15); assert.equal(overlapping.sent, 0);
+  assert.ok(requests.every((event) => event.event_time === NOW));
+  const last = db.sqlite.prepare("SELECT status,sent_at,attempts FROM meta_purchase_outbox WHERE payment_intent_id='pi_slow_14'").get();
+  assert.deepEqual({ ...last }, { status: 'sent', sent_at: NOW + 135, attempts: 1 });
+});
+
+test('delivery retry backoff starts when the failed request finishes, using an advancing injected clock', async (t) => {
+  const db = setupDb(t), env = await queueLive(db); let current = NOW, calls = 0;
+  const options = { now: () => current, fetch: async () => {
+    calls++; current += 9;
+    return calls === 1 ? response({}, 503) : response({ events_received: 1 });
+  } };
+  assert.equal((await dispatchMetaPurchases(env, options)).failed, 1);
+  assert.equal(db.sqlite.prepare('SELECT next_attempt_at FROM meta_purchase_outbox').get().next_attempt_at, NOW + 69);
+  current = NOW + 60;
+  assert.equal((await dispatchMetaPurchases(env, options)).sent, 0); assert.equal(calls, 1);
+  current = NOW + 69;
+  assert.equal((await dispatchMetaPurchases(env, options)).sent, 1); assert.equal(calls, 2);
+  assert.equal(db.sqlite.prepare('SELECT sent_at FROM meta_purchase_outbox').get().sent_at, NOW + 78);
+});
+
+test('a slow batch expires later purchases at their original seven-day deadline', async (t) => {
+  const db = setupDb(t), env = await queueLive(db);
+  const later = piFixture({ id: 'pi_later', livemode: true });
+  await queueMetaPurchase(env, success(later, { id: 'evt_later' }), later, manifest,
+    { now: NOW, requestUrl: 'https://theodore.net/api/stripe-webhook' });
+  let current = NOW + 7 * 86400 - 1; const events = [];
+  t.mock.method(Date, 'now', () => current * 1000);
+  const summary = await dispatchMetaPurchases(env, { fetch: async (_url, options) => {
+    events.push(JSON.parse(options.body).data[0]); current += 2;
+    return response({ events_received: 1 });
+  } });
+  assert.equal(events.length, 1); assert.equal(events[0].event_time, NOW);
+  assert.equal(summary.sent, 1); assert.equal(summary.expired, 1);
+  const expired = db.sqlite.prepare("SELECT event_time,payload_json,lease_token,lease_until,last_error FROM meta_purchase_outbox WHERE status='expired'").get();
+  assert.deepEqual({ ...expired }, { event_time: NOW, payload_json: '', lease_token: null, lease_until: null, last_error: 'event_too_old' });
+});
+
+test('a delayed scheduled worker uses actual execution time instead of its scheduled timestamp', async (t) => {
+  const db = setupDb(t), env = await queueLive(db); let pending;
+  t.mock.method(Date, 'now', () => (NOW + 20) * 1000);
+  t.mock.method(globalThis, 'fetch', async () => response({ events_received: 1 }));
+  await metaDeliveryWorker.scheduled({ scheduledTime: (NOW - 300) * 1000 }, env, { waitUntil(work) { pending = work; } });
+  await pending;
+  const row = db.sqlite.prepare('SELECT status,event_time,sent_at FROM meta_purchase_outbox').get();
+  assert.deepEqual({ ...row }, { status: 'sent', event_time: NOW, sent_at: NOW + 20 });
 });
 
 test('outbox storage failure asks Stripe to retry without changing payment or bypassing an already-sent receipt', async (t) => {

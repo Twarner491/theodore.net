@@ -5,7 +5,7 @@
   var VERSION = "meta-v2", WEEK = 604800, enabled = false, serverOptOut = false, panel = null, syncing = false, observedAnon = "";
   var browserEvents = false, pixelId = "", pixelLoading = false, pixelReady = false, pixelInitialized = false;
   var pageSent = false, viewSent = "", currentView = null, pendingEvents = [];
-  var choice = read(KEY), savedClick = read(CLICK_KEY);
+  var choice = read(KEY), savedClick = read(CLICK_KEY), pageClick = null;
   function now() { return Math.floor(Date.now() / 1000); }
   function read(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (_) { return null; } }
   function save(key, value) { try { if (value) localStorage.setItem(key, JSON.stringify(value)); else localStorage.removeItem(key); } catch (_) {} }
@@ -141,9 +141,19 @@
     if (!enabled || blocked() || !validChoice() || !choice.allowed) return;
     var incoming = window.TheodorePaidAttribution && window.TheodorePaidAttribution.clickContext();
     if (incoming && incoming.at >= now() - WEEK && incoming.at <= now() && /^[A-Za-z0-9_.-]{1,450}$/.test(incoming.fbclid)) {
+      // Reloading the same tagged URL is not a new Meta click. Preserve the
+      // timestamp we already know, even when it has expired and must be removed.
+      var clickAt = incoming.at;
+      var stored = savedClick && typeof savedClick.fbc === "string" && savedClick.fbc.length <= 500 &&
+        /^fb\.[0-9]+\.(\d{13})\.([A-Za-z0-9_.-]+)$/.exec(savedClick.fbc);
+      if (stored && stored[2] === incoming.fbclid && Number(stored[1]) > 0 && Number(stored[1]) <= (now() + 1) * 1000)
+        clickAt = Number(stored[1]) / 1000;
+      if (pageClick && pageClick.fbclid === incoming.fbclid) clickAt = Math.min(clickAt, pageClick.at);
+      pageClick = { fbclid: incoming.fbclid, at: clickAt }; // Memory only; no longer storage retention.
+      if (clickAt < now() - WEEK) return;
       var storedAt = savedClick && validId(savedClick.fbc, "fbc") ? Number(savedClick.fbc.split(".")[2]) / 1000 : 0;
-      if (incoming.at >= storedAt) {
-        savedClick = { fbc: "fb.1." + incoming.at * 1000 + "." + incoming.fbclid };
+      if (clickAt >= storedAt) {
+        savedClick = { fbc: "fb.1." + clickAt * 1000 + "." + incoming.fbclid };
         save(CLICK_KEY, savedClick);
       }
     }

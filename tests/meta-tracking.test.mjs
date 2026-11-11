@@ -304,3 +304,30 @@ test('checkout starts obey v1, privacy, withdrawal during load and private route
   h.checkout([frame]); h.revoke(); h.loadPixel();
   assert.equal(pixelEvents(h).length, 0);
 });
+
+
+test('the same consented fbclid preserves its stored creation time instead of renewing the seven-day window', async () => {
+  const originalAt = SECOND - 6 * 86400;
+  const fbc = `fb.1.${originalAt * 1000}.Same_Click.with-dots`;
+  for (const incomingAt of [SECOND, originalAt - 10]) {
+    const h = await harness({ choice: accepted(), storedClick: { fbc },
+      click: { fbclid: 'Same_Click.with-dots', at: incomingAt, path: '/store/avian-visitors/' } });
+    assert.equal(h.context().fbc, fbc);
+    assert.equal(JSON.parse(h.data.get(CLICK)).fbc, fbc);
+    h.setTime((originalAt + 7 * 86400 + 1) * 1000);
+    assert.equal(h.context().fbc, undefined);
+    assert.equal(h.context().fbc, undefined, 'repeated context reads cannot resurrect the same arrival');
+    assert.equal(h.data.has(CLICK), false, 'expired matching data keeps the existing deletion policy');
+  }
+});
+
+test('an already-expired stored fbclid is not renewed, while a genuinely different later click updates matching', async () => {
+  const originalAt = SECOND - 8 * 86400;
+  const click = { fbclid: 'Same_Click', at: SECOND, path: '/store/avian-visitors/' };
+  const h = await harness({ choice: accepted(), storedClick: { fbc: `fb.1.${originalAt * 1000}.Same_Click` }, click });
+  assert.equal(h.context().fbc, undefined);
+  assert.equal(h.context().fbc, undefined);
+  assert.equal(h.data.has(CLICK), false);
+  click.fbclid = 'Different_Click';
+  assert.equal(h.context().fbc, `fb.1.${SECOND * 1000}.Different_Click`);
+});
