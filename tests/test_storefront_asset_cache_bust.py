@@ -1,4 +1,5 @@
 import importlib.util
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -10,6 +11,31 @@ SPEC.loader.exec_module(CACHE_BUST)
 
 
 class StorefrontAssetCacheBustTest(unittest.TestCase):
+    def test_measurement_script_urls_change_when_their_source_changes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            scripts = root / "docs/assets/js"
+            scripts.mkdir(parents=True)
+            assets = ["assets/js/attribution.js", "assets/js/meta-tracking.js"]
+            for asset in assets:
+                (root / "docs" / asset).write_text("window.measurementVersion = 1;\n")
+
+            config = {
+                "config_file_path": str(root / "mkdocs.yml"),
+                "extra_javascript": assets,
+                "extra_css": [],
+            }
+            previous = CACHE_BUST.on_config(config)["extra_javascript"]
+            for index, asset in enumerate(assets):
+                with self.subTest(asset=asset):
+                    self.assertRegex(previous[index], r"\?h=[0-9a-f]{8}$")
+                    (root / "docs" / asset).write_text("window.measurementVersion = 2;\n")
+                    updated = CACHE_BUST.on_config(config)["extra_javascript"]
+                    self.assertNotEqual(updated[index], previous[index])
+                    self.assertEqual(updated[1 - index], previous[1 - index])
+                    self.assertEqual(CACHE_BUST.on_config(config)["extra_javascript"], updated)
+                    previous = updated
+
     def test_storefront_status_assets_receive_content_versions(self):
         config = {
             "config_file_path": str(ROOT / "mkdocs.yml"),

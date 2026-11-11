@@ -434,6 +434,7 @@
     const added = Math.min(Math.max(0, Math.floor(qty)), variantMaxQuantity(id, build) - (ex ? ex.qty : 0));
     if (!Number.isFinite(added) || added <= 0) return;
     if (ex) ex.qty += added; else cart.push({ id, build, qty: added });
+    metaItem("AddToCart", id, build, added);
     saveCart(); renderCart(); updateBadge(true); openCart();
     var atcUnit = evItemValue(getProduct(id), build); track("add_to_cart", { product: id, build: build, qty: added, value: atcUnit != null ? atcUnit * added : null });
     var ga4Qty = added, ga4Line = ga4Item(id, build, ga4Qty);
@@ -443,7 +444,9 @@
     const line = cart[i];
     if (!line || checkoutIsBusy() || !Number.isFinite(qty) || (qty > line.qty && !canIncreaseQuantity(line.id, line.build))) return;
     qty = Math.min(Math.floor(qty), variantMaxQuantity(line.id, line.build));
+    const added = qty - line.qty;
     if (qty <= 0) cart.splice(i, 1); else line.qty = qty;
+    if (added > 0) metaItem("AddToCart", line.id, line.build, added);
     saveCart(); renderCart();
   }
 
@@ -737,6 +740,18 @@
     const b = buildId || ((p && p.defaultBuild) || "");
     const v = p ? variantById(p, b) : null;
     return { item_id: id + "-" + b, item_name: (p && p.title) || id, item_variant: b, price: (v && v.price) || 0, quantity: qty || 1 };
+  }
+  function metaCatalogItem(id, buildId, quantity) {
+    const p = getProduct(id), v = p && exactVariant(p, buildId);
+    if (!p || !p.published || !v || !Number.isFinite(v.price) ||
+        (p.metaCatalogId && buildId !== p.defaultBuild)) return null;
+    return { id: p.metaCatalogId || id + "-" + buildId, quantity, value: v.price * quantity };
+  }
+  function metaItem(name, id, buildId, quantity) {
+    try {
+      const item = metaCatalogItem(id, buildId, quantity);
+      if (item && window.TheodoreMetaTracking) window.TheodoreMetaTracking.itemEvent(name, item);
+    } catch (_) { /* Optional advertising cannot interrupt shopping. */ }
   }
 
   // Versioned assignment is reproducible from the existing random visitor id.
@@ -1155,10 +1170,12 @@
   function setCartQty(id, b, q) {
     if (checkoutIsBusy() || !Number.isFinite(q) || (q > cartQtyOf(id, b) && !canIncreaseQuantity(id, b))) return;
     q = Math.max(0, Math.min(variantMaxQuantity(id, b), Math.floor(q)));
+    const added = q - cartQtyOf(id, b);
     const i = cart.findIndex((x) => x.id === id && x.build === b);
     if (q <= 0) { if (i >= 0) cart.splice(i, 1); }
     else if (i >= 0) cart[i].qty = q;
     else cart.push({ id, build: b, qty: q });
+    if (added > 0) metaItem("AddToCart", id, b, added);
     saveCart(); renderCart(); updateBadge(true);   // renderCart() re-syncs the cards via syncAccCards()
   }
   const ICON_PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
@@ -1327,6 +1344,7 @@
     }
     else if (status === "paused") { buy.classList.remove("is-waitlist"); buy.textContent = st.cta; buy.disabled = true; }
     else { buy.classList.add("is-waitlist"); buy.textContent = "Notify me"; }
+    metaItem("ViewContent", P.id, build, 1);
   }
 
   /* ---- drop countdown: fills the buy button's slot while a variant waits on its launchAt. Each
@@ -1602,6 +1620,10 @@
   }
   async function checkout() {
     if (!cart.length) return;
+    try {
+      if (window.TheodoreMetaTracking) window.TheodoreMetaTracking.checkoutEvent(
+        cart.map((line) => metaCatalogItem(line.id, line.build, line.qty)));
+    } catch (_) { /* Optional advertising cannot delay navigation. */ }
     // Recovery requests already use keepalive; never hold a navigation click
     // for optional background work.
     if (localRecovery) void localRecovery.flush(1000).catch(() => {});

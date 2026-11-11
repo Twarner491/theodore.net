@@ -20,6 +20,7 @@ import re
 import yaml
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlencode
 from mkdocs.structure.files import File
 
 # MkDocs loads hook files by path without putting the repository on sys.path.
@@ -255,11 +256,16 @@ def _meta_catalog_items(products, price_field='stripePrice', docs_dir=None):
                 return url
             title = str(p.get('title', p['id']))
             label = str(v.get('label', v.get('id', '')))
+            link = base + '/store/' + p['id'] + '/'
+            # Variant cards must open the package and price they advertise. A stable
+            # product-only listing follows defaultBuild as production batches roll over.
+            if not p.get('metaCatalogId'):
+                link += '?' + urlencode({'variant': str(v.get('id', ''))})
             items.append(dict(zip(META_FIELDS, [
                 p.get('metaCatalogId') or p['id'] + '-' + str(v.get('id', '')),
                 title if (p.get('metaCatalogId') or not label or label == title) else title + ' - ' + label,
                 desc, availability, 'new', '%.2f USD' % float(price),
-                base + '/store/' + p['id'] + '/', image_url(img), 'theodore.net',
+                link, image_url(img), 'theodore.net',
                 0 if availability == 'out of stock' else 25,
                 ','.join(image_url(x) for x in images if x != img),
             ]), inventorySku=v.get('inventorySku'), launchAt=_launch_at(v),

@@ -8,7 +8,7 @@ until a purge -- and the zone purge has proven unreliable for this asset. Append
 served dynamically (cache-control: max-age=0), so the rewritten reference goes live on the very next deploy
 with no purge needed. Fully defensive: any failure falls back to the bare reference, never breaking the build.
 
-The sitewide store-data.js and search.js references need the same treatment. Store data is generated from
+The sitewide measurement, store-data.js and search.js references need the same treatment. Store data is generated from
 the product frontmatter, so its version covers the product definitions and generator rather than a source
 file that does not exist until the build is underway.
 """
@@ -55,6 +55,8 @@ def on_config(config):
     store_sources.extend(path.relative_to(base) for path in sorted((base / "docs/store").glob("*.md")))
     store_sources.extend(path.relative_to(base) for path in image_helpers.source_inputs(base / "docs"))
     versions = {
+        "assets/js/attribution.js": _source_hash(config, [Path("docs/assets/js/attribution.js")]),
+        "assets/js/meta-tracking.js": _source_hash(config, [Path("docs/assets/js/meta-tracking.js")]),
         "assets/js/store-data.js": _source_hash(config, store_sources),
         "assets/js/search.js": _source_hash(config, [Path("docs/assets/js/search.js")]),
         "assets/js/index.js": _source_hash(config, [Path("docs/assets/js/index.js")]),

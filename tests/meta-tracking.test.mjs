@@ -5,35 +5,42 @@ import vm from 'node:vm';
 
 const source = readFileSync(new URL('../docs/assets/js/meta-tracking.js', import.meta.url), 'utf8');
 const SECOND = 1794340000, KEY = 'theodore:meta-choice:v1', CLICK = 'theodore:meta-click:v1';
-async function harness({ enabled = true, privacyOptOut = false, respond, choice, storedClick, click = { fbclid: 'Real_Click-123', at: SECOND, path: '/store/avian-visitors/' }, navigator = {}, brokenStorage = false, cookie = '' } = {}) {
+async function harness({ enabled = true, privacyOptOut = false, browserEvents = false, pixelId = '1234567890',
+  url = 'https://theodore.net/store/avian-visitors/', referrer = '', respond, choice, storedClick,
+  click = { fbclid: 'Real_Click-123', at: SECOND, path: '/store/avian-visitors/' }, navigator = {}, brokenStorage = false, cookie = '' } = {}) {
   const data = new Map(choice ? [[KEY, JSON.stringify(choice)]] : []), events = {}, panels = [];
   data.set('tev_aid', 'anonymous-test-browser');
   if (storedClick) data.set(CLICK, JSON.stringify(storedClick));
-  const status = { textContent: '' }, requests = []; let time = SECOND * 1000;
+  const status = { textContent: '' }, requests = [], scripts = []; let time = SECOND * 1000;
   const document = {
-    cookie, readyState: 'complete', getElementById: () => status,
+    cookie, referrer, readyState: 'complete', getElementById: () => status,
     addEventListener(name, fn) { events['document:' + name] = fn; },
     documentElement: { style: { setProperty() {}, removeProperty() {} } },
     body: { appendChild(panel) { panels.push(panel); } },
+    head: { appendChild(script) { scripts.push(script); } },
     createElement() { return { offsetHeight: 100, setAttribute() {}, addEventListener(name, fn) { this[name] = fn; }, remove() { this.removed = true; } }; }
   };
   const window = {
+    STORE_PRODUCTS: [{ id: 'avian-visitors', published: true, project: '/projects/AvianVisitors/' }],
     TheodorePaidAttribution: { clickContext: () => click, snapshot: () => click ? { first: {} } : null },
     addEventListener(name, fn) { events[name] = fn; }, dispatchEvent(event) { if (events[event.type]) events[event.type](event); }
   };
   class Clock extends Date { static now() { return time; } }
-  vm.runInNewContext(source, { document, window, navigator, location: { pathname: '/store/avian-visitors/' },
+  vm.runInNewContext(source, { document, window, navigator, location: new URL(url), URL,
     localStorage: { getItem(key) { if (brokenStorage) throw Error(); return data.get(key) || null; }, setItem(key, val) { if (brokenStorage) throw Error(); data.set(key, val); }, removeItem(key) { data.delete(key); } },
     sessionStorage: { getItem: () => 'anonymous-test-session' },
     Date: Clock, CustomEvent: class { constructor(type) { this.type = type; } },
     fetch: async (url, options) => {
       const body = options?.body ? JSON.parse(options.body) : null; requests.push({ url, body });
       if (respond) { const response = await respond(url, body); if (response) return response; }
-      return { ok: true, json: async () => url === '/api/ad-consent' ? { recorded: true, allowed: body.consent } : { metaMeasurementEnabled: enabled, privacyOptOut } };
+      return { ok: true, json: async () => url === '/api/ad-consent' ? { recorded: true, allowed: body.consent } : { metaMeasurementEnabled: enabled, privacyOptOut, metaBrowserEventsEnabled: browserEvents, metaPixelId: pixelId } };
     }
   });
   await new Promise(setImmediate);
-  return { data, panels, requests, setTime(value) { time = value; }, event(name, value = {}) { events[name]?.(value); }, context: (anon) => JSON.parse(JSON.stringify(window.TheodoreMetaTracking.context(anon))),
+  return { data, panels, requests, scripts, navigator, calls: () => JSON.parse(JSON.stringify((window.fbq?.queue || []).map((args) => Array.from(args)))),
+    checkout(items) { window.TheodoreMetaTracking.checkoutEvent(items); },
+    loadPixel() { scripts.at(-1)?.onload(); }, item(name, value) { window.TheodoreMetaTracking.itemEvent(name, value); },
+    setTime(value) { time = value; }, event(name, value = {}) { events[name]?.(value); }, context: (anon) => JSON.parse(JSON.stringify(window.TheodoreMetaTracking.context(anon))),
     async choose(value) { panels.at(-1).click({ target: { closest: () => ({ getAttribute: () => value }) } }); await new Promise(setImmediate); },
     reopen() { events['document:click']({ target: { closest: () => ({ getAttribute: () => 'choose' }) } }); },
     revoke() { events['document:click']({ target: { closest: () => ({ getAttribute: () => 'off' }) } }); }, status };
@@ -42,7 +49,7 @@ test('no sharing or click storage before choice; opt-in preserves real click tim
   const h = await harness();
   assert.equal(h.context().consent, false); assert.equal(h.data.has(CLICK), false);
   await h.choose('yes');
-  assert.deepEqual(h.context(), { consent: true, version: 'meta-v1', at: SECOND, atMs: SECOND * 1000, fbc: `fb.1.${SECOND * 1000}.Real_Click-123` });
+  assert.deepEqual(h.context(), { consent: true, version: 'meta-v2', at: SECOND, atMs: SECOND * 1000, fbc: `fb.1.${SECOND * 1000}.Real_Click-123` });
   assert.equal(h.panels[0].removed, true);
 });
 test('decline and later revocation clear matching data without preventing checkout', async () => {
@@ -135,4 +142,192 @@ test('an older open tab does not overwrite the newer consented ad click from ano
     click: { fbclid: 'Older_Click', at: SECOND - 10, path: '/store/avian-visitors/' } });
   assert.equal(h.context().fbc, newer);
   assert.equal(JSON.parse(h.data.get(CLICK)).fbc, newer);
+});
+
+const frame = { id: 'avian-visitors', quantity: 1, value: 699 };
+const pixelEvents = (h) => h.calls().filter((call) => call[0] === 'trackSingle');
+const accepted = (version = 'meta-v2') => ({ allowed: true, version, at: SECOND - 10,
+  anon: 'anonymous-test-browser', acknowledged: true });
+
+test('Pixel waits for expanded opt-in and load; sends only current view and subsequent cart additions', async () => {
+  const h = await harness({ browserEvents: true, click: null });
+  h.item('ViewContent', frame); h.item('AddToCart', frame);
+  assert.equal(h.panels.length, 1, 'organic shoppers can choose without an ad click');
+  assert.equal(h.scripts.length, 0);
+  await h.choose('yes');
+  assert.equal(h.scripts.length, 1); assert.equal(pixelEvents(h).length, 0);
+  assert.equal(h.scripts[0].src, 'https://connect.facebook.net/en_US/fbevents.js');
+  assert.equal(h.scripts[0].referrerPolicy, 'no-referrer');
+  h.loadPixel();
+  assert.deepEqual(h.calls().slice(0, 4), [['consent', 'revoke'], ['set', 'autoConfig', false, '1234567890'], ['init', '1234567890'], ['consent', 'grant']]);
+  assert.deepEqual(pixelEvents(h).map((call) => call[2]), ['PageView', 'ViewContent']);
+  h.item('AddToCart', { ...frame, email: 'never@example.com', address: 'not transmitted' });
+  const added = pixelEvents(h).at(-1);
+  assert.deepEqual(added, ['trackSingle', '1234567890', 'AddToCart', {
+    content_type: 'product', content_ids: ['avian-visitors'], contents: [{ id: 'avian-visitors', quantity: 1 }], currency: 'USD', value: 699,
+  }]);
+  h.context(); h.item('ViewContent', frame);
+  assert.equal(pixelEvents(h).length, 3, 'no duplicate view from re-render or context reads');
+  assert.equal(pixelEvents(h).some((call) => call[2] === 'Purchase'), false);
+});
+
+test('v1 opt-in stays purchase-only until a fresh choice; previous denial is respected', async () => {
+  const h = await harness({ browserEvents: true, choice: accepted('meta-v1'), click: null });
+  assert.equal(h.context().version, 'meta-v1'); assert.equal(h.context().consent, true);
+  assert.equal(h.scripts.length, 0); assert.equal(h.panels.length, 1);
+  assert.equal(h.requests.some((r) => r.url === '/api/ad-consent'), false, 'no silent server consent upgrade');
+  await h.choose('yes');
+  assert.equal(h.context().version, 'meta-v2'); assert.equal(h.scripts.length, 1);
+  assert.equal(h.requests.find((r) => r.url === '/api/ad-consent').body.version, 'meta-v2');
+  const denied = await harness({ browserEvents: true, choice: { ...accepted('meta-v1'), allowed: false }, click: null });
+  assert.equal(denied.panels.length, 0); assert.equal(denied.scripts.length, 0);
+});
+
+test('a variant switch before consent replaces the pending view rather than replaying its history', async () => {
+  const h = await harness({ browserEvents: true });
+  h.item('ViewContent', { id: 'avian-mic-electronics', quantity: 1, value: 50 });
+  h.item('ViewContent', { id: 'avian-mic-electronics-printed', quantity: 1, value: 60 });
+  await h.choose('yes'); h.loadPixel();
+  const views = pixelEvents(h).filter((event) => event[2] === 'ViewContent');
+  assert.equal(views.length, 1); assert.deepEqual(views[0][3].content_ids, ['avian-mic-electronics-printed']);
+  assert.equal(views[0][3].value, 60);
+});
+
+test('no browser script until the server acknowledges expanded consent', async () => {
+  let release;
+  const pending = new Promise((resolve) => { release = resolve; });
+  const h = await harness({ browserEvents: true, respond(url) { if (url === '/api/ad-consent') return pending; } });
+  await h.choose('yes'); assert.equal(h.scripts.length, 0);
+  release({ ok: true, json: async () => ({ recorded: true, allowed: true }) });
+  await new Promise(setImmediate); assert.equal(h.scripts.length, 1);
+});
+
+test('revoking while Pixel loads discards events and never initializes or grants on completion', async () => {
+  const h = await harness({ browserEvents: true }); await h.choose('yes');
+  h.item('AddToCart', frame); h.revoke(); h.loadPixel();
+  assert.equal(pixelEvents(h).length, 0);
+  assert.equal(h.calls().some((call) => call[0] === 'init' || call[1] === 'grant'), false);
+});
+
+test('cross-tab revocation and newly enabled privacy signals stop further Pixel events', async () => {
+  const h = await harness({ browserEvents: true, choice: accepted() }); h.loadPixel();
+  const before = pixelEvents(h).length;
+  h.data.set(KEY, JSON.stringify({ ...accepted(), allowed: false, at: SECOND }));
+  h.event('storage', { key: KEY }); h.item('AddToCart', frame);
+  assert.equal(pixelEvents(h).length, before); assert.deepEqual(h.calls().at(-1), ['consent', 'revoke']);
+  const gpc = await harness({ browserEvents: true, choice: accepted() }); gpc.loadPixel();
+  const count = pixelEvents(gpc).length;
+  gpc.navigator.globalPrivacyControl = true; gpc.context(); gpc.item('AddToCart', frame);
+  assert.equal(pixelEvents(gpc).length, count); assert.equal(gpc.context().consent, false);
+});
+
+test('Pixel never loads on payment, private query, unsafe referrer, preview or disabled pages', async () => {
+  for (const options of [
+    { url: 'https://theodore.net/store/checkout/' },
+    { url: 'https://theodore.net/store/confirmation/?payment_intent_client_secret=secret' },
+    { url: 'https://theodore.net/privacy/' },
+    { url: 'https://theodore.net/store/?restore=private_token' },
+    { url: 'https://theodore.net/store/avian-visitors/?email=private@example.com' },
+    { url: 'https://theodore.net/store/#private_token' },
+    { referrer: 'https://theodore.net/store/confirmation/?payment_intent_client_secret=secret' },
+    { referrer: 'https://theodore.net/private/customer-token/' },
+    { referrer: 'https://external.example/profiles/customer-name/' },
+    { url: 'http://127.0.0.1:8766/store/' },
+    { browserEvents: false }, { pixelId: '' }, { privacyOptOut: true }, { navigator: { doNotTrack: '1' } },
+  ]) {
+    const h = await harness({ browserEvents: true, choice: accepted(), ...options });
+    h.item('ViewContent', frame); h.item('AddToCart', frame);
+    assert.equal(h.scripts.length, 0, JSON.stringify(options));
+  }
+  const safe = await harness({ browserEvents: true, choice: accepted(),
+    referrer: 'https://theodore.net/projects/AvianVisitors/',
+    url: 'https://theodore.net/store/avian-visitors/?fbclid=Real_123&utm_source=instagram&variant=assembled-continuous' });
+  assert.equal(safe.scripts.length, 1);
+});
+
+test('invalid event values and unrecognized event types cannot reach Pixel', async () => {
+  const h = await harness({ browserEvents: true, choice: accepted() }); h.loadPixel();
+  for (const value of [{ ...frame, id: 'private@example.com' }, { ...frame, quantity: 0 },
+    { ...frame, quantity: 1.5 }, { ...frame, value: NaN }, { ...frame, value: -1 }]) h.item('AddToCart', value);
+  h.item('Purchase', frame); h.item('Lead', frame);
+  assert.deepEqual(pixelEvents(h).map((call) => call[2]), ['PageView']);
+});
+
+
+test('current paid landing and tagged referrer URLs permit Pixel only after expanded consent', async () => {
+  const tags = ['reel-a', 'species', 'photo'];
+  for (const tag of tags) {
+    const url = `https://theodore.net/store/avian-visitors/?go=av3-meta-${tag}&utm_source=instagram&utm_medium=paid_social&utm_campaign=av-meta-nov26-v1&utm_content=${tag}&ad_id=120249657837420578&adset_id=120249657837410578&campaign_id=120249657837400578&fbclid=Real_Click-123`;
+    const h = await harness({ browserEvents: true, choice: accepted(), url });
+    assert.equal(h.scripts.length, 1, tag);
+    const next = await harness({ browserEvents: true, choice: accepted(), url: 'https://theodore.net/store/?cart=open', referrer: url });
+    assert.equal(next.scripts.length, 1, 'public cart route following a tagged product page');
+  }
+  for (const query of ['go=private-token', 'cart=private-token', 'cart=open&restore=private-token']) {
+    const h = await harness({ browserEvents: true, choice: accepted(), url: 'https://theodore.net/store/?' + query });
+    assert.equal(h.scripts.length, 0, query);
+  }
+});
+
+test('checkout starts send catalog items only after acknowledged v2 consent and never replay earlier clicks', async () => {
+  let release;
+  const pending = new Promise((resolve) => { release = resolve; });
+  const h = await harness({ browserEvents: true, respond(url) { if (url === '/api/ad-consent') return pending; } });
+  h.checkout([frame]); await h.choose('yes'); h.checkout([frame]);
+  assert.equal(h.scripts.length, 0);
+  release({ ok: true, json: async () => ({ recorded: true, allowed: true }) });
+  await new Promise(setImmediate); h.loadPixel();
+  assert.deepEqual(pixelEvents(h).map((event) => event[2]), ['PageView']);
+  h.checkout([{ ...frame, quantity: 2, value: 1398, email: 'never@example.com' },
+    { id: 'avian-mic-electronics-printed', quantity: 1, value: 60, token: 'private' }]);
+  assert.deepEqual(pixelEvents(h).at(-1), ['trackSingle', '1234567890', 'InitiateCheckout', {
+    content_type: 'product', content_ids: ['avian-visitors', 'avian-mic-electronics-printed'],
+    contents: [{ id: 'avian-visitors', quantity: 2 }, { id: 'avian-mic-electronics-printed', quantity: 1 }],
+    currency: 'USD', value: 1458, num_items: 3,
+  }]);
+  const count = pixelEvents(h).length;
+  for (const invalid of [[], null, [frame, { ...frame, quantity: 0 }], [{ ...frame, value: NaN }]]) h.checkout(invalid);
+  h.item('Purchase', frame); h.revoke(); h.checkout([frame]);
+  assert.equal(pixelEvents(h).length, count);
+});
+
+test('checkout starts obey v1, privacy, withdrawal during load and private route exclusions', async () => {
+  for (const options of [{ choice: accepted('meta-v1') }, { choice: undefined },
+    { navigator: { globalPrivacyControl: true } }, { navigator: { doNotTrack: '1' } },
+    { url: 'https://theodore.net/store/checkout/' },
+    { url: 'https://theodore.net/store/?restore=private-token' }]) {
+    const h = await harness({ browserEvents: true, choice: accepted(), ...options });
+    h.checkout([frame]); h.loadPixel();
+    assert.equal(h.scripts.length, 0); assert.equal(pixelEvents(h).length, 0);
+  }
+  const h = await harness({ browserEvents: true, choice: accepted() });
+  h.checkout([frame]); h.revoke(); h.loadPixel();
+  assert.equal(pixelEvents(h).length, 0);
+});
+
+
+test('the same consented fbclid preserves its stored creation time instead of renewing the seven-day window', async () => {
+  const originalAt = SECOND - 6 * 86400;
+  const fbc = `fb.1.${originalAt * 1000}.Same_Click.with-dots`;
+  for (const incomingAt of [SECOND, originalAt - 10]) {
+    const h = await harness({ choice: accepted(), storedClick: { fbc },
+      click: { fbclid: 'Same_Click.with-dots', at: incomingAt, path: '/store/avian-visitors/' } });
+    assert.equal(h.context().fbc, fbc);
+    assert.equal(JSON.parse(h.data.get(CLICK)).fbc, fbc);
+    h.setTime((originalAt + 7 * 86400 + 1) * 1000);
+    assert.equal(h.context().fbc, undefined);
+    assert.equal(h.context().fbc, undefined, 'repeated context reads cannot resurrect the same arrival');
+    assert.equal(h.data.has(CLICK), false, 'expired matching data keeps the existing deletion policy');
+  }
+});
+
+test('an already-expired stored fbclid is not renewed, while a genuinely different later click updates matching', async () => {
+  const originalAt = SECOND - 8 * 86400;
+  const click = { fbclid: 'Same_Click', at: SECOND, path: '/store/avian-visitors/' };
+  const h = await harness({ choice: accepted(), storedClick: { fbc: `fb.1.${originalAt * 1000}.Same_Click` }, click });
+  assert.equal(h.context().fbc, undefined);
+  assert.equal(h.context().fbc, undefined);
+  assert.equal(h.data.has(CLICK), false);
+  click.fbclid = 'Different_Click';
+  assert.equal(h.context().fbc, `fb.1.${SECOND * 1000}.Different_Click`);
 });

@@ -5,6 +5,7 @@ import unittest
 
 from hooks.store_products import _meta_catalog_csv, _products
 from test_store_launch import build, drop
+from urllib.parse import parse_qs, urlsplit
 
 
 class MetaCatalogTests(unittest.TestCase):
@@ -62,4 +63,34 @@ class MetaCatalogTests(unittest.TestCase):
         polargraphs = [r for r in rows if r['id'] in ('polargraph-electronics', 'polargraph-electronics-printed')]
         self.assertEqual(len(polargraphs), 2)
         self.assertTrue(all(r['availability'] == 'out of stock' for r in polargraphs))
+
+    def test_real_catalog_links_select_the_advertised_build_and_price(self):
+        from pathlib import Path
+        docs = Path(__file__).resolve().parents[1] / 'docs'
+        products = _products(docs)
+        source = json.loads(build(products)['meta-catalog-source.json'])
+        by_id = {row['id']: row for row in source}
+        frame = by_id['avian-visitors']
+        self.assertEqual(frame['link'], 'https://theodore.net/store/avian-visitors/')
+        self.assertEqual(frame['price'], '699.00 USD')
+        self.assertEqual(frame['availability'], 'in stock')
+        for product_id, price in [('avian-visitors-kit', 520), ('avian-mic', 210)]:
+            with self.subTest(product=product_id):
+                row = by_id[product_id + '-electronics-printed']
+                url = urlsplit(row['link'])
+                selected = parse_qs(url.query).get('variant', [None])[0]
+                self.assertEqual(selected, 'electronics-printed')
+                product = next(p for p in products if p['id'] == product_id)
+                variant = next(v for v in product['variants'] if v['id'] == selected)
+                self.assertEqual(url.path, '/store/' + product_id + '/')
+                self.assertEqual(variant['price'], price)
+                self.assertEqual(row['price'], '%.2f USD' % price)
+                self.assertEqual(row['availability'], 'in stock')
+
+    def test_variant_link_encodes_query_delimiters_without_changing_the_feed_identity(self):
+        product = drop('2000-01-01T00:00:00Z')
+        product['variants'][0]['id'] = 'printed & mounted'
+        row = list(csv.DictReader(io.StringIO(_meta_catalog_csv([product]))))[0]
+        self.assertEqual(row['id'], 'frame-printed & mounted')
+        self.assertEqual(parse_qs(urlsplit(row['link']).query), {'variant': ['printed & mounted']})
 

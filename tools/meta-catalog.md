@@ -13,6 +13,11 @@ Sold-out products publish `out of stock` and quantity zero instead of disappeari
 from the feed. Ordinary made-to-order products retain their existing display
 quantity of 25; the website's status controls whether they are available.
 
+Variant-specific listings link to `?variant=<build>` so their website landing page
+selects the same package and price shown in the card. Meta may append tracking
+parameters to that query; the storefront preserves them. This does not change
+the separate Shop checkout handoff, which resolves the catalog item ID.
+
 Avian Visitors uses `metaCatalogId: avian-visitors`: only its current default build
 is listed under that permanent ID. Open subsequent batches through the normal
 storefront and inventory process, retaining this product field. Existing tags and
