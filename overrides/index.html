@@ -24,9 +24,7 @@
     .main-navigation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; transform: translateX(-100%); transition: none; }
   </style>
 
-  <!-- Hide Material's native search before first paint so it never flashes before search.js swaps
-       in the custom component; no-JS leaves it unset, so native search stays as a fallback (paired
-       with the .tw-has-search rules in search.css). -->
+  <!-- Select the static custom search before first paint; native search remains the no-JS fallback. -->
   <script>document.documentElement.classList.add("tw-has-search")</script>
 
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
@@ -136,40 +134,7 @@
     <!-- Header title -->
     <div class="md-header__title" data-md-component="header-title"></div>
 
-    <!-- Color palette -->
-    {% if not config.theme.palette is mapping %}
-      <form class="md-header__option" data-md-component="palette">
-        {% for option in config.theme.palette %}
-          {% set primary = option.primary | replace(" ", "-") | lower %}
-          {% set accent  = option.accent  | replace(" ", "-") | lower %}
-          <input
-            class="md-option"
-            data-md-color-media="{{ option.media }}"
-            data-md-color-scheme="{{ option.scheme }}"
-            data-md-color-accent="{{ accent }}"
-            {% if option.toggle %}
-              aria-label="{{ option.toggle.name }}"
-            {% else  %}
-              aria-hidden="true"
-            {% endif %}
-            type="radio"
-            name="__palette"
-            id="__palette_{{ loop.index }}"
-          />
-          {% if option.toggle %}
-            <label
-              class="md-header__button md-icon"
-              onclick="colortheme()"
-              title="{{ option.toggle.name }}"
-              for="__palette_{{ loop.index0 or loop.length }}"
-              hidden
-            >
-              {% include ".icons/" ~ option.toggle.icon ~ ".svg" %}
-            </label>
-          {% endif %}
-        {% endfor %}
-      </form>
-    {% endif %}
+    {% include "partials/header-palette.html" %}
 
     <!-- Site language selector -->
     {% if config.extra.alternate %}
@@ -203,6 +168,7 @@
 
     <!-- Button to open search modal -->
     {% if "material/search" in config.plugins %}
+      {% include "partials/header-search.html" %}
       <label class="md-header__button md-icon" for="__search">
         {% include ".icons/material/magnify.svg" %}
       </label>
@@ -211,12 +177,14 @@
       {% include "partials/search.html" %}
     {% endif %}
 
+    {% include "partials/header-cart.html" %}
+
     <label class="md-header__button md-icon" id="parent" onclick="togglemenu()">
      <span class="menu">
       {% include ".icons/material/menu" ~ ".svg" %}
      </span>
      <span class="close">
-      <i class="fa-solid fa-xmark"></i>
+      {% include ".icons/fontawesome/solid/xmark.svg" %}
      </span>
     </label>
 

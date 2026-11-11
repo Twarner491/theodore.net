@@ -30,7 +30,7 @@ function storeHelpers(now, overrides = {}) {
         const elements = {
           ".pe-box-contents": { innerHTML: "" }, ".pe-qty span": { textContent: "" },
           ".pe-price": { innerHTML: "" }, ".pe-qty": { style: {} }, ".pe-buy": buy,
-          ".pe-waitlist": { hidden: false, innerHTML: "" }, ".pe-batch": { textContent: "", hidden: true },
+          ".pe-waitlist": { hidden: false, innerHTML: "" }, ".pe-batch": { textContent: "", hidden: true, classList: { add() {}, remove() {} } },
           ".pe-countdown": { hidden: true, innerHTML: "" },
         };
         root = { querySelector: function (s) { return elements[s] || null; }, querySelectorAll: function () { return []; } };

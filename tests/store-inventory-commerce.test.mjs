@@ -904,6 +904,7 @@ test("retired Batch 1 checkout is rejected before Stripe while Batch 2 binds onl
 
 
 test("Batch 2 signed capture and success reserve then commit its own stock exactly once", async (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: Date.now() });
   const db = new SQLiteD1(); t.after(() => db.close());
   db.sqlite.exec(readFileSync(new URL("../migrations/0002_avian_batch_2.sql", import.meta.url), "utf8"));
   const now = Math.floor(Date.now() / 1000);
@@ -927,10 +928,15 @@ test("Batch 2 signed capture and success reserve then commit its own stock exact
     }
     throw new Error("unexpected fetch " + target);
   };
+  // Delivery may cross a second boundary after authorization. The reservation
+  // is created at capture time, before Stripe emits the later success event.
+  t.mock.timers.tick(1000);
   const capture = await signedWebhook({ id: "evt_batch2_capture", type: "payment_intent.amount_capturable_updated",
     created: now, livemode: false, data: { object: { id: pi.id } } }, { STORE_INVENTORY: db }, fetchMock);
   assert.deepEqual(await capture.json(), { received: true, captured: true });
-  const success = { id: "evt_batch2_success", type: "payment_intent.succeeded", created: now,
+  assert.equal((await readInventoryReservation({ STORE_INVENTORY: db }, pi.id)).createdAt, now + 1);
+  t.mock.timers.tick(1000);
+  const success = { id: "evt_batch2_success", type: "payment_intent.succeeded", created: Math.floor(Date.now() / 1000),
     livemode: false, data: { object: { ...pi, status: "succeeded" } } };
   for (let i = 0; i < 2; i++) {
     const result = await signedWebhook(success, { STORE_INVENTORY: db }, fetchMock);

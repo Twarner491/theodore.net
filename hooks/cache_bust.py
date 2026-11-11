@@ -13,6 +13,7 @@ the product frontmatter, so its version covers the product definitions and gener
 file that does not exist until the build is underway.
 """
 import hashlib
+import importlib.util
 import os
 from pathlib import Path
 
@@ -45,9 +46,14 @@ def _source_hash(config, paths):
 
 
 def on_config(config):
+    # Hook loading does not guarantee that `hooks` is an importable package.
+    image_spec = importlib.util.spec_from_file_location('store_image_cache_inputs', Path(__file__).with_name('store_images.py'))
+    image_helpers = importlib.util.module_from_spec(image_spec)
+    image_spec.loader.exec_module(image_helpers)
     base = Path(config["config_file_path"]).resolve().parent
-    store_sources = [Path("hooks/store_products.py")]
+    store_sources = [Path("hooks/store_products.py"), Path("hooks/store_images.py")]
     store_sources.extend(path.relative_to(base) for path in sorted((base / "docs/store").glob("*.md")))
+    store_sources.extend(path.relative_to(base) for path in image_helpers.source_inputs(base / "docs"))
     versions = {
         "assets/js/store-data.js": _source_hash(config, store_sources),
         "assets/js/search.js": _source_hash(config, [Path("docs/assets/js/search.js")]),
@@ -59,12 +65,24 @@ def on_config(config):
         if asset.split("?", 1)[0] in versions else asset
         for asset in map(str, config.get("extra_javascript", []))
     ]
+    # CSS defines the initial, static header slots. Version it alongside search.js
+    # so a cached stylesheet cannot restore the old hidden/injected-icon layout.
+    css_versions = {
+        asset: _source_hash(config, [Path("docs") / asset])
+        for asset in ("assets/css/search.css", "assets/css/header-search.css")
+    }
+    config["extra_css"] = [
+        asset.split("?", 1)[0] + "?h=" + css_versions[asset.split("?", 1)[0]]
+        if asset.split("?", 1)[0] in css_versions else asset
+        for asset in map(str, config.get("extra_css", []))
+    ]
     return config
 
 
 def on_post_page(output, page, config):
     # These card assets also have absolute references authored directly in templates.
-    for asset in ("assets/js/index.js", "assets/css/projects/project.css", "assets/css/store.css"):
+    for asset in ("assets/js/index.js", "assets/css/projects/project.css", "assets/css/store.css",
+                  "assets/js/header.js", "assets/css/header.css"):
         reference = '/' + asset + '"'
         if reference in output:
             version = _source_hash(config, [Path("docs") / asset])

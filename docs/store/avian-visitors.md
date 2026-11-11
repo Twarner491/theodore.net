@@ -20,17 +20,35 @@ images:
   - avianAssembledTop.png
   - avianAssembledBack.png
   - avianAssembledSide.png
-defaultBuild: assembled-batch-2
+defaultBuild: assembled-continuous
 project: /projects/AvianVisitors/
 related:
   - avian-mic
 storeListings:
   - category: products
-    build: assembled-batch-2
+    build: assembled-continuous
     variants:
-      - assembled-batch-2
+      - assembled-continuous
     title: Avian Visitors
 variants:
+  - id: assembled-continuous
+    image: avianAssembledTop.png
+    label: Assembled
+    status: available
+    productionBatchGroup: avian-visitors
+    price: 699
+    weight: 4
+    stripePrice: price_1UAyqjRPSNpqisAPDHJxogp3
+    stripePriceLive: price_1URc2XRPSNpqisAPNxAEEUEQ
+    maxQuantity: 20
+    shippingProfile: contiguous-us-ground
+    softwareNote: I assemble each frame by hand. Batches 1 and 2 are expected to ship by the end of 2026, and I'm working hard to get subsequent batches out as soon as possible.
+    contents:
+      - Fully assembled 13.3-inch e-paper frame with rechargeable battery
+      - Wall-hanging hardware
+# Retain the original catalog fields for signed Batch 1/2 callbacks and fulfillment retries.
+# Retired builds cannot create or update checkout sessions.
+retiredVariants:
   - id: assembled-batch-2
     image: avianAssembledTop.png
     label: Assembled (Batch 2)
@@ -44,13 +62,9 @@ variants:
     shippingProfile: contiguous-us-ground
     inventorySku: avian-gen3-batch-02
     batchSize: 30
-    softwareNote: I assemble each of these by hand, working as hard as I can to ship both Batch 1 and Batch 2 before the end of 2026.
     contents:
       - Fully assembled 13.3-inch e-paper frame with rechargeable battery
       - Wall-hanging hardware
-# Retain the original catalog fields for signed Batch 1 callbacks and fulfillment retries.
-# Retired builds cannot create or update checkout sessions.
-retiredVariants:
   - id: assembled
     image: avianAssembledTop.png
     label: Assembled

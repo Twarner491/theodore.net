@@ -2,6 +2,9 @@
   --scroll-position: 0px;
 }
 
+#nav-close svg, .close svg { width: 0.7875rem; height: 1.05rem; display: block; fill: currentColor; }
+.store-cart-btn:not([data-store-cart-bound]) .store-cart-count { transition: none; }
+
 header {
     position: sticky;
     top: 0;

@@ -20,6 +20,7 @@ function searchHelpers() {
     document: {
       readyState: "loading",
       addEventListener() {},
+      querySelector() { return null; },
       querySelectorAll() { return []; },
       body: { getAttribute() { return null; } },
       documentElement: { getAttribute() { return null; } },

@@ -26,6 +26,7 @@ variants:
   - id: default
     image: pens.png
     label: 9-pack
+    status: soldout
     price: 28
     stripePrice: "price_1TkB7LRPSNpqisAPmfGuCIzh"
     stripePriceLive: "price_1TkCJfRPSNpqisAPPz9Lc7ut"
@@ -35,6 +36,7 @@ variants:
   - id: with-mounts
     image: penMountsandCaps.png
     label: "+ 9 Mounts & Caps"
+    status: soldout
     price: 48
     stripePrice: "price_1TkzoKRPSNpqisAPEQSKciDr"
     stripePriceLive: "price_1Tl0o9RPSNpqisAPlKRkfPHP"
@@ -44,6 +46,20 @@ variants:
       - 9 Sakura Pigma Micron 05 pens (Black, Orange, Brown, Red, Pink, Green, Purple, Blue, Sepia)
       - 9 3D-printed pen mounts
       - 9 3D-printed pen caps
+# Both options include pens. Retain their prior trusted checkout terms for
+# signed callbacks while rejecting new or updated purchases of either option.
+retiredVariants:
+  - id: default
+    label: 9-pack
+    price: 28
+    stripePrice: "price_1TkB7LRPSNpqisAPmfGuCIzh"
+    stripePriceLive: "price_1TkCJfRPSNpqisAPPz9Lc7ut"
+  - id: with-mounts
+    label: "+ 9 Mounts & Caps"
+    price: 48
+    stripePrice: "price_1TkzoKRPSNpqisAPEQSKciDr"
+    stripePriceLive: "price_1Tl0o9RPSNpqisAPlKRkfPHP"
+    weight: 0.5
 colophon: ""
 ---
 

@@ -118,10 +118,9 @@ function soldOutDetailState() {
 function inventoryBootHarness(overrides = {}) {
   const original = readFileSync(new URL("../docs/assets/js/store.js", import.meta.url), "utf8");
   const source = original.replace(/\}\)\(\);\s*$/, `
-    globalThis.__storeBoot = { visible: false };
+    globalThis.__storeBoot = { visible: false, badgeCounts: [] };
     evInit = function () {};
-    injectHeaderCart = function () {};
-    importCartFromUrl = function () {};
+    injectHeaderCart = function () { globalThis.__storeBoot.badgeCounts.push(cartCount()); };
     ensureDrawer = function () {};
     renderCart = function () {};
     updateBadge = function () {};
@@ -329,6 +328,24 @@ test("store boot reveals and accepts an ordinary add before a hung finite read s
   assert.equal(harness.boot.interact(), 1);
 });
 
+test("the first header badge uses the saved cart after any checkout-link import", () => {
+  const cable = { id: "cable", published: true, defaultBuild: "standard", variants: [{ id: "standard", price: 12, stripePrice: "price_ordinary" }] };
+  for (const [search, count] of [["", 2], ["?product=cable&build=standard&qty=3", 5], ["?products=cable-standard:4", 4]]) {
+    let stored = JSON.stringify([{ id: "cable", build: "standard", qty: 2 }]);
+    const h = inventoryBootHarness({
+      location: { hostname: "example.test", pathname: "/store/checkout/", search, hash: "", origin: "https://example.test" },
+      localStorage: {
+        getItem(key) { return key === "store:cart:v3" ? stored : null; },
+        setItem(key, value) { if (key === "store:cart:v3") stored = value; },
+      },
+    });
+    h.window.STORE_PRODUCTS = [cable];
+    h.boot.run();
+    assert.deepEqual(Array.from(h.boot.badgeCounts), [count], "the initial badge never resets the saved/imported count to zero");
+    assert.equal(h.boot.cart()[0].qty, count);
+  }
+});
+
 test("authoritative inventory immediately reconciles a persisted finite cart", async () => {
   let stored = JSON.stringify([{ id: "avian-visitors", build: "assembled", qty: 20 }]);
   const harness = inventoryBootHarness({
@@ -415,4 +432,11 @@ test("Batch 2 detail count opens only with confirmed stock and closes on sellout
   helpers.setInventory({ "avian-gen3-batch-02": { available: 0, soldOut: true } }, true);
   assert.equal(helpers.batchAvailabilityText(variant), "Batch 2, 0 remaining");
   assert.equal(helpers.buyable(variant), false);
+});
+
+test("a made-to-order production label displays without inventing a finite remaining count", () => {
+  const helpers = inventoryHelpers();
+  assert.equal(helpers.batchAvailabilityText({ batchLabel: "Batch 3 · made to order" }), "Batch 3 · made to order");
+  assert.equal(helpers.batchAvailabilityText({}), "");
+  assert.equal(helpers.batchAvailabilityText({ batchLabel: "Batch 3", batchSize: 30, inventorySku: "batch-3" }), "", "a finite batch still waits for authoritative stock");
 });

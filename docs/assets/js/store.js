@@ -33,6 +33,27 @@
   }
 
   const ICON_CLOSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 6 18 18M18 6 6 18"/></svg>';
+  // Font Awesome Free 7.1.0 (CC BY 4.0), from Material's bundled icon set.
+  // Inline paths keep navigation and product placeholders independent of the remote kit.
+  const STORE_ICON_PATHS = {
+    "arrow-left-long": [576, "M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288H544c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l73.4-73.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-128 128z"],
+    "chevron-down": [448, "M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"],
+    "chevron-left": [320, "M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"],
+    "chevron-right": [320, "M311.1 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L243.2 256 73.9 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"],
+    "cube": [512, "M224.3-2.5c19.8-11.4 44.2-11.4 64 0L464.2 99c19.8 11.4 32 32.6 32 55.4v203c0 22.9-12.2 44-32 55.4L288.3 514.5a64.16 64.16 0 0 1-64 0L48.5 413c-19.8-11.4-32-32.6-32-55.4v-203c0-22.9 12.2-44 32-55.4zm207.8 360V191.4l-143.8 83v166.1z"],
+    "cubes": [512, "M284-1.3c-17.3-10-38.7-10-56 0l-84.2 48.6c-17.3 10-28 28.5-28 48.5v101.9l-88.3 51c-17.3 10-28 28.5-28 48.5v97.3c0 20 10.7 38.5 28 48.5l84.3 48.6c17.3 10 38.7 10 56 0l88.3-51 88.3 51c17.3 10 38.7 10 56 0l84.1-48.6c17.3-10 28-28.5 28-48.5v-97.3c0-20-10.7-38.5-28-48.5l-88.3-51V95.8c0-20-10.7-38.5-28-48.5zm-52 293.9v106.5l-88.3 51c-1.2.7-2.6 1.1-4 1.1V345.9zm231.4.6c.7 1.2 1.1 2.6 1.1 4v97.3c0 2.9-1.5 5.5-4 6.9L376.2 450c-1.2.7-2.6 1.1-4 1.1V345.8zM348.3 95.8v101.9L256 251V144.5l91.2-52.6c.7 1.2 1.1 2.6 1.1 4z"],
+    "screwdriver-wrench": [576, "M70.8-6.7c5.4-5.4 13.8-6.2 20.2-2l118.9 79.2c8.9 5.9 14.2 15.9 14.2 26.6v49.6l90.8 90.8c33.3-15 73.9-8.9 101.2 18.5l126.1 126.1c18.7 18.7 18.7 49.1 0 67.9l-60.1 60.1c-18.7 18.7-49.1 18.7-67.9 0L288.1 384c-27.4-27.4-33.5-67.9-18.5-101.2L178.8 192h-49.6c-10.7 0-20.7-5.3-26.6-14.2L23.4 58.9c-4.2-6.3-3.4-14.8 2-20.2zm145 303.5c-6.3 36.9 2.3 75.9 26.2 107.2l-94.9 95c-28.1 28.1-73.7 28.1-101.8 0s-28.1-73.7 0-101.8l135.4-135.5 35.2 35.1zM384.1 0c20.1 0 39.4 3.7 57.1 10.5 10 3.8 11.8 16.5 4.3 24.1l-56.7 56.7c-3 3-4.7 7.1-4.7 11.3V144c0 8.8 7.2 16 16 16h41.4c4.2 0 8.3-1.7 11.3-4.7l56.7-56.7c7.6-7.5 20.3-5.7 24.1 4.3 6.8 17.7 10.5 37 10.5 57.1 0 43.2-17.2 82.3-45 111.1L450 222c-33.1-33-78.5-45.7-121.1-38.4l-56.8-56.8V97.1l-.2-5c-.8-12.4-4.4-24.3-10.5-34.9C290.8 22.2 334.8 0 384.1-.1z"],
+    "pen-nib": [512, "m368.5 18.3-50.1 50.1 125.3 125.3 50.1-50.1c21.9-21.9 21.9-57.3 0-79.2l-46.1-46.1c-21.9-21.9-57.3-21.9-79.2 0m-89.2 78.9-.5.1-144.1 43.2c-19.9 6-35.7 21.2-42.3 41L3.8 445.8c-2.9 8.7-1.9 18.2 2.5 26l155.4-155.4c-1.1-4-1.6-8.1-1.6-12.4 0-26.5 21.5-48 48-48s48 21.5 48 48-21.5 48-48 48c-4.3 0-8.5-.6-12.4-1.6L40.3 505.7c7.8 4.4 17.2 5.4 26 2.5l264.3-88.6c19.7-6.6 35-22.4 41-42.3l43.2-144.1.1-.5L279.4 97.2z"],
+    "image": [448, "M64 32C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zm64 80a48 48 0 1 1 0 96 48 48 0 1 1 0-96m144 112c8.4 0 16.1 4.4 20.5 11.5l88 144c4.5 7.4 4.7 16.7.5 24.3S368.7 416 360 416H88c-8.9 0-17.2-5-21.3-12.9s-3.5-17.5 1.6-24.8l56-80c4.5-6.4 11.8-10.2 19.7-10.2s15.2 3.8 19.7 10.2l26.4 37.8 61.4-100.5c4.4-7.1 12.1-11.5 20.5-11.5z"],
+  };
+  function storeIcon(name, classes = "") {
+    const icon = STORE_ICON_PATHS[name] || STORE_ICON_PATHS.cube;
+    return '<svg class="store-icon' + (classes ? ' ' + classes : '') + '" viewBox="0 0 ' + icon[0] + ' 512" fill="currentColor" aria-hidden="true" focusable="false"><path d="' + icon[1] + '"/></svg>';
+  }
+  function productIcon(classes) {
+    const name = String(classes || '').split(/\s+/).map((c) => c.replace(/^fa-/, '')).find((c) => Object.hasOwn(STORE_ICON_PATHS, c));
+    return storeIcon(name || 'cube');
+  }
   const ICON_BAG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6h-2c0-2.8-2.2-5-5-5S7 3.2 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m-7-3c1.7 0 3 1.3 3 3H9c0-1.7 1.3-3 3-3m7 17H5V8h14zm-7-8c-1.7 0-3-1.3-3-3H7c0 2.8 2.2 5 5 5s5-2.2 5-5h-2c0 1.7-1.3 3-3 3"/></svg>';
 
   /* product data is generated from docs/store/*.md frontmatter by hooks/store_products.py and loaded as window.STORE_PRODUCTS; populated in init() */
@@ -41,6 +62,15 @@
   let INVENTORY_LOADING = false;
   let INVENTORY_ROWS = Object.create(null);
   const INVENTORY_TIMEOUT_MS = 2500;
+  let PRODUCTION_BATCH_ROWS = Object.create(null);
+  let productionBatchLoading = false;
+  let batchExposure = null;
+  let batchExposureSession = null;
+  const batchExposureSeen = new Set();
+  const BATCH_EXPOSURE_KEY = "store:batch-exposures:v1";
+  const BATCH_EXPERIMENT = "avian-count-v1";
+  const COUNT_EXPERIMENT_ENABLED = true;
+  let batchExperimentIdentity;
 
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
@@ -139,6 +169,7 @@
     comingSoon: { sell: false, cta: "",            tag: "Coming soon" },
     loading:    { sell: false, cta: "Checking availability", tag: "Checking availability" },
     unavailable: { sell: false, cta: "Check availability", tag: "Availability unavailable" },
+    paused:     { sell: false, cta: "Orders paused", tag: "Orders paused" },
   };
   const configuredStatusOf = (v) => { const s = v && (v.status || (v.comingSoon ? "comingSoon" : "available")); return STATUS[s] ? s : "available"; };
   /* timed drops: a variant's optional `launchAt` (ISO 8601 UTC, e.g. "2026-11-12T17:00:00Z") keeps
@@ -150,9 +181,20 @@
   const launchPending = (v) => { if (!v || v.launchAt == null) return false; const t = launchTime(v); return t == null || Date.now() < t; };
   const LOW_STOCK = 5;
   const inventorySkuOf = (v) => v && typeof v.inventorySku === "string" && /^[a-z0-9][a-z0-9._-]{0,63}$/.test(v.inventorySku) ? v.inventorySku : "";
+  const productionBatchGroupOf = (v) => v && v.productionBatchGroup === "avian-visitors" ? v.productionBatchGroup : "";
+  const productionBatchOf = (v) => PRODUCTION_BATCH_ROWS[productionBatchGroupOf(v)] || null;
+  function productionBatchHTML(v) {
+    const row = productionBatchOf(v);
+    if (!row) return "";
+    const assignment = batchExperimentAssignment();
+    const concealed = !COUNT_EXPERIMENT_ENABLED || (assignment && assignment.arm === "label");
+    return '<span class="pe-batch-label">Batch ' + row.ordinal + '</span><span class="pe-batch-remaining' +
+      (concealed ? ' pe-batch-remaining--concealed" aria-hidden="true' : '') + '">' +
+      row.remaining + (row.remaining === 1 ? ' frame remaining' : ' frames remaining') + '</span>';
+  }
   function batchAvailabilityText(v, product) {
     const total = v && Number.isSafeInteger(v.batchSize) && v.batchSize > 0 ? v.batchSize : 0;
-    if (!total) return "";
+    if (!total) return v && typeof v.batchLabel === "string" ? v.batchLabel : "";
     const sku = inventorySkuOf(v), row = sku && INVENTORY_READY ? INVENTORY_ROWS[sku] : null;
     let remaining = row && Number.isSafeInteger(row.available) && row.available >= 0
       ? Math.min(total, row.available)
@@ -169,6 +211,8 @@
     const configured = configuredStatusOf(v);
     if (!STATUS[configured].sell) return configured;
     if (launchPending(v)) return "comingSoon";
+    const production = productionBatchOf(v);
+    if (production && production.paused) return "paused";
     const sku = inventorySkuOf(v);
     if (sku && (!INVENTORY_READY || !INVENTORY_ROWS[sku] || INVENTORY_ROWS[sku].soldOut)) {
       // An explicitly marked, unpublished product can show its finished price/CTA on
@@ -218,8 +262,40 @@
   /* per-image letterbox color (sampled at build, keyed by URL incl. DARK variants) so a contained
      product image fills its frame with a background matching that image's own, in either theme. */
   let IMAGE_BG = {};
-  const bgFor = (u) => IMAGE_BG[u] || "";
+  let IMAGE_SOURCES = {};
+  const bgFor = (u) => (IMAGE_SOURCES[u] && IMAGE_SOURCES[u].background) || IMAGE_BG[u] || "";
   const carouselUrls = (p) => (p.images || []).map((f) => themedUrl(p.imageBase + f));
+  const IMAGE_SIZES = {
+    grid: "(max-width: 695px) 90vw, (max-width: 860px) 44vw, 30vw",
+    gallery: "(max-width: 860px) 90vw, 45vw",
+    accessory: "(max-width: 700px) 44vw, 240px",
+    thumbnail: "64px",
+  };
+  function imageSource(url) {
+    const record = IMAGE_SOURCES[url], sources = record && record.sources;
+    if (!Array.isArray(sources) || !sources.length) return { src: url };
+    return { src: sources[0].url, srcset: sources.map((source) => source.url + " " + source.width + "w").join(", "),
+      width: record.width, height: record.height };
+  }
+  function productImageAttrs(url, size, deferred = false) {
+    const source = imageSource(url);
+    const identity = ' data-store-image="' + escapeHtml(toLight(url)) + '"';
+    const dimensions = source.width ? ' width="' + source.width + '" height="' + source.height + '"' : "";
+    const responsive = ' sizes="' + escapeHtml(IMAGE_SIZES[size] || size) + '" decoding="async"' + dimensions;
+    if (deferred) return identity + responsive + ' data-store-image-pending="true"';
+    return ' src="' + escapeHtml(source.src) + '"' + (source.srcset ? ' srcset="' + escapeHtml(source.srcset) + '"' : "") + identity + responsive;
+  }
+  function loadProductImage(img) {
+    if (!img) return;
+    const original = img.getAttribute("data-store-image") || img.getAttribute("src");
+    if (!original) return;
+    const source = imageSource(themedUrl(original));
+    if (source.srcset) {
+      if (img.getAttribute("srcset") !== source.srcset) img.setAttribute("srcset", source.srcset);
+    } else img.removeAttribute("srcset");
+    if (img.getAttribute("src") !== source.src) img.setAttribute("src", source.src);
+    img.removeAttribute("data-store-image-pending");
+  }
   const minPrice = (p) => { const ps = p.variants.filter(buyable).map((v) => v.price); return ps.length ? Math.min.apply(null, ps) : null; };
   const defaultBuyBuild = (p) => { const d = p.variants.find((v) => v.id === p.defaultBuild); if (buyable(d)) return d.id; const b = p.variants.find(buyable); return b ? b.id : null; };
   const listingVariant = (listing) => listing.variants.find((v) => v.id === listing.build) || listing.variants[0] || null;
@@ -273,6 +349,16 @@
     const identity = migrateCartIdentity(String((line && line.id) || ""), String((line && line.build) || ""));
     return Object.assign({}, line, identity);
   }
+  function currentCartIdentity(id, build) {
+    const identity = migrateCartIdentity(id, build);
+    const product = getProduct(identity.id);
+    // Only an unbound shopping cart moves to the current offering. Historical
+    // receipts and existing payment bindings retain their original batch ids.
+    if (identity.id === "avian-visitors" && ["assembled", "assembled-batch-2"].indexOf(identity.build) >= 0 &&
+        product && !exactVariant(product, identity.build) && exactVariant(product, "assembled-continuous"))
+      return { id: identity.id, build: "assembled-continuous" };
+    return identity;
+  }
   function legacyAvianKitDetailTarget(productId, search, hash) {
     if (productId !== "avian-visitors") return "";
     let params; try { params = new URLSearchParams(search || ""); } catch (e) { return ""; }
@@ -287,7 +373,7 @@
     raw.forEach((l) => {
       if (!l || typeof l !== "object") return;
       let id = String(l.id || ""), build = String(l.build || "");
-      const migrated = migrateCartIdentity(id, build); id = migrated.id; build = migrated.build;
+      const migrated = currentCartIdentity(id, build); id = migrated.id; build = migrated.build;
       let qty = Math.floor(Number(l.qty));
       if (!id || !isFinite(qty) || qty <= 0) return;
       qty = Math.min(qty, known ? variantMaxQuantity(id, build) : MAX_QTY);
@@ -302,9 +388,12 @@
   const loadCart = () => {
     try {
       const raw = JSON.parse(localStorage.getItem(CART_KEY));
-      const hadLegacyAvianKit = Array.isArray(raw) && raw.some((l) => l && isLegacyAvianKitIdentity(l.id, l.build));
+      const hadLegacyIdentity = Array.isArray(raw) && raw.some((l) => l && (() => {
+        const current = currentCartIdentity(l.id, l.build);
+        return current.id !== l.id || current.build !== l.build;
+      })());
       cart = sanitizeCart(raw);
-      if (hadLegacyAvianKit) saveCart();   // make the one-time identity migration persistent
+      if (hadLegacyIdentity) saveCart();   // make the one-time identity migration persistent
     } catch (e) { cart = []; }
     if (!cart.length) saveGiftDraft({ gift: false });
     recordRecoveryCart(cart, "cart_observed");
@@ -375,6 +464,57 @@
     }
   }
 
+  async function loadProductionBatches() {
+    if (productionBatchLoading) return false;
+    const groups = [...new Set(PRODUCTS.filter((p) => p.published)
+      .flatMap((p) => (p.variants || []).map(productionBatchGroupOf)).filter(Boolean))];
+    if (!groups.length) return false;
+    productionBatchLoading = true;
+    try {
+      await Promise.all(groups.map(async (group) => {
+        const controller = typeof AbortController === "function" ? new AbortController() : null;
+        let timer = null;
+        try {
+          const timeout = new Promise((_, reject) => {
+            timer = setTimeout(() => {
+              if (controller) controller.abort();
+              reject(new Error("production batch timeout"));
+            }, INVENTORY_TIMEOUT_MS);
+          });
+          const request = (async () => {
+            const response = await fetch("/api/production-batch?group=" + encodeURIComponent(group), {
+              cache: "no-store", ...(controller ? { signal: controller.signal } : {}),
+            });
+            const row = await response.json();
+            if (!response.ok || !row || row.group !== group || !Number.isSafeInteger(row.ordinal) || row.ordinal < 1 ||
+                !Number.isSafeInteger(row.remaining) || row.remaining < 0 || typeof row.paused !== "boolean")
+              throw new Error("invalid production batch response");
+            return { group, ordinal: row.ordinal, remaining: row.remaining, paused: row.paused };
+          })();
+          PRODUCTION_BATCH_ROWS[group] = await Promise.race([request, timeout]);
+        } catch (_) {
+          // A stale count is not a substitute for the ledger. Checkout independently
+          // checks intake availability; this informational read never blocks rendering.
+          delete PRODUCTION_BATCH_ROWS[group];
+        } finally { if (timer != null) clearTimeout(timer); }
+      }));
+    } finally { productionBatchLoading = false; }
+    return true;
+  }
+
+  function refreshProductionBatchSurfaces() {
+    // Never remount checkout or change the state of an already accepted payment.
+    if ($("#store-grid")) renderGrid();
+    else if ($("#product-detail") && root && P) { updateVariant(false); renderAccessories(P); }
+    else return;
+    renderCart();
+  }
+
+  function refreshProductionBatches() {
+    if (!$("#store-grid") && !$("#product-detail")) return;
+    void loadProductionBatches().then((changed) => { if (changed) refreshProductionBatchSurfaces(); });
+  }
+
   function refreshInventorySurfaces() {
     if ($("#store-grid")) renderGrid();
     else if ($("#product-detail") && root && P) {
@@ -385,6 +525,12 @@
       const product = getProduct(line.id), variant = product && exactVariant(product, line.build);
       return !!inventorySkuOf(variant);
     })) { void renderCheckout(); }
+    else if ($("#checkout")) {
+      const host = $("#checkout");
+      // Related finite products can become available even when this cart has
+      // no finite items. Refresh recommendations without remounting payment.
+      if ($(".co-summary", host) && !(host.__checkoutBusy && host.__checkoutBusy())) coRefreshSummary(host);
+    }
     renderCart();
   }
 
@@ -471,19 +617,109 @@
     return { item_id: id + "-" + b, item_name: (p && p.title) || id, item_variant: b, price: (v && v.price) || 0, quantity: qty || 1 };
   }
 
+  // Versioned assignment is reproducible from the existing random visitor id.
+  // The collector verifies the same unsigned FNV-1a hash; this never authorizes money or stock.
+  function batchExperimentArm(anon) {
+    if (typeof anon !== "string" || !/^[a-z0-9_-]{8,40}$/i.test(anon)) return null;
+    let hash = 2166136261;
+    const input = BATCH_EXPERIMENT + ":" + anon;
+    for (let i = 0; i < input.length; i++) hash = Math.imul(hash ^ input.charCodeAt(i), 16777619) >>> 0;
+    return hash < 0x80000000 ? "label" : "count";
+  }
+  function batchExperimentAssignment() {
+    if (!COUNT_EXPERIMENT_ENABLED) return null;
+    if (batchExperimentIdentity !== undefined) return batchExperimentIdentity;
+    batchExperimentIdentity = null;
+    try {
+      const anon = evAnon();
+      // Without a persistent id we cannot keep returns in the same arm or join purchases.
+      if (localStorage.getItem(EV_AID) !== anon) return null;
+      const arm = batchExperimentArm(anon);
+      if (arm) batchExperimentIdentity = { experiment: BATCH_EXPERIMENT, arm, anon };
+    } catch (_) {}
+    return batchExperimentIdentity;
+  }
+
   function track(type, ex) {
     try {
+      const batchEvent = type === "batch_view" || type === "batch_exposure";
+      if (batchEvent && !COUNT_EXPERIMENT_ENABLED) return;
+      if (batchEvent && (!ex || ex.product !== "avian-visitors" || ex.build !== "assembled-continuous" ||
+          !Number.isSafeInteger(ex.batch_ordinal) || ex.batch_ordinal < 1 || ex.batch_ordinal > 1000000 ||
+          !Number.isSafeInteger(ex.batch_remaining) || ex.batch_remaining < 0 || ex.batch_remaining > 10000)) return;
       const ev = { t: type, a: evAnon(), s: evSess(), src: evSource() };
+      if (type === "batch_exposure") {
+        if (ex.experiment !== BATCH_EXPERIMENT || !["label", "count"].includes(ex.arm) || ex.arm !== batchExperimentArm(ev.a)) return;
+        ev.experiment = ex.experiment; ev.arm = ex.arm;
+      }
       const land = ssg(EV_LAND); if (land) ev.l = land;
       let host = ""; try { host = new URL(document.referrer).hostname; } catch (e) {}
       if (host) ev.r = host.slice(0, 128);
       if (ex) { if (ex.product) ev.p = String(ex.product).slice(0, 64); if (ex.build) ev.b = String(ex.build).slice(0, 40); if (ex.qty != null) ev.q = ex.qty; if (ex.value != null && isFinite(ex.value)) ev.v = Math.round(ex.value); }
-      recordRecoveryEvent(type, ex);
+      if (batchEvent) { ev.batch_ordinal = ex.batch_ordinal; ev.batch_remaining = ex.batch_remaining; }
+      else recordRecoveryEvent(type, ex);
       if (localRecovery && localRecovery.mode === "local") return;
       const body = JSON.stringify(ev);
       if (navigator.sendBeacon) navigator.sendBeacon(EV_URL, body);
       else fetch(EV_URL, { method: "POST", headers: { "content-type": "text/plain" }, body: body, keepalive: true }).catch(() => {});
     } catch (e) { /* analytics never breaks the page */ }
+  }
+
+  function rememberBatchExposure(key) {
+    if (batchExposureSession === null) {
+      batchExposureSession = evSess();
+      try {
+        const saved = JSON.parse(ssg(BATCH_EXPOSURE_KEY));
+        if (saved && saved.session === batchExposureSession && Array.isArray(saved.states))
+          saved.states.slice(-256).forEach((state) => { if (typeof state === "string" && /^(label|count):\d{1,7}:\d{1,5}$/.test(state)) batchExposureSeen.add(state); });
+      } catch (_) {}
+    }
+    if (batchExposureSeen.has(key)) return false;
+    batchExposureSeen.add(key);
+    sss(BATCH_EXPOSURE_KEY, JSON.stringify({ session: batchExposureSession, states: [...batchExposureSeen].slice(-256) }));
+    return true;
+  }
+
+  function observeProductionBatchCounter(element, product, variant) {
+    if (batchExposure) batchExposure.observer.disconnect();
+    batchExposure = null;
+    const row = productionBatchOf(variant), assignment = batchExperimentAssignment();
+    if (!element || element.hidden || !row || row.paused || !assignment || !product || product.id !== "avian-visitors" ||
+        !variant || variant.id !== "assembled-continuous" || typeof IntersectionObserver !== "function") return;
+    // Both arms use the same reserved purchase-area box, including the concealed
+    // count in the label arm. Capture this render, not a later ledger response.
+    const state = { element, ordinal: row.ordinal, remaining: row.remaining, assignment, observer: null };
+    try {
+      state.observer = new IntersectionObserver((entries) => {
+        try {
+          if (batchExposure !== state || document.hidden || element.hidden || !element.isConnected) return;
+          if (!entries.some((entry) => entry.target === element && entry.isIntersecting && entry.intersectionRatio >= 1)) return;
+          const style = getComputedStyle(element);
+          if (style.visibility !== "visible" || style.display === "none" || Number(style.opacity) === 0) return;
+          const rect = element.getBoundingClientRect();
+          if (rect.width <= 0 || rect.height <= 0) return;
+          // A drawer or sticky header can cover an intersecting element. Do not
+          // count that as an exposure to a visible counter.
+          const top = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          if (!top || (top !== element && !element.contains(top))) return;
+          if (rememberBatchExposure(state.assignment.arm + ":" + state.ordinal + ":" + state.remaining)) track("batch_exposure", {
+            product: product.id, build: variant.id, batch_ordinal: state.ordinal, batch_remaining: state.remaining,
+            experiment: state.assignment.experiment, arm: state.assignment.arm,
+          });
+        } catch (_) { /* missing telemetry must not interrupt shopping */ }
+      }, { threshold: 1 });
+      batchExposure = state;
+      state.observer.observe(element);
+    } catch (_) { batchExposure = null; }   // measurement cannot gate the product UI
+  }
+
+  function resumeBatchExposure() {
+    if (!batchExposure || document.hidden) return;
+    // Foregrounding a tab does not necessarily change intersection geometry.
+    try {
+      batchExposure.observer.unobserve(batchExposure.element);
+      batchExposure.observer.observe(batchExposure.element);
+    } catch (_) {}
   }
 
   /* ---- store index filter: a compact checkable menu. Products and kits are the
@@ -602,7 +838,7 @@
       card.dataset.category = listing.category;
       card.innerHTML =
         '<a class="pc-stretch" href="' + href + '" aria-label="' + escapeHtml(listing.title) + '"></a>' +
-        '<div class="pc-imgwrap"' + (hero && bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' + (hero ? '<img class="pc-img" src="' + hero + '" alt="' + escapeHtml(listing.title) + '" loading="lazy">' : '<span class="pc-img"></span>') + "</div>" +
+        '<div class="pc-imgwrap"' + (hero && bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' + (hero ? '<img class="pc-img"' + productImageAttrs(hero, "grid") + ' alt="' + escapeHtml(listing.title) + '" loading="lazy">' : '<span class="pc-img"></span>') + "</div>" +
         '<div class="pc-body">' + (buyBuild ? '<button class="pc-add" type="button" aria-label="Add ' + escapeHtml(listing.title) + ' to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>' : "") +
           '<p class="pc-title">' + escapeHtml(listing.title) + '</p><p class="pc-desc">' + escapeHtml(listing.teaser) + '</p>' +
           '<p class="pc-price">' + (mp != null ? (showFrom ? '<span class="from">from</span>' : "") + money(mp) : listingStatus(listing)) + "</p></div>";
@@ -742,15 +978,15 @@
     const hasVariantDesc = (p.variants || []).some((v) => !!v.desc);
     const hasSoftwareNote = !!p.softwareNote || (p.variants || []).some((v) => !!v.softwareNote);
     const hasLaunch = (p.variants || []).some((v) => launchTime(v) != null);
-    const hasBatch = hasLaunch || (p.variants || []).some((v) => Number.isSafeInteger(v.batchSize) && v.batchSize > 0);
+    const hasBatch = hasLaunch || (p.variants || []).some((v) => productionBatchGroupOf(v) || v.batchLabel || (Number.isSafeInteger(v.batchSize) && v.batchSize > 0));
     const builds = p.variants.map((v) => '<button type="button" data-opt="' + v.id + '">' + v.label + "</button>").join("");
     const back = backTarget();
     return (
-      '<div class="return2feed"><a href="' + escapeHtml(back.href) + '"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> ' + escapeHtml(back.label) + "</a></div>" +
+      '<div class="return2feed"><a href="' + escapeHtml(back.href) + '">' + storeIcon("arrow-left-long") + ' ' + escapeHtml(back.label) + "</a></div>" +
       '<div class="pd-media"><div class="pe-carousel">' +
-        '<button class="pe-arrow prev" type="button" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>' +
+        '<button class="pe-arrow prev" type="button" aria-label="Previous">' + storeIcon("chevron-left") + '</button>' +
         '<div class="pe-frame"><div class="pe-slides"></div></div>' +
-        '<button class="pe-arrow next" type="button" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>' +
+        '<button class="pe-arrow next" type="button" aria-label="Next">' + storeIcon("chevron-right") + '</button>' +
       '</div><div class="pe-dots"></div></div>' +
       '<div class="pd-info"><h2 class="pe-title">' + p.title + "</h2><p class=\"pe-sub\">" + (p.sub || "") + "</p>" +
         (multiVariant ? '<div class="opt-seg" data-group="build"><i class="opt-pill" aria-hidden="true"></i>' + builds + "</div>" : "") +
@@ -773,7 +1009,7 @@
     P = p; build = initial ? initial.id : (p.defaultBuild || p.variants[0].id); qty = 1;
     navTrail = reconcileTrail(p);
     root.innerHTML = detailHTML(p);
-    renderCarousel(); wireDetail(); updateVariant(!!initial);
+    renderCarousel(initial && initial.image); wireDetail(); updateVariant(!!initial);
     renderAccessories(p);
     track("view_item", { product: p.id, build: build, value: evItemValue(p, build) });
     ga4("view_item", { currency: "USD", value: (variantById(p, build) || {}).price || 0, items: [ga4Item(p.id, build, 1)] });
@@ -785,6 +1021,14 @@
      cards on their parent product page. The card links to the accessory's own page; the +
      adds to the cart and becomes a live quantity counter (reads/writes the cart line). ---- */
   const accessoriesFor = (p) => PRODUCTS.filter((a) => a.accessory && a.parentId === p.id && (a.published || DEV_SHOW_UNPUBLISHED));
+  function accessoryBuyBuild(p, includePendingInventory = false) {
+    const eligible = (v) => buyable(v) || (includePendingInventory && v && inventorySkuOf(v) && !INVENTORY_READY && STATUS[configuredStatusOf(v)].sell && !launchPending(v) && v.price != null && !!v.stripePrice);
+    const printed = exactVariant(p, "electronics-printed");
+    if (printed) return eligible(printed) ? printed.id : null;
+    const preferred = exactVariant(p, p.defaultBuild);
+    const selected = eligible(preferred) ? preferred : (p.variants || []).find(eligible);
+    return selected ? selected.id : null;
+  }
   const cartQtyOf = (id, b) => { const l = cart.find((x) => x.id === id && x.build === b); return l ? l.qty : 0; };
   function setCartQty(id, b, q) {
     q = Math.max(0, Math.min(variantMaxQuantity(id, b), Math.floor(q)));
@@ -795,39 +1039,46 @@
     saveCart(); renderCart(); updateBadge(true);   // renderCart() re-syncs the cards via syncAccCards()
   }
   const ICON_PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
-  function accAddHTML(a) {
-    const b = defaultBuyBuild(a); if (!b) return "";   // quick-add the default buyable variant
+  function accAddHTML(a, selectedBuild) {
+    const b = selectedBuild || accessoryBuyBuild(a); if (!b) return "";
     const q = cartQtyOf(a.id, b);
-    if (q > 0) return '<div class="pc-qty"><button type="button" data-q="-1" aria-label="Remove one">−</button><span>' + q + '</span><button type="button" data-q="1" aria-label="Add one">+</button></div>';
-    return '<button class="pc-add" type="button" aria-label="Add to cart">' + ICON_PLUS + "</button>";
+    const atLimit = q >= variantMaxQuantity(a.id, b) || !buyable(exactVariant(a, b));
+    if (q > 0) return '<div class="pc-qty"><button type="button" data-q="-1" aria-label="Remove one ' + escapeHtml(a.title) + '">−</button><span>' + q + '</span><button type="button" data-q="1" aria-label="Add one ' + escapeHtml(a.title) + '"' + (atLimit ? ' disabled' : '') + '>+</button></div>';
+    return '<button class="pc-add" type="button" aria-label="Add ' + escapeHtml(a.title) + ' to cart">' + ICON_PLUS + "</button>";
   }
-  function accCardHTML(a) {
-    const hero = carouselUrls(a)[0];
+  function accCardHTML(a, options = {}) {
+    const b = options.build || accessoryBuyBuild(a), variant = b && exactVariant(a, b);
+    if (!b) return "";
+    const hero = variant && variant.image ? themedUrl(a.imageBase + variant.image) : carouselUrls(a)[0];
     const media = hero
-      ? '<img class="pc-img" src="' + hero + '" alt="' + escapeHtml(a.title) + '" loading="lazy">'
-      : '<span class="pc-img pc-ph"><i class="' + (a.icon || "fa-solid fa-cube") + '" aria-hidden="true"></i></span>';
-    const mp = minPrice(a);
-    // true accessory (single variant) -> exact price; cross-sell product (multi-variant) -> "from $X"
-    const priceHTML = a.accessory ? money((a.variants[0] || {}).price)
-      : (mp != null ? '<span class="from">from</span>' + money(mp) : productStatus(a));
-    return '<div class="product-card product-card--mini" data-acc="' + escapeHtml(a.id) + '">' +
-      '<a class="pc-stretch" href="/store/' + encodeURIComponent(a.id) + '/" aria-label="' + escapeHtml(a.title) + '"></a>' +
+      ? '<img class="pc-img"' + productImageAttrs(hero, "accessory") + ' alt="' + escapeHtml(a.title) + '" loading="lazy">'
+      : '<span class="pc-img pc-ph">' + productIcon(a.icon) + '</span>';
+    const priceHTML = money(variant.price);
+    const controls = '<span class="pc-addwrap">' + accAddHTML(a, b) + '</span>';
+    const title = '<p class="pc-title">' + escapeHtml(a.title) + '</p>';
+    const body = options.checkout
+      ? title + (!a.accessory ? '<p class="co-accessory-variant">' + escapeHtml(variant.label) + '</p>' : '') +
+        '<div class="co-accessory-footer"><p class="pc-price">' + priceHTML + '</p>' + controls + '</div>'
+      : '<div class="pc-tophead">' + title + controls + '</div><p class="pc-price">' + priceHTML + '</p>';
+    return '<div class="product-card product-card--mini' + (options.checkout ? ' co-accessory' : '') + '" data-acc="' + escapeHtml(a.id) + '"' + (b ? ' data-build="' + escapeHtml(b) + '"' : '') + '>' +
+      '<a class="pc-stretch" href="/store/' + encodeURIComponent(a.id) + '/' + (b ? '?variant=' + encodeURIComponent(b) : '') + '" aria-label="' + escapeHtml(a.title) + '"></a>' +
       '<div class="pc-imgwrap"' + (hero && bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' + media + "</div>" +
-      '<div class="pc-body"><div class="pc-tophead"><p class="pc-title">' + escapeHtml(a.title) + '</p><span class="pc-addwrap">' + accAddHTML(a) + "</span></div>" +
-        '<p class="pc-price">' + priceHTML + "</p></div></div>";
+      '<div class="pc-body">' + body + '</div></div>';
   }
   function syncAccCards() {
     $$(".product-card--mini").forEach((card) => {
       const a = getProduct(card.dataset.acc); if (!a) return;
+      // Checkout owns its handlers and focus while rebuilding the order summary.
+      if (card.classList.contains("co-accessory")) return;
       const wrap = $(".pc-addwrap", card); if (wrap) wrap.innerHTML = accAddHTML(a);
     });
   }
   function renderAccessories(p) {
     if (!root) return;
     const prev = document.querySelector(".pd-accessories"); if (prev) prev.remove();   // re-render safety
-    const accs = accessoriesFor(p).filter((a) => buyable(a.variants[0]));   // true accessories
+    const accs = accessoriesFor(p).filter((a) => accessoryBuyBuild(a));   // true accessories
     const related = (p.related || []).map(getProduct).filter(Boolean);       // cross-sell products
-    const cards = accs.concat(related).map(accCardHTML);                      // every card gets the + quick-add
+    const cards = accs.concat(related).map((a) => accCardHTML(a)).filter(Boolean);
     if (!cards.length) return;
     const sec = document.createElement("section");
     sec.className = "pd-accessories";
@@ -836,7 +1087,7 @@
     sec.addEventListener("click", (e) => {
       const card = e.target.closest(".product-card--mini"); if (!card) return;
       const a = getProduct(card.dataset.acc); if (!a) return;
-      const b = defaultBuyBuild(a);
+      const b = accessoryBuyBuild(a);
       if (b && e.target.closest(".pc-add")) { e.preventDefault(); setCartQty(a.id, b, 1); track("add_to_cart", { product: a.id, build: b, qty: 1, value: evItemValue(a, b) }); ga4("add_to_cart", { currency: "USD", value: (ga4Item(a.id, b, 1).price) || 0, items: [ga4Item(a.id, b, 1)] }); }
       else if (b && e.target.closest('.pc-qty button[data-q="1"]')) { e.preventDefault(); setCartQty(a.id, b, cartQtyOf(a.id, b) + 1); }
       else if (b && e.target.closest('.pc-qty button[data-q="-1"]')) { e.preventDefault(); setCartQty(a.id, b, cartQtyOf(a.id, b) - 1); }
@@ -847,17 +1098,21 @@
     reveal();   // inventory refresh replaces these cards after the initial page reveal
   }
 
-  function renderCarousel() {
+  function carouselImageHTML(url, index, active, title) {
+    return '<div class="pe-slide' + (active ? " active" : "") + '"' + (bgFor(url) ? ' style="background:' + bgFor(url) + '"' : '') + '><img' +
+      productImageAttrs(url, "gallery", !active) + ' alt="' + escapeHtml(title) + ' photo ' + (index + 1) + '" loading="eager" fetchpriority="' + (active ? "high" : "auto") + '"></div>';
+  }
+  function renderCarousel(initialImage) {
     const urls = carouselUrls(P);
-    slide = 0;
+    slide = initialImage ? Math.max(0, (P.images || []).indexOf(initialImage)) : 0;
     if (!urls.length) {
-      $(".pe-slides", root).innerHTML = '<div class="pe-slide active"><span class="pe-ph"><i class="' + (P.icon || "fa-solid fa-cube") + '" aria-hidden="true"></i></span></div>';
+      $(".pe-slides", root).innerHTML = '<div class="pe-slide active"><span class="pe-ph">' + productIcon(P.icon) + '</span></div>';
       $(".pe-dots", root).innerHTML = "";
       $(".pe-carousel", root).classList.add("is-single");
       return;
     }
-    $(".pe-slides", root).innerHTML = urls.map((u, i) => '<div class="pe-slide' + (i ? "" : " active") + '"' + (bgFor(u) ? ' style="background:' + bgFor(u) + '"' : '') + '><img src="' + u + '" alt="' + escapeHtml(P.title) + ' photo ' + (i + 1) + '"></div>').join("");
-    $(".pe-dots", root).innerHTML = urls.length > 1 ? urls.map((_, i) => '<button class="pe-dot' + (i ? "" : " active") + '" type="button" data-i="' + i + '" aria-label="image ' + (i + 1) + '"></button>').join("") : "";
+    $(".pe-slides", root).innerHTML = urls.map((u, i) => carouselImageHTML(u, i, i === slide, P.title)).join("");
+    $(".pe-dots", root).innerHTML = urls.length > 1 ? urls.map((_, i) => '<button class="pe-dot' + (i === slide ? " active" : "") + '" type="button" data-i="' + i + '" aria-label="image ' + (i + 1) + '"></button>').join("") : "";
     const multi = urls.length > 1;
     $(".pe-carousel", root).classList.toggle("is-single", !multi);
     $$(".pe-dot", root).forEach((d) => d.addEventListener("click", () => goto(+d.dataset.i)));
@@ -877,6 +1132,7 @@
     const dots = $$(".pe-dot", root);
     slides[slide].classList.remove("active"); if (dots[slide]) dots[slide].classList.remove("active");
     slide = (n + slides.length) % slides.length;
+    loadProductImage(slides[slide].querySelector("img"));
     slides[slide].classList.add("active"); if (dots[slide]) dots[slide].classList.add("active");
   }
   function syncPill() {
@@ -912,14 +1168,22 @@
     const status = statusOf(v), st = STATUS[status], can = buyable(v), launchAt = countdownTarget(v);
     // Keep the price visible during a countdown or an inventory check; confirmed closed states show their status.
     $(".pe-price", root).innerHTML = can ? money(v.price) + (st.tag ? ' <span class="pe-tag">' + st.tag + "</span>" : "")
-      : (launchAt != null || status === "loading" || status === "unavailable") && v.price != null ? money(v.price) : '<span class="pe-status">' + (st.tag || "Unavailable") + "</span>";
+      : (launchAt != null || status === "loading" || status === "unavailable" || status === "paused") && v.price != null ? money(v.price) : '<span class="pe-status">' + (st.tag || "Unavailable") + "</span>";
     $(".pe-qty", root).style.display = can ? "inline-flex" : "none";
     const batch = $(".pe-batch", root);
     if (batch) {
       // before a drop, the date replaces the remaining-count line so the batch size stays private
-      batch.textContent = launchAt != null ? launchText(v) : batchAvailabilityText(v, P);
-      batch.hidden = !batch.textContent;
+      if (productionBatchGroupOf(v) && launchAt == null) {
+        batch.classList.add("pe-batch--production");
+        batch.innerHTML = productionBatchHTML(v);
+        batch.hidden = !batch.innerHTML;
+      } else {
+        batch.classList.remove("pe-batch--production");
+        batch.textContent = launchAt != null ? launchText(v) : batchAvailabilityText(v, P);
+        batch.hidden = !batch.textContent;
+      }
     }
+    observeProductionBatchCounter(batch, P, v);
     const buy = $(".pe-buy", root);
     const wl = $(".pe-waitlist", root);
     if (wl) { wl.hidden = true; wl.innerHTML = ""; }
@@ -932,6 +1196,7 @@
     else if (status === "loading" || status === "unavailable") {
       buy.classList.remove("is-waitlist"); buy.textContent = st.cta; buy.disabled = status === "loading";
     }
+    else if (status === "paused") { buy.classList.remove("is-waitlist"); buy.textContent = st.cta; buy.disabled = true; }
     else { buy.classList.add("is-waitlist"); buy.textContent = "Notify me"; }
   }
 
@@ -1134,16 +1399,23 @@
   function injectHeaderCart() {
     const inner = document.querySelector(".md-header__inner");
     if (!inner) return;
-    if (inner.querySelector(".store-cart-btn")) { cartBtn = inner.querySelector(".store-cart-btn"); updateBadge(); return; }
-    const icons = inner.querySelectorAll(".md-header__button.md-icon");
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "md-header__button md-icon store-cart-btn";
-    btn.setAttribute("aria-label", "Open cart");
-    btn.innerHTML = ICON_BAG + '<span class="store-cart-count">0</span>';
-    btn.addEventListener("click", function () { track("view_cart"); openCart(); });
-    inner.insertBefore(btn, icons[icons.length - 1] || null);
+    let btn = inner.querySelector(".store-cart-btn");
+    if (!btn) {
+      const icons = inner.querySelectorAll(".md-header__button.md-icon");
+      btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "md-header__button md-icon store-cart-btn";
+      btn.setAttribute("aria-label", "Open cart");
+      btn.innerHTML = ICON_BAG + '<span class="store-cart-count">0</span>';
+      inner.insertBefore(btn, icons[icons.length - 1] || null);
+    }
+    if (!btn.dataset.storeCartBound) {
+      btn.addEventListener("click", function () { track("view_cart"); openCart(); });
+      btn.dataset.storeCartBound = "true";
+    }
+    btn.disabled = false;
     cartBtn = btn;
+    updateBadge();
   }
   function updateBadge(bump) {
     if (!cartBtn) return;
@@ -1167,12 +1439,15 @@
       '<p class="cart-error" role="alert" hidden></p>' +
       '<button class="cart-checkout" type="button" disabled>Checkout</button></div>';
     document.body.appendChild(scrim); document.body.appendChild(drawer);
+    drawer.addEventListener("transitionend", (event) => {
+      if (event.target === drawer && !drawer.classList.contains("is-open")) resumeBatchExposure();
+    });
     $(".cart-close", drawer).addEventListener("click", closeCart);
     $(".cart-checkout", drawer).addEventListener("click", checkout);
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCart(); });
   }
   function openCart() { if (/^\/store\/(checkout|confirmation)/.test(location.pathname)) return; ensureDrawer(); renderCart(); drawer.classList.add("is-open"); scrim.classList.add("is-open"); }
-  function closeCart() { if (drawer) { drawer.classList.remove("is-open"); scrim.classList.remove("is-open"); } }
+  function closeCart() { if (drawer) { drawer.classList.remove("is-open"); scrim.classList.remove("is-open"); resumeBatchExposure(); } }
   function renderCart() {
     ensureDrawer(); updateBadge();
     const items = $(".cart-items", drawer);
@@ -1181,7 +1456,7 @@
       items.innerHTML = cart.map((l, i) => {
         const p = getProduct(l.id); if (!p) return "";   // sanitizeCart drops these; this keeps a since-removed product from throwing mid-render
         const v = variantById(p, l.build), hero = carouselUrls(p)[0], gone = !buyable(v);
-        return '<div class="cart-line' + (gone ? " cart-line-gone" : "") + '">' + (hero ? '<img class="cart-line-img" src="' + hero + '" alt="">' : '<span class="cart-line-img"></span>') +
+        return '<div class="cart-line' + (gone ? " cart-line-gone" : "") + '">' + (hero ? '<img class="cart-line-img"' + productImageAttrs(hero, "thumbnail") + ' alt=""' + (bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' : '<span class="cart-line-img"></span>') +
           '<div class="cart-line-meta"><div class="cart-line-info"><p class="cart-line-title">' + p.title + '</p><p class="cart-line-variant">' + v.label + (gone ? ' <span class="cart-line-warn">no longer available</span>' : "") + "</p></div>" +
           '<div class="cart-line-qty"><button type="button" data-i="' + i + '" data-q="-1">−</button><span>' + l.qty + '</span><button type="button" data-i="' + i + '" data-q="1">+</button></div></div>' +
           '<div class="cart-line-side"><div class="cart-line-price">' + money((v.price || 0) * l.qty) + '</div><button class="cart-line-remove" type="button" data-rm="' + i + '">remove</button></div></div>';
@@ -1196,7 +1471,9 @@
   }
   async function checkout() {
     if (!cart.length) return;
-    if (localRecovery) { try { await localRecovery.flush(1000); } catch (e) {} }
+    // Recovery requests already use keepalive; never hold a navigation click
+    // for optional background work.
+    if (localRecovery) void localRecovery.flush(1000).catch(() => {});
     location.href = "/store/checkout/";   // on-site Payment Element checkout page
   }
 
@@ -1205,19 +1482,66 @@
     const p = getProduct(l.id); if (!p) return "";
     const v = variantById(p, l.build), hero = carouselUrls(p)[0], gone = !buyable(v), unit = v.price || 0;
     return '<div class="co-line' + (gone ? " co-line-gone" : "") + '">' +
-      (hero ? '<img class="co-line-img" src="' + hero + '" alt="">' : '<span class="co-line-img"></span>') +
+      (hero ? '<img class="co-line-img"' + productImageAttrs(hero, "thumbnail") + ' alt=""' + (bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' : '<span class="co-line-img"></span>') +
       '<div class="co-line-mid"><p class="co-line-title">' + p.title + '</p><p class="co-line-variant">' + v.label + (gone ? ' <span class="cart-line-warn">no longer available</span>' : "") + "</p>" +
-        '<button class="co-line-remove" type="button" data-rm="' + i + '">remove</button></div>' +
+        '<button class="co-line-remove" type="button" data-rm="' + i + '" aria-label="Remove ' + escapeHtml(p.title) + '">remove</button></div>' +
       '<div class="co-line-right"><div class="co-line-price">' + money(unit * l.qty) + "</div>" +
         '<div class="co-line-unit">' + (l.qty > 1 ? l.qty + " &times; " + money(unit) : "&nbsp;") + "</div>" +
         '<div class="co-line-qty"><button type="button" data-i="' + i + '" data-q="-1" aria-label="less">&minus;</button><span>' + l.qty + '</span><button type="button" data-i="' + i + '" data-q="1" aria-label="more">+</button></div>' +
       "</div></div>";
   }
+  // Only add-ons chosen here keep a quantity control; items brought into
+  // checkout are not recommended again. This lasts for this page visit only.
+  const checkoutAddedAccessories = new Map();
+  let checkoutRecommendationIds = null;
+  function initialCheckoutAccessories() {
+    const included = new Set(cart.map((line) => line.id)), suggestions = [];
+    const frameIds = ["avian-visitors", "avian-visitors-kit"];
+    if (frameIds.some((id) => included.has(id))) frameIds.forEach((id) => included.add(id));
+    const printedParts = { "avian-mic": "bird-mic-case", "avian-visitors-kit": "avian-visitors-parts", polargraph: "polargraph-parts" };
+    const add = (a) => {
+      if (!a || included.has(a.id) || !(a.published || DEV_SHOW_UNPUBLISHED) || !accessoryBuyBuild(a, true)) return;
+      included.add(a.id); suggestions.push(a);
+    };
+    const orderedAccessories = (p) => accessoriesFor(p).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
+    const related = [];
+    cart.forEach((line) => {
+      const p = getProduct(line.id); if (!p) return;
+      (p.related || []).map(getProduct).filter(Boolean).forEach((a) => { related.push(a); add(a); });
+    });
+    cart.forEach((line) => {
+      const p = getProduct(line.id); if (!p) return;
+      orderedAccessories(p).filter((a) => line.build !== "electronics-printed" || a.id !== printedParts[p.id]).forEach(add);
+    });
+    // Include the first authored accessory for a related product (for example,
+    // the Bird Mic's mount alongside the mic on a frame order).
+    related.forEach((p) => { if (suggestions.some((a) => a.id === p.id)) add(orderedAccessories(p)[0]); });
+    return suggestions.slice(0, 3);
+  }
+  function checkoutAccessories() {
+    if (!checkoutRecommendationIds) checkoutRecommendationIds = initialCheckoutAccessories().map((p) => p.id);
+    checkoutAddedAccessories.forEach((b, id) => { if (!cartQtyOf(id, b)) checkoutAddedAccessories.delete(id); });
+    const frameIds = ["avian-visitors", "avian-visitors-kit"];
+    return checkoutRecommendationIds.map(getProduct).filter((p) => {
+      if (!p || !accessoryBuyBuild(p)) return false;
+      const chosen = checkoutAddedAccessories.has(p.id);
+      if (cart.some((line) => line.id === p.id) && !chosen) return false;
+      if (frameIds.includes(p.id) && cart.some((line) => frameIds.includes(line.id) && line.id !== p.id)) return false;
+      return true;
+    });
+  }
+  function coAccessoriesHTML() {
+    const suggestions = checkoutAccessories();
+    if (!suggestions.length) return "";
+    return '<section class="co-accessories" aria-labelledby="co-accessories-title"><h3 id="co-accessories-title">Add-ons</h3><div class="co-accessories-grid">' + suggestions.map((a) =>
+      accCardHTML(a, { checkout: true, build: checkoutAddedAccessories.get(a.id) || accessoryBuyBuild(a) })
+    ).join('') + '</div></section>';
+  }
   function coSummaryHTML() {
     return '<div class="co-lines">' + cart.map(coLineHTML).join("") + "</div>" +
       '<hr class="co-rule">' +
-      '<form class="co-voucher" novalidate><input type="text" placeholder="Voucher code" aria-label="Voucher code" autocomplete="off"><button type="submit" aria-label="Apply voucher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>' +
-      '<p class="co-voucher-msg" role="status" hidden></p><button type="button" class="co-line-remove" data-remove-voucher hidden>Remove voucher</button>' +
+      '<details class="co-voucher-details"><summary>Add a voucher ' + storeIcon("chevron-down", "co-chev") + '</summary><form class="co-voucher" novalidate><input type="text" placeholder="Voucher code" aria-label="Voucher code" autocomplete="off"><button type="submit" aria-label="Apply voucher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>' +
+      '<p class="co-voucher-msg" role="status" hidden></p><button type="button" class="co-line-remove" data-remove-voucher hidden>Remove voucher</button></details>' +
       '<div class="co-gift"><label class="co-check" for="co-gift"><input type="checkbox" id="co-gift" name="gift" form="co-form" aria-controls="co-gift-details"><span>This is a gift</span></label>' +
         '<div id="co-gift-details" hidden><label class="co-field-label" for="co-gift-from">From</label><input class="co-email" id="co-gift-from" name="giftFrom" form="co-form" type="text" autocomplete="off" maxlength="160" aria-describedby="co-gift-error" disabled><p id="co-gift-error" class="co-gift-error" role="alert" hidden></p></div></div>' +
       '<hr class="co-rule">' +
@@ -1226,7 +1550,41 @@
       '<div class="co-row co-muted"><span>Sales tax</span><span class="co-tax">&mdash;</span></div>' +
       '<div class="co-row co-muted"><span>Shipping</span><span class="co-ship">&mdash;</span></div>' +
       '<hr class="co-rule">' +
-      '<div class="co-row co-total-row"><span>Total</span><span class="co-total-val">&mdash;</span></div>';
+      '<div class="co-row co-total-row"><span>Total</span><span class="co-total-val">&mdash;</span></div>' + coAccessoriesHTML();
+  }
+  function checkoutAllowedCountries() {
+    return cart.some((line) => {
+      const p = getProduct(line.id), v = p && exactVariant(p, line.build);
+      return v && v.shippingProfile === "contiguous-us-ground";
+    }) ? ["US"] : ["US", "CA", "AU", "GB"];
+  }
+  function checkoutFiniteDemand() {
+    const demand = {};
+    cart.forEach((line) => {
+      const p = getProduct(line.id), sku = p && inventorySkuOf(exactVariant(p, line.build));
+      if (sku) demand[sku] = (demand[sku] || 0) + line.qty;
+    });
+    return JSON.stringify(Object.keys(demand).sort().map((sku) => [sku, demand[sku]]));
+  }
+  let stripeLoading = null;
+  function loadStripe() {
+    if (typeof window.Stripe === "function") return Promise.resolve(true);
+    if (stripeLoading) return stripeLoading;
+    stripeLoading = new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://js.stripe.com/v3/"; script.async = true;
+      let finished = false;
+      const done = () => {
+        if (finished) return; finished = true; clearTimeout(timer);
+        const ready = typeof window.Stripe === "function";
+        if (!ready) { stripeLoading = null; script.remove(); }
+        resolve(ready);
+      };
+      const timer = setTimeout(done, 10000);
+      script.addEventListener("load", done); script.addEventListener("error", done);
+      document.head.appendChild(script);
+    });
+    return stripeLoading;
   }
   function resolvedColor(varName, fallback) {
     try { const t = document.createElement("span"); t.style.cssText = "color:var(" + varName + ");position:absolute;opacity:0;pointer-events:none"; document.body.appendChild(t); const c = getComputedStyle(t).color; t.remove(); return c || fallback; } catch (e) { return fallback; }
@@ -1256,7 +1614,32 @@
   function coWireSummary(host) {
     $$(".co-line-qty button", host).forEach((b) => b.addEventListener("click", () => { if (host.__checkoutBusy && host.__checkoutBusy()) return; const i = +b.dataset.i; if (!cart[i]) return; setLineQty(i, cart[i].qty + (+b.dataset.q)); coRefreshSummary(host); }));
     $$(".co-line-remove[data-rm]", host).forEach((b) => b.addEventListener("click", () => { if (host.__checkoutBusy && host.__checkoutBusy()) return; setLineQty(+b.dataset.rm, 0); coRefreshSummary(host); }));
+    $$(".co-accessory", host).forEach((row) => {
+      $$(".pc-add, .pc-qty button", row).forEach((button) => button.addEventListener("click", () => {
+        if (host.__checkoutBusy && host.__checkoutBusy()) return;
+        const product = checkoutAccessories().find((p) => p.id === row.dataset.acc);
+        const build = row.dataset.build, delta = button.dataset.q === "-1" ? -1 : 1;
+        if (!product || !exactVariant(product, build)) return;
+        const before = cartQtyOf(product.id, build);
+        if (delta > 0 && (!buyable(exactVariant(product, build)) || before >= variantMaxQuantity(product.id, build))) return;
+        if (delta > 0) { checkoutAddedAccessories.set(product.id, build); addToCart(product.id, build, 1); }
+        else setCartQty(product.id, build, before - 1);
+        coRefreshSummary(host);
+        const replacement = $$(".co-accessory", host).find((card) => card.dataset.acc === product.id);
+        const requestedFocus = replacement && ($(delta < 0 ? '.pc-qty button[data-q="-1"]' : '.pc-qty button[data-q="1"]', replacement) || $(".pc-add", replacement));
+        const focus = requestedFocus && !requestedFocus.disabled ? requestedFocus
+          : replacement ? $('.pc-qty button[data-q="-1"]', replacement) : $(".co-line-remove[data-rm]", host);
+        if (focus) focus.focus({ preventScroll: true });
+        const status = $(".co-cart-status", host);
+        if (status) status.textContent = product.title + (delta > 0 ? " added to your order." : " quantity updated.") + " Quantity " + cartQtyOf(product.id, build) + ". Subtotal " + money2(cartSubtotal()) + ".";
+      }));
+    });
     const vf = $(".co-voucher", host);
+    const voucherDetails = $(".co-voucher-details", host);
+    if (voucherDetails) {
+      voucherDetails.open = !!host.__voucherOpen;
+      voucherDetails.addEventListener("toggle", () => { host.__voucherOpen = voucherDetails.open; });
+    }
     if (vf) {
       vf.addEventListener("submit", (e) => { e.preventDefault(); if (host.__applyVoucher) host.__applyVoucher(($("input", vf).value || "").trim()); });
       $("input", vf).addEventListener("input", () => { if (host.__editVoucher) host.__editVoucher(); });
@@ -1274,27 +1657,31 @@
     if (host.__cartChanged) host.__cartChanged();
     else if (host.__updateSubmit) host.__updateSubmit();
   }
-  async function renderCheckout() {
+  async function renderCheckout(restoredDraft) {
     const host = $("#checkout"); if (!host) return;
+    const draft = restoredDraft || (host.__captureCheckout ? host.__captureCheckout() : null);
     const renderId = (host.__renderId || 0) + 1; host.__renderId = renderId;
     const current = () => host.__renderId === renderId;
-    for (const key of ["__applyVoucher", "__editVoucher", "__paintVoucher", "__cartChanged", "__recalc", "__updateSubmit", "__checkoutBusy", "__wireGift"]) delete host[key];
+    if (host.__disposeCheckout) host.__disposeCheckout();
+    for (const key of ["__applyVoucher", "__editVoucher", "__paintVoucher", "__cartChanged", "__recalc", "__updateSubmit", "__checkoutBusy", "__wireGift", "__captureCheckout", "__disposeCheckout"]) delete host[key];
     loadCart();
     if (!cart.length) { saveGiftDraft({ gift: false }); host.innerHTML = '<div class="co-empty"><p>Your cart is empty.</p><a class="cart-shop-link" href="/store">Go to store</a></div>'; return; }
     track("begin_checkout", { value: cartSubtotal() * 100 });
     ga4("begin_checkout", { currency: "USD", value: cartSubtotal(), items: cart.map(function (l) { return ga4Item(l.id, l.build, l.qty); }) });
     host.innerHTML =
-      '<div class="conf-back-top"><a href="/store/?cart=open" class="co-tocart"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Cart</a></div>' +
+      '<div class="conf-back-top"><a href="/store/?cart=open" class="co-tocart">' + storeIcon("arrow-left-long") + ' Cart</a></div>' +
+      '<p class="co-cart-status co-sr-only" role="status"></p>' +
       '<div class="co-grid">' +
         '<aside class="co-summary">' + coSummaryHTML() + "</aside>" +
         '<div class="co-detail">' +
-          '<div class="return2feed"><a href="/store/?cart=open" class="co-tocart"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Cart</a></div>' +
+          '<div class="return2feed"><a href="/store/?cart=open" class="co-tocart">' + storeIcon("arrow-left-long") + ' Cart</a></div>' +
           '<form class="co-pay" id="co-form" novalidate>' +
-            '<section class="co-section is-open" data-sec="shipping"><button class="co-section-head" type="button"><span class="co-h">Shipping</span><i class="fa-solid fa-chevron-down co-chev" aria-hidden="true"></i></button><div class="co-section-body"><div id="address-element"></div></div></section>' +
-            '<section class="co-section" data-sec="payment"><button class="co-section-head" type="button"><span class="co-h">Payment</span><i class="fa-solid fa-chevron-down co-chev" aria-hidden="true"></i></button><div class="co-section-body">' +
+            '<section class="co-section is-open" data-sec="shipping"><button class="co-section-head" type="button" aria-expanded="true" aria-controls="co-shipping-content"><span class="co-h">Shipping</span>' + storeIcon("chevron-down", "co-chev") + '</button><div class="co-section-body" id="co-shipping-content" aria-hidden="false"><div id="address-element"></div></div></section>' +
+            '<section class="co-section" data-sec="payment"><button class="co-section-head" type="button" aria-expanded="false" aria-controls="co-payment-content"><span class="co-h">Payment</span>' + storeIcon("chevron-down", "co-chev") + '</button><div class="co-section-body" id="co-payment-content" aria-hidden="true" inert>' +
               '<label class="co-field-label" for="co-email">Email for your receipt</label>' +
               '<input class="co-email" id="co-email" type="email" placeholder="you@email.com" autocomplete="email" required maxlength="200" pattern="[^\\s@]+@[^\\s@]+\\.[^\\s@]+">' +
               '<label class="co-check"><input type="checkbox" id="co-news"><span>Email me occasional updates and offers</span></label>' +
+              (draft && draft.paymentResetNotice ? '<p class="co-payment-note" role="status">Your order changed. Please enter your payment details again.</p>' : '') +
               '<div id="payment-element"></div>' +
             "</div></section>" +
             '<p class="co-error" role="alert" hidden></p>' +
@@ -1303,13 +1690,15 @@
           "</form>" +
         "</div>" +
       "</div>";
+    if (draft) { $("#co-email", host).value = draft.email || ""; $("#co-news", host).checked = !!draft.newsletter; }
     coWireSummary(host); swapProductImages();
     const sections = $$(".co-section", host);
     const err = $(".co-error", host), submit = $(".co-submit", host);
     const paymentOpen = () => $('.co-section[data-sec="payment"]', host).classList.contains("is-open");
-    let peReady = false, setupReady = false, addrComplete = false, processing = false, curShip = null, lastTotal = null;
+    let peReady = false, setupReady = false, addrComplete = false, processing = false, curShip = null, lastTotal = null, paymentHadInput = false;
+    let addressDraft = draft && draft.address || null, addressDraftComplete = false, countryBlocked = false;
     let giftCheck, giftFrom, giftDetails, giftError;
-    let gift = giftDraft(), giftErrorMessage = "";
+    let gift = draft && draft.gift || giftDraft(), giftErrorMessage = "";
     const giftValue = () => ({ gift: gift.gift, giftFrom: gift.gift ? gift.giftFrom.normalize("NFC").trim().replace(/\s+/g, " ") : "" });
     const paintGift = () => {
       if (!giftCheck) return;
@@ -1350,12 +1739,18 @@
     };
     host.__wireGift = wireGift; wireGift();
     // Voucher text stays only in this checkout's memory and request bodies, never storage or telemetry.
-    let voucherCode = "", voucherDiscount = 0, voucherState = "none", voucherMessage = "", voucherVersion = 0;
+    let voucherCode = draft && draft.voucherCode || "", voucherDiscount = 0, voucherState = "none", voucherMessage = "", voucherVersion = 0;
+    if (voucherCode || (draft && (draft.voucherState === "editing" || draft.voucherState === "invalid"))) {
+      voucherState = draft.voucherState === "editing" || draft.voucherState === "invalid" ? draft.voucherState : "checking";
+      voucherMessage = voucherState === "checking" ? "Checking voucher…" : draft.voucherMessage;
+    }
     let priceVersion = 0, repricing = false, pricingQueue = Promise.resolve();
     const voucherBlocked = () => voucherState !== "none" && voucherState !== "applied";
     const paintVoucher = () => {
       const input = $(".co-voucher input", host), apply = $(".co-voucher button", host);
       const message = $(".co-voucher-msg", host), remove = $("[data-remove-voucher]", host);
+      const details = $(".co-voucher-details", host);
+      if (details && (voucherCode || voucherState !== "none")) { details.open = true; host.__voucherOpen = true; }
       if (input) { input.disabled = processing || !setupReady; if (input.value !== voucherCode) input.value = voucherCode; }
       if (apply) apply.disabled = processing || !setupReady || voucherState === "checking";
       if (message) { message.textContent = voucherMessage; message.hidden = !voucherMessage; }
@@ -1364,6 +1759,11 @@
       if (row) { row.hidden = !voucherDiscount; row.style.display = voucherDiscount ? "" : "none"; }
       if (amount) amount.textContent = voucherDiscount ? "-" + money2(voucherDiscount / 100) : "";
       $$(".co-line-qty button, .co-line-remove[data-rm]", host).forEach((button) => { button.disabled = processing; });
+      $$(".co-accessory", host).forEach((row) => {
+        const product = getProduct(row.dataset.acc), build = row.dataset.build;
+        const atLimit = !product || !buyable(exactVariant(product, build)) || cartQtyOf(product.id, build) >= variantMaxQuantity(product.id, build);
+        $$(".pc-add, .pc-qty button", row).forEach((button) => { button.disabled = processing || (button.dataset.q !== "-1" && atLimit); });
+      });
     };
     const updateSubmit = () => {
       paintVoucher(); paintGift();
@@ -1372,7 +1772,7 @@
       const onPay = paymentOpen();
       const amt = lastTotal != null ? lastTotal / 100 : cartSubtotal();
       if (sp) sp.textContent = onPay ? "Pay " + money2(amt) : "Continue to payment";
-      submit.disabled = !setupReady || voucherBlocked() || repricing || (onPay && (!peReady || !addrComplete || lastTotal == null));   // can't pay until the Payment Element is ready and a US address gives the final total
+      submit.disabled = !setupReady || voucherBlocked() || repricing || !addrComplete || lastTotal == null || (onPay && !peReady);
     };
     const applyBreakdown = (d) => {
       const noAddr = d.shipping == null;   // no shipping/tax until a US address is entered
@@ -1383,32 +1783,53 @@
       lastTotal = noAddr ? null : d.total;
       updateSubmit();
     };
-    const openSection = (name) => { sections.forEach((s) => s.classList.toggle("is-open", s.dataset.sec === name)); updateSubmit(); };
+    const openSection = (name) => {
+      sections.forEach((s) => {
+        const open = s.dataset.sec === name, head = $(".co-section-head", s), body = $(".co-section-body", s);
+        s.classList.toggle("is-open", open);
+        if (head) head.setAttribute("aria-expanded", String(open));
+        if (body) { body.inert = !open; body.setAttribute("aria-hidden", String(!open)); }
+      });
+      updateSubmit();
+    };
+    const captureCheckout = (restartingPayment = false) => ({
+      email: $("#co-email", host).value, newsletter: $("#co-news", host).checked,
+      address: addressDraft, gift: { ...gift }, voucherCode, voucherState, voucherMessage,
+      paymentOpen: paymentOpen(), paymentResetNotice: !!(draft && draft.paymentResetNotice) || (restartingPayment && (paymentOpen() || paymentHadInput)),
+    });
+    host.__captureCheckout = captureCheckout;
     $$(".co-section-head", host).forEach((h) => h.addEventListener("click", () => openSection(h.parentElement.dataset.sec)));
-    host.__updateSubmit = updateSubmit; updateSubmit();   // shipping is open first -> button reads "Continue to payment"
+    host.__updateSubmit = updateSubmit; openSection(draft && draft.paymentOpen ? "payment" : "shipping");
     const fail = (m) => { err.textContent = m; err.hidden = false; };
     const gone = unavailableLines();
     if (gone.length) { fail(gone.map(lineLabel).join(", ") + (gone.length > 1 ? " are" : " is") + " no longer available. Please edit your cart."); return; }
-    if (!window.Stripe) { fail("Payment could not load. Please refresh the page."); return; }
+    const stripeReady = loadStripe(); // Load in parallel with the initial quote, after content is rendered.
+    const paymentFiniteDemand = checkoutFiniteDemand();
     let data;
     try {
       const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.assign({ cart: cart }, evAttribution(), await recoveryCheckoutContext())) });
       data = await res.json().catch(() => ({}));
       if (!current()) return;
+      if (paymentFiniteDemand !== checkoutFiniteDemand()) { void renderCheckout(captureCheckout(true)); return; }
       if (!res.ok || !data.clientSecret) { fail(data.item ? lineLabel(data.item) + " is no longer available. Please edit your cart." : (data.error || "Could not start checkout. Please try again.")); return; }
     } catch (e) { fail("Network error. Check your connection and try again."); return; }
     if (!data.publishableKey) { fail("Payment is not fully configured yet."); return; }
+    if (!await stripeReady) { if (current()) fail("Payment could not load. Please refresh the page."); return; }
+    if (!current()) return;
+    // The cart remains editable while the SDK loads; its signed scope must still match.
+    if (paymentFiniteDemand !== checkoutFiniteDemand()) { void renderCheckout(captureCheckout(true)); return; }
     const piId = data.clientSecret.split("_secret_")[0] || "";
     const updateToken = data.updateToken || "";   // proves to the server we created this PI; required to update it
     applyBreakdown(data);   // show the subtotal now; shipping + tax fill in once a US address is entered
 
     const stripe = window.Stripe(data.publishableKey);
     const elements = stripe.elements({ clientSecret: data.clientSecret, appearance: checkoutAppearance(), fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" }] });
-    const addressEl = elements.create("address", { mode: "shipping", allowedCountries: ["US", "CA", "AU", "GB"], autocomplete: { mode: "disabled" } });   // the kits also ship to CA/AU/GB (the server checks the cart); disable search-first autocomplete so all fields show expanded
-    addressEl.mount("#address-element");
+    let addressEl = null, addressCountries = checkoutAllowedCountries(), addressGeneration = 0;
     const pe = elements.create("payment", { layout: "tabs", wallets: { applePay: "auto", googlePay: "auto" } });   // surface Apple Pay / Google Pay when eligible
     pe.mount("#payment-element");
     pe.on("ready", () => { peReady = true; updateSubmit(); });
+    pe.on("change", (e) => { if (e.empty === false) paymentHadInput = true; });
+    host.__disposeCheckout = () => { addressGeneration += 1; if (addressEl) addressEl.destroy(); pe.destroy(); };
     const invalidatePrice = () => {
       priceVersion += 1; repricing = false;
       applyBreakdown({ shipping: null });
@@ -1456,13 +1877,52 @@
       pricingQueue = task.catch(() => null);
       return task;
     };
+    const acceptAddressDraft = () => {
+      addrComplete = addressDraftComplete && !!addressDraft && checkoutAllowedCountries().includes(addressDraft.address.country);
+      curShip = addrComplete ? addressDraft : null;
+    };
+    const mountAddress = (countries, defaults) => {
+      const generation = ++addressGeneration;
+      addressCountries = countries; addrComplete = false; addressDraftComplete = false; curShip = null;
+      invalidatePrice();
+      if (addressEl) addressEl.destroy();
+      const options = { mode: "shipping", allowedCountries: countries, autocomplete: { mode: "disabled" } };
+      if (defaults) options.defaultValues = defaults;
+      addressEl = elements.create("address", options);
+      addressEl.on("change", (e) => {
+        if (!current() || generation !== addressGeneration) return;
+        // Cache partial drafts too; passive country changes must not trigger
+        // getValue() validation or discard the customer's unfinished fields.
+        addressDraft = e.value && e.value.address ? { name: e.value.name || "", address: { ...e.value.address } } : null;
+        addressDraftComplete = !!e.complete;
+        acceptAddressDraft(); invalidatePrice();
+        if (syncAddressCountries()) return;
+        if (addrComplete) void recalc();
+      });
+      addressEl.mount("#address-element");
+    };
+    const syncAddressCountries = () => {
+      const countries = checkoutAllowedCountries(), country = addressDraft && addressDraft.address.country;
+      if (country && !countries.includes(country)) {
+        countryBlocked = true; addrComplete = false; curShip = null; invalidatePrice();
+        fail("This order ships only within the contiguous US. Choose a US shipping address or remove the assembled frame.");
+        openSection("shipping");
+        return true; // Keep the foreign draft intact until the customer chooses US.
+      }
+      if (countryBlocked) { countryBlocked = false; err.hidden = true; }
+      if (countries.join() !== addressCountries.join()) {
+        mountAddress(countries, addressDraft);
+        return true;
+      }
+      return false;
+    };
     const applyVoucher = async (code) => {
       if (processing || !setupReady) return;
       const version = ++voucherVersion;
       voucherCode = code; voucherDiscount = 0;
       voucherState = code ? "checking" : "none"; voucherMessage = code ? "Checking voucher…" : "";
       invalidatePrice(); updateSubmit();
-      if (!code) { err.hidden = true; if (curShip && addrComplete) await recalc(); return; }
+      if (!code) { if (!countryBlocked) err.hidden = true; if (curShip && addrComplete) await recalc(); return; }
       const cartSnapshot = JSON.stringify(cart);
       try {
         const response = await fetch("/api/voucher", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ cart: JSON.parse(cartSnapshot), voucherCode: code }) });
@@ -1473,7 +1933,7 @@
         }
         voucherDiscount = result.discount; voucherState = "applied";
         voucherMessage = "Voucher applied: " + money2(result.discount / 100) + " off.";
-        err.hidden = true; updateSubmit();
+        if (!countryBlocked) err.hidden = true; updateSubmit();
         if (curShip && addrComplete) await recalc();
       } catch (e) {
         if (current() && version === voucherVersion) { voucherState = "invalid"; voucherMessage = "Could not check your voucher. Try again."; updateSubmit(); }
@@ -1488,24 +1948,26 @@
       voucherMessage = "Apply this voucher or remove it to continue."; invalidatePrice(); updateSubmit();
     };
     host.__cartChanged = () => {
+      if (paymentFiniteDemand !== checkoutFiniteDemand()) { void renderCheckout(captureCheckout(true)); return; }
+      if (!syncAddressCountries()) acceptAddressDraft();
       if (voucherState === "editing") { invalidatePrice(); updateSubmit(); return; }
       if (voucherCode) void applyVoucher(voucherCode);
       else { invalidatePrice(); if (curShip && addrComplete) void recalc(); }
     };
     host.__recalc = recalc;
-    addressEl.on("change", (e) => {
-      addrComplete = !!e.complete;
-      invalidatePrice();
-      if (e.complete && e.value) { curShip = { name: e.value.name, address: e.value.address }; recalc().then((d) => { if (d && !processing) openSection("payment"); }); }
-      else { curShip = null; updateSubmit(); }
-    });
+    // Keep an incompatible foreign draft visible until the customer selects an
+    // allowed country, even when a finite-scope change recreated the payment.
+    const draftCountry = addressDraft && addressDraft.address.country;
+    mountAddress(draftCountry && !addressCountries.includes(draftCountry) ? ["US", "CA", "AU", "GB"] : addressCountries, addressDraft);
+    syncAddressCountries();
 
     $("#co-form", host).addEventListener("submit", async (e) => {
       e.preventDefault();
       if (processing || voucherBlocked() || repricing) return;
       if (!validateGift()) return;
       if (!addrComplete) { fail("Add your shipping address to continue."); openSection("shipping"); return; }   // shipping + tax need a US address
-      if (!paymentOpen()) { err.hidden = true; openSection("payment"); return; }   // "Continue to payment" -> reveal payment, don't pay yet
+      if (lastTotal == null) return;
+      if (!paymentOpen()) { err.hidden = true; openSection("payment"); $("#co-email", host).focus(); return; }   // explicit Continue -> reveal payment, don't pay yet
       const emailInput = $("#co-email", host);
       if (!emailInput.reportValidity()) return;
       const email = emailInput.value.trim();
@@ -1520,24 +1982,19 @@
       if (error) { processing = false; fail(error.message || "Payment failed. Please try again."); updateSubmit(); }
       // on success Stripe redirects to return_url, where handleCheckoutReturn() clears the cart
     });
-    setupReady = true; updateSubmit();   // checkout is fully wired -> enable the button
+    setupReady = true; updateSubmit();
+    if (voucherCode && voucherState === "checking") void applyVoucher(voucherCode);
     const obs = new MutationObserver(() => { try { elements.update({ appearance: checkoutAppearance() }); } catch (e) {} });
     obs.observe(document.body, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
+    const disposeElements = host.__disposeCheckout;
+    host.__disposeCheckout = () => { obs.disconnect(); disposeElements(); };
   }
 
-  /* ---- fade-in ---- */
+  /* Commerce navigation and filtering should expose their result immediately. */
   function reveal() {
     const els = document.querySelectorAll(".intro-section, .store-feed, .legal-section, .footer, .product-card");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { els.forEach((el) => el.classList.add("visible")); return; }
-    let i = 0;
-    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
-      if (!en.isIntersecting) return;
-      en.target.style.animationDelay = (en.target.classList.contains("product-card") ? (i++ % 6) * 55 : en.target.classList.contains("legal-section") ? 160 : 0) + "ms";
-      en.target.classList.add("visible"); io.unobserve(en.target);
-    }), { threshold: 0.02, rootMargin: "60px" });
-    els.forEach((el) => io.observe(el));
-    setTimeout(() => els.forEach((el) => el.classList.add("visible")), 1400);
+    els.forEach((el) => el.classList.add("visible"));
   }
 
   /* keep the cart in sync if it changes in another tab */
@@ -1546,10 +2003,13 @@
   /* re-point already-rendered product images at the right light/dark variant */
   function swapProductImages() {
     $$("img.pc-img, .pe-slide img, img.cart-line-img, img.co-line-img").forEach((img) => {
-      const cur = img.getAttribute("src"); if (!cur) return;
-      const want = themedUrl(cur);
-      if (cur !== want) img.setAttribute("src", want);
-      const holder = img.closest(".pe-slide, .pc-imgwrap");   // keep the letterbox color matched to the themed image
+      const original = img.getAttribute("data-store-image") || img.getAttribute("src"); if (!original) return;
+      const want = themedUrl(original);
+      const gallerySlide = img.closest(".pe-slide");
+      // Opacity-hidden slides still count as in-viewport to native lazy loading.
+      // Keep them source-less until selected, including after a theme change.
+      if (!gallerySlide || gallerySlide.classList.contains("active")) loadProductImage(img);
+      const holder = img.closest(".pe-slide, .pc-imgwrap, .cart-line-img, .co-line-img");   // cart thumbnails paint their own letterbox surface
       if (holder) { const bg = bgFor(want); if (bg) holder.style.background = bg; }
     });
   }
@@ -1565,8 +2025,8 @@
   /* returning from Stripe: ?checkout=cancel reopens the cart (so they can adjust and
      retry), ?checkout=success empties it. The query is then stripped from the URL. */
   /* ---- order confirmation page (Stripe redirects here after a successful payment) ---- */
-  const backHome = '<div class="return2feed"><a href="https://teddywarner.com" class="co-tocart"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Home</a></div>';
-  const backStore = '<div class="return2feed"><a href="/store" class="co-tocart"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Store</a></div>';
+  const backHome = '<div class="return2feed"><a href="https://teddywarner.com" class="co-tocart">' + storeIcon("arrow-left-long") + ' Home</a></div>';
+  const backStore = '<div class="return2feed"><a href="/store" class="co-tocart">' + storeIcon("arrow-left-long") + ' Store</a></div>';
   function trackUrl(carrier, tracking) {
     if (!tracking) return "";
     const t = encodeURIComponent(tracking), c = carrier || "";
@@ -1598,11 +2058,16 @@
     const hero = p ? carouselUrls(p)[0] : "";
     const v = p ? variantById(p, l.build) : null;
     const title = p ? p.title : l.id;
-    const label = v ? v.label : l.build;
+    const legacyLabel = l.id === "avian-visitors" ? ({ assembled: "Assembled", "assembled-batch-2": "Assembled (Batch 2)" })[l.build] : "";
+    const label = legacyLabel || (v ? v.label : l.build);
     const unit = v ? (v.price || 0) : 0;
+    const allocations = Array.isArray(l.productionBatches) ? l.productionBatches.filter((row) => row &&
+      Number.isSafeInteger(row.ordinal) && row.ordinal > 0 && Number.isSafeInteger(row.quantity) && row.quantity > 0) : [];
+    const batchNote = allocations.length && allocations.reduce((n, row) => n + row.quantity, 0) === l.qty
+      ? '<p class="co-line-variant">' + allocations.map((row) => 'Batch ' + row.ordinal + ' &times; ' + row.quantity).join(' · ') + '</p>' : '';
     return '<div class="co-line">' +
-      (hero ? '<img class="co-line-img" src="' + hero + '" alt="">' : '<span class="co-line-img"></span>') +
-      '<div class="co-line-mid"><p class="co-line-title">' + escapeHtml(title) + '</p><p class="co-line-variant">' + escapeHtml(label) + " &times; " + l.qty + "</p></div>" +
+      (hero ? '<img class="co-line-img"' + productImageAttrs(hero, "thumbnail") + ' alt="">' : '<span class="co-line-img"></span>') +
+      '<div class="co-line-mid"><p class="co-line-title">' + escapeHtml(title) + '</p><p class="co-line-variant">' + escapeHtml(label) + " &times; " + l.qty + "</p>" + batchNote + "</div>" +
       (unit ? '<div class="co-line-right"><div class="co-line-price">' + money(unit * l.qty) + "</div></div>" : "") +
       "</div>";
   }
@@ -1841,11 +2306,12 @@
     DARK_IMAGES = {};
     (Array.isArray(window.STORE_DARK_IMAGES) ? window.STORE_DARK_IMAGES : []).forEach((u) => { DARK_IMAGES[u] = true; });
     IMAGE_BG = (window.STORE_IMAGE_BG && typeof window.STORE_IMAGE_BG === "object") ? window.STORE_IMAGE_BG : {};
+    IMAGE_SOURCES = (window.STORE_IMAGE_SOURCES && typeof window.STORE_IMAGE_SOURCES === "object") ? window.STORE_IMAGE_SOURCES : {};
     // Inventory starts fail closed for finite variants, but it must never delay
     // ordinary product rendering or interaction. Refresh only affected surfaces
     // after the bounded authority read succeeds.
     const inventoryRefresh = loadInventoryAvailability();
-    evInit(); injectHeaderCart(); loadCart(); importCartFromUrl(); ensureDrawer(); renderCart();
+    evInit(); loadCart(); importCartFromUrl(); injectHeaderCart(); ensureDrawer(); renderCart();
     if ($("#store-grid")) wireStoreFilter();
     else if ($("#product-detail")) {
       const p = getProduct($("#product-detail").dataset.product);
@@ -1859,12 +2325,14 @@
     setupThemeSwap();
     handleCheckoutReturn();
     setupLegalBackLink();
+    refreshProductionBatches();
     void inventoryRefresh.then((ready) => {
       if (ready) reconcileCartToInventory();
       refreshInventorySurfaces();
       if (!ready && !INVENTORY_READY) retryInventory(1);
     });
   }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { resumeBatchExposure(); refreshProductionBatches(); } });
   async function checkInventoryAvailability() {
     if (INVENTORY_LOADING) return false;
     const pending = loadInventoryAvailability();
@@ -2093,9 +2561,8 @@
   if (!localRecoveryPreviewActive) recoveryBootstrapReady = enableLiveRecovery();
   let booted = false;
   function boot() { if (booted) return; booted = true; void init(); }
-  // Boot as soon as this (deferred) script runs so the checkout summary is painted
-  // before the cross-document view-transition snapshot. document$ / DOMContentLoaded
-  // stay as fallbacks; the guard makes init run exactly once.
+  // Boot as soon as this deferred script runs; document$ / DOMContentLoaded
+  // stay as fallbacks. The guard makes init run exactly once.
   if (typeof window.document$ !== "undefined" && window.document$.subscribe) window.document$.subscribe(boot);
   if (document.readyState !== "loading") boot();
   else document.addEventListener("DOMContentLoaded", boot);

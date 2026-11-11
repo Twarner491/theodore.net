@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block extrahead %}
+  <script>document.documentElement.classList.add("tw-has-search")</script>
   <meta name="facebook-domain-verification" content="qkq5ugrp1j623jl830eabbokbj9o65" />
   <link rel="alternate" type="application/rss+xml" title="Teddy Warner - RSS Feed" href="https://theodore.net/feed.xml">
   
@@ -183,43 +184,7 @@
       </div>
     </div>
 
-    <!-- Color palette -->
-    {% if config.theme.palette %}
-      {% if not config.theme.palette is mapping %}
-        <form class="md-header__option" data-md-component="palette">
-          {% for option in config.theme.palette %}
-            {% set scheme  = option.scheme  | d("default", true) %}
-            {% set primary = option.primary | d("indigo", true) %}
-            {% set accent  = option.accent  | d("indigo", true) %}
-            <input
-              class="md-option"
-              data-md-color-media="{{ option.media }}"
-              data-md-color-scheme="{{ scheme | replace(' ', '-') }}"
-              data-md-color-primary="{{ primary | replace(' ', '-') }}"
-              data-md-color-accent="{{ accent | replace(' ', '-') }}"
-              {% if option.toggle %}
-                aria-label="{{ option.toggle.name }}"
-              {% else  %}
-                aria-hidden="true"
-              {% endif %}
-              type="radio"
-              name="__palette"
-              id="__palette_{{ loop.index }}"
-            />
-            {% if option.toggle %}
-              <label
-                class="md-header__button md-icon"
-                title="{{ option.toggle.name }}"
-                for="__palette_{{ loop.index0 or loop.length }}"
-                hidden
-              >
-                {% include ".icons/" ~ option.toggle.icon ~ ".svg" %}
-              </label>
-            {% endif %}
-          {% endfor %}
-        </form>
-      {% endif %}
-    {% endif %}
+    {% include "partials/header-palette.html" %}
 
     <!-- Site language selector -->
     {% if config.extra.alternate %}
@@ -253,6 +218,7 @@
 
     <!-- Button to open search modal -->
     {% if "material/search" in config.plugins %}
+      {% include "partials/header-search.html" %}
       <label class="md-header__button md-icon" for="__search">
         {% include ".icons/material/magnify.svg" %}
       </label>
@@ -260,6 +226,8 @@
       <!-- Search interface -->
       {% include "partials/search.html" %}
     {% endif %}
+
+    {% include "partials/header-cart.html" %}
 
     <!-- Repository information -->
     {% if config.repo_url %}

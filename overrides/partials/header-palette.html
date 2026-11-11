@@ -1,0 +1,44 @@
+{% if config.theme.palette and not config.theme.palette is mapping %}
+<form class="md-header__option" data-md-component="palette">
+  {% for option in config.theme.palette %}
+    <input class="md-option"
+      data-md-color-media="{{ option.media }}"
+      data-md-color-scheme="{{ option.scheme | default('default', true) }}"
+      data-md-color-primary="{{ option.primary | default('indigo', true) | replace(' ', '-') | lower }}"
+      data-md-color-accent="{{ option.accent | default('indigo', true) | replace(' ', '-') | lower }}"
+      {% if option.toggle %}aria-label="{{ option.toggle.name }}"{% else %}aria-hidden="true"{% endif %}
+      type="radio" name="__palette" id="__palette_{{ loop.index }}">
+    {% if option.toggle %}
+    <label class="md-header__button md-icon" title="{{ option.toggle.name }}" for="__palette_{{ loop.index0 or loop.length }}" hidden>
+      {% include ".icons/" ~ option.toggle.icon ~ ".svg" %}
+    </label>
+    {% endif %}
+  {% endfor %}
+</form>
+{# Match Material's persisted palette before first paint, rather than leave both
+   labels hidden until its bundle runs. No storage access is required to render. #}
+<script>
+(function () {
+  var inputs = Array.from(document.querySelectorAll('[data-md-component="palette"] input'));
+  var saved;
+  try { saved = typeof __md_get === 'function' ? __md_get('__palette') : null; } catch (e) {}
+  var color = saved && saved.color;
+  var chosen = color && color.media !== '(prefers-color-scheme)' && inputs.find(function (input) {
+    return input.getAttribute('data-md-color-scheme') === color.scheme;
+  });
+  chosen = chosen || inputs.find(function (input) {
+    var media = input.getAttribute('data-md-color-media');
+    return media && window.matchMedia && window.matchMedia(media).matches;
+  }) || inputs[0];
+  if (!chosen) return;
+  ['scheme', 'primary', 'accent'].forEach(function (key) {
+    document.body.setAttribute('data-md-color-' + key, chosen.getAttribute('data-md-color-' + key));
+  });
+  inputs.forEach(function (input) {
+    input.checked = input === chosen;
+    var label = input.nextElementSibling;
+    if (label && label.tagName === 'LABEL') label.hidden = input !== chosen;
+  });
+})();
+</script>
+{% endif %}

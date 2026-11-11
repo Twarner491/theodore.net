@@ -14,7 +14,7 @@ import {
   shippingDestinationMessage,
   trustedShippingProfile,
 } from "../../lib/shipping-profile.js";
-import { createCheckoutBinding, taxAddressBinding } from "../../lib/shipping-binding.js";
+import { createCheckoutBinding, verifyCheckoutBinding, taxAddressBinding } from "../../lib/shipping-binding.js";
 import { launchPending } from "../../lib/store-launch.js";
 import {
   applyBoundInventoryMetadata,
@@ -36,6 +36,7 @@ import {
 import { parseGiftInput } from "../../lib/order-gift.js";
 import { receiptEmail } from "../../lib/receipt-email.js";
 import { resolveRecoveryAssociation, recordRecoveryCheckout } from "../../lib/store-recovery.js";
+import { productionDemand, productionBatchReady, productionIntakePaused } from "../../lib/production-batch-commerce.js";
 
 const MAX_QTY = 99, MAX_LINES = 50;
 const DEFAULT_WEIGHT_LB = 2.0;       // fallback when a variant has no weight
@@ -267,6 +268,9 @@ export async function onRequestPost({ request, env }) {
 
   const checkoutBinding = await createCheckoutBinding(normalized, catalog);
   if (!checkoutBinding) return reply({ error: "An item in your cart is unavailable." }, 400);
+  let continuousDemand;
+  try { continuousDemand = productionDemand(checkoutBinding.manifest, catalog); }
+  catch (_) { return reply({ error: "An item in your cart is unavailable." }, 400); }
   let inventoryDemand;
   try { inventoryDemand = inventoryDemandFromManifest(checkoutBinding.manifest, catalog); }
   catch (error) { return reply({ error: "An item in your cart is unavailable." }, 400); }
@@ -281,6 +285,26 @@ export async function onRequestPost({ request, env }) {
         if (await readInventoryReservation(env, piId)) return reply({ error: "This payment is already being confirmed. Please wait for its result." }, 409);
       } catch (error) { return inventoryUnavailable(reply, error); }
     }
+  }
+  if (continuousDemand.length) {
+    if (productionIntakePaused(env)) {
+      const paused = () => reply({ error: "Frame orders are temporarily paused. Please check back soon.", code: "production_paused" }, 409);
+      if (!piId) return paused();
+      // An ordinary-cart token is also valid for nonfinite frame updates. Read
+      // the accepted prior manifest so it cannot bypass a pause by adding frames
+      // or raising their quantity. Existing frame quantities can still finish.
+      try {
+        const priorResponse = await fetch("https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(piId), { headers: auth });
+        if (!priorResponse.ok) throw new Error("accepted payment unavailable");
+        const prior = await priorResponse.json();
+        const binding = prior && prior.id === piId && await verifyCheckoutBinding(prior.metadata, catalog);
+        if (!binding) return paused();
+        const accepted = productionDemand(binding.manifest, catalog);
+        if (continuousDemand.some((line) => line.quantity > (accepted.find((before) => before.productId === line.productId && before.build === line.build)?.quantity || 0))) return paused();
+      } catch (_) { return reply({ error: "Your accepted order could not be confirmed. Please try again." }, 503); }
+    }
+    try { await productionBatchReady(env); }
+    catch (_) { return reply({ error: "Production availability could not be confirmed. Please try again." }, 503); }
   }
   if (inventoryDemand.length) {
     try {
@@ -322,7 +346,7 @@ export async function onRequestPost({ request, env }) {
     subtotal += lineTotal;
     totalLb += weightLb * qty;
     let lineDiscount = 0;
-    if (voucher && !discount && id === voucher.product_id && build === voucher.build_id) {
+    if (voucher && !discount && id === voucher.product_id && build === voucher.matched_build_id) {
       if (price.unit_amount < voucher.amount_off) return voucherReply(new VoucherUnavailableError(), reply);
       lineDiscount = discount = voucher.amount_off;
     }

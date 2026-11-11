@@ -14,6 +14,9 @@ function searchRenderers({ products = [], labels = [], fetch } = {}) {
   const document = {
     readyState: "loading",
     addEventListener() {},
+    // This renderer-only harness has no header. The early enhancement pass must
+    // observe that absence and defer normally rather than invent a search root.
+    querySelector() { return null; },
     querySelectorAll() { return labels; },
     createElement() {
       return {

@@ -21,6 +21,8 @@ import {
   verifyInventoryProviderEvidence,
 } from "../../lib/store-inventory.js";
 import { recordRecoveryPurchase } from "../../lib/store-recovery.js";
+import { productionDemand, allocateProductionPayment } from "../../lib/production-batch-commerce.js";
+import { readProductionBatch, syncLegacyProductionBatches } from "../../lib/store-production-batches.js";
 const TOLERANCE = 300; // seconds; rejects replayed or stale events
 
 const json = (value, status = 200) => new Response(JSON.stringify(value), {
@@ -90,7 +92,7 @@ export async function onRequestPost({ request, env }) {
 
   // fulfillment hooks (email / dashboard / store record go here later)
   if (event.type === "payment_intent.succeeded") {
-    const pi = (event.data && event.data.object) || {};
+    let pi = (event.data && event.data.object) || {};
     const ship = pi.shipping || {};
     console.log("paid:", pi.id, pi.amount, pi.currency, "| items:", pi.metadata && pi.metadata.items, "| ship:", ship.name);
     let committedInventory = null;
@@ -107,6 +109,16 @@ export async function onRequestPost({ request, env }) {
       } catch (error) {
         console.log("inventory success pending:", error && error.code || "invalid");
         return json({ received: false, fulfilled: false, pending: true, blocked: "inventory_commit_pending" }, 503);
+      }
+      // An existing production ledger must mirror this real finite sale before
+      // notification. Before the new schema/initialization exists, the first
+      // continuous intake will copy these authoritative counters instead.
+      try {
+        if (await readProductionBatch(env, { productId: "avian-visitors" }))
+          await syncLegacyProductionBatches(env, { productId: "avian-visitors" });
+      } catch (error) {
+        if (!/no such table:\s*(?:main\.)?production_(?:batch_state|batches)\b/i.test(String(error)))
+          return json({ received: false, fulfilled: false, pending: true, blocked: "production_legacy_mirror_pending" }, 503);
       }
     }
     // A PaymentIntent is created before the buyer finishes the address form so
@@ -164,6 +176,12 @@ export async function onRequestPost({ request, env }) {
         console.log("fulfillment blocked: profiled authorization did not pass capture gate", pi.id);
         return new Response(JSON.stringify({ received: true, fulfilled: false, blocked: "capture_gate_not_approved" }), { status: 200, headers: { "content-type": "application/json" } });
       }
+    }
+    try {
+      const demand = productionDemand(currentBinding.manifest, catalog);
+      if (demand.length) pi = await allocateProductionPayment({ event, pi, demand, env });
+    } catch (_) {
+      return json({ received: false, fulfilled: false, pending: true, blocked: "production_allocation_pending" }, 503);
     }
     // Only a signed, fully validated purchase can suppress recovery. Do this
     // before the notification shortcut so retries can repair tracking without

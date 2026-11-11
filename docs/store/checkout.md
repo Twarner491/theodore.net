@@ -53,7 +53,6 @@ search:
   <h1 style="display:none;">Checkout - Teddy Warner</h1>
   </main>
 
-  <script src="https://js.stripe.com/v3/"></script>
   <script src="/assets/js/store.js" defer></script>
   <script src="/assets/js/header.js" defer></script>
 </body>
