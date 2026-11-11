@@ -3,6 +3,7 @@
   margin: 24px 0; padding: 0 16px; border: 1px solid var(--md-default-fg-color--lighter);
   border-radius: 10px; color: var(--md-default-fg-color);
 }
+.cookie-preferences > summary::before { display: none; }
 .cookie-preferences summary { padding: 14px 0; cursor: pointer; }
 .cookie-preference-row {
   display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px;
