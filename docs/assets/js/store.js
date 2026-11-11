@@ -64,6 +64,7 @@
   const INVENTORY_TIMEOUT_MS = 2500;
   let PRODUCTION_BATCH_ROWS = Object.create(null);
   let productionBatchLoading = false;
+  let productionBatchRead = null;
   let batchExposure = null;
   let batchExposureSession = null;
   const batchExposureSeen = new Set();
@@ -203,7 +204,7 @@
     if (!row) return "";
     const assignment = batchExperimentAssignment();
     const concealed = !COUNT_EXPERIMENT_ENABLED || (assignment && assignment.arm === "label");
-    return '<span class="pe-batch-label">Batch ' + row.ordinal + '</span><span class="pe-batch-remaining' +
+    return '<span class="pe-batch-label' + (concealed ? ' pe-batch-label--solo' : '') + '">Batch ' + row.ordinal + '</span><span class="pe-batch-remaining' +
       (concealed ? ' pe-batch-remaining--concealed" aria-hidden="true' : '') + '">' +
       row.remaining + (row.remaining === 1 ? ' frame remaining' : ' frames remaining') + '</span>';
   }
@@ -348,7 +349,18 @@
     const sku = inventorySkuOf(v), row = sku && INVENTORY_READY ? INVENTORY_ROWS[sku] : null;
     if (row && Number.isSafeInteger(row.available) && row.available >= 0)
       limit = Math.min(limit, row.available);
+    const production = productionBatchOf(v);
+    if (production && !production.paused) return Math.min(limit, production.remaining);
     return Math.max(1, limit);
+  }
+  function canIncreaseQuantity(id, build) {
+    const p = getProduct(id), v = p && exactVariant(p, build), production = productionBatchOf(v);
+    return buyable(v) && (!productionBatchGroupOf(v) || !!production) && cartQtyOf(id, build) < variantMaxQuantity(id, build);
+  }
+  function checkoutIsBusy() { const host = $("#checkout"); return !!(host && host.__checkoutBusy && host.__checkoutBusy()); }
+  function detailQuantityLimit() {
+    const v = P && exactVariant(P, build), limit = P ? variantMaxQuantity(P.id, build) : 1;
+    return Math.max(1, productionBatchGroupOf(v) ? limit - cartQtyOf(P.id, build) : limit);
   }
   const LEGACY_AVIAN_KIT_BUILDS = ["electronics", "electronics-printed"];
   const isLegacyAvianKitIdentity = (id, build) => id === "avian-visitors" && LEGACY_AVIAN_KIT_BUILDS.indexOf(build) >= 0;
@@ -392,6 +404,7 @@
       let qty = Math.floor(Number(l.qty));
       if (!id || !isFinite(qty) || qty <= 0) return;
       qty = Math.min(qty, known ? variantMaxQuantity(id, build) : MAX_QTY);
+      if (qty <= 0) return;
       if (known) { const p = getProduct(id); if (!p || !(p.variants || []).some((v) => v.id === build)) return; }
       const key = id + "\u0000" + build;
       if (seen[key] != null) { out[seen[key]].qty = Math.min(out[seen[key]].qty + qty, known ? variantMaxQuantity(id, build) : MAX_QTY); return; }
@@ -416,15 +429,23 @@
   const cartCount = () => cart.reduce((n, l) => n + l.qty, 0);
   const cartSubtotal = () => cart.reduce((s, l) => { const p = getProduct(l.id); if (!p) return s; const v = variantById(p, l.build); return s + (v.price ? v.price * l.qty : 0); }, 0);
   function addToCart(id, build, qty) {
+    if (checkoutIsBusy() || !canIncreaseQuantity(id, build)) return;
     const ex = cart.find((l) => l.id === id && l.build === build);
-    const maxQty = variantMaxQuantity(id, build);
-    if (ex) ex.qty = Math.min(ex.qty + qty, maxQty); else cart.push({ id, build, qty: Math.min(qty, maxQty) });
+    const added = Math.min(Math.max(0, Math.floor(qty)), variantMaxQuantity(id, build) - (ex ? ex.qty : 0));
+    if (!Number.isFinite(added) || added <= 0) return;
+    if (ex) ex.qty += added; else cart.push({ id, build, qty: added });
     saveCart(); renderCart(); updateBadge(true); openCart();
-    var atcUnit = evItemValue(getProduct(id), build); track("add_to_cart", { product: id, build: build, qty: qty, value: atcUnit != null ? atcUnit * qty : null });
-    var ga4Qty = Math.min(qty, MAX_QTY), ga4Line = ga4Item(id, build, ga4Qty);
+    var atcUnit = evItemValue(getProduct(id), build); track("add_to_cart", { product: id, build: build, qty: added, value: atcUnit != null ? atcUnit * added : null });
+    var ga4Qty = added, ga4Line = ga4Item(id, build, ga4Qty);
     ga4("add_to_cart", { currency: "USD", value: (ga4Line.price || 0) * ga4Qty, items: [ga4Line] });
   }
-  function setLineQty(i, qty) { if (!cart[i]) return; if (qty <= 0) cart.splice(i, 1); else cart[i].qty = Math.min(Math.floor(qty), variantMaxQuantity(cart[i].id, cart[i].build)); saveCart(); renderCart(); }
+  function setLineQty(i, qty) {
+    const line = cart[i];
+    if (!line || checkoutIsBusy() || !Number.isFinite(qty) || (qty > line.qty && !canIncreaseQuantity(line.id, line.build))) return;
+    qty = Math.min(Math.floor(qty), variantMaxQuantity(line.id, line.build));
+    if (qty <= 0) cart.splice(i, 1); else line.qty = qty;
+    saveCart(); renderCart();
+  }
 
   async function loadInventoryAvailability() {
     const skus = [];
@@ -480,50 +501,100 @@
   }
 
   async function loadProductionBatches() {
-    if (productionBatchLoading) return false;
+    if (productionBatchRead) return productionBatchRead;
     const groups = [...new Set(PRODUCTS.filter((p) => p.published)
       .flatMap((p) => (p.variants || []).map(productionBatchGroupOf)).filter(Boolean))];
     if (!groups.length) return false;
     productionBatchLoading = true;
-    try {
-      await Promise.all(groups.map(async (group) => {
-        const controller = typeof AbortController === "function" ? new AbortController() : null;
-        let timer = null;
-        try {
-          const timeout = new Promise((_, reject) => {
-            timer = setTimeout(() => {
-              if (controller) controller.abort();
-              reject(new Error("production batch timeout"));
-            }, INVENTORY_TIMEOUT_MS);
-          });
-          const request = (async () => {
-            const response = await fetch("/api/production-batch?group=" + encodeURIComponent(group), {
-              cache: "no-store", ...(controller ? { signal: controller.signal } : {}),
+    productionBatchRead = (async () => {
+      try {
+        await Promise.all(groups.map(async (group) => {
+          const controller = typeof AbortController === "function" ? new AbortController() : null;
+          let timer = null;
+          try {
+            const timeout = new Promise((_, reject) => {
+              timer = setTimeout(() => {
+                if (controller) controller.abort();
+                reject(new Error("production batch timeout"));
+              }, INVENTORY_TIMEOUT_MS);
             });
-            const row = await response.json();
-            if (!response.ok || !row || row.group !== group || !Number.isSafeInteger(row.ordinal) || row.ordinal < 1 ||
-                !Number.isSafeInteger(row.remaining) || row.remaining < 0 || typeof row.paused !== "boolean")
-              throw new Error("invalid production batch response");
-            return { group, ordinal: row.ordinal, remaining: row.remaining, paused: row.paused };
-          })();
-          PRODUCTION_BATCH_ROWS[group] = await Promise.race([request, timeout]);
-        } catch (_) {
-          // A stale count is not a substitute for the ledger. Checkout independently
-          // checks intake availability; this informational read never blocks rendering.
-          delete PRODUCTION_BATCH_ROWS[group];
-        } finally { if (timer != null) clearTimeout(timer); }
-      }));
-    } finally { productionBatchLoading = false; }
-    return true;
+            const request = (async () => {
+              const response = await fetch("/api/production-batch?group=" + encodeURIComponent(group), {
+                cache: "no-store", ...(controller ? { signal: controller.signal } : {}),
+              });
+              const row = await response.json();
+              if (!response.ok || !row || row.group !== group || !Number.isSafeInteger(row.ordinal) || row.ordinal < 1 ||
+                  !Number.isSafeInteger(row.remaining) || row.remaining < 0 || typeof row.paused !== "boolean")
+                throw new Error("invalid production batch response");
+              return { group, ordinal: row.ordinal, remaining: row.remaining, paused: row.paused };
+            })();
+            PRODUCTION_BATCH_ROWS[group] = await Promise.race([request, timeout]);
+          } catch (_) {
+            // Preserve the saved cart on a read failure, but do not allow quantity
+            // increases without a current ledger projection. Rendering stays immediate.
+            delete PRODUCTION_BATCH_ROWS[group];
+          } finally { if (timer != null) clearTimeout(timer); }
+        }));
+      } finally { productionBatchLoading = false; productionBatchRead = null; }
+      return true;
+    })();
+    return productionBatchRead;
   }
 
+  function reconcileCartToProductionBatches() {
+    if (checkoutIsBusy()) return false;
+    const before = JSON.stringify(cart);
+    cart = cart.map((line) => {
+      const product = getProduct(line.id), variant = product && exactVariant(product, line.build), row = productionBatchOf(variant);
+      return row && !row.paused ? { ...line, qty: Math.min(line.qty, variantMaxQuantity(line.id, line.build)) } : line;
+    }).filter((line) => line.qty > 0);
+    if (JSON.stringify(cart) === before) return false;
+    saveCart(); return true;
+  }
+  function syncLineQuantityControls(host, busy = false) {
+    $$(".co-line-qty button, .co-line-remove[data-rm]", host).forEach((button) => {
+      const line = cart[+button.dataset.i];
+      button.disabled = busy || (button.dataset.q === "1" && (!line || !canIncreaseQuantity(line.id, line.build)));
+    });
+  }
   function refreshProductionBatchSurfaces() {
-    // Never remount checkout or change the state of an already accepted payment.
-    if ($("#checkout")) { refreshCartBatchLabels(); return; }
-    if ($("#store-grid")) renderGrid();
+    const host = $("#checkout");
+    // Accepted/processing payment quantities never change underneath confirmation.
+    if (checkoutIsBusy()) { refreshCartBatchLabels(); return; }
+    const changed = reconcileCartToProductionBatches();
+    if (host) {
+      refreshCartBatchLabels();
+      if (changed && $(".co-summary", host)) coRefreshSummary(host);
+      else { syncLineQuantityControls(host); if (host.__paintVoucher) host.__paintVoucher(); }
+    } else if ($("#store-grid")) renderGrid();
     else if ($("#product-detail") && root && P) { updateVariant(false); renderAccessories(P); }
-    else { refreshCartBatchLabels(); return; }
+    else refreshCartBatchLabels();
     renderCart();
+  }
+
+  async function reconcileProductionQuantityLimit(data, isCurrent) {
+    if (!data || data.code !== "production_quantity_limit" || !data.item ||
+        data.item.id !== "avian-visitors" || data.item.build !== "assembled-continuous" ||
+        !Number.isSafeInteger(data.maxQuantity) || data.maxQuantity < 0 ||
+        !Number.isSafeInteger(data.currentOrdinal) || data.currentOrdinal < 1) return false;
+    await loadProductionBatches();
+    if (!isCurrent() || checkoutIsBusy()) return false;
+    const before = JSON.stringify(cart), line = cart.find((l) => l.id === data.item.id && l.build === data.item.build);
+    const product = getProduct(data.item.id), variant = product && exactVariant(product, data.item.build), row = productionBatchOf(variant);
+    // A newer rollover supersedes the rejection. Otherwise the signed quote's
+    // limit is still authoritative if the public availability read fails.
+    if (line && !(row && row.ordinal > data.currentOrdinal)) {
+      line.qty = Math.min(line.qty, data.maxQuantity);
+      cart = cart.filter((l) => l.qty > 0);
+    }
+    reconcileCartToProductionBatches();
+    const changed = before !== JSON.stringify(cart), rolledOver = !!(row && row.ordinal > data.currentOrdinal);
+    if (changed || rolledOver) {
+      if (changed) saveCart();
+      renderCart();
+      const host = $("#checkout"); if (host && $(".co-summary", host)) coRefreshSummary(host);
+    } else refreshProductionBatchSurfaces();
+    return changed || rolledOver;
   }
 
   function refreshProductionBatches() {
@@ -1047,6 +1118,7 @@
   }
   const cartQtyOf = (id, b) => { const l = cart.find((x) => x.id === id && x.build === b); return l ? l.qty : 0; };
   function setCartQty(id, b, q) {
+    if (checkoutIsBusy() || !Number.isFinite(q) || (q > cartQtyOf(id, b) && !canIncreaseQuantity(id, b))) return;
     q = Math.max(0, Math.min(variantMaxQuantity(id, b), Math.floor(q)));
     const i = cart.findIndex((x) => x.id === id && x.build === b);
     if (q <= 0) { if (i >= 0) cart.splice(i, 1); }
@@ -1058,9 +1130,9 @@
   function accAddHTML(a, selectedBuild) {
     const b = selectedBuild || accessoryBuyBuild(a); if (!b) return "";
     const q = cartQtyOf(a.id, b);
-    const atLimit = q >= variantMaxQuantity(a.id, b) || !buyable(exactVariant(a, b));
+    const atLimit = !canIncreaseQuantity(a.id, b);
     if (q > 0) return '<div class="pc-qty"><button type="button" data-q="-1" aria-label="Remove one ' + escapeHtml(a.title) + '">−</button><span>' + q + '</span><button type="button" data-q="1" aria-label="Add one ' + escapeHtml(a.title) + '"' + (atLimit ? ' disabled' : '') + '>+</button></div>';
-    return '<button class="pc-add" type="button" aria-label="Add ' + escapeHtml(a.title) + ' to cart">' + ICON_PLUS + "</button>";
+    return '<button class="pc-add" type="button" aria-label="Add ' + escapeHtml(a.title) + ' to cart"' + (atLimit ? ' disabled' : '') + '>' + ICON_PLUS + "</button>";
   }
   function accCardHTML(a, options = {}) {
     const b = options.build || accessoryBuyBuild(a), variant = b && exactVariant(a, b);
@@ -1163,7 +1235,7 @@
   });
   function updateVariant(jump = true) {
     const v = variantById(P, build);
-    qty = Math.min(qty, variantMaxQuantity(P.id, build));
+    qty = Math.min(qty, detailQuantityLimit());
     $$(".opt-seg button", root).forEach((b) => b.setAttribute("aria-current", b.dataset.opt === build ? "true" : "false"));
     syncPill();
     // jump the carousel to this variant's photo (frontmatter variant `image:`), then the user can still swipe
@@ -1181,6 +1253,8 @@
       softwareNote.hidden = !softwareNote.innerHTML;
     }
     $(".pe-qty span", root).textContent = String(qty);
+    $$(".pe-qty button", root).forEach((button) => { button.disabled = button.dataset.q === "1"
+      ? !canIncreaseQuantity(P.id, build) || qty >= detailQuantityLimit() : qty <= 1; });
     const status = statusOf(v), st = STATUS[status], can = buyable(v), launchAt = countdownTarget(v);
     // Keep the price visible during a countdown or an inventory check; confirmed closed states show their status.
     $(".pe-price", root).innerHTML = can ? money(v.price) + (st.tag ? ' <span class="pe-tag">' + st.tag + "</span>" : "")
@@ -1207,7 +1281,11 @@
     stopCountdown();
     if (cd) { cd.hidden = true; cd.innerHTML = ""; }
     buy.style.display = ""; buy.disabled = false;
-    if (can) { buy.classList.remove("is-waitlist"); buy.innerHTML = "<span>" + st.cta + "</span><span>" + money(v.price * qty) + "</span>"; }
+    if (can) {
+      buy.classList.remove("is-waitlist"); buy.innerHTML = "<span>" + st.cta + "</span><span>" + money(v.price * qty) + "</span>";
+      buy.disabled = !canIncreaseQuantity(P.id, build);
+      if (productionBatchGroupOf(v) && !productionBatchOf(v)) { buy.textContent = "Check availability"; buy.disabled = productionBatchLoading; }
+    }
     else if (launchAt != null && cd) { buy.style.display = "none"; startCountdown(cd, v, launchAt); }
     else if (status === "loading" || status === "unavailable") {
       buy.classList.remove("is-waitlist"); buy.textContent = st.cta; buy.disabled = status === "loading";
@@ -1307,14 +1385,15 @@
     $(".pe-arrow.next", root).addEventListener("click", () => goto(slide + 1));
     $$(".pe-qty button", root).forEach((b) => b.addEventListener("click", () => {
       const v = variantById(P, build);
-      const maxQty = variantMaxQuantity(P.id, build);
+      const maxQty = detailQuantityLimit();
+      if (+b.dataset.q > 0 && !canIncreaseQuantity(P.id, build)) return;
       qty = Math.min(maxQty, Math.max(1, qty + (+b.dataset.q)));
-      $(".pe-qty span", root).textContent = String(qty);
-      if (buyable(v)) $(".pe-buy", root).innerHTML = "<span>" + STATUS[statusOf(v)].cta + "</span><span>" + money(v.price * qty) + "</span>";
+      updateVariant(false);
     }));
     $(".pe-buy", root).addEventListener("click", () => {
       const v = variantById(P, build);
-      if (buyable(v)) addToCart(P.id, build, qty);
+      if (productionBatchGroupOf(v) && !productionBatchOf(v)) refreshProductionBatches();
+      else if (buyable(v)) addToCart(P.id, build, qty);
       else if (statusOf(v) === "unavailable") void checkInventoryAvailability();
       else if (waitlistEligible(v)) openWaitlist();
     });
@@ -1474,7 +1553,7 @@
         const v = variantById(p, l.build), hero = carouselUrls(p)[0], gone = !buyable(v);
         return '<div class="cart-line' + (gone ? " cart-line-gone" : "") + '">' + (hero ? '<img class="cart-line-img"' + productImageAttrs(hero, "thumbnail") + ' alt=""' + (bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' : '<span class="cart-line-img"></span>') +
           '<div class="cart-line-meta"><div class="cart-line-info"><p class="cart-line-title">' + p.title + '</p><p class="cart-line-variant">' + cartVariantLabelHTML(v) + (gone ? ' <span class="cart-line-warn">no longer available</span>' : "") + "</p></div>" +
-          '<div class="cart-line-qty"><button type="button" data-i="' + i + '" data-q="-1">−</button><span>' + l.qty + '</span><button type="button" data-i="' + i + '" data-q="1">+</button></div></div>' +
+          '<div class="cart-line-qty"><button type="button" data-i="' + i + '" data-q="-1">−</button><span>' + l.qty + '</span><button type="button" data-i="' + i + '" data-q="1"' + (!canIncreaseQuantity(l.id, l.build) ? ' disabled' : '') + '>+</button></div></div>' +
           '<div class="cart-line-side"><div class="cart-line-price">' + money((v.price || 0) * l.qty) + '</div><button class="cart-line-remove" type="button" data-rm="' + i + '">remove</button></div></div>';
       }).join("") + '<button class="cart-shop-link" type="button">Continue shopping</button>';
       $$(".cart-line-qty button", items).forEach((b) => b.addEventListener("click", () => setLineQty(+b.dataset.i, cart[+b.dataset.i].qty + (+b.dataset.q))));
@@ -1484,6 +1563,7 @@
     $(".cart-sub-val", drawer).textContent = money(cartSubtotal());
     $(".cart-checkout", drawer).disabled = !cart.length || unavailableLines().length > 0;
     syncAccCards();   // keep any on-page accessory cards' +/counter in sync with the cart
+    if ($("#product-detail") && root && P) updateVariant(false);
   }
   async function checkout() {
     if (!cart.length) return;
@@ -1503,7 +1583,7 @@
         '<button class="co-line-remove" type="button" data-rm="' + i + '" aria-label="Remove ' + escapeHtml(p.title) + '">remove</button></div>' +
       '<div class="co-line-right"><div class="co-line-price">' + money(unit * l.qty) + "</div>" +
         '<div class="co-line-unit">' + (l.qty > 1 ? l.qty + " &times; " + money(unit) : "&nbsp;") + "</div>" +
-        '<div class="co-line-qty"><button type="button" data-i="' + i + '" data-q="-1" aria-label="less">&minus;</button><span>' + l.qty + '</span><button type="button" data-i="' + i + '" data-q="1" aria-label="more">+</button></div>' +
+        '<div class="co-line-qty"><button type="button" data-i="' + i + '" data-q="-1" aria-label="less">&minus;</button><span>' + l.qty + '</span><button type="button" data-i="' + i + '" data-q="1" aria-label="more"' + (!canIncreaseQuantity(l.id, l.build) ? ' disabled' : '') + '>+</button></div>' +
       "</div></div>";
   }
   // Only add-ons chosen here keep a quantity control; items brought into
@@ -1774,10 +1854,10 @@
       const row = $(".co-discount-row", host), amount = $(".co-discount", host);
       if (row) { row.hidden = !voucherDiscount; row.style.display = voucherDiscount ? "" : "none"; }
       if (amount) amount.textContent = voucherDiscount ? "-" + money2(voucherDiscount / 100) : "";
-      $$(".co-line-qty button, .co-line-remove[data-rm]", host).forEach((button) => { button.disabled = processing; });
+      syncLineQuantityControls(host, processing);
       $$(".co-accessory", host).forEach((row) => {
         const product = getProduct(row.dataset.acc), build = row.dataset.build;
-        const atLimit = !product || !buyable(exactVariant(product, build)) || cartQtyOf(product.id, build) >= variantMaxQuantity(product.id, build);
+        const atLimit = !product || !canIncreaseQuantity(product.id, build);
         $$(".pc-add, .pc-qty button", row).forEach((button) => { button.disabled = processing || (button.dataset.q !== "-1" && atLimit); });
       });
     };
@@ -1817,17 +1897,33 @@
     $$(".co-section-head", host).forEach((h) => h.addEventListener("click", () => openSection(h.parentElement.dataset.sec)));
     host.__updateSubmit = updateSubmit; openSection(draft && draft.paymentOpen ? "payment" : "shipping");
     const fail = (m) => { err.textContent = m; err.hidden = false; };
+    if (cart.some((line) => { const product = getProduct(line.id); return productionBatchGroupOf(product && exactVariant(product, line.build)); })) {
+      // Show the summary immediately, but clamp restored quantities before creating a payment.
+      await loadProductionBatches();
+      if (!current()) return;
+      refreshProductionBatchSurfaces();
+      if (!cart.length) return;
+    }
     const gone = unavailableLines();
     if (gone.length) { fail(gone.map(lineLabel).join(", ") + (gone.length > 1 ? " are" : " is") + " no longer available. Please edit your cart."); return; }
     const stripeReady = loadStripe(); // Load in parallel with the initial quote, after content is rendered.
     const paymentFiniteDemand = checkoutFiniteDemand();
     let data;
+    const initialCart = JSON.stringify(cart);
     try {
       const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.assign({ cart: cart }, evAttribution(), await recoveryCheckoutContext())) });
       data = await res.json().catch(() => ({}));
       if (!current()) return;
       if (paymentFiniteDemand !== checkoutFiniteDemand()) { void renderCheckout(captureCheckout(true)); return; }
-      if (!res.ok || !data.clientSecret) { fail(data.item ? lineLabel(data.item) + " is no longer available. Please edit your cart." : (data.error || "Could not start checkout. Please try again.")); return; }
+      if (!res.ok || !data.clientSecret) {
+        if (data.code === "production_quantity_limit") {
+          const changed = await reconcileProductionQuantityLimit(data, current);
+          if (!current()) return;
+          if (changed || initialCart !== JSON.stringify(cart)) { void renderCheckout(captureCheckout()); return; }
+          fail(data.error || "The current batch quantity changed. Please update your cart."); return;
+        }
+        fail(data.item ? lineLabel(data.item) + " is no longer available. Please edit your cart." : (data.error || "Could not start checkout. Please try again.")); return;
+      }
     } catch (e) { fail("Network error. Check your connection and try again."); return; }
     if (!data.publishableKey) { fail("Payment is not fully configured yet."); return; }
     if (!await stripeReady) { if (current()) fail("Payment could not load. Please refresh the page."); return; }
@@ -1874,6 +1970,13 @@
               voucherState = "invalid"; voucherMessage = d.error || "That code is not available for this order."; voucherDiscount = 0;
             }
             lastTotal = null;
+            if (d.code === "production_quantity_limit") {
+              // The server rejected this finalize before acceptance; confirmation must stop.
+              if (finalize) processing = false;
+              fail(d.error || "The current batch quantity changed. Please review your order.");
+              await reconcileProductionQuantityLimit(d, current);
+              return null;
+            }
             fail(d.item ? lineLabel(d.item) + " is no longer available. Please edit your cart." : (d.error || "Could not update your order. Please try again.")); return null;
           }
           if ((d.discount || 0) !== voucherDiscount) {
@@ -2014,7 +2117,13 @@
   }
 
   /* keep the cart in sync if it changes in another tab */
-  window.addEventListener("storage", (e) => { if (e.key === CART_KEY) { loadCart(); renderCart(); } });
+  window.addEventListener("storage", (e) => {
+    if (e.key !== CART_KEY || checkoutIsBusy()) return;
+    const before = JSON.stringify(cart);
+    loadCart(); renderCart();
+    const host = $("#checkout");
+    if (host && $(".co-summary", host) && before !== JSON.stringify(cart)) coRefreshSummary(host);
+  });
 
   /* re-point already-rendered product images at the right light/dark variant */
   function swapProductImages() {

@@ -7,7 +7,7 @@ import { onRequestPost as paymentIntent } from "../functions/api/payment-intent.
 import { onRequestPost as stripeWebhook } from "../functions/api/stripe-webhook.js";
 import { onRequestGet as productionBatch } from "../functions/api/production-batch.js";
 import { readProductionBatch } from "../lib/store-production-batches.js";
-import { verifyCheckoutBinding } from "../lib/shipping-binding.js";
+import { createCheckoutBinding, verifyCheckoutBinding } from "../lib/shipping-binding.js";
 import { buildOrder, receiptHtml } from "../lib/emails.js";
 import { orderView } from "../lib/order-view.js";
 import { productionBatchesForItem } from "../lib/order-production-batches.js";
@@ -76,7 +76,7 @@ function fixture(t, { productionSchema = true, voucher = false } = {}) {
   if (voucher) db.sqlite.prepare("UPDATE store_vouchers SET code_sha256=?,active=1 WHERE id=?")
     .run(createHash("sha256").update(VOUCHER_CODE).digest("hex"), VOUCHER_CAMPAIGN);
   const env = { STORE_INVENTORY: db, STRIPE_SECRET_KEY: "sk_test_production_fixture", STRIPE_PUBLISHABLE_KEY: "pk_test_production_fixture", STRIPE_WEBHOOK_SECRET: SECRET, RESEND_API_KEY: "re_fixture" };
-  let sequence = 0, failMetadata = false, failCapture = false;
+  let sequence = 0, failMetadata = false, failCapture = false, failIntentRead = false;
   const previousFetch = globalThis.fetch;
   t.after(() => { globalThis.fetch = previousFetch; db.sqlite.close(); });
   globalThis.fetch = async (url, options = {}) => {
@@ -100,6 +100,7 @@ function fixture(t, { productionSchema = true, voucher = false } = {}) {
     }
     const match = /\/v1\/payment_intents\/(pi_[A-Za-z0-9_]+)(?:\/(capture|cancel))?$/.exec(target.split("?")[0]);
     if (match) {
+      if (!form && failIntentRead) return response({}, 503);
       const pi = intents.get(match[1]); assert.ok(pi);
       if (form?.has("metadata[production_batches]") && failMetadata) { failMetadata = false; return response({}, 503); }
       if (match[2] === "capture") {
@@ -128,7 +129,7 @@ function fixture(t, { productionSchema = true, voucher = false } = {}) {
   }
   async function authorize(pi, id = "evt_authorized") { pi.status = "requires_capture"; pi.amount_capturable = pi.amount; const r = await event("payment_intent.amount_capturable_updated", pi, id); assert.equal(r.status, 200, await r.clone().text()); assert.equal((await r.json()).captured, true); }
   const publicState = () => productionBatch({ env, request: new Request("https://example.test/api/production-batch?group=avian-visitors") });
-  return { db, env, catalog, intents, emails, requests, taxLines, create, post, finalize, event, authorize, publicState, failNextMetadata() { failMetadata = true; }, failCapture(value) { failCapture = value; } };
+  return { db, env, catalog, intents, emails, requests, taxLines, create, post, finalize, event, authorize, publicState, failNextMetadata() { failMetadata = true; }, failCapture(value) { failCapture = value; }, failIntentRead(value) { failIntentRead = value; } };
 }
 
 test("real checkout and signed paid handlers allocate only paid frames, split rollover, and preserve original receipt batches", async t => {
@@ -174,6 +175,120 @@ test("pause rejects new intake and ordinary-PI bypasses but lets accepted frame 
   assert.equal((await update(existing, [frame(2), mic])).status, 200);
   assert.equal((await readProductionBatch(h.env)).remaining, 15);
   assert.equal((await (await h.publicState()).json()).paused, true);
+});
+
+test("new frame checkouts enforce real remaining quantity, including duplicate cart lines, without reserving slots", async t => {
+  const h = fixture(t);
+  for (const cart of [[frame(16)], [frame(8), frame(8)]]) {
+    const before = h.requests.length;
+    const result = await h.post({ cart });
+    assert.equal(result.status, 409);
+    assert.deepEqual(await result.json(), {
+      error: "Only 15 frames remain in the current batch. Please update your cart.",
+      code: "production_quantity_limit", item: { id: GROUP, build: BUILD }, maxQuantity: 15, currentOrdinal: 3,
+    });
+    assert.deepEqual(h.requests.slice(before), ["https://example.test/store-catalog.json"], "reject before any Stripe price, tax or mutation request");
+    assert.equal(h.intents.size, 0);
+  }
+  await h.create([frame(15), mic]);
+  assert.equal((await readProductionBatch(h.env)).remaining, 15, "an admitted draft holds no units");
+  assert.equal(h.db.sqlite.prepare("SELECT COUNT(*) n FROM production_paid_orders").get().n, 0);
+});
+
+test("draft quotes and finalization reject increases over remaining; exact sellout immediately admits the next batch", async t => {
+  const h = fixture(t), stale = await h.create([frame()]);
+  const other = await h.create([frame(14)]), otherPi = await h.finalize(other, [frame(14)]);
+  await h.authorize(otherPi);
+  assert.equal((await h.event("payment_intent.succeeded", otherPi, "evt_cap_other_paid")).status, 200);
+  const beforePi = structuredClone(h.intents.get(stale.id));
+  for (const finalize of [false, true]) {
+    const before = h.requests.length;
+    const result = await h.post({ cart: [frame(3)], paymentIntentId: stale.id, updateToken: stale.updateToken,
+      shipping: SHIPPING, email: "buyer@example.test", finalize });
+    assert.equal(result.status, 409);
+    assert.deepEqual(await result.json(), {
+      error: "Only 1 frame remains in the current batch. Please update your cart.",
+      code: "production_quantity_limit", item: { id: GROUP, build: BUILD }, maxQuantity: 1, currentOrdinal: 3,
+    });
+    assert.deepEqual(h.requests.slice(before), ["https://example.test/store-catalog.json", "https://api.stripe.com/v1/payment_intents/" + stale.id]);
+    assert.deepEqual(h.intents.get(stale.id), beforePi, "rejection must not alter the existing intent");
+  }
+  const corrected = await h.finalize(stale, [frame()]);
+  await h.authorize(corrected);
+  assert.equal((await h.event("payment_intent.succeeded", corrected, "evt_cap_last_paid")).status, 200);
+  const next = await readProductionBatch(h.env);
+  assert.deepEqual([next.ordinal, next.capacity, next.remaining], [4, 15, 15]);
+  await h.create([frame(15)]);
+});
+
+test("a quantity rejection cannot change an accepted authorization, including during an intake pause", async t => {
+  const h = fixture(t), accepted = await h.create([frame(2)]), pi = await h.finalize(accepted, [frame(2)]);
+  pi.status = "requires_capture"; pi.amount_capturable = pi.amount;
+  const other = await h.create([frame(14)]), otherPi = await h.finalize(other, [frame(14)]);
+  await h.authorize(otherPi);
+  assert.equal((await h.event("payment_intent.succeeded", otherPi, "evt_cap_concurrent_paid")).status, 200);
+  h.env.PRODUCTION_BATCH_PAUSED = "1";
+  const beforePi = structuredClone(pi);
+  const rejected = await h.post({ cart: [frame(3)], paymentIntentId: accepted.id, updateToken: accepted.updateToken,
+    shipping: SHIPPING, email: "buyer@example.test", finalize: true });
+  assert.equal(rejected.status, 409);
+  assert.equal((await rejected.json()).code, "production_paused", "a pause remains stricter than ordinary intake limits");
+  assert.deepEqual(pi, beforePi, "do not cancel or rewrite an authorization when rejecting a new quote");
+  await h.authorize(pi, "evt_cap_accepted_authorization");
+  assert.equal((await h.event("payment_intent.succeeded", pi, "evt_cap_accepted_paid")).status, 200);
+  assert.deepEqual(productionBatchesForItem(pi.metadata, frame(2)), [
+    { ordinal: 3, label: "Batch 3", quantity: 1 }, { ordinal: 4, label: "Batch 4", quantity: 1 },
+  ]);
+  const next = await readProductionBatch(h.env);
+  assert.deepEqual([next.ordinal, next.capacity, next.remaining], [4, 15, 14]);
+});
+
+test("verified pre-release twenty-frame drafts can finish without grandfathering new quantities or unrelated tokens", async t => {
+  const h = fixture(t), old = await h.create([frame()]), ordinary = await h.create([mic]);
+  // Reconstruct the bound draft accepted before the dynamic limit existed.
+  const accepted = await createCheckoutBinding([frame(20)], h.catalog), oldPi = h.intents.get(old.id);
+  Object.assign(oldPi.metadata, { items: accepted.legacyItems, shipping_items: accepted.manifestJson,
+    shipping_items_sha256: accepted.manifestSha256, shipping_catalog_sha256: accepted.catalogSha256 });
+  oldPi.amount = 20 * 69900;
+  assert.ok(await verifyCheckoutBinding(oldPi.metadata, h.catalog));
+  assert.equal((await readProductionBatch(h.env)).remaining, 15);
+  const unrelated = await h.post({ cart: [frame(20)], paymentIntentId: ordinary.id, updateToken: ordinary.updateToken,
+    shipping: SHIPPING, email: "buyer@example.test", finalize: true });
+  assert.equal(unrelated.status, 409);
+  assert.equal((await unrelated.json()).code, "production_quantity_limit");
+  assert.equal(h.intents.get(ordinary.id).metadata.items, "avian-mic|printed|1");
+  h.env.PRODUCTION_BATCH_PAUSED = "1";
+  await h.finalize(old, [frame(20)]);
+  assert.equal((await readProductionBatch(h.env)).remaining, 15, "grandfathering does not reserve production");
+  await h.authorize(oldPi);
+  assert.equal((await h.event("payment_intent.succeeded", oldPi, "evt_pre_cap_draft_paid")).status, 200);
+  assert.deepEqual(productionBatchesForItem(oldPi.metadata, frame(20)), [
+    { ordinal: 3, label: "Batch 3", quantity: 15 }, { ordinal: 4, label: "Batch 4", quantity: 5 },
+  ]);
+});
+
+test("unverifiable prior quantities and unavailable production reads fail before price, tax or intent writes", async t => {
+  const h = fixture(t), old = await h.create([frame(15)]);
+  const accepted = await createCheckoutBinding([frame(20)], h.catalog);
+  Object.assign(h.intents.get(old.id).metadata, { items: accepted.legacyItems, shipping_items: accepted.manifestJson,
+    shipping_items_sha256: accepted.manifestSha256, shipping_catalog_sha256: accepted.catalogSha256 });
+  const post = () => h.post({ cart: [frame(16)], paymentIntentId: old.id, updateToken: old.updateToken,
+    shipping: SHIPPING, email: "buyer@example.test", finalize: true });
+  const beforePi = structuredClone(h.intents.get(old.id));
+  h.failIntentRead(true);
+  let before = h.requests.length;
+  assert.equal((await post()).status, 503);
+  assert.deepEqual(h.requests.slice(before), ["https://example.test/store-catalog.json", "https://api.stripe.com/v1/payment_intents/" + old.id]);
+  assert.deepEqual(h.intents.get(old.id), beforePi);
+  h.failIntentRead(false);
+  h.intents.get(old.id).metadata.shipping_items_sha256 = "invalid";
+  const invalid = await post();
+  assert.equal(invalid.status, 409);
+  assert.equal((await invalid.json()).code, "production_quantity_limit");
+  h.env.STORE_INVENTORY = undefined;
+  before = h.requests.length;
+  assert.equal((await post()).status, 503);
+  assert.deepEqual(h.requests.slice(before), ["https://example.test/store-catalog.json"]);
 });
 
 test("continuous frame intake fails closed if its trusted production contract is missing", async t => {

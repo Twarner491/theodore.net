@@ -32,7 +32,7 @@ function element() {
   };
 }
 
-async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, products = [frameProduct], initialCart = [cartLine], sessionValues = new Map() } = {}) {
+async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, products = [frameProduct], initialCart = [cartLine], sessionValues = new Map(), startPending = false } = {}) {
   const fields = {};
   for (const name of [".co-summary", ".co-voucher", ".co-voucher input", ".co-voucher button", ".co-voucher-msg", "[data-remove-voucher]", ".co-discount-row", ".co-discount", ".co-error", ".co-submit", ".co-total-val", ".co-tax", ".co-ship", "#co-email", "#co-news", "#co-form", "#co-gift", "#co-gift-from", "#co-gift-details", "#co-gift-error"]) fields[name] = element();
   fields["#co-email"].value = "buyer@example.com";
@@ -101,7 +101,7 @@ async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, pro
     if (++fullRenders > 1) { fields["#co-email"].value = ""; fields["#co-news"].checked = false; }
   } });
   const confirmation = { innerHTML: "" };
-  const addressHandlers = {};
+  const addressHandlers = {}, windowHandlers = {};
   const requests = [], telemetry = [], stored = [], createdElements = [];
   let savedCart = JSON.stringify(initialCart);
   let confirmations = 0, intents = 0;
@@ -131,6 +131,8 @@ async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, pro
     globalThis.removeLastLine = function () { setLineQty(0, 0); coRefreshSummary(globalThis.host); };
     globalThis.rebuildSummary = function () { $(".co-summary", globalThis.host).innerHTML = coSummaryHTML(); coWireSummary(globalThis.host); };
     globalThis.refreshStock = function (rows) { INVENTORY_ROWS = rows; INVENTORY_READY = true; refreshInventorySurfaces(); };
+    globalThis.refreshBatch = async function () { await loadProductionBatches(); refreshProductionBatchSurfaces(); };
+    globalThis.readCart = () => cart;
   })();`);
   const context = vm.createContext({
     document: {
@@ -138,14 +140,14 @@ async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, pro
       querySelector(selector) { return selector === "#checkout" ? host : selector === "#confirmation" ? confirmation : null; },
       querySelectorAll() { return []; }, body: {}, documentElement: {},
     },
-    window: { addEventListener() {}, Stripe() { return { elements: () => stripeElements, confirmPayment: async () => { confirmations += 1; return { error: { message: "Test confirmation complete" } }; } }; } },
+    window: { addEventListener(name, fn) { windowHandlers[name] = fn; }, Stripe() { return { elements: () => stripeElements, confirmPayment: async () => { confirmations += 1; return { error: { message: "Test confirmation complete" } }; } }; } },
     sessionStorage: { getItem(key) { return sessionValues.get(key) || null; }, setItem(key,value) { sessionValues.set(key,value); }, removeItem(key) { sessionValues.delete(key); } },
     localStorage: { getItem(key) { return key === "store:cart:v3" ? savedCart : null; }, setItem(...args) { stored.push(args); if (args[0] === "store:cart:v3") savedCart = args[1]; } },
     location: { origin: "https://example.test", pathname: "/store/checkout/", search: "", hostname: "example.test" },
     URLSearchParams, setTimeout, clearTimeout, MutationObserver: class { observe() {} disconnect() {} },
     host, cartLine: { ...cartLine }, products, confirmation, telemetry, recoveryContext, stripeGate,
     fetch: async (url, options) => {
-      const body = JSON.parse(options.body); requests.push({ url, body });
+      const body = options.body ? JSON.parse(options.body) : {}; requests.push({ url, body });
       if (respond) { const response = await respond(url, body); if (response) return response; }
       if (url === "/api/voucher") return json({ discount: 10000, discountLabel: "Friends and family" });
       if (url === "/api/payment-intent") {
@@ -159,8 +161,9 @@ async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, pro
   });
   vm.runInContext(source, context, { filename: "store.js" });
   const ready = context.runCheckout();
-  if (!stripeGate) {
+  if (!stripeGate && !startPending) {
     await ready;
+    for (let i = 0; i < 5 && typeof host.__applyVoucher !== "function"; i++) await settle();
     assert.equal(typeof host.__applyVoucher, "function", fields[".co-error"].textContent || "checkout initialization should finish before using the voucher field");
   }
   return {
@@ -180,6 +183,9 @@ async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, pro
     removeLastLine: () => context.removeLastLine(),
     rebuildSummary: () => context.rebuildSummary(),
     refreshStock: (rows) => context.refreshStock(rows),
+    refreshBatch: () => context.refreshBatch(),
+    cart: () => JSON.parse(JSON.stringify(context.readCart())),
+    storageCart(lines) { savedCart = JSON.stringify(lines); windowHandlers.storage({ key: "store:cart:v3" }); },
     continueToPayment: () => fields["#co-form"].handlers.submit({ preventDefault() {} }),
     async pay() {
       if (!payment.classList.contains("is-open")) await fields["#co-form"].handlers.submit({ preventDefault() {} });
@@ -619,4 +625,85 @@ test("the voucher disclosure starts closed and survives a checkout summary refre
   checkout.edit("MY_DRAFT"); checkout.rebuildSummary();
   assert.equal(checkout.fields[".co-voucher input"].value, "MY_DRAFT");
   assert.equal(checkout.fields[".co-voucher-details"].open, true);
+});
+
+
+const continuousProduct = { ...frameProduct, defaultBuild: "assembled-continuous", variants: [{
+  ...frameProduct.variants[0], id: "assembled-continuous", maxQuantity: 20, productionBatchGroup: "avian-visitors",
+}] };
+const continuousLine = qty => ({ id: "avian-visitors", build: "assembled-continuous", qty });
+const batchSnapshot = remaining => ({ group: "avian-visitors", ordinal: 3, remaining, paused: false });
+const quantityError = remaining => json({ code: "production_quantity_limit", error: "Only " + remaining + " frames remain in the current batch. Please update your cart.",
+  item: { id: "avian-visitors", build: "assembled-continuous" }, maxQuantity: remaining, currentOrdinal: 3 }, 409);
+
+test("a restored continuous cart renders immediately but waits for the bounded batch read before creating its capped payment", async () => {
+  const authority = deferred();
+  const h = await harness({ products: [continuousProduct], initialCart: [continuousLine(20)], startPending: true,
+    respond: (url) => url.startsWith("/api/production-batch?") ? authority.promise : null });
+  assert.match(h.host.innerHTML, /Avian Visitors/);
+  assert.equal(h.cart()[0].qty, 20);
+  assert.equal(h.requests.filter(r => r.url === "/api/payment-intent").length, 0);
+  const refresh = h.refreshBatch();
+  assert.equal(h.requests.filter(r => r.url.startsWith("/api/production-batch?")).length, 1, "checkout and refresh share the in-flight authority read");
+  authority.resolve(json(batchSnapshot(7))); await h.ready; await refresh;
+  assert.equal(h.cart()[0].qty, 7);
+  assert.equal(h.requests.find(r => r.url === "/api/payment-intent").body.cart[0].qty, 7);
+  assert.equal(typeof h.host.__applyVoucher, "function");
+});
+
+test("a newer create-time limit reconciles the cart and restarts setup without a false sold-out error", async () => {
+  let remaining = 15, rejected = false;
+  const h = await harness({ products: [continuousProduct], initialCart: [continuousLine(10)], respond: (url, body) => {
+    if (url.startsWith("/api/production-batch?")) return json(batchSnapshot(remaining));
+    if (url === "/api/payment-intent" && !body.paymentIntentId && !rejected) { rejected = true; remaining = 3; return quantityError(3); }
+  } });
+  assert.equal(h.cart()[0].qty, 3);
+  assert.deepEqual(h.requests.filter(r => r.url === "/api/payment-intent").map(r => r.body.cart[0].qty), [10, 3]);
+  assert.doesNotMatch(h.fields[".co-error"].textContent, /no longer available/);
+  assert.equal(h.createdElements.filter(e => e.type === "payment").length, 1);
+});
+
+test("a rejected final quantity stops confirmation, refreshes and requotes, then requires another reviewed payment click", async () => {
+  let remaining = 4, rejected = false;
+  const h = await harness({ products: [continuousProduct], initialCart: [continuousLine(4)], respond: (url, body) => {
+    if (url.startsWith("/api/production-batch?")) return json(batchSnapshot(remaining));
+    if (body.finalize && !rejected) { rejected = true; remaining = 2; return quantityError(2); }
+  } });
+  h.shipping(); await settle(); await h.pay(); await settle();
+  assert.equal(h.confirmations(), 0); assert.equal(h.cart()[0].qty, 2);
+  assert.ok(h.requests.some(r => r.body.paymentIntentId && !r.body.finalize && r.body.cart[0].qty === 2));
+  assert.equal(h.createdElements.filter(e => e.type === "payment").length, 1, "continuous quantity correction keeps the same Payment Element");
+  assert.doesNotMatch(h.fields[".co-error"].textContent, /no longer available/);
+  await h.pay(); assert.equal(h.confirmations(), 1);
+  assert.equal(h.requests.filter(r => r.body.finalize).at(-1).body.cart[0].qty, 2);
+});
+
+test("a processing payment ignores batch clamp and other-tab replacement; idle replacements reprice the current payment", async () => {
+  let remaining = 4; const gate = deferred();
+  const h = await harness({ products: [continuousProduct], initialCart: [continuousLine(4)], respond: (url, body) => {
+    if (url.startsWith("/api/production-batch?")) return json(batchSnapshot(remaining));
+    if (body.finalize) return gate.promise;
+  } });
+  h.shipping(); await settle(); const paying = h.pay(); await settle();
+  remaining = 2; await h.refreshBatch(); h.storageCart([continuousLine(1)]);
+  assert.equal(h.cart()[0].qty, 4);
+  gate.resolve(json({ total: 69900 * 4 + 1500, subtotal: 69900 * 4, shipping: 1500, tax: 0, discount: 0 }));
+  await paying; assert.equal(h.confirmations(), 1);
+  h.storageCart([continuousLine(2)]); await settle();
+  assert.equal(h.cart()[0].qty, 2);
+  assert.ok(h.requests.some(r => r.body.paymentIntentId && !r.body.finalize && r.body.cart[0].qty === 2));
+});
+
+
+test("a rejected quote followed by rollover requotes unchanged quantities instead of leaving payment disabled", async () => {
+  let current = batchSnapshot(4), rejected = false;
+  const h = await harness({ products: [continuousProduct], initialCart: [continuousLine(4)], respond: (url, body) => {
+    if (url.startsWith("/api/production-batch?")) return json(current);
+    if (body.finalize && !rejected) { rejected = true; current = { ...batchSnapshot(15), ordinal: 4 }; return quantityError(2); }
+  } });
+  h.shipping(); await settle(); await h.pay(); await settle();
+  assert.equal(h.confirmations(), 0); assert.equal(h.cart()[0].qty, 4);
+  assert.ok(h.requests.filter(r => r.body.paymentIntentId && !r.body.finalize && r.body.cart[0].qty === 4).length >= 2);
+  assert.equal(h.fields[".co-submit"].disabled, false, "the replacement batch permits a reviewed retry");
+  await h.pay(); assert.equal(h.confirmations(), 1);
 });

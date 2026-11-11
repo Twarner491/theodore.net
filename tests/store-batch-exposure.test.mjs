@@ -146,7 +146,7 @@ test("the label arm reserves the count geometry but conceals it visually and fro
   const h = harness(); await h.load(); h.render();
   assert.equal(h.assignment().arm, "label");
   assert.match(h.html(), /pe-batch-remaining pe-batch-remaining--concealed" aria-hidden="true"/);
-  assert.match(h.html(), /Batch 3/);
+  assert.match(h.html(), /pe-batch-label pe-batch-label--solo">Batch 3/);
   assert.match(h.html(), /15 frames remaining/);
   const css = readFileSync(new URL("../docs/assets/css/store.css", import.meta.url), "utf8");
   assert.match(css, /\.pe-batch-remaining--concealed\s*\{\s*visibility:\s*hidden;\s*\}/);

@@ -18,7 +18,13 @@ function harness(overrides = {}) {
       setProducts: value => { PRODUCTS = value; },
       load: loadProductionBatches, refresh: refreshProductionBatches, html: productionBatchHTML,
       buyable, statusOf, variantMaxQuantity, sanitizeCart, migratedLine, confLineHTML, coLineHTML, detailHTML,
-      loadCart, openCart, cart: () => cart,
+      loadCart, openCart, cart: () => cart, canIncreaseQuantity, accAddHTML, syncLineQuantityControls,
+      refreshSurfaces: refreshProductionBatchSurfaces, reconcile: reconcileCartToProductionBatches,
+      mutations: function (lines) {
+        cart = lines;
+        renderCart = updateBadge = openCart = function () {};
+        return { add: addToCart, set: setCartQty, line: setLineQty, cart: () => cart };
+      },
       drawerState: function (line) {
         const classes = new Set();
         const classList = { add(name) { classes.add(name); }, contains(name) { return classes.has(name); } };
@@ -30,7 +36,7 @@ function harness(overrides = {}) {
         cart = [line]; renderCart();
         return { items, classes };
       },
-      detailState: function (product) {
+      detailState: function (product, selectedQuantity = 1) {
         const classes = new Set();
         const classList = { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } };
         const fields = {
@@ -40,9 +46,9 @@ function harness(overrides = {}) {
           '.pe-batch': { classList, innerHTML: '', hidden: true },
         };
         root = { querySelector: selector => fields[selector] || null, querySelectorAll: () => [] };
-        P = product; build = product.defaultBuild; qty = 1;
+        P = product; build = product.defaultBuild; qty = selectedQuantity;
         updateVariant(false);
-        return { batch: fields['.pe-batch'], button: fields['.pe-buy'], classes: [...classes] };
+        return { batch: fields['.pe-batch'], button: fields['.pe-buy'], classes: [...classes], quantity: qty, limit: detailQuantityLimit() };
       },
       boot: function () {
         globalThis.bootState = { visible: false, checkoutRenders: 0 };
@@ -87,16 +93,17 @@ test("production label starts empty even on localhost and renders only ledger da
   assert.equal(h.buyable(variant), true);
 });
 
-test("rollover changes only display; current-batch quota never caps a multi-frame cart", async () => {
+test("the current real remainder caps the cart and rollover permits the next batch up to twenty", async () => {
   let current = { ...row, remaining: 1 };
   const h = harness({ fetch: async () => reply(current) });
   await h.load();
   assert.match(h.html(variant), /1 frame remaining/);
-  assert.equal(h.variantMaxQuantity(product.id, variant.id), 20);
-  assert.deepEqual(plain(h.sanitizeCart([{ id: product.id, build: variant.id, qty: 4 }])), [{ id: product.id, build: variant.id, qty: 4 }]);
+  assert.equal(h.variantMaxQuantity(product.id, variant.id), 1);
+  assert.deepEqual(plain(h.sanitizeCart([{ id: product.id, build: variant.id, qty: 4 }])), [{ id: product.id, build: variant.id, qty: 1 }]);
   current = { ...row, ordinal: 4, remaining: 29 };
   await h.load();
   assert.match(h.html(variant), /Batch 4/);
+  assert.equal(h.variantMaxQuantity(product.id, variant.id), 20);
   assert.equal(h.buyable(variant), true);
   assert.equal(variant.id, "assembled-continuous");
 });
@@ -152,7 +159,7 @@ test("checkout refresh updates only batch subtitle nodes through rollover and re
   const labels = Array.from({ length: 2 }, () => ({
     dataset: { productionBatchLabel: "avian-visitors", variantLabel: "Assembled" }, textContent: "Assembled",
   }));
-  const checkout = { querySelector() { return null; }, __cartChanged() { throw new Error("must not requote payment"); } };
+  const checkout = { querySelector() { return null; }, querySelectorAll() { return []; }, __cartChanged() { throw new Error("must not requote payment"); } };
   const h = harness({
     document: { readyState: "loading", addEventListener() {}, querySelector(s) { return s === "#checkout" ? checkout : null; },
       querySelectorAll(s) { assert.equal(s, "[data-production-batch-label]"); return labels; },
@@ -238,4 +245,76 @@ test("paid allocations stay attached to their order when the public run advances
   assert.match(html, /Assembled &times; 3/);
   assert.match(html, /Batch 3 &times; 1 · Batch 4 &times; 2/);
   assert.doesNotMatch(html, /Batch 9/);
+});
+
+
+test("all quantity entry points cap accumulated additions and product selection at remaining room", async () => {
+  const h = harness({ fetch: async () => reply({ ...row, remaining: 3 }) });
+  await h.load();
+  const edit = h.mutations([{ id: product.id, build: variant.id, qty: 1 }]);
+  assert.equal(h.detailState(product, 20).quantity, 2, "product quantity accounts for frames already in the cart");
+  edit.add(product.id, variant.id, 20);
+  assert.equal(edit.cart()[0].qty, 3);
+  edit.add(product.id, variant.id, 1); edit.line(0, 4); edit.set(product.id, variant.id, 4);
+  assert.equal(edit.cart()[0].qty, 3);
+  assert.equal(h.detailState(product).button.disabled, true);
+  assert.match(h.accAddHTML(product, variant.id), /data-q="1"[^>]* disabled/);
+  assert.match(h.coLineHTML(edit.cart()[0], 0), /data-q="1"[^>]* disabled/);
+  const plus = { dataset: { i: "0", q: "1" }, disabled: false }, minus = { dataset: { i: "0", q: "-1" }, disabled: false };
+  h.syncLineQuantityControls({ querySelectorAll: () => [minus, plus] });
+  assert.equal(plus.disabled, true); assert.equal(minus.disabled, false);
+  edit.line(0, 2); assert.equal(edit.cart()[0].qty, 2);
+  assert.equal(h.detailState(product, 20).quantity, 1);
+  assert.equal(h.canIncreaseQuantity(product.id, variant.id), true);
+});
+
+test("failed authority preserves saved quantities but blocks all additions until a genuine snapshot returns", async () => {
+  let current = null;
+  const h = harness({ fetch: async () => reply(current) });
+  const line = { id: product.id, build: variant.id, qty: 4 }, edit = h.mutations([line]);
+  await h.load();
+  assert.equal(h.reconcile(), false);
+  assert.equal(edit.cart()[0].qty, 4);
+  edit.add(product.id, variant.id, 1); edit.line(0, 5); edit.set(product.id, variant.id, 6);
+  assert.equal(edit.cart()[0].qty, 4);
+  edit.line(0, 3); assert.equal(edit.cart()[0].qty, 3, "decrease and removal remain available");
+  current = { ...row, remaining: 2 }; await h.load();
+  assert.equal(h.reconcile(), true); assert.equal(edit.cart()[0].qty, 2);
+  current = null; await h.load();
+  assert.equal(h.reconcile(), false); assert.equal(edit.cart()[0].qty, 2);
+  current = { ...row, ordinal: 4, remaining: 15 }; await h.load(); h.reconcile();
+  edit.add(product.id, variant.id, 30); assert.equal(edit.cart()[0].qty, 15);
+});
+
+test("restored duplicate lines clamp to a new snapshot, persist changes, and zero never produces a phantom quantity", async () => {
+  let stored = JSON.stringify([{ id: product.id, build: variant.id, qty: 8 }, { id: product.id, build: variant.id, qty: 8 }]);
+  let current = { ...row, remaining: 5 };
+  const h = harness({ fetch: async () => reply(current), localStorage: {
+    getItem(key) { return key === "store:cart:v3" ? stored : null; },
+    setItem(key, value) { if (key === "store:cart:v3") stored = value; },
+  } });
+  h.loadCart(); assert.equal(h.cart()[0].qty, 16, "initial missing data cannot erase a real cart");
+  await h.load(); assert.equal(h.reconcile(), true);
+  assert.equal(h.cart()[0].qty, 5); assert.equal(JSON.parse(stored)[0].qty, 5);
+  current = { ...row, remaining: 0 }; await h.load(); h.reconcile();
+  assert.deepEqual(plain(h.cart()), []); assert.equal(h.variantMaxQuantity(product.id, variant.id), 0);
+  const edit = h.mutations([]); edit.add(product.id, variant.id, 1); edit.set(product.id, variant.id, 1);
+  assert.deepEqual(plain(edit.cart()), []);
+});
+
+test("a processing checkout keeps its accepted quantity while ordinary refreshes reconcile and requote", async () => {
+  let busy = false, requotes = 0;
+  const summary = { innerHTML: "" }, host = { __checkoutBusy: () => busy, querySelector: s => s === ".co-summary" ? summary : null, querySelectorAll: () => [] };
+  const h = harness({ fetch: async () => reply({ ...row, remaining: 2 }), document: {
+    readyState: "loading", addEventListener() {}, querySelector: s => s === "#checkout" ? host : null, querySelectorAll: () => [],
+    body: { getAttribute() { return null; } }, documentElement: { getAttribute() { return null; } },
+  } });
+  const edit = h.mutations([{ id: product.id, build: variant.id, qty: 4 }]);
+  await h.load(); busy = true;
+  h.refreshSurfaces(); edit.line(0, 1); edit.set(product.id, variant.id, 1);
+  assert.equal(edit.cart()[0].qty, 4);
+  busy = false; host.__cartChanged = () => { requotes++; };
+  h.refreshSurfaces();
+  assert.equal(edit.cart()[0].qty, 2); assert.equal(requotes, 1);
+  h.refreshSurfaces(); assert.equal(requotes, 1, "unchanged snapshots do not continually invalidate payment");
 });

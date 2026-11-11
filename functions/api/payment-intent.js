@@ -287,6 +287,18 @@ export async function onRequestPost({ request, env }) {
     }
   }
   if (continuousDemand.length) {
+    let acceptedDemand = null;
+    const readAcceptedDemand = async () => {
+      if (acceptedDemand !== null) return acceptedDemand;
+      const priorResponse = await fetch("https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(piId), { headers: auth });
+      if (!priorResponse.ok) throw new Error("accepted payment unavailable");
+      const prior = await priorResponse.json();
+      const binding = prior && prior.id === piId && await verifyCheckoutBinding(prior.metadata, catalog);
+      acceptedDemand = binding ? productionDemand(binding.manifest, catalog) : [];
+      return acceptedDemand;
+    };
+    const coveredByAcceptedDemand = (accepted) => continuousDemand.every((line) =>
+      line.quantity <= (accepted.find((before) => before.productId === line.productId && before.build === line.build)?.quantity || 0));
     if (productionIntakePaused(env)) {
       const paused = () => reply({ error: "Frame orders are temporarily paused. Please check back soon.", code: "production_paused" }, 409);
       if (!piId) return paused();
@@ -294,17 +306,29 @@ export async function onRequestPost({ request, env }) {
       // the accepted prior manifest so it cannot bypass a pause by adding frames
       // or raising their quantity. Existing frame quantities can still finish.
       try {
-        const priorResponse = await fetch("https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(piId), { headers: auth });
-        if (!priorResponse.ok) throw new Error("accepted payment unavailable");
-        const prior = await priorResponse.json();
-        const binding = prior && prior.id === piId && await verifyCheckoutBinding(prior.metadata, catalog);
-        if (!binding) return paused();
-        const accepted = productionDemand(binding.manifest, catalog);
-        if (continuousDemand.some((line) => line.quantity > (accepted.find((before) => before.productId === line.productId && before.build === line.build)?.quantity || 0))) return paused();
+        if (!coveredByAcceptedDemand(await readAcceptedDemand())) return paused();
       } catch (_) { return reply({ error: "Your accepted order could not be confirmed. Please try again." }, 503); }
     }
-    try { await productionBatchReady(env); }
+    let currentBatch;
+    try { currentBatch = await productionBatchReady(env); }
     catch (_) { return reply({ error: "Production availability could not be confirmed. Please try again." }, 503); }
+    // Drafts never reserve slots. New intake and increases use the primary
+    // ledger; an existing, verified quantity can still finish after another
+    // buyer consumes slots. Paid allocation may then span successive batches.
+    const requestedFrames = continuousDemand.reduce((sum, line) => sum + line.quantity, 0);
+    let acceptedQuantity = false;
+    if (piId && requestedFrames > currentBatch.remaining) {
+      try { acceptedQuantity = coveredByAcceptedDemand(await readAcceptedDemand()); }
+      catch (_) { return reply({ error: "Your accepted order could not be confirmed. Please try again." }, 503); }
+    }
+    if (requestedFrames > currentBatch.remaining && !acceptedQuantity) {
+      const line = continuousDemand[0], remaining = currentBatch.remaining;
+      return reply({
+        error: "Only " + remaining + (remaining === 1 ? " frame remains" : " frames remain") + " in the current batch. Please update your cart.",
+        code: "production_quantity_limit", item: { id: line.productId, build: line.build },
+        maxQuantity: remaining, currentOrdinal: currentBatch.ordinal,
+      }, 409);
+    }
   }
   if (inventoryDemand.length) {
     try {
