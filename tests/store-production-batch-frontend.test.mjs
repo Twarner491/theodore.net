@@ -17,8 +17,19 @@ function harness(overrides = {}) {
     globalThis.h = {
       setProducts: value => { PRODUCTS = value; },
       load: loadProductionBatches, refresh: refreshProductionBatches, html: productionBatchHTML,
-      buyable, statusOf, variantMaxQuantity, sanitizeCart, migratedLine, confLineHTML, detailHTML,
-      loadCart, cart: () => cart,
+      buyable, statusOf, variantMaxQuantity, sanitizeCart, migratedLine, confLineHTML, coLineHTML, detailHTML,
+      loadCart, openCart, cart: () => cart,
+      drawerState: function (line) {
+        const classes = new Set();
+        const classList = { add(name) { classes.add(name); }, contains(name) { return classes.has(name); } };
+        const items = { innerHTML: '', querySelectorAll: () => [] };
+        const fields = { '.cart-items': items, '.cart-sub-val': {}, '.cart-checkout': {} };
+        drawer = { classList, querySelector: selector => fields[selector] || null };
+        scrim = { classList };
+        ensureDrawer = updateBadge = syncAccCards = function () {};
+        cart = [line]; renderCart();
+        return { items, classes };
+      },
       detailState: function (product) {
         const classes = new Set();
         const classList = { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } };
@@ -41,6 +52,7 @@ function harness(overrides = {}) {
         reveal = function () { bootState.visible = true; };
         wireStoreFilter = reveal;
         renderCheckout = function () { bootState.checkoutRenders += 1; };
+        coRefreshSummary = function () { throw new Error('must not replace payment summary'); };
         init();
         return bootState;
       },
@@ -135,17 +147,78 @@ test("a hung production read cannot delay store rendering and is bounded", async
   assert.equal(h.html(variant), "");
 });
 
-test("production status reads never remount or gate an accepted checkout", async () => {
-  let calls = 0;
+test("checkout refresh updates only batch subtitle nodes through rollover and read failure", async () => {
+  let calls = 0, current = row, failed = false;
+  const labels = Array.from({ length: 2 }, () => ({
+    dataset: { productionBatchLabel: "avian-visitors", variantLabel: "Assembled" }, textContent: "Assembled",
+  }));
+  const checkout = { querySelector() { return null; }, __cartChanged() { throw new Error("must not requote payment"); } };
   const h = harness({
-    document: { readyState: "loading", addEventListener() {}, querySelector(s) { return s === "#checkout" ? { querySelector() { return null; } } : null; }, querySelectorAll() { return []; },
+    document: { readyState: "loading", addEventListener() {}, querySelector(s) { return s === "#checkout" ? checkout : null; },
+      querySelectorAll(s) { assert.equal(s, "[data-production-batch-label]"); return labels; },
       body: { getAttribute() { return null; } }, documentElement: { getAttribute() { return null; } } },
-    fetch: async () => { calls += 1; return reply(row); },
+    fetch: async () => { calls += 1; if (failed) throw new Error("offline"); return reply(current); },
   });
   const state = h.boot(); h.refresh();
   await new Promise((resolve) => setImmediate(resolve));
-  assert.equal(calls, 0);
+  assert.equal(calls, 1, "an in-flight read is shared by the initial checkout and refresh");
+  assert.deepEqual(labels.map((label) => label.textContent), ["Batch 3", "Batch 3"]);
+  current = { ...row, ordinal: 4, remaining: 15 }; h.refresh();
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(labels.map((label) => label.textContent), ["Batch 4", "Batch 4"]);
+  failed = true; h.refresh();
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(labels.map((label) => label.textContent), ["Assembled", "Assembled"]);
+  assert.equal(calls, 3);
   assert.equal(state.checkoutRenders, 1);
+});
+
+test("cart and checkout use the current batch subtitle without counts or changing the cart", async () => {
+  let current = row;
+  const h = harness({ fetch: async () => reply(current) });
+  const line = { id: product.id, build: variant.id, qty: 2 };
+  for (const [snapshot, expected] of [[null, "Assembled"], [row, "Batch 3"], [{ ...row, ordinal: 4 }, "Batch 4"], [null, "Assembled"]]) {
+    current = snapshot; await h.load();
+    for (const html of [h.drawerState(line).items.innerHTML, h.coLineHTML(line, 0)]) {
+      assert.match(html, new RegExp('data-production-batch-label="avian-visitors" data-variant-label="Assembled">' + expected + '</span>'));
+      assert.doesNotMatch(html, /frames? remaining|pe-batch-remaining|productionBatches/);
+    }
+    assert.deepEqual(plain(h.cart()), [line], "display refresh never binds a cart to an ordinal");
+  }
+});
+
+test("opening the drawer off the store loads a fresh batch without delaying its opening", async () => {
+  let resolveRead, calls = 0;
+  const label = { dataset: { productionBatchLabel: "avian-visitors", variantLabel: "Assembled" }, textContent: "Assembled" };
+  const h = harness({
+    location: { hostname: "localhost", pathname: "/projects/avian-visitors/", search: "", hash: "", origin: "http://localhost" },
+    document: { readyState: "loading", addEventListener() {}, querySelector() { return null; },
+      querySelectorAll() { return [label]; }, body: { getAttribute() { return null; } }, documentElement: { getAttribute() { return null; } } },
+    fetch: () => { calls += 1; return new Promise((resolve) => { resolveRead = resolve; }); },
+  });
+  const state = h.drawerState({ id: product.id, build: variant.id, qty: 1 });
+  h.openCart();
+  assert.equal(state.classes.has("is-open"), true);
+  assert.equal(calls, 1);
+  assert.equal(label.textContent, "Assembled");
+  resolveRead(reply(row));
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(label.textContent, "Batch 3");
+});
+
+test("fixed legacy batch variants keep their own labels on cart and checkout", async () => {
+  const h = harness({ fetch: async () => reply({ ...row, ordinal: 9 }) });
+  const legacy = [1, 2].map((ordinal) => ({ ...variant, id: "assembled-batch-" + ordinal,
+    label: "Assembled (Batch " + ordinal + ")", productionBatchGroup: undefined }));
+  h.setProducts([{ ...product, variants: [variant, ...legacy] }]);
+  await h.load();
+  for (const fixed of legacy) {
+    const line = { id: product.id, build: fixed.id, qty: 1 };
+    for (const html of [h.drawerState(line).items.innerHTML, h.coLineHTML(line, 0)]) {
+      assert.ok(html.includes(fixed.label));
+      assert.doesNotMatch(html, /Batch 9|data-production-batch-label/);
+    }
+  }
 });
 
 test("unbound old frame carts migrate and merge without rewriting historical receipts", () => {

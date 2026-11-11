@@ -183,6 +183,21 @@
   const inventorySkuOf = (v) => v && typeof v.inventorySku === "string" && /^[a-z0-9][a-z0-9._-]{0,63}$/.test(v.inventorySku) ? v.inventorySku : "";
   const productionBatchGroupOf = (v) => v && v.productionBatchGroup === "avian-visitors" ? v.productionBatchGroup : "";
   const productionBatchOf = (v) => PRODUCTION_BATCH_ROWS[productionBatchGroupOf(v)] || null;
+  function cartVariantLabelHTML(v) {
+    const group = productionBatchGroupOf(v);
+    if (!group) return escapeHtml(v.label);
+    const row = productionBatchOf(v);
+    return '<span data-production-batch-label="' + group + '" data-variant-label="' + escapeHtml(v.label) + '">' +
+      escapeHtml(row ? "Batch " + row.ordinal : v.label) + '</span>';
+  }
+  function refreshCartBatchLabels() {
+    // This is the current public batch, not a reservation. Paid allocations are
+    // rendered separately on the receipt. Never remount payment fields here.
+    $$("[data-production-batch-label]").forEach((label) => {
+      const row = PRODUCTION_BATCH_ROWS[label.dataset.productionBatchLabel];
+      label.textContent = row ? "Batch " + row.ordinal : label.dataset.variantLabel;
+    });
+  }
   function productionBatchHTML(v) {
     const row = productionBatchOf(v);
     if (!row) return "";
@@ -504,14 +519,15 @@
 
   function refreshProductionBatchSurfaces() {
     // Never remount checkout or change the state of an already accepted payment.
+    if ($("#checkout")) { refreshCartBatchLabels(); return; }
     if ($("#store-grid")) renderGrid();
     else if ($("#product-detail") && root && P) { updateVariant(false); renderAccessories(P); }
-    else return;
+    else { refreshCartBatchLabels(); return; }
     renderCart();
   }
 
   function refreshProductionBatches() {
-    if (!$("#store-grid") && !$("#product-detail")) return;
+    if (!$("#store-grid") && !$("#product-detail") && !$("#checkout") && !(drawer && drawer.classList.contains("is-open"))) return;
     void loadProductionBatches().then((changed) => { if (changed) refreshProductionBatchSurfaces(); });
   }
 
@@ -1446,7 +1462,7 @@
     $(".cart-checkout", drawer).addEventListener("click", checkout);
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCart(); });
   }
-  function openCart() { if (/^\/store\/(checkout|confirmation)/.test(location.pathname)) return; ensureDrawer(); renderCart(); drawer.classList.add("is-open"); scrim.classList.add("is-open"); }
+  function openCart() { if (/^\/store\/(checkout|confirmation)/.test(location.pathname)) return; ensureDrawer(); renderCart(); drawer.classList.add("is-open"); scrim.classList.add("is-open"); refreshProductionBatches(); }
   function closeCart() { if (drawer) { drawer.classList.remove("is-open"); scrim.classList.remove("is-open"); resumeBatchExposure(); } }
   function renderCart() {
     ensureDrawer(); updateBadge();
@@ -1457,7 +1473,7 @@
         const p = getProduct(l.id); if (!p) return "";   // sanitizeCart drops these; this keeps a since-removed product from throwing mid-render
         const v = variantById(p, l.build), hero = carouselUrls(p)[0], gone = !buyable(v);
         return '<div class="cart-line' + (gone ? " cart-line-gone" : "") + '">' + (hero ? '<img class="cart-line-img"' + productImageAttrs(hero, "thumbnail") + ' alt=""' + (bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' : '<span class="cart-line-img"></span>') +
-          '<div class="cart-line-meta"><div class="cart-line-info"><p class="cart-line-title">' + p.title + '</p><p class="cart-line-variant">' + v.label + (gone ? ' <span class="cart-line-warn">no longer available</span>' : "") + "</p></div>" +
+          '<div class="cart-line-meta"><div class="cart-line-info"><p class="cart-line-title">' + p.title + '</p><p class="cart-line-variant">' + cartVariantLabelHTML(v) + (gone ? ' <span class="cart-line-warn">no longer available</span>' : "") + "</p></div>" +
           '<div class="cart-line-qty"><button type="button" data-i="' + i + '" data-q="-1">−</button><span>' + l.qty + '</span><button type="button" data-i="' + i + '" data-q="1">+</button></div></div>' +
           '<div class="cart-line-side"><div class="cart-line-price">' + money((v.price || 0) * l.qty) + '</div><button class="cart-line-remove" type="button" data-rm="' + i + '">remove</button></div></div>';
       }).join("") + '<button class="cart-shop-link" type="button">Continue shopping</button>';
@@ -1483,7 +1499,7 @@
     const v = variantById(p, l.build), hero = carouselUrls(p)[0], gone = !buyable(v), unit = v.price || 0;
     return '<div class="co-line' + (gone ? " co-line-gone" : "") + '">' +
       (hero ? '<img class="co-line-img"' + productImageAttrs(hero, "thumbnail") + ' alt=""' + (bgFor(hero) ? ' style="background:' + bgFor(hero) + '"' : '') + '>' : '<span class="co-line-img"></span>') +
-      '<div class="co-line-mid"><p class="co-line-title">' + p.title + '</p><p class="co-line-variant">' + v.label + (gone ? ' <span class="cart-line-warn">no longer available</span>' : "") + "</p>" +
+      '<div class="co-line-mid"><p class="co-line-title">' + p.title + '</p><p class="co-line-variant">' + cartVariantLabelHTML(v) + (gone ? ' <span class="cart-line-warn">no longer available</span>' : "") + "</p>" +
         '<button class="co-line-remove" type="button" data-rm="' + i + '" aria-label="Remove ' + escapeHtml(p.title) + '">remove</button></div>' +
       '<div class="co-line-right"><div class="co-line-price">' + money(unit * l.qty) + "</div>" +
         '<div class="co-line-unit">' + (l.qty > 1 ? l.qty + " &times; " + money(unit) : "&nbsp;") + "</div>" +
