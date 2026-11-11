@@ -16,13 +16,17 @@ spec.loader.exec_module(activate)
 
 def assembled(text):
     front = text[3:text.index("\n---", 3)]
-    return yaml.safe_load(front)["variants"][0]
+    return next(variant for variant in yaml.safe_load(front)["variants"] if variant["id"] == "assembled")
 
 
 def batch_1_fixture():
     # Exercise the historical activation tool against the original Batch 1 definition.
     current = (ROOT / "docs/store/avian-visitors.md").read_text()
-    return "---\nvariants:\n" + current.split("retiredVariants:\n", 1)[1].split("sections:", 1)[0] + "---\n"
+    retired = current.split("retiredVariants:\n", 1)[1]
+    block = re.search(r"^  - id: assembled\n.*?(?=^  - id: |^[a-zA-Z]|\Z)", retired, re.M | re.S)
+    if not block:
+        raise AssertionError("The original Batch 1 definition must remain archived")
+    return "---\nvariants:\n" + block.group(0) + "---\n"
 
 
 class ActivateBatch1Tests(unittest.TestCase):

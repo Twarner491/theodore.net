@@ -1,4 +1,5 @@
 import { readInventoryAvailability } from "../lib/store-inventory.js";
+import { PRODUCTION_GROUP, productionBatchReady, productionIntakePaused } from "../lib/production-batch-commerce.js";
 
 const FIELDS = ["id", "title", "description", "availability", "condition", "price",
   "link", "image_link", "brand", "quantity_to_sell_on_facebook", "additional_image_link"];
@@ -37,11 +38,24 @@ export async function onRequestGet({ request, env }) {
     }
   }
 
+  let productionOpen = false;
+  if (items.some((item) => item.productionBatchGroup === PRODUCTION_GROUP) && !productionIntakePaused(env)) {
+    try {
+      await productionBatchReady(env);
+      productionOpen = true;
+    } catch (_) {
+      // Pause or missing ledger authority must clear channel availability too.
+      console.log("Meta catalog production availability unavailable");
+    }
+  }
+
   const now = Date.now();
   const rows = items.map((item) => {
     const row = { ...item };
     const launched = !item.launchAt || Date.parse(item.launchAt) <= now;
-    const available = launched && item.availability !== "out of stock";
+    const productionAvailable = !item.productionBatchGroup ||
+      (item.productionBatchGroup === PRODUCTION_GROUP && !item.inventorySku && productionOpen);
+    const available = launched && item.availability !== "out of stock" && productionAvailable;
     if (item.inventorySku) {
       row.quantity_to_sell_on_facebook = available ? stock.get(item.inventorySku) ?? 0 : 0;
       row.availability = row.quantity_to_sell_on_facebook > 0 ? item.availability : "out of stock";

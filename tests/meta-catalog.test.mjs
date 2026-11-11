@@ -29,6 +29,18 @@ function setup() {
   return { db, items, env, request: new Request("https://theodore.net/meta-catalog.csv") };
 }
 
+function productionSetup() {
+  const ctx = setup();
+  ctx.db.exec(readFileSync(new URL("../migrations/0007_production_batches.sql", import.meta.url), "utf8"));
+  ctx.db.exec(`INSERT INTO production_batch_state (product_id,current_ordinal,observed_from,created_at)
+    VALUES ('avian-visitors',3,1794348000,1794348000);
+    INSERT INTO production_batches (product_id,ordinal,capacity,committed_quantity,policy_version,policy_evidence,opened_at)
+    VALUES ('avian-visitors',3,30,29,'paid-demand-v1','{"privateEvidence":true}',1794348000)`);
+  delete ctx.items[0].inventorySku;
+  Object.assign(ctx.items[0], { productionBatchGroup: "avian-visitors", quantity_to_sell_on_facebook: 25 });
+  return ctx;
+}
+
 test("feed uses available stock after sales and reservations, then restores the same id for the next batch", async () => {
   const ctx = setup();
   try {
@@ -73,5 +85,55 @@ test("missing build metadata fails the upload instead of returning an empty repl
   try {
     ctx.env.ASSETS.fetch = async () => new Response("missing", { status: 404 });
     assert.equal((await onRequestGet(ctx)).status, 503);
+  } finally { ctx.db.close(); }
+});
+
+test("ready continuous production retains its stable Meta id and channel quantity, not the batch remainder", async () => {
+  const ctx = productionSetup();
+  try {
+    const response = await onRequestGet(ctx), text = await response.text();
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get("cache-control"), /no-store/);
+    assert.match(text, /avian-visitors,[^\r\n]*in stock[^\r\n]*,25,/);
+    assert.doesNotMatch(text, /privateEvidence|1794348000|paid-demand|productionBatchGroup|Batch 3/);
+    assert.equal(ctx.db.prepare("SELECT committed_quantity FROM production_batches WHERE ordinal=3").get().committed_quantity, 29);
+  } finally { ctx.db.close(); }
+});
+
+test("production pause clears channel stock while ordinary products remain available", async () => {
+  const ctx = productionSetup();
+  try {
+    ctx.env.PRODUCTION_BATCH_PAUSED = "1";
+    let text = await (await onRequestGet(ctx)).text();
+    assert.match(text, /avian-visitors,[^\r\n]*out of stock[^\r\n]*,0,/);
+    assert.match(text, /avian-mic-electronics,[^\r\n]*in stock[^\r\n]*,25,/);
+    delete ctx.env.PRODUCTION_BATCH_PAUSED;
+    text = await (await onRequestGet(ctx)).text();
+    assert.match(text, /avian-visitors,[^\r\n]*in stock[^\r\n]*,25,/);
+  } finally { ctx.db.close(); }
+});
+
+test("missing production authority and unsupported groups fail closed without affecting nonfinite items", async () => {
+  for (const failure of ["no-binding", "no-schema", "unknown-group"]) {
+    const ctx = setup();
+    try {
+      delete ctx.items[0].inventorySku;
+      Object.assign(ctx.items[0], { productionBatchGroup: failure === "unknown-group" ? "other" : "avian-visitors", quantity_to_sell_on_facebook: 25 });
+      if (failure === "no-binding") delete ctx.env.STORE_INVENTORY;
+      const text = await (await onRequestGet(ctx)).text();
+      assert.match(text, /avian-visitors,[^\r\n]*out of stock[^\r\n]*,0,/);
+      assert.match(text, /avian-mic-electronics,[^\r\n]*in stock[^\r\n]*,25,/);
+    } finally { ctx.db.close(); }
+  }
+});
+
+test("ready production cannot override an explicit sold-out status or a future launch", async () => {
+  const ctx = productionSetup();
+  try {
+    ctx.items[0].availability = "out of stock";
+    assert.match(await (await onRequestGet(ctx)).text(), /avian-visitors,[^\r\n]*out of stock[^\r\n]*,0,/);
+    ctx.items[0].availability = "in stock";
+    ctx.items[0].launchAt = "2999-01-01T00:00:00Z";
+    assert.match(await (await onRequestGet(ctx)).text(), /avian-visitors,[^\r\n]*out of stock[^\r\n]*,0,/);
   } finally { ctx.db.close(); }
 });

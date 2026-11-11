@@ -56,7 +56,6 @@ variants:
       - Everything in the Electronics Kit
       - 3D Printed backplate
       - Oak wood frame and mat
-softwareNote: Hardware only. You install the open-source software on your own device at first setup.
 sections:
   - label: Pairs with
     items:

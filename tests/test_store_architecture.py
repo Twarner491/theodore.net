@@ -5,9 +5,10 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
+from PIL import Image
 
 from hooks.search_data import _scan_store
-from hooks.store_products import _inventory_sku, _products, _shipping_profile, on_files
+from hooks.store_products import _inventory_sku, _production_batch_group, _products, _shipping_profile, on_files
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,26 +25,28 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
         kit = self.products['avian-visitors-kit']
 
         self.assertTrue(assembled['published'])
-        self.assertEqual(assembled['defaultBuild'], 'assembled-batch-2')
-        self.assertEqual([variant['id'] for variant in assembled['variants']], ['assembled-batch-2'])
+        self.assertEqual(assembled['defaultBuild'], 'assembled-continuous')
+        self.assertEqual([variant['id'] for variant in assembled['variants']], ['assembled-continuous'])
         assembled_variant = assembled['variants'][0]
         self.assertNotIn('comingSoon', assembled_variant)
         self.assertEqual(assembled_variant['price'], 699)
         self.assertEqual(assembled_variant['stripePrice'], 'price_1UAyqjRPSNpqisAPDHJxogp3')
         self.assertNotIn('localPreview', assembled_variant)
         self.assertEqual(assembled_variant['shippingProfile'], 'contiguous-us-ground')
-        self.assertEqual(assembled_variant['inventorySku'], 'avian-gen3-batch-02')
-        self.assertEqual(assembled_variant['batchSize'], 30)
+        self.assertEqual(assembled_variant['productionBatchGroup'], 'avian-visitors')
+        self.assertNotIn('inventorySku', assembled_variant)
+        self.assertNotIn('batchSize', assembled_variant)
         self.assertEqual(assembled_variant['maxQuantity'], 20)
         self.assertEqual(assembled_variant['status'], 'available')
         self.assertRegex(assembled_variant['stripePriceLive'], r'^price_[A-Za-z0-9]+$')
         self.assertNotIn('launchAt', assembled_variant)
-        self.assertEqual(assembled_variant['batchLabel'], 'Batch 2')
+        self.assertEqual(assembled_variant['label'], 'Assembled')
+        self.assertNotIn('batchLabel', assembled_variant)
         self.assertNotIn('batchSizePrivate', assembled_variant)
         self.assertEqual(assembled['storeListings'], [{
             'category': 'products',
-            'build': 'assembled-batch-2',
-            'variants': ['assembled-batch-2'],
+            'build': 'assembled-continuous',
+            'variants': ['assembled-continuous'],
             'title': 'Avian Visitors',
         }])
 
@@ -81,7 +84,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
         variant = assembled['variants'][0]
 
         self.assertNotIn('desc', variant)
-        self.assertEqual(variant['softwareNote'], 'I assemble each of these by hand, working as hard as I can to ship both Batch 1 and Batch 2 before the end of 2026.')
+        self.assertEqual(variant['softwareNote'], "I assemble each frame by hand. Batches 1 and 2 are expected to ship by the end of 2026, and I'm working hard to get subsequent batches out as soon as possible.")
         self.assertNotIn('colophon', assembled)
         self.assertEqual(
             [section['label'] for section in assembled['sections']],
@@ -161,7 +164,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
             image_dir = docs_dir / 'assets' / 'images' / 'Fixture'
             image_dir.mkdir(parents=True)
             for filename in ('top.png', 'topDARK.png', 'back.png', 'side.png', 'sideDARK.png'):
-                (image_dir / filename).touch()
+                Image.new('RGB', (8, 6), '#f3f2f2').save(image_dir / filename)
 
             class HookConfig(dict):
                 site_dir = str(Path(root) / 'site')
@@ -268,7 +271,16 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             _inventory_sku({'inventorySku': 'avian-gen3-batch-01'})
 
-    def test_batch_2_opens_without_changing_the_retired_batch_1_catalog(self):
+    def test_production_group_is_allowlisted_and_separate_from_finite_stock(self):
+        valid = {'productionBatchGroup': 'avian-visitors', 'shippingProfile': 'contiguous-us-ground'}
+        self.assertEqual(_production_batch_group(valid), 'avian-visitors')
+        self.assertIsNone(_production_batch_group({}))
+        for invalid in ({'productionBatchGroup': 'other'}, {'productionBatchGroup': 'avian-visitors'},
+                        {**valid, 'inventorySku': 'avian-gen3-batch-02'}):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                _production_batch_group(invalid)
+
+    def test_continuous_sales_preserve_both_retired_payment_catalog_snapshots(self):
         variant = self.products['avian-visitors']['variants'][0]
         class HookConfig(dict):
             use_directory_urls = True
@@ -287,12 +299,19 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
                     on_files(files, config)
                 generated = next(file for file in files if file.src_uri == 'store-catalog.json')
                 catalog = json.loads(generated.content_string)
-                entry = catalog['avian-visitors']['variants']['assembled-batch-2']
+                entry = catalog['avian-visitors']['variants']['assembled-continuous']
                 self.assertNotIn('launchAt', entry)
-                self.assertEqual(entry['inventorySku'], 'avian-gen3-batch-02')
+                self.assertNotIn('inventorySku', entry)
+                self.assertEqual(entry['productionBatchGroup'], 'avian-visitors')
+                self.assertEqual(entry['label'], 'Assembled')
                 self.assertEqual(entry['price'], variant['stripePriceLive' if mode == 'live' else 'stripePrice'])
-                self.assertEqual(catalog['avian-visitors']['retiredBuilds'], ['assembled'])
-                # These fields are hashed into existing Batch 1 payment bindings.
+                self.assertEqual(catalog['avian-visitors']['retiredBuilds'], ['assembled-batch-2', 'assembled'])
+                # These exact fields are hashed into existing payment bindings.
+                self.assertEqual(catalog['avian-visitors']['variants']['assembled-batch-2'], {
+                    'price': variant['stripePriceLive' if mode == 'live' else 'stripePrice'],
+                    'weightLb': 4.0, 'maxQty': 20, 'label': 'Assembled (Batch 2)', 'priceUsd': 699,
+                    'shippingProfile': 'contiguous-us-ground', 'inventorySku': 'avian-gen3-batch-02',
+                })
                 self.assertEqual(catalog['avian-visitors']['variants']['assembled'], {
                     'price': variant['stripePriceLive' if mode == 'live' else 'stripePrice'],
                     'weightLb': 4.0, 'maxQty': 20, 'label': 'Assembled', 'priceUsd': 699,
@@ -302,14 +321,15 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
                 runtime = next(file for file in files if file.src_uri == 'assets/js/store-data.js')
                 self.assertNotIn('retiredVariants', runtime.content_string)
                 self.assertNotIn('avian-gen3-batch-01', runtime.content_string)
+                self.assertNotIn('avian-gen3-batch-02', runtime.content_string)
 
     def test_kit_and_accessory_availability_retains_test_and_live_prices(self):
         for product in self.products.values():
             for variant in product.get('variants', []):
-                if (product['id'], variant.get('id')) == ('avian-visitors', 'assembled-batch-2'):
+                if (product['id'], variant.get('id')) == ('avian-visitors', 'assembled-continuous'):
                     continue
                 with self.subTest(product=product['id'], variant=variant.get('id')):
-                    if product['id'] == 'polargraph':
+                    if product['id'] in ('polargraph', 'polargraph-parts', 'micron-pens-9'):
                         self.assertEqual(variant.get('status'), 'soldout')
                     else:
                         self.assertNotIn('status', variant)
@@ -336,7 +356,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
             'polargraph-parts': ['default'],
         }
         if self.products['avian-visitors']['variants'][0]['status'] == 'available':
-            expected['avian-visitors'] = ['assembled', 'assembled-batch-2']
+            expected['avian-visitors'] = ['assembled', 'assembled-batch-2', 'assembled-continuous']
         for mode in ('test', 'live'):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as root:
                 config = HookConfig(docs_dir=str(DOCS))
@@ -351,7 +371,7 @@ class AvianVisitorsStoreArchitectureTests(unittest.TestCase):
                 signup = json.loads(signup_file.content_string)
                 self.assertEqual(signup['polargraph'], ['electronics', 'electronics-printed'])
                 self.assertNotIn('polargraph', catalog)
-                self.assertEqual(signup['avian-visitors'], ['assembled-batch-2'])
+                self.assertEqual(signup['avian-visitors'], ['assembled-continuous'])
                 for product_id in ('avian-visitors-kit', 'mic-mount'):
                     self.assertEqual(signup[product_id], expected[product_id])
                 launches = next(file for file in files if file.src_uri == 'store-launches.json')

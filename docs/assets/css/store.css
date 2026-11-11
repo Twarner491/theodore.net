@@ -6,6 +6,12 @@
 
 /* match the projects/writings whitespace between the intro desc and first card */
 .store-feed { width: 100%; margin-top: 21px; }
+.store-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; fill: currentColor; flex: none; }
+.socialpar .store-icon { width: 15.5px; height: 16px; color: var(--md-default-fg-color); opacity: 0.9; }
+/* Let the themed body paint the viewport canvas and keep rubber-band scroll
+   from exposing a separate canvas color on store routes. */
+html:has(#store-grid, #product-detail, #checkout, #confirmation) { background: transparent; overscroll-behavior-y: none; }
+body:has(#store-grid, #product-detail, #checkout, #confirmation) { background: var(--md-default-bg-color); overscroll-behavior-y: none; }
 
 /* align the store + product + policy pages to the projects/writings intro
    height. store.css loads only on these pages, so the homepage is untouched. */
@@ -41,7 +47,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
   text-decoration: none !important; transition: all 0.3s ease;
 }
 .return2feed a:hover { opacity: 0.4; cursor: pointer; }
-.return2feed i { margin-right: 0.45em; }
+.return2feed i, .return2feed .store-icon { margin-right: 0.45em; }
 
 :root {
   --store-track:  color-mix(in srgb, var(--md-default-fg-color) 5%, transparent);
@@ -149,7 +155,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .product-card--mini .pc-imgwrap { aspect-ratio: 6 / 5; }
 .product-card--mini .pc-imgwrap img { object-fit: contain; }   /* whole thumbnail fits; imgwrap bg fills the rest */
 .pc-ph { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
-.pc-ph i { font-size: 1.8em; color: var(--md-default-fg-color); opacity: 0.2; }
+.pc-ph i, .pc-ph .store-icon { font-size: 1.8em; color: var(--md-default-fg-color); opacity: 0.2; }
 .product-card--mini .pc-body { padding: 0.7em 0.95em 0.8em; }
 .pc-tophead { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5em; }
 .product-card--mini .pc-title { flex: 1; min-width: 0; font-size: 0.92em; line-height: 1.35; margin: 0; padding: 0; opacity: 0.78; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -162,7 +168,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .pc-qty span { min-width: 18px; text-align: center; font-family: "JetBrains Mono"; font-size: 0.76em; opacity: 0.85; }
 /* carousel placeholder for a product with no photos yet (uses the frontmatter icon) */
 .pe-ph { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
-.pe-ph i { font-size: 2.4em; color: var(--md-default-fg-color); opacity: 0.18; }
+.pe-ph i, .pe-ph .store-icon { font-size: 2.4em; color: var(--md-default-fg-color); opacity: 0.18; }
 @media (max-width: 760px) { .acc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* product detail page: image carousel + info, two columns */
@@ -177,7 +183,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
   opacity: 0.4; cursor: pointer; font-size: 15px; transition: opacity 0.2s ease;
 }
 .pe-arrow:hover { opacity: 1; }
-.pe-frame { flex: 1; min-width: 0; position: relative; aspect-ratio: 3 / 4; border: 1px solid var(--md-default-fg-color--lightest); border-radius: 18px; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.pe-frame { flex: 1; min-width: 0; position: relative; aspect-ratio: 3 / 4; border: 0; border-radius: 18px; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
 .pe-frame:active { cursor: grabbing; }
 .pe-carousel.is-single .pe-frame { cursor: default; }
 .pe-carousel.is-single .pe-arrow { display: none; }   /* single image: no prev/next arrows on desktop */
@@ -234,6 +240,10 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
   font-family: "JetBrains Mono"; font-size: 0.7em; font-weight: 300; line-height: 1.35;
   color: var(--md-default-fg-color); opacity: 0.5;
 }
+.pe-batch--production { opacity: 1; }
+.pe-batch-label { display: block; opacity: 0.45; }
+.pe-batch-remaining { display: block; margin-top: 0.2em; opacity: 0.85; }
+.pe-batch-remaining--concealed { visibility: hidden; }
 
 .pe-buy {
   width: 100%; border: 1.2px solid var(--md-default-fg-color); border-radius: 16px;
@@ -337,7 +347,7 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .cart-shop-link:hover { opacity: 0.85; }
 .cart-empty + .cart-shop-link { margin-top: 0.6em; }
 .cart-line { display: grid; grid-template-columns: 60px 1fr auto; gap: 0.85em; align-items: stretch; padding: 1em 0; border-bottom: 1px solid var(--md-default-fg-color--lightest); }
-.cart-line-img { width: 60px; height: 68px; align-self: start; border-radius: 14px; object-fit: cover; border: 1px solid var(--md-default-fg-color--lightest); }   /* taller than 60 so the meta column's space-between opens up the variant -> qty gap */
+.cart-line .cart-line-img { box-sizing: border-box; contain: size; width: 60px; height: auto; min-height: 68px; align-self: stretch; border-radius: 14px; object-fit: contain; border: 1px solid var(--md-default-fg-color--lightest); }
 .cart-line-meta { min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
 .cart-line-side { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; }
 .cart-line-title { font-family: "JetBrains Mono"; font-size: 0.85em; font-weight: 300; opacity: 0.85; margin: 0 0 2px; }
@@ -378,12 +388,10 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .legal-prose li { margin: 0.35em 0; }
 .legal-prose .draft { display: inline-block; padding: 0.4em 0.8em; border-radius: 10px; border: 1px solid var(--md-default-fg-color--lightest); font-size: 0.82em; opacity: 0.7; margin-bottom: 1em; }
 
-/* fade-in */
-.store-feed, .legal-section, .product-card { opacity: 0; }
-.store-feed.visible, .legal-section.visible { animation: fadeIn 0.6s ease-out forwards; }
-.product-card.visible { animation: fadeIn 0.5s ease-out forwards; }
-.store-grid.is-filter-update .product-card,
-.store-grid.is-filter-update .product-card.visible { opacity: 1; animation: none; }
+/* Show commerce content immediately, including back/forward navigation. */
+.intro-section, .intro-section.visible, .store-feed, .store-feed.visible,
+.legal-section, .legal-section.visible, .footer, .footer.visible,
+.product-card, .product-card.visible { opacity: 1; animation: none; will-change: auto; }
 
 /* responsive */
 @media (max-width: 1200px) { .store-grid { grid-template-columns: repeat(3, 1fr); gap: 1.1em; } }
@@ -421,30 +429,18 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .co-grid { display: grid; grid-template-columns: 1fr; gap: 2.6em; align-items: start; }
 @media (min-width: 820px) { .co-grid { grid-template-columns: 1fr 1.05fr; gap: 3.2em; } }
 
-/* ---- cart -> checkout morph (cross-document View Transitions) ----
-   The open cart drawer and the checkout summary share a transition name, so the
-   drawer expands into the left column as the page navigates -- and morphs back on
-   return. Browsers without support (e.g. Firefox) just navigate normally. */
-@view-transition { navigation: auto; }
-.cart-drawer.is-open { view-transition-name: co-surface; }   /* only when open, so it never clashes with .co-summary on the checkout page */
-.co-summary { view-transition-name: co-surface; }
-/* the checkout column must be fully painted (store.js boots eagerly), not mid fade-in, when the snapshot is taken */
-.store-feed:has(#checkout) { opacity: 1; }
-.store-feed:has(#checkout).visible { animation: none; }
-::view-transition-group(co-surface) { animation-duration: 0.46s; animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.34s; }
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(co-surface), ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 1ms !important; }
-}
+/* Frequent store/cart navigation should not wait on a cross-document animation. */
+@view-transition { navigation: none; }
 
 /* left: cart summary */
 .co-line { display: flex; align-items: stretch; gap: 0.9em; padding: 1em 0; border-bottom: 1px solid var(--md-default-fg-color--lightest); }
 .co-line:first-child { padding-top: 0; }
 .co-line:last-child { border-bottom: 0; padding-bottom: 0; }
-.co-line-img { width: 64px; align-self: stretch; min-height: 64px; flex: none; border-radius: 12px; object-fit: cover; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); background: var(--md-default-bg-color); }
+.co-line .co-line-img { box-sizing: border-box; contain: size; width: 64px; height: auto; min-height: 72px; align-self: stretch; flex: none; border-radius: 12px; object-fit: contain; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); background: var(--md-default-bg-color); }
 .co-line-mid { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; align-self: stretch; }
 .co-line-title { font-family: "JetBrains Mono"; font-size: 0.86em; font-weight: 300; opacity: 0.88; margin: 0; }
 .co-line-variant { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; opacity: 0.5; margin: 0.15em 0 0.5em; }
+.co-payment-note { font-family: "JetBrains Mono"; font-size: 0.74em; font-weight: 300; line-height: 1.5; margin: 0 0 1em; }
 .co-line-remove { margin-top: auto; border: 0; background: none; padding: 0; cursor: pointer; font-family: "JetBrains Mono"; font-size: 0.68em; font-weight: 300; opacity: 0.45; color: var(--md-default-fg-color); text-decoration: underline; }
 .co-line-remove:hover { opacity: 0.8; }
 .co-line-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25em; }
@@ -455,8 +451,35 @@ header .md-header__option, header .md-header__button { pointer-events: auto; }
 .co-line-qty button:hover { opacity: 1; }
 .co-line-qty span { min-width: 1.5em; text-align: center; font-family: "JetBrains Mono"; font-size: 0.78em; opacity: 0.85; }
 .co-line-gone { opacity: 0.55; }
+.co-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.co-accessories { margin-top: 1.5em; }
+.co-accessories h3 { font-family: "JetBrains Mono"; font-size: 0.8em; font-weight: 300; margin: 0 0 0.65em; }
+.co-accessories-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 160px)); gap: 0.65em; }
+@media (max-width: 819px) { .co-accessories-grid > .co-accessory:nth-child(n + 3) { display: none; } }
+@media (min-width: 820px) { .co-accessories-grid { grid-template-columns: repeat(3, minmax(0, 160px)); } }
+.co-accessory.product-card { opacity: 1; animation: none; min-width: 0; }
+.co-accessory .pc-imgwrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.co-accessory .pc-body { padding: 0.6em 0.65em; }
+.co-accessory .pc-title { flex: none; font-size: 0.76em; white-space: normal; overflow-wrap: anywhere; }
+.co-accessory-variant { font-family: "JetBrains Mono"; font-size: 0.66em; font-weight: 300; line-height: 1.4; margin: 0.2em 0 0; opacity: 0.65; }
+.co-accessory-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.3em; margin-top: auto; padding-top: 0.45em; }
+.co-accessory .pc-price { padding: 0; font-size: 0.72em; }
+.co-accessory button:disabled { opacity: 0.35; cursor: default; transform: none; }
+.co-accessory button:focus-visible { outline: 2px solid var(--md-default-fg-color); outline-offset: 2px; }
+.co-accessory .pc-stretch:focus-visible { outline: 2px solid var(--md-default-fg-color); outline-offset: -3px; }
+@media (prefers-reduced-motion: reduce) { .co-accessory:hover, .co-accessory .pc-add:hover { transform: none; } }
+@media (hover: none) { .co-accessory:hover, .co-accessory .pc-add:hover { transform: none; } }
 
 .co-rule { border: none; border-top: 1px solid var(--md-default-fg-color--lightest); height: 0; margin: 1.3em 0; }
+/* Native disclosure semantics without Material's admonition/pencil styling. */
+#checkout .co-voucher-details { display: block; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; color: inherit; font-size: inherit; }
+#checkout .co-voucher-details > summary { display: block; width: fit-content; max-width: 100%; min-height: 24px; margin: 0; padding: 0.4em 0; border: 0; border-radius: 0; background: none; box-shadow: none; color: inherit; font-family: "JetBrains Mono"; font-size: 0.8em; font-weight: 300; cursor: pointer; list-style: none; }
+#checkout .co-voucher-details > summary::before, #checkout .co-voucher-details > summary::after, #checkout .co-voucher-details > summary::-webkit-details-marker { display: none; content: none; }
+#checkout .co-voucher-details[open] > summary { margin-bottom: 0.7em; }
+#checkout .co-voucher-details .co-chev { margin-left: 0.35em; }
+#checkout .co-voucher-details[open] .co-chev { transform: rotate(180deg); }
+#checkout .co-voucher-details > summary:focus-visible { outline: 2px solid var(--md-default-fg-color); outline-offset: 3px; }
+#checkout .co-voucher-details > :last-child { margin-bottom: 0; }
 .co-voucher { display: flex; align-items: center; border: 1.2px solid var(--tw-line, var(--md-default-fg-color--lightest)); border-radius: 14px; overflow: hidden; }
 .co-voucher input { flex: 1; min-width: 0; border: 0; background: none; outline: none; color: var(--md-default-fg-color); font-family: "JetBrains Mono"; font-size: 0.8em; font-weight: 300; padding: 0.95em 0.4em 0.95em 1.2em; }
 .co-voucher button { flex: none; border: 0; background: none; cursor: pointer; color: var(--md-default-fg-color); opacity: 0.6; padding: 0 1.1em; display: flex; align-items: center; }

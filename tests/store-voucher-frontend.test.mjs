@@ -18,6 +18,7 @@ function element() {
       toggle(name, on) { if (on) classes.add(name); else classes.delete(name); },
     },
     addEventListener(type, handler) { this.handlers[type] = handler; },
+    focus() { this.focused = true; },
     closest() { return this; },
     querySelector() { return null; },
   };
@@ -89,7 +90,10 @@ async function harness({ respond, fetchUpdates, recoveryContext } = {}) {
     edit(code) { fields[".co-voucher input"].value = code; host.__editVoucher(); },
     shipping(address = {}) { addressHandlers.change({ complete: true, value: { name: "Test", address: { country: "US", state: "CA", postal_code: "94110", line1: "Test", ...address } } }); },
     changeCart: (lines) => context.changeCart(lines),
-    pay: () => fields["#co-form"].handlers.submit({ preventDefault() {} }),
+    async pay() {
+      if (!payment.classList.contains("is-open")) await fields["#co-form"].handlers.submit({ preventDefault() {} });
+      return fields["#co-form"].handlers.submit({ preventDefault() {} });
+    },
     confirmations: () => confirmations,
     async canceledOrder() { context.location.search = "?payment_intent=pi_test&payment_intent_client_secret=pi_test_secret_example&redirect_status=succeeded"; await context.runConfirmation(); },
     order: (data) => context.runOrder(data),

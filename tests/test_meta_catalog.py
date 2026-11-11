@@ -35,6 +35,21 @@ class MetaCatalogTests(unittest.TestCase):
         self.assertEqual(source[0]['inventorySku'], 'avian-gen3-batch-02')
         self.assertEqual(source[0]['launchAt'], '2999-01-01T00:00:00Z')
 
+    def test_production_source_keeps_stable_identity_and_static_feed_fails_closed(self):
+        product = drop('2000-01-01T00:00:00Z', productionBatchGroup='avian-visitors',
+                       shippingProfile='contiguous-us-ground')
+        product.update(metaCatalogId='avian-visitors')
+        generated = build([product])
+        source = json.loads(generated['meta-catalog-source.json'])
+        self.assertEqual(source[0]['id'], 'avian-visitors')
+        self.assertEqual(source[0]['productionBatchGroup'], 'avian-visitors')
+        self.assertEqual(source[0]['quantity_to_sell_on_facebook'], 25)
+        self.assertIsNone(source[0]['inventorySku'])
+        row = list(csv.DictReader(io.StringIO(generated['meta-catalog.csv'])))[0]
+        self.assertEqual(row['availability'], 'out of stock')
+        self.assertEqual(row['quantity_to_sell_on_facebook'], '0')
+        self.assertNotIn('productionBatchGroup', row)
+
     def test_real_live_catalog_has_one_assembled_frame_and_no_buyable_polargraphs(self):
         from pathlib import Path
         docs = Path(__file__).resolve().parents[1] / 'docs'
@@ -42,6 +57,8 @@ class MetaCatalogTests(unittest.TestCase):
         frame = [r for r in rows if r['id'] == 'avian-visitors']
         self.assertEqual(len(frame), 1)
         self.assertEqual(frame[0]['price'], '699.00 USD')
+        self.assertEqual(frame[0]['availability'], 'out of stock')
+        self.assertEqual(frame[0]['quantity_to_sell_on_facebook'], '0')
         polargraphs = [r for r in rows if r['id'] in ('polargraph-electronics', 'polargraph-electronics-printed')]
         self.assertEqual(len(polargraphs), 2)
         self.assertTrue(all(r['availability'] == 'out of stock' for r in polargraphs))

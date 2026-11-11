@@ -90,6 +90,7 @@ hooks:
   - hooks/rss_dates.py
   - hooks/content_lists.py
   - hooks/store_title_brand.py
+  - hooks/header_assets.py
   - hooks/case_redirects.py
   - hooks/tufte_elements.py
   - hooks/store_products.py

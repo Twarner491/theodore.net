@@ -12,6 +12,7 @@ frontmatter. Read-only: this never writes into the source tree.
 
 import csv
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -20,6 +21,13 @@ import yaml
 from datetime import datetime, timezone
 from pathlib import Path
 from mkdocs.structure.files import File
+
+# MkDocs loads hook files by path without putting the repository on sys.path.
+# Resolve the sibling helper explicitly so plain `mkdocs build` works in CI too.
+_images_spec = importlib.util.spec_from_file_location('store_image_helpers', Path(__file__).with_name('store_images.py'))
+_image_helpers = importlib.util.module_from_spec(_images_spec)
+_images_spec.loader.exec_module(_image_helpers)
+build_image_sources = _image_helpers.build_image_sources
 
 try:
     from PIL import Image
@@ -37,6 +45,7 @@ DEFAULT_MAX_QTY = 10
 ABSOLUTE_MAX_QTY = 99
 SHIPPING_PROFILES = {'contiguous-us-ground'}
 INVENTORY_SKUS = {'avian-gen3-batch-01', 'avian-gen3-batch-02'}
+PRODUCTION_BATCH_GROUPS = {'avian-visitors'}
 
 
 def _bg_color(path):
@@ -134,6 +143,20 @@ def _inventory_sku(v):
     if _shipping_profile(v) != 'contiguous-us-ground':
         raise ValueError('finite inventory requires contiguous-us-ground manual capture')
     return sku
+
+
+def _production_batch_group(v):
+    """Stable production accounting, separate from finite inventory variants."""
+    if 'productionBatchGroup' not in v:
+        return None
+    group = v.get('productionBatchGroup')
+    if group not in PRODUCTION_BATCH_GROUPS:
+        raise ValueError('unknown store productionBatchGroup: ' + repr(group))
+    if _shipping_profile(v) != 'contiguous-us-ground':
+        raise ValueError('production batches require contiguous-us-ground shipping')
+    if 'inventorySku' in v:
+        raise ValueError('production batches cannot also use finite inventory')
+    return group
 
 
 _LAUNCH_AT_RX = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$')
@@ -239,19 +262,20 @@ def _meta_catalog_items(products, price_field='stripePrice', docs_dir=None):
                 base + '/store/' + p['id'] + '/', image_url(img), 'theodore.net',
                 0 if availability == 'out of stock' else 25,
                 ','.join(image_url(x) for x in images if x != img),
-            ]), inventorySku=v.get('inventorySku'), launchAt=_launch_at(v)))
+            ]), inventorySku=v.get('inventorySku'), launchAt=_launch_at(v),
+                productionBatchGroup=_production_batch_group(v)))
     return items
 
 
 def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
-    """Safe static fallback: finite stock is unavailable until read at request time."""
+    """Safe static fallback: dynamic stock/intake is unavailable until read at request time."""
     out = io.StringIO()
     w = csv.DictWriter(out, fieldnames=META_FIELDS, extrasaction='ignore')
     w.writeheader()
     for item in _meta_catalog_items(products, price_field, docs_dir):
         if item['launchAt'] and not _launch_open({'launchAt': item['launchAt']}):
             continue
-        if item['inventorySku']:
+        if item['inventorySku'] or item['productionBatchGroup']:
             item.update(availability='out of stock', quantity_to_sell_on_facebook=0)
         w.writerow(item)
     return out.getvalue()
@@ -259,6 +283,9 @@ def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
 
 def on_files(files, config):
     products = _products(config['docs_dir'])
+    image_sources, image_files = build_image_sources(products, config['docs_dir'])
+    for path, data in image_files.items():
+        files.append(File.generated(config, path, content=data))
     for p in products:   # before store-data.js is serialized, so a bad value fails the build clearly
         for v in (p.get('variants') or []):
             if isinstance(v, dict):
@@ -289,8 +316,18 @@ def on_files(files, config):
                "window.STORE_DARK_IMAGES = "
                + json.dumps(dark, ensure_ascii=False) + ";\n"
                "window.STORE_IMAGE_BG = "
-               + json.dumps(image_bg, ensure_ascii=False) + ";\n")
+               + json.dumps(image_bg, ensure_ascii=False) + ";\n"
+               "window.STORE_IMAGE_SOURCES = "
+               + json.dumps(image_sources, ensure_ascii=False) + ";\n")
     files.append(File.generated(config, 'assets/js/store-data.js', content=content))
+    # Include the actual generated derivative URLs (and therefore codec output)
+    # in the catalog version, even if a Pillow upgrade changes encoded bytes.
+    data_version = hashlib.sha256(content.encode('utf-8')).hexdigest()[:8]
+    config['extra_javascript'] = [
+        'assets/js/store-data.js?h=' + data_version
+        if str(asset).split('?', 1)[0] == 'assets/js/store-data.js' else asset
+        for asset in config.get('extra_javascript', [])
+    ]
     # trusted catalog read server-side by the checkout Function: per variant, the
     # Stripe Price id (amount) and the shipping weight (lb). Variant `weight`
     # overrides the product `weight`, which falls back to DEFAULT_WEIGHT_LB.
@@ -337,6 +374,7 @@ def on_files(files, config):
                 continue
             shipping_profile = _shipping_profile(v)
             inventory_sku = _inventory_sku(v)
+            production_group = _production_batch_group(v)
             if not _sellable(v):
                 continue
             price_id = v.get(price_field)
@@ -351,6 +389,8 @@ def on_files(files, config):
                 catalog_variant['shippingProfile'] = shipping_profile
             if inventory_sku:
                 catalog_variant['inventorySku'] = inventory_sku
+            if production_group:
+                catalog_variant['productionBatchGroup'] = production_group
             launch_at = _launch_at(v)
             if launch_at:   # payment-intent.js refuses the variant until this instant
                 catalog_variant['launchAt'] = launch_at

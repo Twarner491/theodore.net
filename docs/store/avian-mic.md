@@ -48,7 +48,6 @@ variants:
     contents:
       - Everything in the Electronics Kit
       - 3D-printed case
-softwareNote: Hardware only. You install the open-source software on your own device at first setup.
 sections:
   - label: Open Source
     items:

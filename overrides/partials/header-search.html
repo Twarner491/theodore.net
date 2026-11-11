@@ -1,0 +1,11 @@
+{# The resting icon is present before JavaScript or any external icon font loads.
+   search.js adopts this node in place; Material remains the no-JS fallback. #}
+<div class="tw-search" data-tw-search-static>
+  <div class="tw-bar">
+    <input class="tw-input" type="text" autocomplete="off" spellcheck="false" aria-label="Search the site" aria-expanded="false" tabindex="-1">
+    <span class="tw-hint" aria-hidden="true">try <span class="tw-hint-word"></span></span>
+    <button class="tw-clear" type="button" aria-label="Clear" tabindex="-1"><span aria-hidden="true">{% include ".icons/fontawesome/solid/xmark.svg" %}</span></button>
+    <button class="tw-icon" type="button" aria-label="Search" aria-expanded="false" disabled><span aria-hidden="true">{% include ".icons/fontawesome/solid/magnifying-glass.svg" %}</span></button>
+  </div>
+  <button class="tw-close" type="button" aria-label="Close search"><span aria-hidden="true">{% include ".icons/fontawesome/solid/xmark.svg" %}</span></button>
+</div>

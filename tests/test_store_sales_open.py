@@ -18,17 +18,17 @@ SEARCH_DATA = load_hook("search_data")
 
 
 class StoreSalesOpenTest(unittest.TestCase):
-    def test_public_catalog_excludes_paused_polargraph_kits(self):
+    def test_public_catalog_excludes_paused_polargraph_kits_and_sold_out_accessories(self):
         expected = {
-            "avian-visitors": ["assembled-batch-2"] if self._assembled_activated() else [],
+            "avian-visitors": ["assembled-continuous"] if self._assembled_activated() else [],
             "avian-visitors-kit": ["electronics", "electronics-printed"],
             "mic-mount": ["default"],
             "avian-mic": ["electronics", "electronics-printed"],
             "avian-visitors-parts": ["default"],
             "bird-mic-case": ["default"],
-            "polargraph-parts": ["default"],
+            "polargraph-parts": [],
             "polargraph": [],
-            "micron-pens-9": ["default", "with-mounts"],
+            "micron-pens-9": [],
         }
         products = {product["id"]: product for product in STORE_PRODUCTS._products(ROOT / "docs")}
         sellable = {
@@ -45,7 +45,8 @@ class StoreSalesOpenTest(unittest.TestCase):
                 self.assertTrue(variants[variant_id].get("stripePriceLive"))
 
         assembled = products["avian-visitors"]["variants"][0]
-        self.assertEqual(assembled["inventorySku"], "avian-gen3-batch-02")
+        self.assertNotIn("inventorySku", assembled)
+        self.assertEqual(assembled["productionBatchGroup"], "avian-visitors")
         self.assertNotIn("launchAt", assembled)
         self.assertEqual(STORE_PRODUCTS._sellable(assembled), self._assembled_activated())
 

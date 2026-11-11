@@ -14,15 +14,11 @@
   :root, [data-md-color-scheme] { --tw-line: color-mix(in srgb, var(--md-default-fg-color) 17%, transparent); }
 }
 
-/* Material's native search is replaced by the custom component (search.js). Hide it from the FIRST
-   PAINT, not just after search.js adds .tw-has-search, so it never flashes before the swap on load.
-   The extrahead inline script marks <html>.tw-has-search before the header paints; the icon label is
-   only made INVISIBLE then (kept as a 40px slot-holder) so nothing shifts sideways, and is collapsed
-   for good once search.js builds the custom icon and marks <body>.tw-has-search. With no JS at all,
-   .tw-has-search is never set, so the native search stays as a fallback. */
+/* The template renders the custom SVG icon in its final slot. JS enhances it in place,
+   so neither the icon nor neighboring controls need to appear or shift during boot. */
 .tw-has-search .md-search { display: none !important; }
-.tw-has-search label.md-header__button.md-icon[for="__search"] { visibility: hidden; }
-body.tw-has-search label.md-header__button.md-icon[for="__search"] { display: none !important; }
+.tw-has-search label.md-header__button.md-icon[for="__search"] { display: none !important; }
+html:not(.tw-has-search) .tw-search[data-tw-search-static] { display: none; }
 
 /* ---- header slot + bar ---- */
 /* the slot itself animates width (bar fills it) — avoids the absolute-element
@@ -60,12 +56,13 @@ body.tw-has-search label.md-header__button.md-icon[for="__search"] { display: no
 .tw-icon { width: 40px; box-sizing: border-box; }
 /* The glass sits centred in its own 40px slot: no right-pad, no resting nudge, so the slot is
    symmetric and lines up evenly with the palette and hamburger, with no rightward overhang. */
-.tw-icon i { font-size: 0.85rem; opacity: 0.85; transition: opacity 0.25s ease; }   /* sized to the visible weight of the nav icons — stays at this foreground tone when open too (no dimming) */
+.tw-icon svg { width: 0.85rem; height: 0.85rem; opacity: 0.85; }   /* same solid magnifier as before, without a font fetch */
+.tw-icon svg, .tw-clear svg, .tw-close svg { display: block; fill: currentColor; }
 .tw-clear { width: 26px; margin-right: 8px; opacity: 0.4; display: none; }   /* gap from the magnifying glass so the two don't read as one cluster */
-.tw-clear i { font-size: 0.8rem; }
+.tw-clear svg { width: 0.6rem; height: 0.8rem; }
 .tw-clear:hover { opacity: 0.8; }
 .tw-close { width: 44px; display: none; opacity: 0.55; }   /* obvious exit — full-page only; solid ✕ at the magnifier's weight (just smaller than the old 1.1rem that read heavy) */
-.tw-close i { font-size: 0.9rem; }
+.tw-close svg { width: 0.675rem; height: 0.9rem; }
 .tw-close:hover { opacity: 0.9; }
 
 /* lock page scroll while open (matches the nav menu) */

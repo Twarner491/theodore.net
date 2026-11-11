@@ -1,4 +1,7 @@
 function initializeHeader() {
+  // Some templates / navigation paths evaluate this file again. Remove the previous
+  // closure, not a new handleScroll function that was never registered.
+  if (window.__twHeaderCleanup) window.__twHeaderCleanup();
   let lastScrollTop = 0;
   const scrollThreshold = 100;
   const minScrollForMobile = 50;
@@ -50,11 +53,12 @@ function initializeHeader() {
     lastScrollTop = currentScroll;
   }
 
-  // Remove any existing scroll listeners
-  window.removeEventListener('scroll', handleScroll);
-  
   // Add the scroll listener
   window.addEventListener('scroll', handleScroll, { passive: true });
+  window.__twHeaderCleanup = function () {
+    window.removeEventListener('scroll', handleScroll);
+    if (scrollTimer !== null) clearTimeout(scrollTimer);
+  };
 }
 
 // Initialize on DOMContentLoaded
@@ -75,9 +79,8 @@ function ensureNavClose() {
     btn.id = 'nav-close';
     btn.type = 'button';
     btn.setAttribute('aria-label', 'Close menu');
-    // Font Awesome xmark, matching the other close icons. FA is in webfont mode here, so a
-    // dynamically-created <i> picks up the glyph via CSS like the static ones do.
-    btn.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+    // Font Awesome Free solid xmark (CC BY 4.0), inline so closing the menu never waits for a font.
+    btn.innerHTML = '<svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" focusable="false"><path d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l137.3-137.4 137.4 137.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7z"/></svg>';
     btn.addEventListener('click', function() { window.togglemenu(); });
     document.body.appendChild(btn);
   }

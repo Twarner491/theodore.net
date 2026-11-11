@@ -6,7 +6,14 @@
 // and store products are baked into /search-data.json at build time, so search
 // works everywhere. UI opens immediately; Fuse.js loads in the background.
 (function () {
+  // A second script evaluation must not attach a second set of document handlers.
+  // The existing instance follows Material navigation and rebuilds disconnected nodes.
+  if (window.__twSearchInitialized) return;
+  window.__twSearchInitialized = true;
   var DATA_URL = '/search-data.json';
+  // Font Awesome Free solid paths (CC BY 4.0), matching the template's inline icons.
+  var ICON_SEARCH = '<svg viewBox="0 0 512 512" aria-hidden="true" focusable="false"><path d="M416 208c0 45.9-14.9 88.3-40 122.7l126.6 126.7c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.1-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208M208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288"/></svg>';
+  var ICON_CLOSE = '<svg viewBox="0 0 384 512" aria-hidden="true" focusable="false"><path d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l137.3-137.4 137.4 137.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7z"/></svg>';
   var HINTS = ['bird projects', 'cnc milling', 'generative art', 'aquaponics', 'on turning twenty', 'a pizza machine'];
   // Shuffle (Fisher-Yates) so the rotating "try '…'" suggestions go in a different order each load.
   for (var _h = HINTS.length - 1; _h > 0; _h--) { var _r = Math.floor(Math.random() * (_h + 1)), _t = HINTS[_h]; HINTS[_h] = HINTS[_r]; HINTS[_r] = _t; }
@@ -344,6 +351,7 @@
     document.documentElement.style.paddingRight = sbw + 'px';
     scrim.classList.add('tw-shown');
     root.querySelector('.tw-icon').setAttribute('aria-expanded', 'true');
+    input.tabIndex = 0;
     input.value = ''; clearBtn.style.display = 'none'; scope = null;
     load().then(function () { if (openState && gen === openGen) update(); });
     void root.offsetWidth;                       // commit the collapsed width so the expand animates smoothly
@@ -362,6 +370,7 @@
     panel.classList.remove('tw-shown');          // reverse of open: panel retracts first…
     var icon = root.querySelector('.tw-icon'); if (icon) icon.setAttribute('aria-expanded', 'false');
     input.blur();
+    input.tabIndex = -1;
     if (isFullPage()) {
       // Inverse of the open stagger: the bar collapses back toward the icon FIRST (on top of the
       // still-full white), THEN — after a beat — the white wipes out toward the icon and the bar
@@ -391,16 +400,16 @@
   }
 
   // ---------- build / inject / teardown ----------
-  function build() {
-    root = document.createElement('div'); root.className = 'tw-search';
-    root.innerHTML =
+  function build(existing) {
+    root = existing || document.createElement('div'); root.className = 'tw-search';
+    if (!existing) root.innerHTML =
       '<div class="tw-bar">' +
-        '<input class="tw-input" type="text" autocomplete="off" spellcheck="false" aria-label="Search the site" aria-expanded="false">' +
+        '<input class="tw-input" type="text" autocomplete="off" spellcheck="false" aria-label="Search the site" aria-expanded="false" tabindex="-1">' +
         '<span class="tw-hint" aria-hidden="true">try <span class="tw-hint-word"></span></span>' +
-        '<button class="tw-clear" type="button" aria-label="Clear" tabindex="-1"><i class="fa-solid fa-xmark"></i></button>' +
-        '<button class="tw-icon" type="button" aria-label="Search" aria-expanded="false"><i class="fa-solid fa-magnifying-glass"></i></button>' +
+        '<button class="tw-clear" type="button" aria-label="Clear" tabindex="-1">' + ICON_CLOSE + '</button>' +
+        '<button class="tw-icon" type="button" aria-label="Search" aria-expanded="false">' + ICON_SEARCH + '</button>' +
       '</div>' +
-      '<button class="tw-close" type="button" aria-label="Close search"><i class="fa-solid fa-xmark"></i></button>';   // sibling of the bar — sits to its right on full-page; solid ✕ sized to match the magnifier's weight
+      '<button class="tw-close" type="button" aria-label="Close search">' + ICON_CLOSE + '</button>';   // sibling of the bar — sits to its right on full-page
     bar = root.querySelector('.tw-bar'); input = root.querySelector('.tw-input');
     hint = root.querySelector('.tw-hint'); hintWord = root.querySelector('.tw-hint-word'); clearBtn = root.querySelector('.tw-clear');
 
@@ -415,6 +424,7 @@
     document.body.appendChild(panel);
 
     root.querySelector('.tw-icon').addEventListener('click', function (e) { e.preventDefault(); openState ? close() : open(); });
+    root.querySelector('.tw-icon').disabled = false;
     root.querySelector('.tw-close').addEventListener('click', function (e) { e.preventDefault(); close(); });
     input.addEventListener('input', function () { clearTimeout(debounce); debounce = setTimeout(update, 60); });
     input.addEventListener('keydown', onKey);
@@ -466,10 +476,12 @@
   function inject() {
     if (root && (!root.isConnected || !panel || !panel.isConnected)) teardown();   // body was swapped → rebuild fresh
     if (root) return true;
-    var ref = document.querySelector('label.md-header__button.md-icon[for="__search"]') || document.querySelector('.md-search');
+    var existing = document.querySelector('.tw-search[data-tw-search-static]');
+    var ref = existing || document.querySelector('label.md-header__button.md-icon[for="__search"]') || document.querySelector('.md-search');
     if (!ref || !ref.parentNode) return false;
-    build();
-    ref.parentNode.insertBefore(root, ref);
+    build(existing);
+    if (!existing) ref.parentNode.insertBefore(root, ref);
+    document.documentElement.classList.add('tw-has-search');
     document.body.classList.add('tw-has-search');
     return true;
   }
@@ -490,7 +502,7 @@
 
   // ---------- lifecycle ----------
   function ready(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
-  ready(inject);
+  if (!inject()) ready(inject);
   ready(function () { loadProductAvailability(0); });
   var sub = setInterval(function () { if (typeof document$ !== 'undefined') { clearInterval(sub); document$.subscribe(function () { inject(); refreshHomeStock(); }); } }, 100);
 
