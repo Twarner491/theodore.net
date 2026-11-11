@@ -1,0 +1,19 @@
+# Production delivery binding for consented, verified Purchase events.
+name = "theodore-meta-purchase-delivery"
+account_id = "557e541291a977fc1683c53376eb56a0"
+main = "meta-purchase-delivery.js"
+compatibility_date = "2026-08-31"
+
+[vars]
+META_CAPI_ENABLED = "1"
+META_CAPI_MODE = "live"
+META_DATASET_ID = "2377987452691978"
+# Configure META_CAPI_ACCESS_TOKEN as a worker secret. No Stripe key is needed.
+
+[[d1_databases]]
+binding = "STORE_INVENTORY"
+database_name = "avian-store-inventory-production"
+database_id = "f5c3ea2a-f262-4c25-93d1-8f1c80d1f140"
+
+[triggers]
+crons = ["*/5 * * * *"]

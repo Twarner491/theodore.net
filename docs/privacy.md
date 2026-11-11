@@ -47,8 +47,8 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective November 3, 2026</p>
-          <p>This update explains optional emailed carts and how store signups can be linked to shopping activity.</p>
+          <p class="draft">Effective November 10, 2026</p>
+          <p>This update explains paid-ad attribution and optional Meta ad measurement.</p>
 
           <p>This policy describes how Things by Theodore LLC handles personal information for the theodore.net website and store and the Avian Visitors frame services at avianvisitors.com.</p>
 
@@ -78,7 +78,15 @@ search:
           <h3>Cookies, analytics, and Do Not Track</h3>
           <p>Local storage and session storage hold a random first-party visitor identifier, a per-tab visit identifier, referral attribution, cart state, navigation state, and short-lived store-visit credentials. Signup and cart-email fields do not store your email address in browser storage.</p>
           <p>Google Analytics collects standard usage data, including pages viewed, approximate location, and device and browser information. This data uses identifiers; first-party store identifiers can be linked to orders as described above. Google and the other providers listed above may collect information when you use the site. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.</p>
-          <p>You can opt out with <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google's browser add-on</a> or block cookies and site storage in your browser. We do not respond to Do Not Track signals.</p>
+          <p>You can opt out of Google Analytics with <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google's browser add-on</a> or block cookies and site storage in your browser. Global Privacy Control and Do Not Track disable the optional Meta measurement described below; these signals do not change the other analytics described here.</p>
+
+          <h3 id="ad-measurement">Ad measurement</h3>
+          <p>We record campaign and creative labels from ad links separately from your original referral source, and link them to payment records to measure sales. A campaign label does not identify your Meta account.</p>
+          <p>If you allow ad measurement, this browser uses a Meta ad-click identifier for up to seven days. For a completed purchase, we can share that identifier or an existing Meta browser identifier, browser information, purchased product identifiers, an order identifier, order value, currency, and purchase time with Meta through its Conversions API. Meta uses these details to match purchases to ads and measure and improve advertising. This integration does not send your name, email, phone number, address, or card details. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's privacy policy</a>.</p>
+          <p>When you check out, the ad identifiers, browser information, and consent record can also be saved with the payment record and follow its retention period. Pending event details are removed after delivery or expiry; we keep delivery status for up to 90 days.</p>
+          <p>Your choice is saved on this browser for 90 days. You can turn measurement off below; this stops future sharing from this browser but cannot recall events already sent. You can shop without allowing it.</p>
+          <p id="ad-measurement-status" role="status">Meta ad measurement is currently off.</p>
+          <div class="ad-measurement-controls"><button type="button" data-ad-measurement="choose">Change ad measurement</button><button type="button" data-ad-measurement="off">Turn off ad measurement</button></div>
 
           <p>External fonts, icons, scripts, images and embeds can send connection information to their providers, including Google Fonts, Font Awesome, jsDelivr and GitHub. Giscus comments are public GitHub Discussions.</p>
 

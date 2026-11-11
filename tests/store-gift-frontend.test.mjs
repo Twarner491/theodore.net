@@ -32,7 +32,7 @@ function element() {
   };
 }
 
-async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, products = [frameProduct], initialCart = [cartLine], sessionValues = new Map(), startPending = false } = {}) {
+async function harness({ respond, fetchUpdates, recoveryContext, attributionContext, stripeGate, products = [frameProduct], initialCart = [cartLine], sessionValues = new Map(), startPending = false } = {}) {
   const fields = {};
   for (const name of [".co-summary", ".co-voucher", ".co-voucher input", ".co-voucher button", ".co-voucher-msg", "[data-remove-voucher]", ".co-discount-row", ".co-discount", ".co-error", ".co-submit", ".co-total-val", ".co-tax", ".co-ship", "#co-email", "#co-news", "#co-form", "#co-gift", "#co-gift-from", "#co-gift-details", "#co-gift-error"]) fields[name] = element();
   fields["#co-email"].value = "buyer@example.com";
@@ -120,7 +120,7 @@ async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, pro
     PRODUCTS = globalThis.products;
     cart = [globalThis.cartLine];
     renderCart = function () {}; swapProductImages = function () {}; reveal = function () {}; updateBadge = function () {};
-    track = function (...args) { globalThis.telemetry.push(args); }; ga4 = function (...args) { globalThis.telemetry.push(args); }; evAttribution = function () { return {}; };
+    track = function (...args) { globalThis.telemetry.push(args); }; ga4 = function (...args) { globalThis.telemetry.push(args); }; evAttribution = function () { return globalThis.attributionContext ? globalThis.attributionContext() : {}; };
     checkoutAppearance = function () { return {}; };
     if (globalThis.stripeGate) loadStripe = function () { return globalThis.stripeGate; };
     if (globalThis.recoveryContext) localRecovery = { checkoutContext: globalThis.recoveryContext, recordCart() {} };
@@ -145,7 +145,7 @@ async function harness({ respond, fetchUpdates, recoveryContext, stripeGate, pro
     localStorage: { getItem(key) { return key === "store:cart:v3" ? savedCart : null; }, setItem(...args) { stored.push(args); if (args[0] === "store:cart:v3") savedCart = args[1]; } },
     location: { origin: "https://example.test", pathname: "/store/checkout/", search: "", hostname: "example.test" },
     URLSearchParams, setTimeout, clearTimeout, MutationObserver: class { observe() {} disconnect() {} },
-    host, cartLine: { ...cartLine }, products, confirmation, telemetry, recoveryContext, stripeGate,
+    host, cartLine: { ...cartLine }, products, confirmation, telemetry, recoveryContext, attributionContext, stripeGate,
     fetch: async (url, options) => {
       const body = options.body ? JSON.parse(options.body) : {}; requests.push({ url, body });
       if (respond) { const response = await respond(url, body); if (response) return response; }
@@ -706,4 +706,28 @@ test("a rejected quote followed by rollover requotes unchanged quantities instea
   assert.ok(h.requests.filter(r => r.body.paymentIntentId && !r.body.finalize && r.body.cart[0].qty === 4).length >= 2);
   assert.equal(h.fields[".co-submit"].disabled, false, "the replacement batch permits a reviewed retry");
   await h.pay(); assert.equal(h.confirmations(), 1);
+});
+
+
+test("paid and Meta context are refreshed on initial creation, shipping quote, voucher, and final payment", async () => {
+  let lastArm = "reel-a", consent = true;
+  const context = () => ({ anon: "visitor12345678", source: "instagram",
+    paidAttribution: { v: 1, experiment: "av-meta-nov26-v1", first: { arm: "reel-a" }, last: { arm: lastArm } },
+    metaTracking: { consent, version: "meta-v1" } });
+  const h = await harness({ attributionContext: context });
+  const payments = () => h.requests.filter((request) => request.url === "/api/payment-intent");
+  assert.equal(payments()[0].body.paidAttribution.last.arm, "reel-a");
+  lastArm = "species";
+  h.shipping(); await settle();
+  assert.equal(payments().at(-1).body.paidAttribution.last.arm, "species");
+  await h.apply(CODE);
+  assert.equal(payments().at(-1).body.paidAttribution.first.arm, "reel-a");
+  assert.equal(payments().at(-1).body.voucherCode, CODE);
+  consent = false; lastArm = "photo";
+  await h.pay();
+  const final = payments().at(-1).body;
+  assert.equal(final.finalize, true);
+  assert.equal(final.paidAttribution.last.arm, "photo");
+  assert.equal(final.metaTracking.consent, false);
+  assert.equal(h.confirmations(), 1);
 });

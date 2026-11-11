@@ -642,7 +642,8 @@
   const evClean = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9_.-]/g, "").slice(0, 24);
   function evRid() { try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g, "").slice(0, 32); } catch (e) {} return Date.now().toString(36) + Math.random().toString(36).slice(2, 12); }
   function evAnon() { try { let a = localStorage.getItem(EV_AID); if (!a) { a = evRid(); localStorage.setItem(EV_AID, a); } return a; } catch (e) { return evSess(); } }
-  function evSess() { let s = ssg(EV_SID); if (!s) { s = evRid(); sss(EV_SID, s); } return s; }
+  let evSessionFallback = "";
+  function evSess() { let s = ssg(EV_SID); if (!s) { s = evSessionFallback || evRid(); evSessionFallback = s; sss(EV_SID, s); } return s; }
   // First-touch channel for the session: a clean ?go=<slug> short-link wins, else the referrer host maps to a
   // canonical token. Locked in on the first page of the session so later internal hops stay attributed.
   function evSource() {
@@ -674,9 +675,43 @@
     sss(EV_SRC, src);
     return src;
   }
-  function evInit() { try { if (ssg(EV_LAND) == null) sss(EV_LAND, location.pathname.slice(0, 256)); evSource(); } catch (e) {} }
+  let paidArrivalSent = "";
+  function recordPaidArrival() {
+    try {
+      const attribution = window.TheodorePaidAttribution;
+      if (!attribution) return;
+      attribution.capture();
+      const paidAttribution = attribution.arrival();
+      if (!paidAttribution || paidAttribution.last.id === paidArrivalSent) return;
+      paidArrivalSent = paidAttribution.last.id;
+      const body = JSON.stringify({ anon: evAnon(), session: evSess(), paidAttribution });
+      fetch("/api/ad-attribution", { method: "POST", headers: { "content-type": "application/json" }, body, keepalive: true })
+        .then(async (response) => {
+          const result = response.ok && await response.json();
+          if (result && result.recorded) attribution.acknowledge(paidAttribution.last.id);
+          else paidArrivalSent = "";
+        }).catch(() => { paidArrivalSent = ""; });
+    } catch (_) { /* Optional measurement cannot delay checkout. */ }
+  }
+  function evInit() {
+    try { if (ssg(EV_LAND) == null) sss(EV_LAND, location.pathname.slice(0, 256)); evSource(); } catch (e) {}
+    recordPaidArrival();
+    try { if (window.TheodoreMetaTracking) window.TheodoreMetaTracking.context(evAnon()); } catch (_) {}
+  }
   // expose the session's first-party identity so checkout can stamp it onto the order (attribution join)
-  function evAttribution() { try { return { anon: evAnon(), source: evSource() }; } catch (e) { return {}; } }
+  function evAttribution() {
+    const context = { anon: evAnon(), source: evSource() };
+    try {
+      recordPaidArrival();
+      const paid = window.TheodorePaidAttribution && window.TheodorePaidAttribution.snapshot();
+      if (paid) context.paidAttribution = paid;
+    } catch (_) {}
+    try {
+      const meta = window.TheodoreMetaTracking && window.TheodoreMetaTracking.context(context.anon);
+      if (meta) context.metaTracking = meta;
+    } catch (_) {}
+    return context;
+  }
   function evItemValue(p, b) { try { const v = variantById(p, b || (p.defaultBuild || (p.variants[0] || {}).id)); return v && v.price ? v.price * 100 : null; } catch (e) { return null; } }
   /* ---- GA4 ecommerce mirrors: the same moments the first-party beacon tracks,
      emitted as standard gtag ecommerce events so channel/conversion reporting works
@@ -1960,7 +1995,7 @@
       const task = pricingQueue.then(async () => {
         if (!current() || version !== priceVersion) return null;
         try {
-          Object.assign(reqBody, await recoveryCheckoutContext());
+          Object.assign(reqBody, evAttribution(), await recoveryCheckoutContext());
           if (!current() || version !== priceVersion) return null;
           const r = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(reqBody) });
           const d = await r.json().catch(() => ({}));

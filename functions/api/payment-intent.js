@@ -37,6 +37,8 @@ import { parseGiftInput } from "../../lib/order-gift.js";
 import { receiptEmail } from "../../lib/receipt-email.js";
 import { resolveRecoveryAssociation, recordRecoveryCheckout } from "../../lib/store-recovery.js";
 import { productionDemand, productionBatchReady, productionIntakePaused } from "../../lib/production-batch-commerce.js";
+import { paidAttributionEnabled, applyPaidMetadata, applyMetaTrackingMetadata, advertisingOptOut } from "../../lib/paid-attribution.js";
+import { metaMeasurementAvailable } from "../../lib/meta-purchase.js";
 
 const MAX_QTY = 99, MAX_LINES = 50;
 const DEFAULT_WEIGHT_LB = 2.0;       // fallback when a variant has no weight
@@ -286,6 +288,7 @@ export async function onRequestPost({ request, env }) {
       } catch (error) { return inventoryUnavailable(reply, error); }
     }
   }
+  let priorIntent = null;
   if (continuousDemand.length) {
     let acceptedDemand = null;
     const readAcceptedDemand = async () => {
@@ -293,6 +296,7 @@ export async function onRequestPost({ request, env }) {
       const priorResponse = await fetch("https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(piId), { headers: auth });
       if (!priorResponse.ok) throw new Error("accepted payment unavailable");
       const prior = await priorResponse.json();
+      if (prior?.id === piId) priorIntent = prior;
       const binding = prior && prior.id === piId && await verifyCheckoutBinding(prior.metadata, catalog);
       acceptedDemand = binding ? productionDemand(binding.manifest, catalog) : [];
       return acceptedDemand;
@@ -493,6 +497,29 @@ export async function onRequestPost({ request, env }) {
   if (email || piId) form.set("metadata[email]", email); // branded receipt and order lookup; don't trigger Stripe's separate receipt
   if (anon) form.set("metadata[anon]", anon);       // first-party visitor id -> joins this order back to its funnel session
   if (src) form.set("metadata[src]", src);          // first-party channel (x / instagram / direct / <go-slug>) for revenue attribution
+  const paidTracking = paidAttributionEnabled(env) && body.paidAttribution;
+  const metaTracking = metaMeasurementAvailable(env, request) && body.metaTracking !== undefined;
+  const metaOptOut = env.META_CAPI_ENABLED === "1" && (body.metaTracking?.consent === false || advertisingOptOut(request));
+  if (paidTracking || metaTracking || metaOptOut) {
+    let prior = {};
+    if (piId) {
+      // A later paid click may refresh a draft, but never relabel an authorized or settled order.
+      try {
+        if (!priorIntent) {
+          const response = await fetch("https://api.stripe.com/v1/payment_intents/" + encodeURIComponent(piId), { headers: auth });
+          if (!response.ok) throw new Error("draft unavailable");
+          priorIntent = await response.json();
+        }
+        const intent = priorIntent;
+        if (intent?.id !== piId) throw new Error("draft mismatch");
+        if (!["requires_payment_method", "requires_confirmation", "requires_action"].includes(intent.status))
+          return reply({ error: "This payment is already being confirmed. Please wait for its result." }, 409);
+        prior = intent.metadata || {};
+      } catch (_) { return reply({ error: "Could not update checkout. Please try again." }, 503); }
+    }
+    if (paidTracking) applyPaidMetadata(form, body.paidAttribution, prior);
+    if (metaTracking || metaOptOut) applyMetaTrackingMetadata(form, body.metaTracking, request);
+  }
   // NB: we deliberately do NOT set shipping[...] here. confirmPayment() sets the PI's
   // shipping from the Address Element (publishable key); a secret-key shipping set
   // would then block that client update. The address above is still used for tax.

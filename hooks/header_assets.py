@@ -21,7 +21,7 @@ _GOOGLE_FONT_CSS = re.compile(
     r'<link\b(?=[^>]*\brel=["\']stylesheet["\'])(?=[^>]*\bhref=["\']https://fonts\.googleapis\.com/)[^>]*>',
     re.IGNORECASE,
 )
-_EARLY_SCRIPTS = ('error-suppressor.js', 'attribution.js', 'store-data.js', 'store.js', 'header.js', 'search.js')
+_EARLY_SCRIPTS = ('error-suppressor.js', 'attribution.js', 'meta-tracking.js', 'store-data.js', 'store.js', 'header.js', 'search.js')
 _EARLY_MARKER = '<!-- storefront early scripts -->'
 
 
