@@ -70,29 +70,47 @@ search:
             <li><strong>Buttondown.</strong> Buttondown stores waitlist and newsletter subscriptions and sends those messages. Store signups include your public IP address for abuse prevention. See <a href="https://buttondown.com/legal/privacy" target="_blank" rel="noopener">Buttondown's privacy policy</a>.</li>
             <li><strong>Resend.</strong> Resend delivers requested cart emails, order and shipping emails, and frame sign-in links. See <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">Resend's privacy policy</a>.</li>
             <li><strong>Google Analytics.</strong> Google processes site-usage and shopping-event data as described below.</li>
-            <li><strong>Meta.</strong> With your permission, Meta processes store activity and purchase details to measure ads and build audiences on Instagram and Facebook. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's privacy policy</a>.</li>
+            <li><strong>Meta.</strong> According to your advertising preference, Meta processes store activity and purchase details to measure ads and build audiences on Instagram and Facebook. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's privacy policy</a>.</li>
             <li><strong>BirdWeather and Zippopotam.us.</strong> Selected postal areas or station IDs are used to find bird detections. Custom sources receive requests at the address you provide.</li>
           </ul>
-          <p>We do not sell personal information or use waitlist email addresses for unrelated purposes.</p>
+          <p>We do not sell customer lists or use waitlist email addresses for unrelated purposes.</p>
 
           <h3>Cookies, analytics, and Do Not Track</h3>
           <p>Local storage and session storage hold a random first-party visitor identifier, a per-tab visit identifier, referral attribution, cart state, navigation state, and short-lived store-visit credentials. Signup and cart-email fields do not store your email address in browser storage.</p>
           <p>Google Analytics collects standard usage data, including pages viewed, approximate location, and device and browser information. This data uses identifiers; first-party store identifiers can be linked to orders as described above. Google and the other providers listed above may collect information when you use the site. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.</p>
-          <p>You can turn off Google Analytics below or use <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google's browser add-on</a>. Global Privacy Control and Do Not Track keep Meta off; these signals do not change the other analytics described here.</p>
-          <p>Meta advertising is off until you allow it. It can share pages and products viewed, cart additions, checkout starts, purchases, public page and product details, ad and browser identifiers, and browser and connection information, including your IP address. We do not send your name, email, phone number, address or card details through this integration.</p>
-          <p>Choices are saved on this browser for 90 days. Turning Meta off stops future sharing; it cannot recall events already sent. Ad-click identifiers are used for up to seven days. Details saved with an order follow its retention period; delivery records are kept for up to 90 days.</p>
+          <p>You can turn off Google Analytics below or use <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google's browser add-on</a>. Global Privacy Control and Do Not Track turn Meta off unless you explicitly confirm a different choice below; these signals do not change the other analytics described here.</p>
+          <p>Meta advertising starts on for new U.S. visitors without an opt-out. Elsewhere, or when location is unknown, it stays off until allowed. It can share pages and products viewed, cart additions, checkout starts, purchases, public page and product details, ad and browser identifiers, and browser and connection information, including your IP address. We do not send your name, email, phone number, address or card details through this integration.</p>
+          <p>Meta opt-outs stay saved on this browser; permissions last 90 days. Turning Meta off stops future sharing; it cannot recall events already sent. Ad-click identifiers are used for up to seven days. Details saved with an order follow its retention period; delivery records are kept for up to 90 days.</p>
 
           <details class="cookie-preferences" id="ad-measurement">
             <summary>Cookie preferences</summary>
-            <div class="cookie-preference-row"><span>Cart and checkout</span><span class="cookie-preference-state">Always on</span></div>
             <div class="cookie-preference-row">
-              <label for="cookie-analytics"><span>Google Analytics</span><input id="cookie-analytics" type="checkbox" data-cookie-preference="analytics" aria-describedby="cookie-analytics-status" disabled></label>
-              <span id="cookie-analytics-status" class="cookie-preference-state" role="status">Loading…</span>
+              <label for="cookie-required">
+                <span id="cookie-required-label">Cart and checkout</span>
+                <span class="cookie-preference-state">On</span>
+                <input id="cookie-required" type="checkbox" checked disabled title="Required" aria-label="Cart and checkout (required)">
+              </label>
             </div>
             <div class="cookie-preference-row">
-              <label for="cookie-meta"><span>Meta advertising</span><input id="cookie-meta" type="checkbox" data-cookie-preference="meta" aria-describedby="ad-measurement-status" disabled></label>
-              <span id="ad-measurement-status" class="cookie-preference-state" role="status">Loading…</span>
+              <label for="cookie-analytics">
+                <span id="cookie-analytics-label">Google Analytics</span>
+                <span id="cookie-analytics-status" class="cookie-preference-state" role="status">Loading…</span>
+                <input id="cookie-analytics" type="checkbox" data-cookie-preference="analytics" aria-labelledby="cookie-analytics-label" aria-describedby="cookie-analytics-status cookie-analytics-note" disabled>
+              </label>
+              <span id="cookie-analytics-note" class="cookie-preference-note" role="status" hidden></span>
+            </div>
+            <div class="cookie-preference-row">
+              <label for="cookie-meta">
+                <span id="cookie-meta-label">Meta advertising</span>
+                <span id="ad-measurement-status" class="cookie-preference-state" role="status">Loading…</span>
+                <input id="cookie-meta" type="checkbox" data-cookie-preference="meta" aria-labelledby="cookie-meta-label" aria-describedby="ad-measurement-status cookie-meta-note" disabled>
+              </label>
+              <span id="cookie-meta-note" class="cookie-preference-note" role="status" hidden></span>
               <button id="cookie-meta-retry" type="button" data-cookie-retry hidden>Retry</button>
+              <div id="cookie-meta-confirmation" class="cookie-preference-confirmation" role="group" aria-labelledby="cookie-meta-confirmation-label" hidden>
+                <p id="cookie-meta-confirmation-label">Allow Meta on this site despite your browser setting?</p>
+                <button id="cookie-meta-confirm" type="button" data-meta-override="confirm" disabled>Allow</button><button id="cookie-meta-cancel" type="button" data-meta-override="cancel">Cancel</button>
+              </div>
             </div>
           </details>
 

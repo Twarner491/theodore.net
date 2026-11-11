@@ -3,7 +3,7 @@ import { createHmac } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 import test from 'node:test';
-import { AD_EXPERIMENT, applyPaidMetadata, applyMetaTrackingMetadata, recordPaidArrival, recordMetaConsent } from '../lib/paid-attribution.js';
+import { AD_EXPERIMENT, applyPaidMetadata, applyMetaTrackingMetadata, recordPaidArrival, recordMetaConsent, resolveMetaTrackingDecision } from '../lib/paid-attribution.js';
 import { metaPurchasePayload, queueMetaPurchase, dispatchMetaPurchases, metaMeasurementAvailable } from '../lib/meta-purchase.js';
 import { onRequestPost as paymentIntent } from '../functions/api/payment-intent.js';
 import { onRequestPost as webhook } from '../functions/api/stripe-webhook.js';
@@ -117,7 +117,7 @@ test('preview queues once and never sends, including duplicates, mode mismatch a
   assert.equal((await queueMetaPurchase({ ...env, META_CAPI_MODE: 'live' }, event, pi, manifest, opts)).reason, 'disabled');
   assert.equal((await queueMetaPurchase(env, event, pi, manifest, { ...opts, requestUrl: 'https://preview.example/api/stripe-webhook' })).queued, false);
   assert.equal(metaMeasurementAvailable(env, post('ad-config', {})), true);
-  assert.equal(metaMeasurementAvailable(env, post('ad-config', {}, { dnt: '1' })), false);
+  assert.equal(metaMeasurementAvailable(env, post('ad-config', {}, { dnt: '1' })), true, 'capability is separate from the effective privacy choice');
 });
 
 const liveEnv = (db) => envFor(db, { META_CAPI_MODE: 'live', META_DATASET_ID: '1234567890', META_CAPI_ACCESS_TOKEN: 'mock-only-token', STRIPE_SECRET_KEY: 'sk_live_mock_only' });
@@ -200,7 +200,7 @@ test('explicit opt-out clears earlier unpaid matching context; ordinary missing 
 test('withdrawal suppresses pending consented purchases and cannot revive old context after re-opt-in', async (t) => {
   const db = setupDb(t), env = await queueLive(db);
   const denied = { anon: 'visitor0001', consent: false, version: 'meta-v1', at: NOW + 10 };
-  assert.deepEqual(await recordMetaConsent(env, denied, post('ad-consent', denied), { now: NOW + 10 }), { recorded: true, allowed: false });
+  assert.equal((await recordMetaConsent(env, denied, post('ad-consent', denied), { now: NOW + 10 })).allowed, false);
   assert.equal(db.sqlite.prepare('SELECT status FROM meta_purchase_outbox').get().status, 'suppressed');
   assert.equal(db.sqlite.prepare('SELECT payload_json FROM meta_purchase_outbox').get().payload_json, '');
   const optedIn = { ...denied, consent: true, at: NOW + 20 };
@@ -352,7 +352,7 @@ test('header-only privacy signals are exposed to the client and override even a 
   for (const headers of [{ 'sec-gpc': '1' }, { dnt: '1' }]) {
     const request = post('ad-config', {}, headers), result = await adConfig({ env, request });
     assert.equal(result.headers.get('cache-control'), 'no-store');
-    assert.deepEqual(await result.json(), { metaMeasurementEnabled: false, metaBrowserEventsEnabled: false, metaPixelId: '', privacyOptOut: true });
+    const config = await result.json(); assert.equal(config.metaMeasurementEnabled, true); assert.equal(config.privacyOptOut, true); assert.equal(config.regionalDefaultAllowed, false); assert.equal(config.signalOverrideSupported, true); assert.equal(config.privacySignals.gpc, headers['sec-gpc'] === '1'); assert.equal(config.privacySignals.dnt, headers.dnt === '1');
     assert.equal((await recordMetaConsent(env, { ...allowed, atMs: NOW * 1000 + 50 }, request, { now: NOW })).allowed, false);
   }
 });
@@ -360,7 +360,7 @@ test('header-only privacy signals are exposed to the client and override even a 
 test('expanded consent preserves its version through acknowledged choice and server-only Purchase', async (t) => {
   const db = setupDb(t), env = envFor(db), input = { anon: 'visitor0001', ...context({ version: 'meta-v2' }) };
   const result = await recordMetaConsent(env, input, post('ad-consent', input), { now: NOW });
-  assert.deepEqual(result, { recorded: true, allowed: true });
+  assert.equal(result.recorded, true); assert.equal(result.allowed, true); assert.equal(result.version, 'meta-v2');
   const form = new URLSearchParams();
   applyMetaTrackingMetadata(form, input, post('payment-intent', {}, { 'user-agent': 'Actual browser' }), { now: NOW });
   assert.equal(fields(form).meta_consent, 'meta-v2');
@@ -376,12 +376,169 @@ test('browser config requires its own flag, reveals no secret and never gives a 
   const off = await read(liveEnv(db));
   assert.equal(off.metaMeasurementEnabled, true); assert.equal(off.metaBrowserEventsEnabled, false); assert.equal(off.metaPixelId, '');
   const live = await read({ ...liveEnv(db), META_PIXEL_ENABLED: '1' });
-  assert.deepEqual(live, { metaMeasurementEnabled: true, metaBrowserEventsEnabled: true, metaPixelId: '1234567890', privacyOptOut: false });
+  assert.deepEqual(live, { metaMeasurementEnabled: true, metaBrowserEventsEnabled: true, metaPixelId: '1234567890', privacyOptOut: false, privacySignals: {gpc:false,dnt:false}, regionalDefaultAllowed:false, signalOverrideSupported:true });
   assert.equal(JSON.stringify(live).includes('mock-only-token'), false);
   const preview = await read({ ...envFor(db), META_PIXEL_ENABLED: '1' }, new Request(ORIGIN + '/api/ad-config'));
   assert.equal(preview.metaBrowserEventsEnabled, true); assert.equal(preview.metaPixelId, '');
   const optedOut = await read({ ...liveEnv(db), META_PIXEL_ENABLED: '1' }, new Request(request, { headers: { 'sec-gpc': '1' } }));
-  assert.equal(optedOut.metaBrowserEventsEnabled, false); assert.equal(optedOut.metaPixelId, '');
+  assert.equal(optedOut.metaBrowserEventsEnabled, true); assert.equal(optedOut.metaPixelId, '1234567890'); assert.equal(optedOut.privacyOptOut, true);
   const staging = await read({ ...liveEnv(db), META_PIXEL_ENABLED: '1' }, new Request('https://preview.example/api/ad-config'));
   assert.equal(staging.metaBrowserEventsEnabled, false); assert.equal(staging.metaPixelId, '');
+});
+
+const policyInput = (version = 'meta-us-v1', extra = {}) => ({ anon:'policyvisitor0001',consent:true,version,at:NOW,atMs:NOW*1000,...extra });
+function regionalRequest(input, country = 'US', headers = {}) {
+  const request = post('ad-consent',input,headers);
+  if (country !== undefined) Object.defineProperty(request,'cf',{value:{country}});
+  return request;
+}
+async function overrideDecision(env, { anon='policyvisitor0001',signals={gpc:true,dnt:false},atMs=NOW*1000+100,headers={} }={}) {
+  const prepare={action:'prepare-override',anon,signals};
+  const prepared=await recordMetaConsent(env,prepare,regionalRequest(prepare,'US',headers),{now:NOW});
+  assert.equal(prepared.prepared,true);
+  const confirm=policyInput('meta-v3',{action:'confirm-override',anon,signals,at:Math.floor(atMs/1000),atMs,challenge:prepared.challenge});
+  const result=await recordMetaConsent(env,confirm,regionalRequest(confirm,'US',headers),{now:NOW});
+  return {prepared,confirm,result};
+}
+function acknowledgedContext(result, extra={}) {
+  return context({version:result.version,at:result.at,atMs:result.atMs,decisionId:result.decisionId,...extra});
+}
+
+test('US default requires trusted edge geography, no privacy signal and a distinct acknowledged decision', async t=>{
+  const db=setupDb(t),env=envFor(db),input=policyInput();
+  for(const country of [undefined,'GB','DE','CA','AU','us','XX']){
+    const request=post('ad-consent',input,{'cf-ipcountry':'US'});
+    if(country!==undefined)Object.defineProperty(request,'cf',{value:{country}});
+    assert.equal((await recordMetaConsent(env,input,request,{now:NOW})).recorded,false);
+    const config=await(await adConfig({env,request})).json();assert.equal(config.regionalDefaultAllowed,false);
+  }
+  for(const headers of [{'sec-gpc':'1'},{dnt:'1'}])assert.equal((await recordMetaConsent(env,input,regionalRequest(input,'US',headers),{now:NOW})).recorded,false);
+  const ack=await recordMetaConsent(env,input,regionalRequest(input),{now:NOW});
+  assert.equal(ack.allowed,true);assert.equal(ack.version,'meta-us-v1');assert.match(ack.decisionId,/^[a-f0-9-]{36}$/);assert.equal(ack.decisionAt,NOW);
+  assert.equal(db.sqlite.prepare('SELECT policy_version FROM meta_ad_consent').get().policy_version,'meta-us-v1');
+  const browserOnly={...policyInput('meta-us-v1',{anon:'browseronly0001'}),signals:{gpc:true}};
+  assert.equal((await recordMetaConsent(env,browserOnly,regionalRequest(browserOnly),{now:NOW})).recorded,false);
+});
+
+test('expired explicit refusals are retained and defaults cannot replace them; active legacy scope is not promoted', async t=>{
+  const db=setupDb(t),env=envFor(db),old=policyInput('meta-v2',{consent:false,at:NOW-100*86400,atMs:(NOW-100*86400)*1000});
+  assert.equal((await recordMetaConsent(env,old,regionalRequest(old),{now:NOW})).allowed,false);
+  db.sqlite.prepare('UPDATE meta_ad_consent SET received_at=?').run(NOW-100*86400);
+  const other=policyInput('meta-v2',{anon:'anotheruser0001'});await recordMetaConsent(env,other,regionalRequest(other),{now:NOW});
+  assert.equal(db.sqlite.prepare('SELECT allowed FROM meta_ad_consent WHERE anon=?').get(old.anon).allowed,0);
+  assert.equal((await recordMetaConsent(env,policyInput(),regionalRequest(policyInput()),{now:NOW})).allowed,false);
+  const legacy=policyInput('meta-v1',{anon:'legacyuser0001'});await recordMetaConsent(env,legacy,regionalRequest(legacy),{now:NOW});
+  const upgrade={...legacy,version:'meta-us-v1',atMs:NOW*1000+1};assert.equal((await recordMetaConsent(env,upgrade,regionalRequest(upgrade),{now:NOW})).reason,'existing_choice');
+  assert.equal(db.sqlite.prepare('SELECT policy_version FROM meta_ad_consent WHERE anon=?').get(legacy.anon).policy_version,'meta-v1');
+});
+
+test('a denial inserted between the default read and write wins atomically', async t=>{
+  const db=setupDb(t),basePrepare=db.prepare.bind(db);let injected=false;
+  db.prepare=sql=>{if(!injected&&sql.startsWith('INSERT INTO meta_ad_consent')){
+    injected=true;db.sqlite.prepare('INSERT INTO meta_ad_consent(anon,allowed,choice_at,choice_at_ms,received_at,policy_version) VALUES(?,?,?,?,?,?)').run('policyvisitor0001',0,NOW-10,(NOW-10)*1000,NOW,'meta-v2');
+  }return basePrepare(sql);};
+  const input=policyInput(),ack=await recordMetaConsent(envFor(db),input,regionalRequest(input),{now:NOW});
+  assert.equal(ack.allowed,false);assert.equal(ack.version,'meta-v2');
+});
+
+test('overrides require separate prepare and confirmation with matching identity, signals and unexpired nonce', async t=>{
+  const db=setupDb(t),env=envFor(db),input=policyInput('meta-v3',{signals:{gpc:true}});
+  assert.equal((await recordMetaConsent(env,input,regionalRequest(input),{now:NOW})).reason,'confirmation_required');
+  const prepare={action:'prepare-override',anon:input.anon,signals:{gpc:true,dnt:false}};
+  const p=await recordMetaConsent(env,prepare,regionalRequest(prepare),{now:NOW});assert.equal(p.expiresAt,NOW+300);
+  assert.equal(db.sqlite.prepare('SELECT nonce_hash FROM meta_ad_override_challenges').get().nonce_hash.includes(p.challenge),false);
+  for(const changed of [{anon:'otherperson0001'},{signals:{gpc:true,dnt:true}},{challenge:'00000000-0000-0000-0000-000000000000'}]){
+    const confirm={...input,action:'confirm-override',challenge:p.challenge,...changed};assert.equal((await recordMetaConsent(env,confirm,regionalRequest(confirm),{now:NOW})).recorded,false);
+  }
+  const confirm={...input,action:'confirm-override',challenge:p.challenge};
+  assert.equal((await recordMetaConsent(env,confirm,regionalRequest(confirm),{now:NOW+300})).recorded,false);
+  assert.equal(db.sqlite.prepare('SELECT COUNT(*) n FROM meta_ad_consent').get().n,0);
+});
+
+test('lost override acknowledgement retries are idempotent and never revive a newer refusal', async t=>{
+  const db=setupDb(t),env=envFor(db),{confirm,result}=await overrideDecision(env);
+  assert.equal(result.allowed,true);assert.equal(result.version,'meta-v3');assert.deepEqual(result.overrideSignals,{gpc:true,dnt:false});
+  const retry=await recordMetaConsent(env,confirm,regionalRequest(confirm),{now:NOW+301});assert.deepEqual(retry,result);
+  const denied=policyInput('meta-v3',{consent:false,atMs:NOW*1000+200,signals:{gpc:true}});
+  assert.equal((await recordMetaConsent(env,denied,regionalRequest(denied),{now:NOW})).allowed,false);
+  assert.equal((await recordMetaConsent(env,confirm,regionalRequest(confirm),{now:NOW+302})).recorded,false);
+  assert.equal(db.sqlite.prepare('SELECT allowed FROM meta_ad_consent').get().allowed,0);
+});
+
+test('a newer refusal between prepare and confirm invalidates the challenge, including same-millisecond decisions', async t=>{
+  const db=setupDb(t),env=envFor(db),initial=policyInput('meta-v2',{consent:false});await recordMetaConsent(env,initial,regionalRequest(initial),{now:NOW});
+  const prepare={action:'prepare-override',anon:initial.anon,signals:{dnt:true}};
+  const p=await recordMetaConsent(env,prepare,regionalRequest(prepare),{now:NOW});
+  await recordMetaConsent(env,initial,regionalRequest(initial),{now:NOW});
+  const confirm=policyInput('meta-v3',{action:'confirm-override',challenge:p.challenge,signals:{dnt:true},atMs:NOW*1000+100});
+  assert.equal((await recordMetaConsent(env,confirm,regionalRequest(confirm),{now:NOW})).recorded,false);
+});
+
+test('only acknowledged ledger decisions can stamp default/override PI metadata; geography and newly uncovered signals fail closed', async t=>{
+  const db=setupDb(t),env=envFor(db),input=policyInput(),ack=await recordMetaConsent(env,input,regionalRequest(input),{now:NOW});
+  const value=acknowledgedContext(ack),form=new URLSearchParams(),request=regionalRequest({});
+  applyMetaTrackingMetadata(form,value,request,{now:NOW});assert.equal(fields(form).meta_consent,undefined);
+  const decision=await resolveMetaTrackingDecision(env,value,input.anon,request,{now:NOW});
+  applyMetaTrackingMetadata(form,value,request,{now:NOW,decision});assert.equal(fields(form).meta_consent,'meta-us-v1');assert.equal(fields(form).meta_decision_id,ack.decisionId);
+  for(const country of ['GB',undefined]){const req=post('payment-intent',{});if(country)Object.defineProperty(req,'cf',{value:{country}});assert.equal(await resolveMetaTrackingDecision(env,value,input.anon,req,{now:NOW}),false);}
+  assert.equal(await resolveMetaTrackingDecision(env,value,'otherperson0001',request,{now:NOW}),false);
+  const overridden=await overrideDecision(env,{anon:'overrideuser0001'});const v=acknowledgedContext(overridden.result,{signals:{gpc:true}});
+  const allowed=await resolveMetaTrackingDecision(env,v,'overrideuser0001',regionalRequest({},'GB',{'sec-gpc':'1'}),{now:NOW});assert.equal(allowed.override_bits,1);
+  const newSignal=await resolveMetaTrackingDecision(env,{...v,signals:{gpc:true,dnt:true}},'overrideuser0001',regionalRequest({}),{now:NOW});assert.equal(newSignal,false);
+  assert.equal(db.sqlite.prepare('SELECT allowed,signal_bits FROM meta_ad_consent WHERE anon=?').get('overrideuser0001').signal_bits,3);
+});
+
+test('new-policy Purchase requires exact ledger decision at queue and delivery, and withdrawal suppresses instead of backfilling', async t=>{
+  const db=setupDb(t),env=liveEnv(db),input=policyInput(),ack=await recordMetaConsent(env,input,regionalRequest(input),{now:NOW});
+  const value=acknowledgedContext(ack),request=regionalRequest({}),decision=await resolveMetaTrackingDecision(env,value,input.anon,request,{now:NOW});
+  const form=new URLSearchParams();applyMetaTrackingMetadata(form,value,request,{now:NOW,decision});
+  const pi=piFixture({livemode:true,metadata:{...fields(form),anon:input.anon}}),event=success(pi),opts={now:NOW,requestUrl:'https://theodore.net/api/stripe-webhook'};
+  assert.equal((await queueMetaPurchase(env,event,pi,manifest,opts)).queued,true);
+  const forged={...pi,id:'pi_forged',metadata:{...pi.metadata,meta_decision_id:crypto.randomUUID()}};assert.equal((await queueMetaPurchase(env,success(forged),forged,manifest,opts)).queued,false);
+  const absent={...pi,id:'pi_absent',metadata:{...pi.metadata,anon:'missingperson0001'}};assert.equal((await queueMetaPurchase(env,success(absent),absent,manifest,opts)).queued,false);
+  const denied=policyInput('meta-us-v1',{consent:false,atMs:NOW*1000+1});await recordMetaConsent(env,denied,regionalRequest(denied),{now:NOW});
+  let sends=0;await dispatchMetaPurchases(env,{now:NOW,fetch:async()=>{sends++;return response({events_received:1});}});assert.equal(sends,0);
+  assert.equal(db.sqlite.prepare('SELECT status,payload_json FROM meta_purchase_outbox').get().status,'suppressed');
+  const explicit=policyInput('meta-v2',{atMs:NOW*1000+2});await recordMetaConsent(env,explicit,regionalRequest(explicit),{now:NOW});
+  await dispatchMetaPurchases(env,{now:NOW,fetch:async()=>{sends++;return response({events_received:1});}});assert.equal(sends,0);
+});
+
+test('a stale signal observer cannot revoke a newer confirmed override installed between its read and write', async t=>{
+  const db=setupDb(t),env=envFor(db),old=policyInput('meta-v2');await recordMetaConsent(env,old,regionalRequest(old),{now:NOW});
+  const basePrepare=db.prepare.bind(db),newId=crypto.randomUUID();let injected=false;
+  db.prepare=sql=>{if(!injected&&sql.startsWith('INSERT INTO meta_ad_consent')){
+    injected=true;db.sqlite.prepare("UPDATE meta_ad_consent SET policy_version='meta-v3',decision_id=?,override_bits=1,signal_bits=1,choice_at_ms=? WHERE anon=?").run(newId,NOW*1000+100,old.anon);
+  }return basePrepare(sql);};
+  const stale=acknowledgedContext({version:'meta-v2',at:NOW,atMs:NOW*1000},{signals:{gpc:true}});
+  assert.equal(await resolveMetaTrackingDecision(env,stale,old.anon,regionalRequest({}),{now:NOW}),false);
+  const current=db.sqlite.prepare('SELECT allowed,policy_version,decision_id FROM meta_ad_consent').get();
+  assert.equal(current.allowed,1);assert.equal(current.policy_version,'meta-v3');assert.equal(current.decision_id,newId);
+  assert.equal((await recordMetaConsent(env,{...old,signals:{gpc:true}},regionalRequest({}),{now:NOW})).recorded,false);
+  assert.equal(db.sqlite.prepare('SELECT allowed FROM meta_ad_consent').get().allowed,1);
+});
+
+test('actual payment endpoint carries a confirmed override with tolerated client clock skew into signed Purchase, then a new signal suppresses delivery', async t=>{
+  const db=setupDb(t),env=envFor(db),stripe=stripeFixture(t),{result}=await overrideDecision(env,{atMs:(NOW+45)*1000+1});
+  const value=acknowledgedContext(result,{signals:{gpc:true}}),cart=[{id:'avian-visitors',build:'assembled',qty:1}];
+  const body={cart,anon:'policyvisitor0001',metaTracking:value,shipping:SHIPPING,email:'fixture@example.com',finalize:true};
+  const r=await paymentIntent({env,request:post('payment-intent',body,{'sec-gpc':'1'})});assert.equal(r.status,200);
+  const pi=[...stripe.intents.values()][0];assert.equal(pi.metadata.meta_consent,'meta-v3');assert.equal(pi.metadata.meta_decision_id,result.decisionId);assert.equal(pi.metadata.meta_override_bits,'1');
+  pi.status='succeeded';pi.amount_received=pi.amount;pi.metadata.notified='1';pi.shipping=SHIPPING;
+  assert.equal((await signedWebhook(env,pi)).status,200);
+  const row=db.sqlite.prepare('SELECT consent_version,decision_id FROM meta_purchase_outbox').get();assert.equal(row.consent_version,'meta-v3');assert.equal(row.decision_id,result.decisionId);
+  assert.equal(metaPurchasePayload(success(pi,{created:NOW-1}),pi,manifest,{now:NOW}),null,'a browser clock cannot make a decision precede its server receipt');
+  await resolveMetaTrackingDecision(env,{...value,signals:{gpc:true,dnt:true}},body.anon,regionalRequest({}),{now:NOW+2});
+  assert.equal(db.sqlite.prepare('SELECT status FROM meta_purchase_outbox').get().status,'suppressed');
+});
+
+test('default checkout context is cleared outside the US and when an older update omits policy metadata', async t=>{
+  const db=setupDb(t),env=envFor(db),stripe=stripeFixture(t),input=policyInput(),ack=await recordMetaConsent(env,input,regionalRequest(input),{now:NOW});
+  const value=acknowledgedContext(ack),cart=[{id:'avian-visitors',build:'assembled',qty:1}],body={cart,anon:input.anon,metaTracking:value};
+  const request=post('payment-intent',body);Object.defineProperty(request,'cf',{value:{country:'US'}});
+  const draft=await(await paymentIntent({env,request})).json(),pi=[...stripe.intents.values()][0];assert.equal(pi.metadata.meta_consent,'meta-us-v1');
+  const update={...body,paymentIntentId:pi.id,updateToken:draft.updateToken,shipping:SHIPPING};
+  const foreign=post('payment-intent',update);Object.defineProperty(foreign,'cf',{value:{country:'GB'}});
+  assert.equal((await paymentIntent({env,request:foreign})).status,200);assert.equal(pi.metadata.meta_consent,undefined);
+  const us=post('payment-intent',update);Object.defineProperty(us,'cf',{value:{country:'US'}});await paymentIntent({env,request:us});assert.equal(pi.metadata.meta_consent,'meta-us-v1');
+  const omitted={...update};delete omitted.metaTracking;assert.equal((await paymentIntent({env,request:post('payment-intent',omitted)})).status,200);assert.equal(pi.metadata.meta_consent,undefined);
 });
