@@ -1,23 +1,28 @@
-body:has(.ad-choice) { padding-bottom: var(--ad-choice-space, 0px); }
-.ad-choice {
-  position: fixed; z-index: 1200; bottom: 12px; left: 50%; transform: translateX(-50%);
-  width: min(680px, calc(100% - 24px)); box-sizing: border-box; padding: 16px 18px;
-  display: flex; align-items: center; gap: 20px; border-radius: 18px;
-  border: 1px solid var(--md-default-fg-color--lighter);
-  background: var(--md-default-bg-color); color: var(--md-default-fg-color);
-  font-family: "JetBrains Mono", monospace; font-size: 12px; line-height: 1.6;
+.cookie-preferences {
+  scroll-margin-top: 120px;
+  margin: 24px 0; padding: 0 16px; border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 10px; color: var(--md-default-fg-color);
 }
-.ad-choice strong { font-weight: 500; }
-.ad-choice p { margin: 4px 0 0; }
-.ad-choice a { color: inherit; text-decoration: underline; }
-.ad-choice-actions { display: flex; gap: 8px; flex-shrink: 0; }
-.ad-choice button, .ad-measurement-controls button {
-  font: inherit; color: inherit; background: transparent; border: 1px solid currentColor;
-  border-radius: 8px; padding: 10px 12px; min-height: 44px; cursor: pointer;
+.cookie-preferences summary { padding: 14px 0; cursor: pointer; }
+.cookie-preference-row {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px;
+  min-height: 48px; padding: 4px 0; border-top: 1px solid var(--md-default-fg-color--lightest);
 }
-.ad-choice button:focus-visible, .ad-choice a:focus-visible, .ad-measurement-controls button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-.ad-measurement-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
-@media (max-width: 600px) {
-  .ad-choice { align-items: stretch; flex-direction: column; gap: 12px; padding: 14px 16px; }
-  .ad-choice-actions button { flex: 1; }
+.cookie-preference-row > span:first-child, .cookie-preference-row label { flex: 1; }
+.cookie-preference-row label {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 44px; cursor: pointer;
+}
+.cookie-preference-row input { width: 18px; height: 18px; margin: 0; accent-color: var(--md-default-fg-color); }
+.cookie-preference-row label:has(input:disabled) { cursor: default; }
+.cookie-preference-state { font-size: .85em; color: var(--md-default-fg-color--light); }
+.cookie-preferences button {
+  font: inherit; color: inherit; background: transparent; border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 6px; padding: 4px 10px; min-height: 32px; cursor: pointer;
+}
+.cookie-preferences :is(summary, input, button):focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.cookie-preferences button[hidden] { display: none; }
+@media (max-width: 480px) {
+  .cookie-preference-row label { flex-basis: 100%; }
+  .cookie-preference-row { padding: 6px 0; }
 }

@@ -11,9 +11,12 @@ async function harness({ enabled = true, privacyOptOut = false, browserEvents = 
   const data = new Map(choice ? [[KEY, JSON.stringify(choice)]] : []), events = {}, panels = [];
   data.set('tev_aid', 'anonymous-test-browser');
   if (storedClick) data.set(CLICK, JSON.stringify(storedClick));
-  const status = { textContent: '' }, requests = [], scripts = []; let time = SECOND * 1000;
+  const status = { textContent: '' }, metaToggle = { checked: false, disabled: false, getAttribute: () => 'meta' },
+    retry = { hidden: true, disabled: false }, analyticsToggle = {}, analyticsStatus = { textContent: '' }, requests = [], scripts = []; let time = SECOND * 1000;
+  const fields = { 'ad-measurement-status': status, 'cookie-meta': metaToggle, 'cookie-meta-retry': retry,
+    'cookie-analytics': analyticsToggle, 'cookie-analytics-status': analyticsStatus };
   const document = {
-    cookie, referrer, readyState: 'complete', getElementById: () => status,
+    cookie, referrer, readyState: 'complete', getElementById: (id) => fields[id] || null,
     addEventListener(name, fn) { events['document:' + name] = fn; },
     documentElement: { style: { setProperty() {}, removeProperty() {} } },
     body: { appendChild(panel) { panels.push(panel); } },
@@ -37,20 +40,20 @@ async function harness({ enabled = true, privacyOptOut = false, browserEvents = 
     }
   });
   await new Promise(setImmediate);
-  return { data, panels, requests, scripts, navigator, calls: () => JSON.parse(JSON.stringify((window.fbq?.queue || []).map((args) => Array.from(args)))),
+  return { data, panels, requests, scripts, navigator, metaToggle, retry, calls: () => JSON.parse(JSON.stringify((window.fbq?.queue || []).map((args) => Array.from(args)))),
     checkout(items) { window.TheodoreMetaTracking.checkoutEvent(items); },
     loadPixel() { scripts.at(-1)?.onload(); }, item(name, value) { window.TheodoreMetaTracking.itemEvent(name, value); },
     setTime(value) { time = value; }, event(name, value = {}) { events[name]?.(value); }, context: (anon) => JSON.parse(JSON.stringify(window.TheodoreMetaTracking.context(anon))),
-    async choose(value) { panels.at(-1).click({ target: { closest: () => ({ getAttribute: () => value }) } }); await new Promise(setImmediate); },
-    reopen() { events['document:click']({ target: { closest: () => ({ getAttribute: () => 'choose' }) } }); },
-    revoke() { events['document:click']({ target: { closest: () => ({ getAttribute: () => 'off' }) } }); }, status };
+    async choose(value) { metaToggle.checked = value === 'yes'; events['document:change']?.({ target: { closest: () => metaToggle } }); await new Promise(setImmediate); },
+    async retryChoice() { events['document:click']?.({ target: { closest: () => retry } }); await new Promise(setImmediate); },
+    revoke() { metaToggle.checked = false; events['document:change']?.({ target: { closest: () => metaToggle } }); }, status };
 }
 test('no sharing or click storage before choice; opt-in preserves real click time', async () => {
   const h = await harness();
   assert.equal(h.context().consent, false); assert.equal(h.data.has(CLICK), false);
   await h.choose('yes');
   assert.deepEqual(h.context(), { consent: true, version: 'meta-v2', at: SECOND, atMs: SECOND * 1000, fbc: `fb.1.${SECOND * 1000}.Real_Click-123` });
-  assert.equal(h.panels[0].removed, true);
+  assert.equal(h.panels.length, 0); assert.equal(h.metaToggle.checked, true);
 });
 test('decline and later revocation clear matching data without preventing checkout', async () => {
   const h = await harness(); await h.choose('yes'); h.context(); h.revoke();
@@ -65,7 +68,7 @@ test('disabled server and browser privacy signals override earlier opt-in', asyn
 });
 test('expired consent requires a new choice and identifiers are never invented', async () => {
   const h = await harness({ choice: { allowed: true, version: 'meta-v1', at: SECOND - 91 * 86400 } });
-  assert.equal(h.context().consent, false); assert.equal(h.panels.length, 1);
+  assert.equal(h.context().consent, false); assert.equal(h.panels.length, 0);
   const noClick = await harness({ choice: { allowed: true, version: 'meta-v1', at: SECOND }, click: null });
   assert.deepEqual(noClick.context(), { consent: true, version: 'meta-v1', at: SECOND, atMs: SECOND * 1000 });
 });
@@ -123,7 +126,7 @@ test('failed consent delivery retries on reconnect while sharing remains off', a
 
 test('malformed stored truthy consent never enables sharing', async () => {
   const h = await harness({ choice: { allowed: 'false', acknowledged: true, anon: 'anonymous-test-browser', version: 'meta-v1', at: SECOND } });
-  assert.equal(h.context().consent, false); assert.equal(h.panels.length, 1);
+  assert.equal(h.context().consent, false); assert.equal(h.panels.length, 0);
   assert.equal(h.requests.some((r) => r.url === '/api/ad-consent'), false);
 });
 
@@ -152,7 +155,7 @@ const accepted = (version = 'meta-v2') => ({ allowed: true, version, at: SECOND 
 test('Pixel waits for expanded opt-in and load; sends only current view and subsequent cart additions', async () => {
   const h = await harness({ browserEvents: true, click: null });
   h.item('ViewContent', frame); h.item('AddToCart', frame);
-  assert.equal(h.panels.length, 1, 'organic shoppers can choose without an ad click');
+  assert.equal(h.panels.length, 0, 'store visits do not show an automatic prompt');
   assert.equal(h.scripts.length, 0);
   await h.choose('yes');
   assert.equal(h.scripts.length, 1); assert.equal(pixelEvents(h).length, 0);
@@ -174,7 +177,7 @@ test('Pixel waits for expanded opt-in and load; sends only current view and subs
 test('v1 opt-in stays purchase-only until a fresh choice; previous denial is respected', async () => {
   const h = await harness({ browserEvents: true, choice: accepted('meta-v1'), click: null });
   assert.equal(h.context().version, 'meta-v1'); assert.equal(h.context().consent, true);
-  assert.equal(h.scripts.length, 0); assert.equal(h.panels.length, 1);
+  assert.equal(h.scripts.length, 0); assert.equal(h.panels.length, 0);
   assert.equal(h.requests.some((r) => r.url === '/api/ad-consent'), false, 'no silent server consent upgrade');
   await h.choose('yes');
   assert.equal(h.context().version, 'meta-v2'); assert.equal(h.scripts.length, 1);
@@ -330,4 +333,73 @@ test('an already-expired stored fbclid is not renewed, while a genuinely differe
   assert.equal(h.data.has(CLICK), false);
   click.fbclid = 'Different_Click';
   assert.equal(h.context().fbc, `fb.1.${SECOND * 1000}.Different_Click`);
+});
+
+
+test('privacy controls show pending acknowledgement, confirmed status and persistent choice without a banner', async () => {
+  let release;
+  const gate = new Promise((resolve) => { release = resolve; });
+  const h = await harness({ browserEvents: true, url: 'https://theodore.net/privacy/',
+    respond(url) { if (url === '/api/ad-consent') return gate; } });
+  assert.equal(h.panels.length, 0); assert.equal(h.metaToggle.checked, false);
+  await h.choose('yes');
+  assert.equal(h.metaToggle.checked, true); assert.match(h.status.textContent, /Saving/);
+  assert.equal(h.context().consent, false); assert.equal(h.scripts.length, 0);
+  release({ ok: true, json: async () => ({ recorded: true, allowed: true }) });
+  await new Promise(setImmediate);
+  assert.equal(h.status.textContent, 'On'); assert.equal(h.context().consent, true);
+  const reload = await harness({ url: 'https://theodore.net/privacy/', choice: JSON.parse(h.data.get(KEY)) });
+  assert.equal(reload.metaToggle.checked, true); assert.equal(reload.scripts.length, 0);
+});
+
+test('privacy controls explain unavailable and browser-blocked states instead of leaving a dead change button', async () => {
+  for (const options of [{ enabled: false }, { privacyOptOut: true }, { navigator: { globalPrivacyControl: true } }, { navigator: { doNotTrack: '1' } }]) {
+    const h = await harness({ url: 'https://theodore.net/privacy/', ...options });
+    assert.equal(h.metaToggle.disabled, true);
+    assert.match(h.status.textContent, options.enabled === false ? /not enabled/ : /browser privacy preference/);
+    await h.choose('yes'); assert.equal(h.context().consent, false); assert.equal(h.metaToggle.checked, false);
+    assert.equal(h.requests.some((r) => r.url === '/api/ad-consent' && r.body.consent), false);
+  }
+});
+
+test('failed configuration and consent saves have working inline retries', async () => {
+  let configFails = true;
+  const config = await harness({ url: 'https://theodore.net/privacy/', respond(url) {
+    if (url === '/api/ad-config' && configFails) throw Error('offline');
+  } });
+  assert.equal(config.metaToggle.disabled, true); assert.equal(config.retry.hidden, false);
+  assert.match(config.status.textContent, /Could not load/);
+  configFails = false; await config.retryChoice();
+  assert.equal(config.metaToggle.disabled, false); assert.equal(config.retry.hidden, true);
+  let saveFails = true;
+  const save = await harness({ url: 'https://theodore.net/privacy/', respond(url) {
+    if (url === '/api/ad-consent' && saveFails) throw Error('offline');
+  } });
+  await save.choose('yes'); assert.equal(save.context().consent, false);
+  await new Promise(setImmediate); assert.match(save.status.textContent, /Could not save/); assert.equal(save.retry.hidden, false);
+  saveFails = false; await save.retryChoice();
+  assert.equal(save.context().consent, true); assert.equal(save.status.textContent, 'On');
+  saveFails = true; save.revoke(); await new Promise(setImmediate);
+  assert.equal(save.context().consent, false); assert.match(save.status.textContent, /Off.*retry/i);
+});
+
+test('legacy purchase-only permission is visible and never silently upgraded on Privacy', async () => {
+  const h = await harness({ url: 'https://theodore.net/privacy/', browserEvents: true, choice: accepted('meta-v1') });
+  assert.equal(h.metaToggle.checked, true); assert.equal(h.status.textContent, 'Purchases only');
+  assert.equal(h.context().version, 'meta-v1'); assert.equal(h.requests.some((r) => r.url === '/api/ad-consent'), false);
+  h.revoke(); await new Promise(setImmediate); await h.choose('yes');
+  assert.equal(h.context().version, 'meta-v2'); assert.equal(h.scripts.length, 0);
+});
+
+test('Privacy opt-in works on the next public store page without loading Pixel on Privacy', async () => {
+  const privacy = await harness({ browserEvents: true, url: 'https://theodore.net/privacy/' });
+  await privacy.choose('yes');
+  assert.equal(privacy.scripts.length, 0);
+  const choice = JSON.parse(privacy.data.get(KEY));
+  const store = await harness({ browserEvents: true, choice, referrer: 'https://theodore.net/privacy/' });
+  assert.equal(store.scripts.length, 1);
+  for (const referrer of ['https://external.example/privacy/', 'https://theodore.net/privacy/?email=private@example.com']) {
+    const unsafe = await harness({ browserEvents: true, choice, referrer });
+    assert.equal(unsafe.scripts.length, 0);
+  }
 });

@@ -48,13 +48,12 @@ search:
       <div class="content5">
         <div class="legal-prose">
           <p class="draft">Effective November 11, 2026</p>
-          <p>This update explains paid-ad attribution and optional Meta advertising cookies and measurement.</p>
 
           <p>This policy describes how Things by Theodore LLC handles personal information for the theodore.net website and store and the Avian Visitors frame services at avianvisitors.com.</p>
 
           <h3>What we collect</h3>
           <p>Orders require your name, email address, billing address, and shipping address. Checkout is guest-only; the store does not create accounts. If you join a waitlist or newsletter, we collect your email address and the list tags used to send the updates you requested.</p>
-          <p>We also collect basic site and checkout activity: pages viewed, store actions, referral source, approximate location, device and browser information, a random first-party visitor identifier, and a per-tab session identifier. Checkout-funnel events do not include your email address, but the visitor identifier and referral source are saved with payment records to link store activity to orders. Hosting and security providers also process IP addresses.</p>
+          <p>We also collect basic site and checkout activity: pages viewed, store actions, referral source, approximate location, device and browser information, a random first-party visitor identifier, and a per-tab session identifier. Checkout-funnel events do not include your email address, but the visitor identifier and referral source are saved with payment records to link store activity to orders. Campaign labels from ad links are also saved with payment records to measure sales. Hosting and security providers also process IP addresses.</p>
           <p>If you ask us to email your cart, we save your email and the items you selected to send that requested message. If you sign up for store updates, we record which product page you signed up on. We can associate an email you provide with that visit's cart and checkout activity and matching orders to understand where shoppers leave and improve the store. Email addresses are kept in private operational records, separate from analytics events. Anonymous visit identifiers do not tell us your name or email.</p>
           <p>Requesting a cart email does not subscribe you to the newsletter. Newsletter signups receive the updates and deals they requested, with an unsubscribe option. Entering an email for checkout alone does not subscribe you to marketing emails.</p>
           <p>Stripe processes card payments. Your card details go directly to Stripe; we do not see or store your card number. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a>.</p>
@@ -71,6 +70,7 @@ search:
             <li><strong>Buttondown.</strong> Buttondown stores waitlist and newsletter subscriptions and sends those messages. Store signups include your public IP address for abuse prevention. See <a href="https://buttondown.com/legal/privacy" target="_blank" rel="noopener">Buttondown's privacy policy</a>.</li>
             <li><strong>Resend.</strong> Resend delivers requested cart emails, order and shipping emails, and frame sign-in links. See <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">Resend's privacy policy</a>.</li>
             <li><strong>Google Analytics.</strong> Google processes site-usage and shopping-event data as described below.</li>
+            <li><strong>Meta.</strong> With your permission, Meta processes store activity and purchase details to measure ads and build audiences on Instagram and Facebook. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's privacy policy</a>.</li>
             <li><strong>BirdWeather and Zippopotam.us.</strong> Selected postal areas or station IDs are used to find bird detections. Custom sources receive requests at the address you provide.</li>
           </ul>
           <p>We do not sell personal information or use waitlist email addresses for unrelated purposes.</p>
@@ -78,17 +78,23 @@ search:
           <h3>Cookies, analytics, and Do Not Track</h3>
           <p>Local storage and session storage hold a random first-party visitor identifier, a per-tab visit identifier, referral attribution, cart state, navigation state, and short-lived store-visit credentials. Signup and cart-email fields do not store your email address in browser storage.</p>
           <p>Google Analytics collects standard usage data, including pages viewed, approximate location, and device and browser information. This data uses identifiers; first-party store identifiers can be linked to orders as described above. Google and the other providers listed above may collect information when you use the site. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.</p>
-          <p>You can opt out of Google Analytics with <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google's browser add-on</a> or block cookies and site storage in your browser. Global Privacy Control and Do Not Track disable the optional Meta measurement described below; these signals do not change the other analytics described here.</p>
+          <p>You can turn off Google Analytics below or use <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google's browser add-on</a>. Global Privacy Control and Do Not Track keep Meta off; these signals do not change the other analytics described here.</p>
+          <p>Meta advertising is off until you allow it. It can share pages and products viewed, cart additions, checkout starts, purchases, public page and product details, ad and browser identifiers, and browser and connection information, including your IP address. We do not send your name, email, phone number, address or card details through this integration.</p>
+          <p>Choices are saved on this browser for 90 days. Turning Meta off stops future sharing; it cannot recall events already sent. Ad-click identifiers are used for up to seven days. Details saved with an order follow its retention period; delivery records are kept for up to 90 days.</p>
 
-          <h3 id="ad-measurement">Ad measurement</h3>
-          <p>We record campaign and creative labels from ad links separately from your original referral source, and link them to payment records to measure sales. A campaign label does not identify your Meta account.</p>
-          <p>If you allow Meta advertising cookies, we use the Meta Pixel on public store and product pages to share store visits, product views, cart additions and checkout starts, including product identifiers, quantities, values and currency. Meta receives public page and product details, the page address, referrer, browser and connection information, including your IP address, and can use cookies to recognize your browser. Meta can use this activity to measure advertising and include you in audiences for relevant ads on Instagram and Facebook. We do not load this Pixel on checkout, order-confirmation or privacy pages, and we do not enable automatic form matching.</p>
-          <p>For a completed purchase, we can share a Meta ad-click or browser identifier, browser information, purchased product identifiers, an order identifier, order value, currency, and purchase time with Meta through its Conversions API. We use ad-click identifiers for up to seven days. This integration does not send your name, email, phone number, address, or card details. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's privacy policy</a>.</p>
-          <p>If you previously allowed only ad-click and purchase measurement, that choice remains limited to purchase measurement until you make a new choice. We do not use earlier store activity to build Meta browsing audiences.</p>
-          <p>When you check out, the ad identifiers, browser information, and consent record can also be saved with the payment record and follow its retention period. Pending event details are removed after delivery or expiry; we keep delivery status for up to 90 days.</p>
-          <p>Your choice is saved on this browser for 90 days. You can turn measurement off below; this stops future sharing from this browser but cannot recall events already sent. You can shop without allowing it.</p>
-          <p id="ad-measurement-status" role="status">Meta ad measurement is currently off.</p>
-          <div class="ad-measurement-controls"><button type="button" data-ad-measurement="choose">Change ad measurement</button><button type="button" data-ad-measurement="off">Turn off ad measurement</button></div>
+          <details class="cookie-preferences" id="ad-measurement">
+            <summary>Cookie preferences</summary>
+            <div class="cookie-preference-row"><span>Cart and checkout</span><span class="cookie-preference-state">Always on</span></div>
+            <div class="cookie-preference-row">
+              <label for="cookie-analytics"><span>Google Analytics</span><input id="cookie-analytics" type="checkbox" data-cookie-preference="analytics" aria-describedby="cookie-analytics-status" disabled></label>
+              <span id="cookie-analytics-status" class="cookie-preference-state" role="status">Loading…</span>
+            </div>
+            <div class="cookie-preference-row">
+              <label for="cookie-meta"><span>Meta advertising</span><input id="cookie-meta" type="checkbox" data-cookie-preference="meta" aria-describedby="ad-measurement-status" disabled></label>
+              <span id="ad-measurement-status" class="cookie-preference-state" role="status">Loading…</span>
+              <button id="cookie-meta-retry" type="button" data-cookie-retry hidden>Retry</button>
+            </div>
+          </details>
 
           <p>External fonts, icons, scripts, images and embeds can send connection information to their providers, including Google Fonts, Font Awesome, jsDelivr and GitHub. Giscus comments are public GitHub Discussions.</p>
 

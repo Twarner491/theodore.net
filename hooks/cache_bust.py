@@ -71,7 +71,7 @@ def on_config(config):
     # so a cached stylesheet cannot restore the old hidden/injected-icon layout.
     css_versions = {
         asset: _source_hash(config, [Path("docs") / asset])
-        for asset in ("assets/css/search.css", "assets/css/header-search.css")
+        for asset in ("assets/css/search.css", "assets/css/header-search.css", "assets/css/ad-measurement.css")
     }
     config["extra_css"] = [
         asset.split("?", 1)[0] + "?h=" + css_versions[asset.split("?", 1)[0]]
