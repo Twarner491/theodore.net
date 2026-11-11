@@ -16,9 +16,10 @@ function harness(overrides = {}) {
   const source = original.replace(/\}\)\(\);\s*$/, `
     globalThis.h = {
       setProducts: value => { PRODUCTS = value; },
+      selectVariant: (value, quantity) => { build = value; qty = quantity; updateVariant(false); },
       load: loadProductionBatches, refresh: refreshProductionBatches, html: productionBatchHTML,
       buyable, statusOf, variantMaxQuantity, sanitizeCart, migratedLine, confLineHTML, coLineHTML, detailHTML,
-      loadCart, openCart, cart: () => cart, canIncreaseQuantity, accAddHTML, syncLineQuantityControls,
+      loadCart, openCart, checkout, cart: () => cart, canIncreaseQuantity, accAddHTML, syncLineQuantityControls,
       refreshSurfaces: refreshProductionBatchSurfaces, reconcile: reconcileCartToProductionBatches,
       mutations: function (lines) {
         cart = lines;
@@ -106,6 +107,38 @@ test("the current real remainder caps the cart and rollover permits the next bat
   assert.equal(h.variantMaxQuantity(product.id, variant.id), 20);
   assert.equal(h.buyable(variant), true);
   assert.equal(variant.id, "assembled-continuous");
+});
+
+test("Meta cart events use the catalog identity and only actual successful quantity increases", async () => {
+  const events = [], listed = { ...product, metaCatalogId: 'avian-visitors' };
+  const h = harness({ fetch: async () => reply({ ...row, remaining: 3 }),
+    window: { addEventListener() {}, STORE_PRODUCTS: [listed], TheodoreMetaTracking: {
+      itemEvent(name, item) { events.push({ name, item: plain(item) }); },
+    } } });
+  h.setProducts([listed]); await h.load();
+  const m = h.mutations([]);
+  m.add(product.id, variant.id, 20);
+  assert.deepEqual(events, [{ name: 'AddToCart', item: { id: 'avian-visitors', quantity: 3, value: 2097 } }]);
+  m.add(product.id, variant.id, 1); m.set(product.id, variant.id, 20); m.line(0, 20);
+  assert.equal(events.length, 1, 'blocked or clamped no-op additions do not count');
+  m.line(0, 1); m.set(product.id, variant.id, 2); m.line(0, 3);
+  assert.deepEqual(events.slice(1), [1, 1].map((quantity) => ({ name: 'AddToCart',
+    item: { id: 'avian-visitors', quantity, value: 699 } })));
+  m.set(product.id, variant.id, 0);
+  assert.equal(events.length, 3, 'removing items never counts as an addition');
+});
+
+test("Meta product views follow the displayed variant and not the selected purchase quantity", () => {
+  const events = [], mic = { id: 'avian-mic', title: 'Bird Mic', published: true, defaultBuild: 'electronics',
+    variants: [{ id: 'electronics', price: 50, contents: [] }, { id: 'electronics-printed', price: 60, contents: [] }] };
+  const h = harness({ window: { addEventListener() {}, STORE_PRODUCTS: [mic], TheodoreMetaTracking: {
+    itemEvent(name, item) { events.push({ name, item: plain(item) }); },
+  } } });
+  h.setProducts([mic]); h.detailState(mic, 3); h.selectVariant('electronics-printed', 4);
+  assert.deepEqual(events, [
+    { name: 'ViewContent', item: { id: 'avian-mic-electronics', quantity: 1, value: 50 } },
+    { name: 'ViewContent', item: { id: 'avian-mic-electronics-printed', quantity: 1, value: 60 } },
+  ]);
 });
 
 test("errors and malformed projections omit stale counts instead of inventing a batch", async () => {
@@ -317,4 +350,22 @@ test("a processing checkout keeps its accepted quantity while ordinary refreshes
   h.refreshSurfaces();
   assert.equal(edit.cart()[0].qty, 2); assert.equal(requotes, 1);
   h.refreshSurfaces(); assert.equal(requotes, 1, "unchanged snapshots do not continually invalidate payment");
+});
+
+
+test('the public cart checkout action reports catalog items before navigation without delaying or breaking it', async () => {
+  const order = [], listed = { ...product, metaCatalogId: 'avian-visitors' };
+  const mic = { id: 'avian-mic', published: true, defaultBuild: 'electronics-printed', variants: [{ id: 'electronics-printed', price: 60 }] };
+  const location = { pathname: '/store/', search: '', hash: '', origin: 'https://theodore.net',
+    set href(value) { order.push(['navigate', value]); } };
+  const tracker = { checkoutEvent(items) { order.push(['checkout', plain(items)]); } };
+  const h = harness({ location, window: { addEventListener() {}, STORE_PRODUCTS: [listed, mic], TheodoreMetaTracking: tracker } });
+  h.setProducts([listed, mic]);
+  h.mutations([{ id: listed.id, build: variant.id, qty: 2 }, { id: mic.id, build: mic.defaultBuild, qty: 1 }]);
+  await h.checkout();
+  assert.deepEqual(order, [['checkout', [{ id: 'avian-visitors', quantity: 2, value: 1398 },
+    { id: 'avian-mic-electronics-printed', quantity: 1, value: 60 }]], ['navigate', '/store/checkout/']]);
+  order.length = 0; tracker.checkoutEvent = () => { throw Error('optional tracker unavailable'); };
+  await h.checkout(); assert.deepEqual(order, [['navigate', '/store/checkout/']]);
+  order.length = 0; h.mutations([]); await h.checkout(); assert.deepEqual(order, []);
 });

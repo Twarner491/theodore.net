@@ -47,8 +47,8 @@ search:
     <section class="legal-section">
       <div class="content5">
         <div class="legal-prose">
-          <p class="draft">Effective November 10, 2026</p>
-          <p>This update explains paid-ad attribution and optional Meta ad measurement.</p>
+          <p class="draft">Effective November 11, 2026</p>
+          <p>This update explains paid-ad attribution and optional Meta advertising cookies and measurement.</p>
 
           <p>This policy describes how Things by Theodore LLC handles personal information for the theodore.net website and store and the Avian Visitors frame services at avianvisitors.com.</p>
 
@@ -82,7 +82,9 @@ search:
 
           <h3 id="ad-measurement">Ad measurement</h3>
           <p>We record campaign and creative labels from ad links separately from your original referral source, and link them to payment records to measure sales. A campaign label does not identify your Meta account.</p>
-          <p>If you allow ad measurement, this browser uses a Meta ad-click identifier for up to seven days. For a completed purchase, we can share that identifier or an existing Meta browser identifier, browser information, purchased product identifiers, an order identifier, order value, currency, and purchase time with Meta through its Conversions API. Meta uses these details to match purchases to ads and measure and improve advertising. This integration does not send your name, email, phone number, address, or card details. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's privacy policy</a>.</p>
+          <p>If you allow Meta advertising cookies, we use the Meta Pixel on public store and product pages to share store visits, product views, cart additions and checkout starts, including product identifiers, quantities, values and currency. Meta receives public page and product details, the page address, referrer, browser and connection information, including your IP address, and can use cookies to recognize your browser. Meta can use this activity to measure advertising and include you in audiences for relevant ads on Instagram and Facebook. We do not load this Pixel on checkout, order-confirmation or privacy pages, and we do not enable automatic form matching.</p>
+          <p>For a completed purchase, we can share a Meta ad-click or browser identifier, browser information, purchased product identifiers, an order identifier, order value, currency, and purchase time with Meta through its Conversions API. We use ad-click identifiers for up to seven days. This integration does not send your name, email, phone number, address, or card details. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's privacy policy</a>.</p>
+          <p>If you previously allowed only ad-click and purchase measurement, that choice remains limited to purchase measurement until you make a new choice. We do not use earlier store activity to build Meta browsing audiences.</p>
           <p>When you check out, the ad identifiers, browser information, and consent record can also be saved with the payment record and follow its retention period. Pending event details are removed after delivery or expiry; we keep delivery status for up to 90 days.</p>
           <p>Your choice is saved on this browser for 90 days. You can turn measurement off below; this stops future sharing from this browser but cannot recall events already sent. You can shop without allowing it.</p>
           <p id="ad-measurement-status" role="status">Meta ad measurement is currently off.</p>

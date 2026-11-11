@@ -281,7 +281,36 @@ test('header-only privacy signals are exposed to the client and override even a 
   for (const headers of [{ 'sec-gpc': '1' }, { dnt: '1' }]) {
     const request = post('ad-config', {}, headers), result = await adConfig({ env, request });
     assert.equal(result.headers.get('cache-control'), 'no-store');
-    assert.deepEqual(await result.json(), { metaMeasurementEnabled: false, privacyOptOut: true });
+    assert.deepEqual(await result.json(), { metaMeasurementEnabled: false, metaBrowserEventsEnabled: false, metaPixelId: '', privacyOptOut: true });
     assert.equal((await recordMetaConsent(env, { ...allowed, atMs: NOW * 1000 + 50 }, request, { now: NOW })).allowed, false);
   }
+});
+
+test('expanded consent preserves its version through acknowledged choice and server-only Purchase', async (t) => {
+  const db = setupDb(t), env = envFor(db), input = { anon: 'visitor0001', ...context({ version: 'meta-v2' }) };
+  const result = await recordMetaConsent(env, input, post('ad-consent', input), { now: NOW });
+  assert.deepEqual(result, { recorded: true, allowed: true });
+  const form = new URLSearchParams();
+  applyMetaTrackingMetadata(form, input, post('payment-intent', {}, { 'user-agent': 'Actual browser' }), { now: NOW });
+  assert.equal(fields(form).meta_consent, 'meta-v2');
+  const pi = piFixture({ metadata: { ...piFixture().metadata, ...fields(form) } });
+  const payload = metaPurchasePayload(success(pi), pi, manifest, { now: NOW });
+  assert.equal(payload.event_id, 'Purchase:pi_fixture'); assert.equal(payload.event_name, 'Purchase');
+  assert.equal(metaPurchasePayload(success(pi), { ...pi, metadata: { ...pi.metadata, meta_consent: 'meta-v3' } }, manifest, { now: NOW }), null);
+});
+
+test('browser config requires its own flag, reveals no secret and never gives a live Pixel to preview', async (t) => {
+  const db = setupDb(t), request = new Request('https://theodore.net/api/ad-config');
+  const read = async (env, req = request) => (await adConfig({ env, request: req })).json();
+  const off = await read(liveEnv(db));
+  assert.equal(off.metaMeasurementEnabled, true); assert.equal(off.metaBrowserEventsEnabled, false); assert.equal(off.metaPixelId, '');
+  const live = await read({ ...liveEnv(db), META_PIXEL_ENABLED: '1' });
+  assert.deepEqual(live, { metaMeasurementEnabled: true, metaBrowserEventsEnabled: true, metaPixelId: '1234567890', privacyOptOut: false });
+  assert.equal(JSON.stringify(live).includes('mock-only-token'), false);
+  const preview = await read({ ...envFor(db), META_PIXEL_ENABLED: '1' }, new Request(ORIGIN + '/api/ad-config'));
+  assert.equal(preview.metaBrowserEventsEnabled, true); assert.equal(preview.metaPixelId, '');
+  const optedOut = await read({ ...liveEnv(db), META_PIXEL_ENABLED: '1' }, new Request(request, { headers: { 'sec-gpc': '1' } }));
+  assert.equal(optedOut.metaBrowserEventsEnabled, false); assert.equal(optedOut.metaPixelId, '');
+  const staging = await read({ ...liveEnv(db), META_PIXEL_ENABLED: '1' }, new Request('https://preview.example/api/ad-config'));
+  assert.equal(staging.metaBrowserEventsEnabled, false); assert.equal(staging.metaPixelId, '');
 });
