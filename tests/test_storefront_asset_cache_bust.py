@@ -36,6 +36,19 @@ class StorefrontAssetCacheBustTest(unittest.TestCase):
                     self.assertEqual(CACHE_BUST.on_config(config)["extra_javascript"], updated)
                     previous = updated
 
+    def test_cookie_controls_stylesheet_changes_receive_a_new_url(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            asset = root / "docs/assets/css/ad-measurement.css"
+            asset.parent.mkdir(parents=True)
+            asset.write_text(".cookie-preferences { display: block; }")
+            config = {"config_file_path": str(root / "mkdocs.yml"),
+                      "extra_javascript": [], "extra_css": ["assets/css/ad-measurement.css"]}
+            previous = CACHE_BUST.on_config(config)["extra_css"][0]
+            self.assertRegex(previous, r"\?h=[0-9a-f]{8}$")
+            asset.write_text(".cookie-preferences { display: flex; }")
+            self.assertNotEqual(CACHE_BUST.on_config(config)["extra_css"][0], previous)
+
     def test_storefront_status_assets_receive_content_versions(self):
         config = {
             "config_file_path": str(ROOT / "mkdocs.yml"),

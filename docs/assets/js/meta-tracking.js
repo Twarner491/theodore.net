@@ -2,13 +2,14 @@
 (function () {
   "use strict";
   var KEY = "theodore:meta-choice:v1", CLICK_KEY = "theodore:meta-click:v1";
-  var VERSION = "meta-v2", WEEK = 604800, enabled = false, serverOptOut = false, panel = null, syncing = false, observedAnon = "";
+  var VERSION = "meta-v2", WEEK = 604800, enabled = false, serverOptOut = false, syncing = false, observedAnon = "";
+  var configState = "loading", saveFailed = false, choicePersisted = true;
   var browserEvents = false, pixelId = "", pixelLoading = false, pixelReady = false, pixelInitialized = false;
   var pageSent = false, viewSent = "", currentView = null, pendingEvents = [];
   var choice = read(KEY), savedClick = read(CLICK_KEY), pageClick = null;
   function now() { return Math.floor(Date.now() / 1000); }
-  function read(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (_) { return null; } }
-  function save(key, value) { try { if (value) localStorage.setItem(key, JSON.stringify(value)); else localStorage.removeItem(key); } catch (_) {} }
+  function read(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (_) { if (key === KEY) choicePersisted = false; return null; } }
+  function save(key, value) { try { if (value) localStorage.setItem(key, JSON.stringify(value)); else localStorage.removeItem(key); if (key === KEY) choicePersisted = true; } catch (_) { if (key === KEY) choicePersisted = false; } }
   function blocked() { return serverOptOut || navigator.globalPrivacyControl === true || navigator.doNotTrack === "1" || window.doNotTrack === "1"; }
   function validChoice() { return choice && (choice.version === "meta-v1" || choice.version === VERSION) && typeof choice.allowed === "boolean" &&
     Number.isSafeInteger(choice.at) && choice.at > 0 && choice.at <= now() && now() - choice.at < 90 * 86400 &&
@@ -47,7 +48,7 @@
       if (!document.referrer) return true;
       var referrer = new URL(document.referrer);
       var publicReferrer = referrer.pathname === "/" || referrer.origin === url.origin &&
-        (storePath(referrer.pathname) || products.some(function (product) {
+        (storePath(referrer.pathname) || /^\/privacy\/?$/.test(referrer.pathname) || products.some(function (product) {
           return product.published && product.project === referrer.pathname;
         }));
       return publicReferrer && safeUrl(referrer);
@@ -161,7 +162,7 @@
   function context(anon) {
     identity(anon);
     if (blocked() && validChoice() && choice.allowed) setChoice(false);
-    syncChoice();
+    if (!saveFailed) syncChoice();
     syncPixel();
     if (blocked() || !validChoice() || !choice.allowed) {
       savedClick = null; save(CLICK_KEY, null);
@@ -178,11 +179,30 @@
   }
   function status() {
     var target = document.getElementById("ad-measurement-status");
-    if (target) target.textContent = blocked() ? "Ad measurement is off because of your browser privacy preference." : !enabled ? "Meta ad measurement is currently off." : allowed() ? "Ad measurement is allowed on this browser." : "Ad measurement is off on this browser.";
-  }
-  function dismiss() {
-    if (panel) { panel.remove(); panel = null; }
-    document.documentElement.style.removeProperty("--ad-choice-space");
+    var toggle = document.getElementById("cookie-meta"), retry = document.getElementById("cookie-meta-retry");
+    var pending = validChoice() && choice.acknowledged !== true;
+    var text = blocked() ? "Off: your browser privacy preference." : configState === "loading" ? "Loading…" :
+      configState === "error" ? "Could not load. Retry." : !enabled ? "Off: not enabled on this site." :
+      pending ? (saveFailed || !syncing ? (choice.allowed ? "Could not save. Retry." : "Off on this browser. Retry to finish saving.") :
+        choice.allowed ? "Saving…" : "Off. Saving…") : allowed() ?
+        (choice.version === "meta-v1" ? "Purchases only" : choicePersisted ? "On" : "On for this visit") : "Off";
+    if (target) target.textContent = text;
+    if (toggle) {
+      toggle.disabled = blocked() || configState !== "ready" || !enabled;
+      toggle.checked = !!(!toggle.disabled && validChoice() && choice.allowed && (allowed() || pending));
+    }
+    if (retry) {
+      retry.hidden = blocked() || !(configState === "error" || configState === "ready" && (!enabled || pending && !syncing));
+      retry.disabled = configState === "loading" || syncing;
+    }
+    var analytics = window.TheodoreAnalyticsPreference, ga = document.getElementById("cookie-analytics");
+    var gaStatus = document.getElementById("cookie-analytics-status");
+    if (ga && gaStatus) {
+      var state = analytics ? analytics.state() : { available: false, allowed: false, persisted: false };
+      ga.disabled = !state.available; ga.checked = state.available && state.allowed;
+      gaStatus.textContent = !state.available ? "Not enabled on this site" :
+        (state.allowed ? "On" : "Off") + (state.persisted ? "" : " for this visit");
+    }
   }
   function syncChoice() {
     if (syncing || !validChoice() || (!enabled && choice.allowed) || choice.acknowledged === true && choice.anon) return;
@@ -190,21 +210,23 @@
     if (!/^[A-Za-z0-9_-]{8,64}$/.test(anon)) return;
     var pending = choice;
     pending.anon = anon;
-    syncing = true;
+    syncing = true; saveFailed = false; status();
     fetch("/api/ad-consent", { method: "POST", credentials: "same-origin", keepalive: true,
       headers: { "content-type": "application/json" }, body: JSON.stringify({ anon: anon,
         consent: pending.allowed, version: pending.version, at: pending.at, atMs: pending.atMs || pending.at * 1000 })
     }).then(function (response) { if (!response.ok) throw new Error("unavailable"); return response.json(); })
       .then(function (result) {
-        if (choice === pending && result.recorded === true && (result.allowed === pending.allowed || result.allowed === false)) {
+        if (choice !== pending) return;
+        if (result.recorded === true && (result.allowed === pending.allowed || result.allowed === false)) {
           choice.allowed = result.allowed;
           choice.acknowledged = true;
           if (!choice.allowed) { savedClick = null; save(CLICK_KEY, null); }
           save(KEY, choice); status(); syncPixel();
-        }
-      }).catch(function () {}).finally(function () {
+        } else throw new Error("unacknowledged");
+      }).catch(function () { if (choice === pending) saveFailed = true; }).finally(function () {
         syncing = false;
         if (choice !== pending) syncChoice();
+        status();
       });
   }
   function setChoice(allowed) {
@@ -214,35 +236,17 @@
     save(KEY, choice);
     if (!choice.allowed) { savedClick = null; save(CLICK_KEY, null); }
     else captureClick();
-    dismiss(); status(); syncChoice(); syncPixel();
+    saveFailed = false; status(); syncChoice(); syncPixel();
     window.dispatchEvent(new CustomEvent("theodore:meta-consent"));
   }
-  function show() {
-    if (!enabled || blocked() || panel) { status(); return; }
-    panel = document.createElement("aside");
-    panel.className = "ad-choice";
-    panel.setAttribute("aria-label", "Meta advertising choice");
-    panel.innerHTML = '<div><strong>Allow Meta advertising cookies?</strong><p>Share store visits, product views, cart additions, checkout starts and purchases with Meta to measure ads and show you relevant ads on Instagram and Facebook. <a href="/privacy/#ad-measurement">Privacy</a></p></div><div class="ad-choice-actions"><button type="button" data-ad-choice="no">No thanks</button><button type="button" data-ad-choice="yes">Allow</button></div>';
-    panel.addEventListener("click", function (event) {
-      var button = event.target.closest("[data-ad-choice]");
-      if (button) setChoice(button.getAttribute("data-ad-choice") === "yes");
-    });
-    document.body.appendChild(panel);
-    document.documentElement.style.setProperty("--ad-choice-space", (panel.offsetHeight + 24) + "px");
-  }
   window.TheodoreMetaTracking = { context: context, itemEvent: itemEvent, checkoutEvent: checkoutEvent };
-  function init() {
-    if (!/^\/store(?:\/|$)|^\/privacy(?:\/|$)/.test(location.pathname)) return;
-    document.addEventListener("click", function (event) {
-      var trigger = event.target.closest("[data-ad-measurement]");
-      if (!trigger) return;
-      if (trigger.getAttribute("data-ad-measurement") === "off") setChoice(false);
-      else show();
-    });
+  function loadConfig() {
+    configState = "loading"; status();
     fetch("/api/ad-config", { credentials: "same-origin", cache: "no-store" }).then(function (response) {
       if (!response.ok) throw new Error("unavailable");
       return response.json();
     }).then(function (config) {
+      configState = "ready";
       serverOptOut = config.privacyOptOut === true;
       enabled = config.metaMeasurementEnabled === true && !serverOptOut;
       browserEvents = config.metaBrowserEventsEnabled === true;
@@ -250,19 +254,35 @@
       if (blocked() && validChoice() && choice.allowed) setChoice(false);
       syncChoice();
       captureClick(); status(); syncPixel();
-      var incoming = window.TheodorePaidAttribution && window.TheodorePaidAttribution.clickContext();
-      var paid = window.TheodorePaidAttribution && window.TheodorePaidAttribution.snapshot();
-      var needsChoice = !validChoice() || browserEvents && choice.allowed && choice.version !== VERSION;
-      if (enabled && needsChoice && (incoming || paid || browserEvents && safeStorePage()) && /^\/store(?:\/|$)/.test(location.pathname)) show();
-    }).catch(function () { enabled = false; status(); });
+    }).catch(function () { enabled = false; configState = "error"; status(); syncPixel(); });
   }
+  function init() {
+    if (!/^\/store(?:\/|$)|^\/privacy(?:\/|$)/.test(location.pathname)) return;
+    document.addEventListener("change", function (event) {
+      var control = event.target.closest("[data-cookie-preference]");
+      if (!control) return;
+      if (control.getAttribute("data-cookie-preference") === "meta") {
+        if (control.checked && (blocked() || !enabled || configState !== "ready")) { status(); return; }
+        setChoice(control.checked);
+      } else if (window.TheodoreAnalyticsPreference) {
+        window.TheodoreAnalyticsPreference.setAllowed(control.checked); status();
+      }
+    });
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest("[data-cookie-retry]")) return;
+      if (configState === "error" || !enabled) loadConfig();
+      else { syncChoice(); status(); }
+    });
+    loadConfig();
+  }
+  window.addEventListener("theodore:analytics-preference", status);
   window.addEventListener("storage", function (event) {
     if (event.key !== KEY && event.key !== CLICK_KEY) return;
-    choice = read(KEY); savedClick = read(CLICK_KEY); status(); syncChoice(); syncPixel();
+    choice = read(KEY); savedClick = read(CLICK_KEY); saveFailed = false; status(); syncChoice(); syncPixel();
     window.dispatchEvent(new CustomEvent("theodore:meta-consent"));
   });
   window.addEventListener("online", syncChoice);
-  document.addEventListener("visibilitychange", function () { if (!document.hidden) { context(); syncPixel(); } });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) { context(); syncPixel(); status(); } });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();

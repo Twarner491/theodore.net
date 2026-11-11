@@ -725,6 +725,7 @@
   function ga4(name, params) {
     if (DEV_SHOW_UNPUBLISHED || (localRecovery && localRecovery.mode === "local")) return;
     try {
+      if (window.TheodoreAnalyticsPreference && !window.TheodoreAnalyticsPreference.state().allowed) return;
       if (typeof window.__theodoreAnalyticsParams !== "function") return;
       params = window.__theodoreAnalyticsParams(params);
       if (typeof window.gtag === "function") window.gtag("event", name, params);

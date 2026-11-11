@@ -25,4 +25,120 @@ window.__theodoreAnalyticsParams = function (params) {
 {% if config.extra.analytics %}
   {% set property = config.extra.analytics.property | d("", true) %}
 {% endif %}
-<script id="__analytics">function __md_analytics(){function e(){if(arguments[0]==="config"||arguments[0]==="event")arguments[2]=window.__theodoreAnalyticsParams(arguments[2]);dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","{{ property }}",{}),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","{{ property }}",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id={{ property }}",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+<script id="__analytics">
+(function () {
+  var property = "{{ property }}", available = /^G-[A-Z0-9]+$/i.test(property);
+  var key = "theodore_analytics_preference_v1", ttl = 90 * 86400000;
+  var allowed = true, persisted = false, requested = false, started = false;
+
+  function readChoice(raw) {
+    try {
+      var value = JSON.parse(raw), now = Date.now();
+      if (value && value.v === 1 && typeof value.allowed === "boolean" &&
+          Number.isSafeInteger(value.at) && value.at > now - ttl && value.at <= now + 60000) return value;
+    } catch (_) {}
+    return null;
+  }
+  function state() { return { allowed: available && allowed, persisted: persisted, available: available }; }
+  function clearCookies() {
+    try {
+      var names = document.cookie.split(";").map(function (part) { return part.trim().split("=")[0]; })
+        .filter(function (name) { return /^_ga(?:_|$)/.test(name); });
+      var domains = [""], labels = location.hostname.split(".");
+      while (labels.length > 1) {
+        domains.push(labels.join("."), "." + labels.join("."));
+        labels.shift();
+      }
+      var paths = ["/"], current = "";
+      location.pathname.split("/").slice(1, -1).forEach(function (part) {
+        current += "/" + part;
+        if (part && !/[;\r\n]/.test(current)) paths.push(current, current + "/");
+      });
+      names.forEach(function (name) {
+        domains.forEach(function (domain) {
+          paths.forEach(function (path) {
+            document.cookie = name + "=; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=" + path + ";" +
+              (domain ? " domain=" + domain + ";" : "");
+          });
+        });
+      });
+    } catch (_) { /* Cookie access may be blocked; the collection gate still applies. */ }
+  }
+  function notify() {
+    try { window.dispatchEvent(new CustomEvent("theodore:analytics-preference", { detail: state() })); } catch (_) {}
+  }
+  function apply() {
+    if (available) window["ga-disable-" + property] = !allowed;
+    if (!allowed) clearCookies();
+    else if (requested) start();
+  }
+  function setAllowed(value) {
+    if (!available || typeof value !== "boolean") return state();
+    allowed = value; persisted = false;
+    apply();
+    try {
+      var record = JSON.stringify({ v: 1, allowed: allowed, at: Date.now() });
+      localStorage.setItem(key, record);
+      persisted = localStorage.getItem(key) === record;
+    } catch (_) {}
+    notify();
+    return state();
+  }
+  function emit() {
+    if (!available || !allowed || window["ga-disable-" + property]) return;
+    if (arguments[0] === "config" || arguments[0] === "event") arguments[2] = window.__theodoreAnalyticsParams(arguments[2]);
+    window.dataLayer.push(arguments);
+  }
+  function bindEvents() {
+    if (document.forms.search) document.forms.search.query.addEventListener("blur", function () {
+      if (this.value) emit("event", "search", { search_term: this.value });
+    });
+    document$.subscribe(function () {
+      var form = document.forms.feedback;
+      if (form === undefined) return;
+      for (var button of form.querySelectorAll("[type=submit]")) button.addEventListener("click", function (event) {
+        event.preventDefault();
+        var value = this.getAttribute("data-md-value");
+        emit("event", "feedback", { page: document.location.pathname, data: value });
+        form.firstElementChild.disabled = true;
+        var note = form.querySelector(".md-feedback__note [data-md-value='" + value + "']");
+        if (note) note.hidden = false;
+      });
+      form.hidden = false;
+    });
+    location$.subscribe(function (url) { emit("config", property, { page_path: url.pathname }); });
+  }
+  function start() {
+    requested = true;
+    if (started || !available || !allowed) return;
+    started = true;
+    window.dataLayer = window.dataLayer || [];
+    emit("js", new Date());
+    emit("config", property, {});
+    if (document.readyState && document.readyState !== "loading") bindEvents();
+    else document.addEventListener("DOMContentLoaded", bindEvents);
+    var script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtag/js?id=" + property;
+    document.getElementById("__analytics").insertAdjacentElement("afterEnd", script);
+  }
+  try {
+    var choice = readChoice(localStorage.getItem(key));
+    if (choice) { allowed = choice.allowed; persisted = true; }
+  } catch (_) {}
+  window.__md_analytics = start;
+  window.TheodoreAnalyticsPreference = { state: state, setAllowed: setAllowed };
+  apply();
+  if (typeof window.addEventListener === "function") window.addEventListener("storage", function (event) {
+    if (event.key !== key && event.key !== null) return;
+    var choice;
+    try {
+      if (event.storageArea && event.storageArea !== localStorage) return;
+      choice = readChoice(localStorage.getItem(key));
+    } catch (_) { return; }
+    allowed = choice ? choice.allowed : true;
+    persisted = Boolean(choice);
+    apply(); notify();
+  });
+})();
+</script>

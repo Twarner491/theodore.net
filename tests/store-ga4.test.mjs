@@ -79,6 +79,26 @@ test("the existing global gtag path is preserved and never queues a duplicate", 
   assert.equal(context.dataLayer.length, 2);
 });
 
+test("the real analytics preference stops both commerce paths immediately without replay on re-enable", () => {
+  const context = harness({ material: true }), calls = [];
+  context.document.createElement = () => ({});
+  context.document.getElementById = () => ({ insertAdjacentElement() {} });
+  const provider = analyticsTemplate.match(/<script id="__analytics">([\s\S]*?)<\/script>/)[1].replaceAll("{{ property }}", "G-TEST123456");
+  vm.runInContext(provider, context);
+  context.__md_analytics();
+  context.TheodoreAnalyticsPreference.setAllowed(false);
+  const before = context.dataLayer.length;
+  context.storeAnalytics("purchase", { value: 699 });
+  assert.equal(context.dataLayer.length, before);
+  context.gtag = (...args) => calls.push(args);
+  context.storeAnalytics("purchase", { value: 699 });
+  assert.equal(calls.length, 0);
+  context.TheodoreAnalyticsPreference.setAllowed(true);
+  assert.equal(context.dataLayer.length, before); assert.equal(calls.length, 0);
+  context.storeAnalytics("add_to_cart", { value: 699 });
+  assert.equal(calls.length, 1); assert.equal(calls[0][1], "add_to_cart");
+});
+
 test("absent, not-yet-configured, empty-ID and non-GA analytics stay inert", () => {
   const absent = harness();
   absent.storeAnalytics("view_item", {});
