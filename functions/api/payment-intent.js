@@ -37,7 +37,7 @@ import { parseGiftInput } from "../../lib/order-gift.js";
 import { receiptEmail } from "../../lib/receipt-email.js";
 import { resolveRecoveryAssociation, recordRecoveryCheckout } from "../../lib/store-recovery.js";
 import { productionDemand, productionBatchReady, productionIntakePaused } from "../../lib/production-batch-commerce.js";
-import { paidAttributionEnabled, applyPaidMetadata, applyMetaTrackingMetadata, advertisingOptOut } from "../../lib/paid-attribution.js";
+import { paidAttributionEnabled, applyPaidMetadata, applyMetaTrackingMetadata, advertisingOptOut, resolveMetaTrackingDecision, ledgerMetaVersion } from "../../lib/paid-attribution.js";
 import { metaMeasurementAvailable } from "../../lib/meta-purchase.js";
 
 const MAX_QTY = 99, MAX_LINES = 50;
@@ -500,7 +500,8 @@ export async function onRequestPost({ request, env }) {
   const paidTracking = paidAttributionEnabled(env) && body.paidAttribution;
   const metaTracking = metaMeasurementAvailable(env, request) && body.metaTracking !== undefined;
   const metaOptOut = env.META_CAPI_ENABLED === "1" && (body.metaTracking?.consent === false || advertisingOptOut(request));
-  if (paidTracking || metaTracking || metaOptOut) {
+  const metaRecheck = env.META_CAPI_ENABLED === "1" && !!piId;
+  if (paidTracking || metaTracking || metaOptOut || metaRecheck) {
     let prior = {};
     if (piId) {
       // A later paid click may refresh a draft, but never relabel an authorized or settled order.
@@ -518,7 +519,16 @@ export async function onRequestPost({ request, env }) {
       } catch (_) { return reply({ error: "Could not update checkout. Please try again." }, 503); }
     }
     if (paidTracking) applyPaidMetadata(form, body.paidAttribution, prior);
-    if (metaTracking || metaOptOut) applyMetaTrackingMetadata(form, body.metaTracking, request);
+    if (metaTracking || metaOptOut) {
+      let decision = false;
+      try { decision = await resolveMetaTrackingDecision(env, body.metaTracking, anon || prior.anon, request); }
+      catch (_) { /* Optional advertising fails closed without preventing payment. */ }
+      applyMetaTrackingMetadata(form, body.metaTracking, request, { decision });
+    } else if (ledgerMetaVersion(prior.meta_consent)) {
+      // A default/override must be revalidated on every quote/finalization. An
+      // older client with no current policy context cannot preserve it silently.
+      applyMetaTrackingMetadata(form, { consent: false }, request);
+    }
   }
   // NB: we deliberately do NOT set shipping[...] here. confirmPayment() sets the PI's
   // shipping from the Address Element (publishable key); a secret-key shipping set

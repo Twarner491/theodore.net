@@ -5,16 +5,17 @@ import vm from 'node:vm';
 
 const source = readFileSync(new URL('../docs/assets/js/meta-tracking.js', import.meta.url), 'utf8');
 const SECOND = 1794340000, KEY = 'theodore:meta-choice:v1', CLICK = 'theodore:meta-click:v1';
-async function harness({ enabled = true, privacyOptOut = false, browserEvents = false, pixelId = '1234567890',
-  url = 'https://theodore.net/store/avian-visitors/', referrer = '', respond, choice, storedClick,
-  click = { fbclid: 'Real_Click-123', at: SECOND, path: '/store/avian-visitors/' }, navigator = {}, brokenStorage = false, cookie = '' } = {}) {
+async function harness({ enabled = true, privacyOptOut = false, privacySignals = { gpc: privacyOptOut, dnt: false }, regionalDefaultAllowed = false, signalOverrideSupported = true, browserEvents = false, pixelId = '1234567890',
+  url = 'https://theodore.net/store/avian-visitors/', referrer = '', respond, choice, storedClick, analytics,
+  click = { fbclid: 'Real_Click-123', at: SECOND, path: '/store/avian-visitors/' }, navigator = {}, brokenStorage = false, cookie = '', rawChoice } = {}) {
   const data = new Map(choice ? [[KEY, JSON.stringify(choice)]] : []), events = {}, panels = [];
   data.set('tev_aid', 'anonymous-test-browser');
+  if (rawChoice !== undefined) data.set(KEY, rawChoice);
   if (storedClick) data.set(CLICK, JSON.stringify(storedClick));
   const status = { textContent: '' }, metaToggle = { checked: false, disabled: false, getAttribute: () => 'meta' },
-    retry = { hidden: true, disabled: false }, analyticsToggle = {}, analyticsStatus = { textContent: '' }, requests = [], scripts = []; let time = SECOND * 1000;
+    retry = { hidden: true, disabled: false }, metaNote = { textContent: '', hidden: true }, analyticsNote = { textContent: '', hidden: true }, analyticsToggle = { getAttribute: () => 'analytics' }, analyticsStatus = { textContent: '' }, requests = [], scripts = []; let time = SECOND * 1000;
   const fields = { 'ad-measurement-status': status, 'cookie-meta': metaToggle, 'cookie-meta-retry': retry,
-    'cookie-analytics': analyticsToggle, 'cookie-analytics-status': analyticsStatus };
+    'cookie-meta-note': metaNote, 'cookie-analytics-note': analyticsNote, 'cookie-analytics': analyticsToggle, 'cookie-analytics-status': analyticsStatus, 'cookie-meta-confirmation': { hidden: true }, 'cookie-meta-confirm': { disabled: false }, 'cookie-meta-cancel': {} };
   const document = {
     cookie, referrer, readyState: 'complete', getElementById: (id) => fields[id] || null,
     addEventListener(name, fn) { events['document:' + name] = fn; },
@@ -24,6 +25,7 @@ async function harness({ enabled = true, privacyOptOut = false, browserEvents = 
     createElement() { return { offsetHeight: 100, setAttribute() {}, addEventListener(name, fn) { this[name] = fn; }, remove() { this.removed = true; } }; }
   };
   const window = {
+    TheodoreAnalyticsPreference: analytics,
     STORE_PRODUCTS: [{ id: 'avian-visitors', published: true, project: '/projects/AvianVisitors/' }],
     TheodorePaidAttribution: { clickContext: () => click, snapshot: () => click ? { first: {} } : null },
     addEventListener(name, fn) { events[name] = fn; }, dispatchEvent(event) { if (events[event.type]) events[event.type](event); }
@@ -36,23 +38,31 @@ async function harness({ enabled = true, privacyOptOut = false, browserEvents = 
     fetch: async (url, options) => {
       const body = options?.body ? JSON.parse(options.body) : null; requests.push({ url, body });
       if (respond) { const response = await respond(url, body); if (response) return response; }
-      return { ok: true, json: async () => url === '/api/ad-consent' ? { recorded: true, allowed: body.consent } : { metaMeasurementEnabled: enabled, privacyOptOut, metaBrowserEventsEnabled: browserEvents, metaPixelId: pixelId } };
+      return { ok: true, json: async () => url === '/api/ad-consent' ? body.action === 'prepare-override' ?
+        { prepared: true, challenge: '11111111-1111-4111-8111-111111111111', expiresAt: SECOND + 300, signals: body.signals } :
+        { recorded: true, allowed: body.consent, version: body.version, at: body.at, atMs: body.atMs,
+          decisionId: '22222222-2222-4222-8222-222222222222', decisionAt: SECOND,
+          overrideSignals: body.action === 'confirm-override' || body.version === 'meta-v3' ? body.signals : { gpc: false, dnt: false } } :
+        { metaMeasurementEnabled: enabled, privacyOptOut, privacySignals, regionalDefaultAllowed, signalOverrideSupported,
+          metaBrowserEventsEnabled: browserEvents, metaPixelId: pixelId } };
     }
   });
   await new Promise(setImmediate);
-  return { data, panels, requests, scripts, navigator, metaToggle, retry, calls: () => JSON.parse(JSON.stringify((window.fbq?.queue || []).map((args) => Array.from(args)))),
+  return { data, panels, requests, scripts, navigator, fields, metaToggle, retry, metaNote, analyticsNote, analyticsToggle, analyticsStatus, calls: () => JSON.parse(JSON.stringify((window.fbq?.queue || []).map((args) => Array.from(args)))),
     checkout(items) { window.TheodoreMetaTracking.checkoutEvent(items); },
     loadPixel() { scripts.at(-1)?.onload(); }, item(name, value) { window.TheodoreMetaTracking.itemEvent(name, value); },
     setTime(value) { time = value; }, event(name, value = {}) { events[name]?.(value); }, context: (anon) => JSON.parse(JSON.stringify(window.TheodoreMetaTracking.context(anon))),
     async choose(value) { metaToggle.checked = value === 'yes'; events['document:change']?.({ target: { closest: () => metaToggle } }); await new Promise(setImmediate); },
-    async retryChoice() { events['document:click']?.({ target: { closest: () => retry } }); await new Promise(setImmediate); },
+    async chooseAnalytics(value) { analyticsToggle.checked = value; events['document:change']?.({ target: { closest: () => analyticsToggle } }); await new Promise(setImmediate); },
+    async overrideAction(value) { events['document:click']?.({ target: { closest: (selector) => selector === '[data-meta-override]' ? { getAttribute: () => value } : null } }); await new Promise(setImmediate); },
+    async retryChoice() { events['document:click']?.({ target: { closest: (selector) => selector === '[data-cookie-retry]' ? retry : null } }); await new Promise(setImmediate); },
     revoke() { metaToggle.checked = false; events['document:change']?.({ target: { closest: () => metaToggle } }); }, status };
 }
 test('no sharing or click storage before choice; opt-in preserves real click time', async () => {
   const h = await harness();
   assert.equal(h.context().consent, false); assert.equal(h.data.has(CLICK), false);
   await h.choose('yes');
-  assert.deepEqual(h.context(), { consent: true, version: 'meta-v2', at: SECOND, atMs: SECOND * 1000, fbc: `fb.1.${SECOND * 1000}.Real_Click-123` });
+  assert.deepEqual(h.context(), { consent: true, version: 'meta-v2', at: SECOND, atMs: SECOND * 1000, signals: { gpc: false, dnt: false }, fbc: `fb.1.${SECOND * 1000}.Real_Click-123` });
   assert.equal(h.panels.length, 0); assert.equal(h.metaToggle.checked, true);
 });
 test('decline and later revocation clear matching data without preventing checkout', async () => {
@@ -70,7 +80,7 @@ test('expired consent requires a new choice and identifiers are never invented',
   const h = await harness({ choice: { allowed: true, version: 'meta-v1', at: SECOND - 91 * 86400 } });
   assert.equal(h.context().consent, false); assert.equal(h.panels.length, 0);
   const noClick = await harness({ choice: { allowed: true, version: 'meta-v1', at: SECOND }, click: null });
-  assert.deepEqual(noClick.context(), { consent: true, version: 'meta-v1', at: SECOND, atMs: SECOND * 1000 });
+  assert.deepEqual(noClick.context(), { consent: true, version: 'meta-v1', at: SECOND, atMs: SECOND * 1000, signals: { gpc: false, dnt: false } });
 });
 test('stored choice can work in memory when storage is blocked; malformed cookies stay excluded', async () => {
   const h = await harness({ brokenStorage: true, cookie: '_fbp=bad; _fbc=bad' }); await h.choose('yes');
@@ -87,7 +97,7 @@ test('server-only privacy signal withdraws a prior opt-in even without a navigat
   assert.equal(h.context().consent, false);
   const withdrawal = h.requests.find((r) => r.url === '/api/ad-consent');
   assert.equal(withdrawal.body.consent, false); assert.equal(withdrawal.body.anon, 'anonymous-test-browser');
-  assert.equal(h.panels.length, 0); assert.match(h.status.textContent, /privacy preference/);
+  assert.equal(h.panels.length, 0); assert.equal(h.status.textContent, 'Off'); assert.match(h.metaToggle.title, /browser privacy/);
 });
 
 test('acknowledgment is bound to its anonymous identity; revocation still targets that identity after rotation', async () => {
@@ -343,7 +353,7 @@ test('privacy controls show pending acknowledgement, confirmed status and persis
     respond(url) { if (url === '/api/ad-consent') return gate; } });
   assert.equal(h.panels.length, 0); assert.equal(h.metaToggle.checked, false);
   await h.choose('yes');
-  assert.equal(h.metaToggle.checked, true); assert.match(h.status.textContent, /Saving/);
+  assert.equal(h.metaToggle.checked, false); assert.match(h.status.textContent, /Saving/);
   assert.equal(h.context().consent, false); assert.equal(h.scripts.length, 0);
   release({ ok: true, json: async () => ({ recorded: true, allowed: true }) });
   await new Promise(setImmediate);
@@ -355,8 +365,9 @@ test('privacy controls show pending acknowledgement, confirmed status and persis
 test('privacy controls explain unavailable and browser-blocked states instead of leaving a dead change button', async () => {
   for (const options of [{ enabled: false }, { privacyOptOut: true }, { navigator: { globalPrivacyControl: true } }, { navigator: { doNotTrack: '1' } }]) {
     const h = await harness({ url: 'https://theodore.net/privacy/', ...options });
-    assert.equal(h.metaToggle.disabled, true);
-    assert.match(h.status.textContent, options.enabled === false ? /not enabled/ : /browser privacy preference/);
+    assert.equal(h.metaToggle.disabled, options.enabled === false);
+    assert.equal(h.status.textContent, 'Off');
+    assert.match(options.enabled === false ? h.metaNote.textContent : h.metaToggle.title, options.enabled === false ? /Unavailable/ : /browser privacy/);
     await h.choose('yes'); assert.equal(h.context().consent, false); assert.equal(h.metaToggle.checked, false);
     assert.equal(h.requests.some((r) => r.url === '/api/ad-consent' && r.body.consent), false);
   }
@@ -368,7 +379,7 @@ test('failed configuration and consent saves have working inline retries', async
     if (url === '/api/ad-config' && configFails) throw Error('offline');
   } });
   assert.equal(config.metaToggle.disabled, true); assert.equal(config.retry.hidden, false);
-  assert.match(config.status.textContent, /Could not load/);
+  assert.equal(config.status.textContent, 'Off'); assert.match(config.metaNote.textContent, /Could not load/);
   configFails = false; await config.retryChoice();
   assert.equal(config.metaToggle.disabled, false); assert.equal(config.retry.hidden, true);
   let saveFails = true;
@@ -376,16 +387,16 @@ test('failed configuration and consent saves have working inline retries', async
     if (url === '/api/ad-consent' && saveFails) throw Error('offline');
   } });
   await save.choose('yes'); assert.equal(save.context().consent, false);
-  await new Promise(setImmediate); assert.match(save.status.textContent, /Could not save/); assert.equal(save.retry.hidden, false);
+  await new Promise(setImmediate); assert.match(save.metaNote.textContent, /Could not save/); assert.equal(save.retry.hidden, false);
   saveFails = false; await save.retryChoice();
   assert.equal(save.context().consent, true); assert.equal(save.status.textContent, 'On');
   saveFails = true; save.revoke(); await new Promise(setImmediate);
-  assert.equal(save.context().consent, false); assert.match(save.status.textContent, /Off.*retry/i);
+  assert.equal(save.context().consent, false); assert.equal(save.status.textContent, 'Off'); assert.match(save.metaNote.textContent, /Retry/);
 });
 
 test('legacy purchase-only permission is visible and never silently upgraded on Privacy', async () => {
   const h = await harness({ url: 'https://theodore.net/privacy/', browserEvents: true, choice: accepted('meta-v1') });
-  assert.equal(h.metaToggle.checked, true); assert.equal(h.status.textContent, 'Purchases only');
+  assert.equal(h.metaToggle.checked, true); assert.equal(h.status.textContent, 'On'); assert.match(h.metaToggle.title, /purchase measurement only/);
   assert.equal(h.context().version, 'meta-v1'); assert.equal(h.requests.some((r) => r.url === '/api/ad-consent'), false);
   h.revoke(); await new Promise(setImmediate); await h.choose('yes');
   assert.equal(h.context().version, 'meta-v2'); assert.equal(h.scripts.length, 0);
@@ -402,4 +413,177 @@ test('Privacy opt-in works on the next public store page without loading Pixel o
     const unsafe = await harness({ browserEvents: true, choice, referrer });
     assert.equal(unsafe.scripts.length, 0);
   }
+});
+
+test('compact statuses distinguish defaults from an observed local persistence failure', async () => {
+  let state = { available: true, allowed: true, persisted: false }, fails = true;
+  const h = await harness({ url: 'https://theodore.net/privacy/', analytics: {
+    state: () => ({ ...state }), setAllowed(value) { state = { ...state, allowed: value, persisted: !fails }; return { ...state }; }
+  } });
+  assert.equal(h.analyticsStatus.textContent, 'On'); assert.equal(h.analyticsNote.hidden, true);
+  await h.chooseAnalytics(false);
+  assert.equal(h.analyticsStatus.textContent, 'Off'); assert.equal(h.analyticsToggle.checked, false);
+  assert.equal(h.analyticsNote.hidden, false); assert.match(h.analyticsNote.textContent, /Not saved/);
+  fails = false; await h.chooseAnalytics(true);
+  assert.equal(h.analyticsStatus.textContent, 'On'); assert.equal(h.analyticsNote.hidden, true);
+  const meta = await harness({ brokenStorage: true }); await meta.choose('yes');
+  assert.equal(meta.status.textContent, 'On'); assert.equal(meta.metaNote.hidden, false);
+  assert.match(meta.metaNote.textContent, /Not saved/);
+});
+
+const newChoice = (version, extra = {}) => ({ ...accepted(version), decisionId: '22222222-2222-4222-8222-222222222222',
+  decisionAt: SECOND - 1, overrideSignals: { gpc: true, dnt: false }, ...extra });
+
+test('fresh US allowance waits for canonical server acknowledgement without manufacturing explicit consent', async () => {
+  let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  const h = await harness({ regionalDefaultAllowed: true, browserEvents: true, respond(url) {
+    if (url === '/api/ad-consent') return gate;
+  } });
+  const request = h.requests.find(r => r.url === '/api/ad-consent').body;
+  assert.equal(request.version, 'meta-us-v1'); assert.equal(request.consent, true);
+  assert.equal(h.context().consent, false); assert.equal(h.metaToggle.checked, false); assert.equal(h.scripts.length, 0);
+  release({ ok: true, json: async () => ({ recorded: true, allowed: true, version: request.version,
+    at: request.at, atMs: request.atMs, decisionId: '22222222-2222-4222-8222-222222222222', decisionAt: SECOND }) });
+  await new Promise(setImmediate);
+  assert.equal(h.context().version, 'meta-us-v1'); assert.equal(h.metaToggle.checked, true); assert.equal(h.scripts.length, 1);
+  assert.equal(h.context().decisionId, '22222222-2222-4222-8222-222222222222');
+});
+
+test('default allowance never replaces a refusal, expired or malformed history, legacy scope or unreadable storage', async () => {
+  for (const options of [ { choice: { ...accepted(), allowed: false } },
+    { choice: { ...accepted(), allowed: false, at: SECOND - 91 * 86400 } },
+    { choice: { ...accepted(), at: SECOND - 91 * 86400 } }, { rawChoice: '{broken' },
+    { rawChoice: 'null' }, { rawChoice: 'false' }, { brokenStorage: true },
+    { choice: accepted('meta-v1') }, { navigator: { globalPrivacyControl: true } },
+    { regionalDefaultAllowed: false } ]) {
+    const h = await harness({ regionalDefaultAllowed: true, browserEvents: true, ...options });
+    assert.equal(h.requests.some(r => r.body?.version === 'meta-us-v1'), false, JSON.stringify(options));
+    assert.equal(h.scripts.length, 0, JSON.stringify(options));
+  }
+  const moved = await harness({ choice: newChoice('meta-us-v1'), regionalDefaultAllowed: false, browserEvents: true });
+  assert.equal(moved.context().consent, false); assert.equal(moved.scripts.length, 0);
+  assert.equal(moved.requests.some(r => r.body?.consent === false), false);
+});
+
+test('browser signal override requires a separate confirmation and server decision before sharing', async () => {
+  const h = await harness({ navigator: { globalPrivacyControl: true }, browserEvents: true, url: 'https://theodore.net/privacy/' });
+  assert.equal(h.metaToggle.disabled, false); await h.choose('yes');
+  assert.equal(h.fields['cookie-meta-confirmation'].hidden, false);
+  assert.equal(h.requests.some(r => r.body?.action === 'prepare-override'), true);
+  assert.equal(h.requests.some(r => r.body?.action === 'confirm-override'), false);
+  assert.equal(h.context().consent, false); assert.equal(h.metaToggle.checked, false);
+  await h.overrideAction('confirm');
+  assert.equal(h.context().version, 'meta-v3'); assert.equal(h.context().consent, true);
+  assert.deepEqual(h.context().signals, { gpc: true, dnt: false }); assert.equal(h.metaToggle.checked, true);
+  assert.equal(h.scripts.length, 0); // Even confirmed permission never loads on Privacy.
+  const choice = JSON.parse(h.data.get(KEY));
+  const store = await harness({ choice, navigator: { globalPrivacyControl: true }, browserEvents: true });
+  assert.equal(store.scripts.length, 1);
+  store.navigator.doNotTrack = '1'; store.context();
+  assert.equal(store.context().consent, false); assert.equal(store.data.has(CLICK), false);
+});
+
+test('cancelled or failed browser override never grants or loads Pixel', async () => {
+  const canceled = await harness({ privacySignals: { gpc: true, dnt: false }, privacyOptOut: true, browserEvents: true });
+  await canceled.choose('yes'); await canceled.overrideAction('cancel');
+  assert.equal(canceled.context().consent, false); assert.equal(canceled.fields['cookie-meta-confirmation'].hidden, true);
+  assert.equal(canceled.requests.some(r => r.body?.action === 'confirm-override'), false); assert.equal(canceled.scripts.length, 0);
+  const failed = await harness({ navigator: { doNotTrack: '1' }, browserEvents: true, respond(url, body) {
+    if (body?.action === 'confirm-override') return { ok: true, json: async () => ({ recorded: false }) };
+  } });
+  await failed.choose('yes'); await failed.overrideAction('confirm');
+  assert.equal(failed.context().consent, false); assert.equal(failed.scripts.length, 0); assert.equal(failed.status.textContent, 'Off');
+});
+
+test('a fresh browser privacy signal persists a refusal after the signal is removed', async () => {
+  for (const options of [{ navigator: { globalPrivacyControl: true } }, { privacyOptOut: true, privacySignals: { gpc: false, dnt: true } }]) {
+    const h = await harness({ regionalDefaultAllowed: true, ...options });
+    const stored = JSON.parse(h.data.get(KEY));
+    assert.equal(stored.allowed, false); assert.equal(h.requests.some(r => r.body?.consent === false), true);
+    const later = await harness({ regionalDefaultAllowed: true, choice: stored, browserEvents: true });
+    assert.equal(later.context().consent, false); assert.equal(later.scripts.length, 0);
+    assert.equal(later.requests.some(r => r.body?.version === 'meta-us-v1'), false);
+  }
+});
+
+test('saved US allowance stays intact while config loads and receives a fresh ledger check', async () => {
+  let releaseConfig, releaseChoice;
+  const configGate = new Promise(resolve => { releaseConfig = resolve; });
+  const choiceGate = new Promise(resolve => { releaseChoice = resolve; });
+  const h = await harness({ choice: newChoice('meta-us-v1'), browserEvents: true, respond(url) {
+    return url === '/api/ad-config' ? configGate : choiceGate;
+  } });
+  assert.equal(h.context().consent, false); assert.equal(h.requests.length, 1);
+  releaseConfig({ ok: true, json: async () => ({ metaMeasurementEnabled: true, metaBrowserEventsEnabled: true,
+    metaPixelId: '1234567890', regionalDefaultAllowed: true, privacySignals: { gpc: false, dnt: false }, signalOverrideSupported: true }) });
+  await new Promise(setImmediate);
+  assert.equal(h.context().consent, false); assert.equal(h.scripts.length, 0);
+  const sent = h.requests.find(r => r.url === '/api/ad-consent').body;
+  assert.equal(sent.version, 'meta-us-v1'); assert.equal(sent.consent, true); assert.ok(sent.decisionId);
+  releaseChoice({ ok: true, json: async () => ({ recorded: true, allowed: true, version: sent.version,
+    at: sent.at, atMs: sent.atMs, decisionId: sent.decisionId, decisionAt: SECOND }) });
+  await new Promise(setImmediate);
+  assert.equal(h.scripts.length, 1); assert.equal(h.requests.some(r => r.body?.consent === false), false);
+});
+
+test('a saved override waits for revalidation and adopts a server withdrawal', async () => {
+  let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  const h = await harness({ choice: newChoice('meta-v3'), navigator: { globalPrivacyControl: true }, browserEvents: true,
+    respond(url) { if (url === '/api/ad-consent') return gate; } });
+  assert.equal(h.scripts.length, 0); assert.equal(h.context().consent, false); assert.equal(h.metaToggle.checked, false);
+  assert.equal(h.requests.find(r => r.url === '/api/ad-consent').body.action, undefined);
+  release({ ok: true, json: async () => ({ recorded: true, allowed: false, version: 'meta-v2', at: SECOND, atMs: SECOND * 1000 }) });
+  await new Promise(setImmediate);
+  assert.equal(h.scripts.length, 0); assert.equal(h.context().consent, false); assert.equal(JSON.parse(h.data.get(KEY)).allowed, false);
+});
+
+test('late prepare and confirmation replies cannot undo cancellation or an identity change', async () => {
+  for (const phase of ['prepare-override', 'confirm-override']) {
+    let release, body;
+    const gate = new Promise(resolve => { release = resolve; });
+    const h = await harness({ navigator: { globalPrivacyControl: true }, browserEvents: true, respond(url, input) {
+      if (input?.action === phase) { body = input; return gate; }
+    } });
+    await h.choose('yes');
+    if (phase === 'confirm-override') await h.overrideAction('confirm');
+    await h.overrideAction('cancel');
+    release({ ok: true, json: async () => phase === 'prepare-override' ?
+      { prepared: true, challenge: '11111111-1111-4111-8111-111111111111', expiresAt: SECOND + 300, signals: body.signals } :
+      { recorded: true, allowed: true, version: 'meta-v3', at: body.at, atMs: body.atMs,
+        decisionId: '22222222-2222-4222-8222-222222222222', decisionAt: SECOND, overrideSignals: body.signals } });
+    await new Promise(setImmediate);
+    assert.equal(h.context().consent, false); assert.equal(h.scripts.length, 0); assert.equal(h.fields['cookie-meta-confirmation'].hidden, true);
+    assert.equal(JSON.parse(h.data.get(KEY)).allowed, false);
+  }
+  const changed = await harness({ navigator: { globalPrivacyControl: true }, browserEvents: true });
+  await changed.choose('yes'); changed.data.set('tev_aid', 'different-browser-identity'); await changed.overrideAction('confirm');
+  assert.equal(changed.requests.some(r => r.body?.action === 'confirm-override'), false);
+  assert.equal(changed.context().consent, false); assert.equal(changed.scripts.length, 0);
+});
+
+test('prepare waits for in-flight signal refusal and a new uncovered signal cancels pending confirmation', async () => {
+  let releaseRefusal;
+  const refusalGate = new Promise(resolve => { releaseRefusal = resolve; });
+  const h = await harness({ navigator: { globalPrivacyControl: true }, respond(url, body) {
+    if (body?.consent === false) return refusalGate;
+  } });
+  await h.choose('yes'); assert.equal(h.requests.some(r => r.body?.action === 'prepare-override'), false);
+  const refusal = h.requests.find(r => r.body?.consent === false).body;
+  releaseRefusal({ ok: true, json: async () => ({ recorded: true, allowed: false, version: refusal.version, at: refusal.at, atMs: refusal.atMs }) });
+  await new Promise(setImmediate); await new Promise(setImmediate);
+  assert.equal(h.requests.some(r => r.body?.action === 'prepare-override'), true);
+  h.navigator.doNotTrack = '1'; await h.overrideAction('confirm');
+  assert.equal(h.requests.some(r => r.body?.action === 'confirm-override'), false); assert.equal(h.context().consent, false);
+});
+
+test('new allowance and override reject missing canonical decisions and expired challenges', async () => {
+  const missing = await harness({ regionalDefaultAllowed: true, browserEvents: true, respond(url, body) {
+    if (body?.version === 'meta-us-v1') return { ok: true, json: async () => ({ recorded: true, allowed: true }) };
+  } });
+  assert.equal(missing.context().consent, false); assert.equal(missing.scripts.length, 0); assert.equal(missing.metaToggle.checked, false);
+  const expired = await harness({ navigator: { doNotTrack: '1' }, browserEvents: true });
+  await expired.choose('yes'); expired.setTime((SECOND + 301) * 1000); await expired.overrideAction('confirm');
+  assert.equal(expired.requests.some(r => r.body?.action === 'confirm-override'), false); assert.equal(expired.scripts.length, 0);
 });
