@@ -87,6 +87,46 @@ class MetaCatalogTests(unittest.TestCase):
                 self.assertEqual(row['price'], '%.2f USD' % price)
                 self.assertEqual(row['availability'], 'in stock')
 
+    def test_real_kit_listing_fields_carry_exact_store_copy_weight_and_images(self):
+        from pathlib import Path
+        docs = Path(__file__).resolve().parents[1] / 'docs'
+        products = _products(docs)
+        by_id = {row['id']: row for row in json.loads(build(products)['meta-catalog-source.json'])}
+        expected = {  # store weight + 0.3 lb packaging, exactly as checkout prices shipping
+            'avian-visitors-kit-electronics': ('avian-visitors-kit', 'electronics', 450, 2.0),
+            'avian-visitors-kit-electronics-printed': ('avian-visitors-kit', 'electronics-printed', 520, 3.5),
+            'avian-mic-electronics': ('avian-mic', 'electronics', 180, 0.9),
+            'avian-mic-electronics-printed': ('avian-mic', 'electronics-printed', 210, 1.05),
+        }
+        for sku, (group, variant_id, price, weight) in expected.items():
+            with self.subTest(sku=sku):
+                row = by_id[sku]
+                product = next(p for p in products if p['id'] == group)
+                variant = next(v for v in product['variants'] if v['id'] == variant_id)
+                self.assertEqual((row['group'], row['variantId'], row['price']), (group, variant_id, '%.2f USD' % price))
+                self.assertEqual(row['productTitle'], product['title'])
+                self.assertEqual(row['variantLabel'], variant['label'])
+                self.assertEqual(row['shipWeightLb'], weight)
+                self.assertTrue(row['listingImages'])
+                self.assertTrue(all(u.startswith('https://theodore.net/') for u in row['listingImages']))
+                description = row['listingDescription']
+                self.assertTrue(description.startswith('<p>'))
+                self.assertNotRegex(description, r'<(?!/?(p|ul|li)>)')   # paragraphs and lists only
+                for line in variant.get('contents') or []:
+                    self.assertIn(line.replace('&', '&amp;'), description)
+
+    def test_listing_description_drops_links_and_markup_but_keeps_store_words(self):
+        from hooks.store_products import _listing_description
+        text = _listing_description({
+            'sub': 'A <em>tiny</em> mic.', 'softwareNote': 'Hardware only.',
+            'variants': [{'id': 'a', 'label': 'Kit', 'desc': 'All parts.', 'contents': ['Pi & SD']},
+                         {'id': 'b', 'label': '+ Case', 'contents': []}],
+            'sections': [{'label': 'Pairs with', 'items': ['A <a href="/x/">Frame</a> or `birdnet.local`']}],
+            'colophon': 'Sold as hardware.'})
+        self.assertEqual(text, '<p>A tiny mic.</p><p>Kit: All parts.</p><ul><li>Pi &amp; SD</li></ul>'
+                               '<p>+ Case</p><p>Hardware only.</p><p>Pairs with</p>'
+                               '<ul><li>A Frame or birdnet.local</li></ul><p>Sold as hardware.</p>')
+
     def test_variant_link_encodes_query_delimiters_without_changing_the_feed_identity(self):
         product = drop('2000-01-01T00:00:00Z')
         product['variants'][0]['id'] = 'printed & mounted'

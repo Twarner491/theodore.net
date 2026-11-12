@@ -12,6 +12,7 @@ frontmatter. Read-only: this never writes into the source tree.
 
 import csv
 import hashlib
+import html
 import importlib.util
 import io
 import json
@@ -221,6 +222,7 @@ def _meta_catalog_items(products, price_field='stripePrice', docs_dir=None):
         img_base = p.get('imageBase', '') or ''
         images = p.get('images') or []
         first_img = images[0] if images else ''
+        listing_description = _listing_description(p)
         for v in (p.get('variants') or []):
             if not isinstance(v, dict):
                 continue
@@ -269,8 +271,60 @@ def _meta_catalog_items(products, price_field='stripePrice', docs_dir=None):
                 0 if availability == 'out of stock' else 25,
                 ','.join(image_url(x) for x in images if x != img),
             ]), inventorySku=v.get('inventorySku'), launchAt=_launch_at(v),
-                productionBatchGroup=_production_batch_group(v)))
+                productionBatchGroup=_production_batch_group(v),
+                # Marketplace listing fields (TikTok Shop via Shopify): the store page's own
+                # product title, option label, copy, gallery and packed shipping weight.
+                group=p['id'], productTitle=title, variantId=str(v.get('id', '')), variantLabel=label,
+                shipWeightLb=round(_weight_lb(v, p) + PACKAGING_LB, 2),
+                listingDescription=listing_description,
+                listingImages=[image_url(x) for x in images],
+                variantImage=image_url(v['image']) if v.get('image') else ''))
     return items
+
+
+PACKAGING_LB = 0.3   # mirrors functions/api/payment-intent.js PACKAGING_LB: box + padding per order
+_TAG_RX = re.compile(r'<[^>]+>')
+
+
+def _weight_lb(v, p):
+    w = v.get('weight', p.get('weight'))
+    try:
+        return float(w) if w is not None else DEFAULT_WEIGHT_LB
+    except (TypeError, ValueError):
+        return DEFAULT_WEIGHT_LB
+
+
+def _plain(text):
+    """Store copy without markup: tags and link targets dropped, link text kept."""
+    return ' '.join(html.unescape(_TAG_RX.sub('', str(text or ''))).replace('`', '').split())
+
+
+def _listing_description(p):
+    """The store page's copy as paragraphs and lists only (marketplaces drop other markup):
+    the headline, each option and what it includes, the software note, each section, and
+    the colophon. Every word comes from the product's frontmatter."""
+    esc = lambda t: html.escape(_plain(t), quote=False)
+    variants = [v for v in (p.get('variants') or []) if isinstance(v, dict)
+                and not (p.get('metaCatalogId') and v.get('id') != p.get('defaultBuild'))]
+    parts = ['<p>' + esc(p['sub']) + '</p>'] if _plain(p.get('sub')) else []
+    for v in variants:
+        line = ': '.join(x for x in (_plain(v.get('label')), _plain(v.get('desc'))) if x)
+        if line and (len(variants) > 1 or _plain(v.get('desc'))):
+            parts.append('<p>' + html.escape(line, quote=False) + '</p>')
+        contents = [c for c in (v.get('contents') or []) if _plain(c)]
+        if contents:
+            parts.append('<ul>' + ''.join('<li>' + esc(c) + '</li>' for c in contents) + '</ul>')
+    notes = sorted({_plain(v.get('softwareNote')) for v in variants} | {_plain(p.get('softwareNote'))})
+    parts += ['<p>' + html.escape(n, quote=False) + '</p>' for n in notes if n]
+    for s in p.get('sections') or []:
+        lines = [i for i in (s.get('items') or ([s['html']] if s.get('html') else [])) if _plain(i)]
+        if not lines:
+            continue
+        parts.append('<p>' + esc(s.get('label')) + '</p>')
+        parts.append('<ul>' + ''.join('<li>' + esc(i) + '</li>' for i in lines) + '</ul>')
+    if _plain(p.get('colophon')):
+        parts.append('<p>' + esc(p['colophon']) + '</p>')
+    return ''.join(parts)
 
 
 def _meta_catalog_csv(products, price_field='stripePrice', docs_dir=None):
