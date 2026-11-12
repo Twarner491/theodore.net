@@ -12,6 +12,7 @@ accessory: true
 parentId: polargraph
 published: true
 id: micron-pens-9
+brand: Sakura
 robots: "noindex, follow"
 icon: fa-solid fa-pen-nib
 teaser: Nine archival-ink fineliners, 0.45 mm, for plotting in color.

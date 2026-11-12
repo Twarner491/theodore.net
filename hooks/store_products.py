@@ -40,7 +40,7 @@ except Exception:
 # keys copied verbatim from frontmatter into the runtime product object
 KEYS = ['id', 'published', 'title', 'teaser', 'sub', 'imageBase', 'images',
         'defaultBuild', 'variants', 'retiredVariants', 'softwareNote', 'sections', 'colophon', 'weight',
-        'accessory', 'parentId', 'icon', 'related', 'project', 'storeListings', 'metaCatalogId']
+        'accessory', 'parentId', 'icon', 'related', 'project', 'storeListings', 'metaCatalogId', 'brand']
 
 DEFAULT_WEIGHT_LB = 2.0
 DEFAULT_MAX_QTY = 10
@@ -272,6 +272,8 @@ def _meta_catalog_items(products, price_field='stripePrice', docs_dir=None):
                 ','.join(image_url(x) for x in images if x != img),
             ]), inventorySku=v.get('inventorySku'), launchAt=_launch_at(v),
                 productionBatchGroup=_production_batch_group(v),
+                discoveryBrand=_plain(p.get('brand')),
+                discoveryDescription=' '.join(filter(None, (_plain(desc), _plain(v.get('desc'))))),
                 # Marketplace listing fields (TikTok Shop via Shopify): the store page's own
                 # product title, option label, copy, gallery and packed shipping weight.
                 group=p['id'], productTitle=title, variantId=str(v.get('id', '')), variantLabel=label,
@@ -467,7 +469,7 @@ def on_files(files, config):
     files.append(File.generated(config, 'store-catalog.json', content=json.dumps(catalog, ensure_ascii=False)))
     files.append(File.generated(config, 'store-signup-catalog.json', content=json.dumps(_signup_catalog(products), ensure_ascii=False)))
     files.append(File.generated(config, 'store-launches.json', content=json.dumps(_launches(products), ensure_ascii=False)))
-    # Public metadata for the dynamic Meta feed; never includes Stripe Price ids.
+    # Public metadata for the dynamic product feeds; never includes Stripe Price ids.
     files.append(File.generated(config, 'meta-catalog-source.json', content=json.dumps(
         _meta_catalog_items(products, price_field, config['docs_dir']), ensure_ascii=False)))
     files.append(File.generated(config, 'meta-catalog.csv', content=_meta_catalog_csv(products, price_field, config['docs_dir'])))
