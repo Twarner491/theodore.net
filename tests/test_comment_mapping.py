@@ -94,13 +94,18 @@ class CommentMappingTests(unittest.TestCase):
         self.assertEqual(config['data-mapping'], 'number')
         self.assertEqual(str(config['data-term']), '29')
 
-    def test_newer_comments_remain_accessible_from_the_article(self):
-        for path, number in [('projects/AvianVisitors.md', 32),
-                             ('writings/immortalitytrap.md', 33)]:
-            with self.subTest(path=path):
-                html, _ = self.render(self.article_metadata(path), path)
-                self.assertIn(f'https://github.com/Twarner491/theodore.net/discussions/{number}',
-                              Links(html).hrefs)
+    def test_avian_comments_use_original_discussion_without_split_thread_notice(self):
+        html, config = self.render(self.article_metadata())
+        self.assertEqual(config['data-mapping'], 'number')
+        self.assertEqual(config['data-term'], '29')
+        self.assertNotIn('https://github.com/Twarner491/theodore.net/discussions/32',
+                         Links(html).hrefs)
+
+    def test_other_articles_keep_their_related_discussion_link(self):
+        path = 'writings/immortalitytrap.md'
+        html, _ = self.render(self.article_metadata(path), path)
+        self.assertIn('https://github.com/Twarner491/theodore.net/discussions/33',
+                      Links(html).hrefs)
 
     def test_other_articles_keep_their_existing_title_mapping(self):
         html, config = self.render({'title': 'Another project'})
