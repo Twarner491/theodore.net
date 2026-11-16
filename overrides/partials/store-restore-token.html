@@ -4,12 +4,16 @@
   if (!/^\/store(?:\/|$)/.test(location.pathname)) return;
   var fragment = (location.hash || "").slice(1);
   var params = new URLSearchParams(fragment);
-  if (!params.has("restore_cart")) return;
+  var hasFrameOrder = params.has("frame_order");
+  if (!params.has("restore_cart") && !hasFrameOrder) return;
   var token = params.get("restore_cart") || "";
+  var frameOrder = params.get("frame_order") || "";
   var remaining = fragment.split("&").filter(function (part) {
-    return !new URLSearchParams(part).has("restore_cart");
+    var values = new URLSearchParams(part);
+    return !values.has("restore_cart") && !values.has("frame_order");
   }).join("&");
   history.replaceState(history.state, "", location.pathname + location.search + (remaining ? "#" + remaining : ""));
   if (/^[a-f0-9]{64}$/.test(token)) window.__theodoreRestoreToken = token;
+  if (hasFrameOrder) window.__theodoreFrameOrderToken = frameOrder;
 })();
 </script>

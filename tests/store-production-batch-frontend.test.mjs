@@ -18,6 +18,7 @@ function harness(overrides = {}) {
       setProducts: value => { PRODUCTS = value; },
       selectVariant: (value, quantity) => { build = value; qty = quantity; updateVariant(false); },
       load: loadProductionBatches, refresh: refreshProductionBatches, html: productionBatchHTML,
+      openFrameOrderLink, restoreFrameOrderLink, frameOrderCheckoutContext,
       buyable, statusOf, variantMaxQuantity, sanitizeCart, migratedLine, confLineHTML, coLineHTML, detailHTML,
       loadCart, openCart, checkout, cart: () => cart, canIncreaseQuantity, accAddHTML, syncLineQuantityControls,
       refreshSurfaces: refreshProductionBatchSurfaces, reconcile: reconcileCartToProductionBatches,
@@ -72,7 +73,7 @@ function harness(overrides = {}) {
     location: { hostname: "localhost", pathname: "/store/", search: "", hash: "", origin: "http://localhost" },
     localStorage: { getItem() { return null; }, setItem() {} },
     sessionStorage: { getItem() { return null; }, removeItem() {} },
-    URLSearchParams, setTimeout, clearTimeout, AbortController,
+    URLSearchParams, setTimeout, clearTimeout, AbortController, AbortSignal,
     ...overrides,
   });
   vm.runInContext(source, context, { filename: "store.js" });
@@ -107,6 +108,35 @@ test("the current real remainder caps the cart and rollover permits the next bat
   assert.equal(h.variantMaxQuantity(product.id, variant.id), 20);
   assert.equal(h.buyable(variant), true);
   assert.equal(variant.id, "assembled-continuous");
+});
+
+test("a verified shared link preserves its seven-frame cart across refreshes with five spots remaining", async () => {
+  const storage = new Map(), token = "d".repeat(64);
+  const options = {
+    fetch: async (url, request) => {
+      if (url === "/api/frame-order-link") {
+        assert.equal(JSON.parse(request.body).token, token);
+        return reply({ quantity: 7, expiresAt: Math.floor(Date.now() / 1000) + 3600 });
+      }
+      return reply({ ...row, remaining: 5 });
+    },
+    localStorage: { getItem: k => storage.get(k) || null, setItem: (k,v) => storage.set(k,v) },
+    sessionStorage: { getItem: k => storage.get(k) || null, setItem: (k,v) => storage.set(k,v), removeItem: k => storage.delete(k) },
+  };
+  const h = harness(options);
+  await h.load();
+  assert.equal(h.variantMaxQuantity(product.id, variant.id), 5);
+  await h.openFrameOrderLink(token);
+  assert.equal(h.cart()[0].qty, 7);
+  assert.equal(h.reconcile(), false);
+  assert.equal(h.canIncreaseQuantity(product.id, variant.id), false);
+  assert.match(h.html(variant), /5 frames remaining/);
+  const reloaded = harness(options);
+  reloaded.restoreFrameOrderLink();
+  await reloaded.load();
+  reloaded.loadCart();
+  assert.equal(reloaded.cart()[0].qty, 7);
+  assert.deepEqual(plain(reloaded.frameOrderCheckoutContext()), { frameOrderToken: token });
 });
 
 test("Meta cart events use the catalog identity and only actual successful quantity increases", async () => {

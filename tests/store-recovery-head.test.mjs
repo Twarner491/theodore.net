@@ -32,6 +32,12 @@ test("invalid and duplicate restore credentials are removed without accepting an
   assert.equal(page.replacements[0].url, "/store/");
 });
 
+test("the private frame order fragment is captured before checkout tags load", () => {
+  const page = load("/store/checkout/", "#frame_order=" + token + "&section", "");
+  assert.equal(page.window.__theodoreFrameOrderToken, token);
+  assert.equal(page.replacements[0].url, "/store/checkout/#section");
+});
+
 test("normal anchors and non-store pages retain their original URL", () => {
   for (const [path, hash] of [["/store/", "#details"], ["/projects/example/", "#restore_cart=" + token]]) {
     const page = load(path, hash);

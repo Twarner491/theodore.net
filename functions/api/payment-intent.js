@@ -37,6 +37,7 @@ import { parseGiftInput } from "../../lib/order-gift.js";
 import { receiptEmail } from "../../lib/receipt-email.js";
 import { resolveRecoveryAssociation, recordRecoveryCheckout } from "../../lib/store-recovery.js";
 import { productionDemand, productionBatchReady, productionIntakePaused } from "../../lib/production-batch-commerce.js";
+import { readFrameOrderLink } from "../../lib/frame-order-link.js";
 import { paidAttributionEnabled, applyPaidMetadata, applyMetaTrackingMetadata, advertisingOptOut, resolveMetaTrackingDecision, ledgerMetaVersion } from "../../lib/paid-attribution.js";
 import { metaMeasurementAvailable } from "../../lib/meta-purchase.js";
 
@@ -324,6 +325,13 @@ export async function onRequestPost({ request, env }) {
     if (piId && requestedFrames > currentBatch.remaining) {
       try { acceptedQuantity = coveredByAcceptedDemand(await readAcceptedDemand()); }
       catch (_) { return reply({ error: "Your accepted order could not be confirmed. Please try again." }, 503); }
+    }
+    if (requestedFrames > currentBatch.remaining && !acceptedQuantity && body.frameOrderToken) {
+      try {
+        const link = await readFrameOrderLink(env, body.frameOrderToken);
+        if (!link) return reply({ error: "This frame order link is invalid or has expired." }, 409);
+        acceptedQuantity = requestedFrames <= link.quantity;
+      } catch (_) { return reply({ error: "The frame order link could not be checked. Please try again." }, 503); }
     }
     if (requestedFrames > currentBatch.remaining && !acceptedQuantity) {
       const line = continuousDemand[0], remaining = currentBatch.remaining;
