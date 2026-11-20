@@ -74,6 +74,9 @@ class MetaCatalogTests(unittest.TestCase):
         self.assertEqual(frame['link'], 'https://theodore.net/store/avian-visitors/')
         self.assertEqual(frame['price'], '699.00 USD')
         self.assertEqual(frame['availability'], 'in stock')
+        frame_product = next(p for p in products if p['id'] == 'avian-visitors')
+        frame_variant = next(v for v in frame_product['variants'] if v['id'] == frame_product['defaultBuild'])
+        self.assertIn(frame_variant['softwareNote'], frame['discoveryDescription'])
         for product_id, price in [('avian-visitors-kit', 520), ('avian-mic', 210)]:
             with self.subTest(product=product_id):
                 row = by_id[product_id + '-electronics-printed']

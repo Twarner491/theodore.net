@@ -41,6 +41,8 @@ test("discovery catalog uses stable variant URLs, correct brands and OpenAI fiel
   assert.match(response.headers.get("cache-control"), /no-store/);
   const [header, frame, pens, mounts, future, preorder] = (await response.text()).split("\r\n");
   assert.match(header, /^item_id,title,description,url,brand,seller_name,image_url,availability,price,/);
+  assert.match(header, /,target_countries,store_country,/);
+  assert.match(frame, /,"\[""US""\]",US,/);
   assert.match(frame, /"A frame with birds, ""nearby""\.",https:\/\/theodore\.net\/store\/avian-visitors\/,theodore\.net,Things by Theodore,[^,]+,in_stock,699\.00 USD/);
   assert.match(pens, /\?variant=default,Sakura,Things by Theodore,[^,]+,out_of_stock,.*micron-pens-9,true,"\{""Package"":""9-pack""\}"/);
   assert.match(mounts, /\?variant=with-mounts,Sakura,Things by Theodore,[^,]+,backorder,.*micron-pens-9,true/);

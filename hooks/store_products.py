@@ -273,7 +273,8 @@ def _meta_catalog_items(products, price_field='stripePrice', docs_dir=None):
             ]), inventorySku=v.get('inventorySku'), launchAt=_launch_at(v),
                 productionBatchGroup=_production_batch_group(v),
                 discoveryBrand=_plain(p.get('brand')),
-                discoveryDescription=' '.join(filter(None, (_plain(desc), _plain(v.get('desc'))))),
+                discoveryDescription=' '.join(filter(None, (
+                    _plain(desc), _plain(v.get('desc')), _plain(v.get('softwareNote') or p.get('softwareNote'))))),
                 # Marketplace listing fields (TikTok Shop via Shopify): the store page's own
                 # product title, option label, copy, gallery and packed shipping weight.
                 group=p['id'], productTitle=title, variantId=str(v.get('id', '')), variantLabel=label,

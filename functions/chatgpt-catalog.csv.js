@@ -1,6 +1,6 @@
 import { catalogCsv, catalogUnavailable, readChannelCatalog } from "../lib/channel-catalog.js";
 
-const REQUIRED = ["item_id", "title", "description", "url", "brand", "seller_name", "image_url", "availability", "price"];
+const REQUIRED = ["item_id", "title", "description", "url", "brand", "seller_name", "image_url", "availability", "price", "target_countries", "store_country"];
 const FIELDS = [...REQUIRED, "condition", "additional_image_urls", "seller_url", "return_policy",
   "group_id", "listing_has_variations", "variant_dict", "is_eligible_search", "is_eligible_checkout", "is_ads_eligible"];
 const AVAILABILITY = new Map([
@@ -29,6 +29,8 @@ export async function onRequestGet(context) {
       image_url: item.image_link,
       availability: AVAILABILITY.get(item.availability) ?? "unknown",
       price: item.price,
+      target_countries: JSON.stringify(["US"]),
+      store_country: "US",
       condition: item.condition,
       additional_image_urls: item.additional_image_link,
       seller_url: "https://theodore.net/store/",
