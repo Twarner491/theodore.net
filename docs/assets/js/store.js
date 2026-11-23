@@ -16,6 +16,8 @@
   function validFrameOrderLink(link) {
     return link && /^[a-f0-9]{64}$/.test(link.token) &&
       Number.isSafeInteger(link.quantity) && link.quantity >= 1 && link.quantity <= 99 &&
+      (link.maxQuantity === undefined || (Number.isSafeInteger(link.maxQuantity) &&
+        link.maxQuantity >= link.quantity && link.maxQuantity <= 99)) &&
       Number.isSafeInteger(link.expiresAt) && Date.now() < link.expiresAt * 1000;
   }
   function restoreFrameOrderLink() {
@@ -25,8 +27,8 @@
     } catch (_) {}
   }
   function frameOrderQuantity(id, build) {
-    return id === "avian-visitors" && build === "assembled-continuous" && validFrameOrderLink(frameOrderLink)
-      ? frameOrderLink.quantity : 0;
+    return id === "avian-visitors" && build === "assembled-continuous" && frameOrderLink
+      ? (frameOrderLink.maxQuantity ?? frameOrderLink.quantity) : 0;
   }
   function frameOrderCheckoutContext() {
     return frameOrderQuantity("avian-visitors", "assembled-continuous")
@@ -39,7 +41,7 @@
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "This frame order link is unavailable.");
-    const link = { token, quantity: data.quantity, expiresAt: data.expiresAt };
+    const link = { token, quantity: data.quantity, maxQuantity: data.maxQuantity, expiresAt: data.expiresAt };
     if (!validFrameOrderLink(link)) throw new Error("This frame order link is unavailable.");
     const id = "avian-visitors", build = "assembled-continuous", product = getProduct(id);
     const variant = product && exactVariant(product, build);
@@ -403,11 +405,13 @@
     let limit = v && Number.isInteger(v.maxQuantity)
       ? Math.max(1, Math.min(MAX_QTY, v.maxQuantity))
       : MAX_QTY;
+    const privateLimit = frameOrderQuantity(id, build);
+    limit = Math.max(limit, privateLimit);
     const sku = inventorySkuOf(v), row = sku && INVENTORY_READY ? INVENTORY_ROWS[sku] : null;
     if (row && Number.isSafeInteger(row.available) && row.available >= 0)
       limit = Math.min(limit, row.available);
     const production = productionBatchOf(v);
-    if (production && !production.paused) return Math.min(limit, Math.max(production.remaining, frameOrderQuantity(id, build)));
+    if (production && !production.paused) return Math.min(limit, Math.max(production.remaining, privateLimit));
     return Math.max(1, limit);
   }
   function canIncreaseQuantity(id, build) {
@@ -633,7 +637,9 @@
   }
 
   async function reconcileProductionQuantityLimit(data, isCurrent) {
-    if (!data || data.code !== "production_quantity_limit" || !data.item ||
+    // A private checkout must surface a rejected quote without substituting
+    // the ordinary batch quantity for the buyer's selected amount.
+    if (frameOrderLink || !data || data.code !== "production_quantity_limit" || !data.item ||
         data.item.id !== "avian-visitors" || data.item.build !== "assembled-continuous" ||
         !Number.isSafeInteger(data.maxQuantity) || data.maxQuantity < 0 ||
         !Number.isSafeInteger(data.currentOrdinal) || data.currentOrdinal < 1) return false;
@@ -2566,7 +2572,9 @@
     }
     else if ($("#checkout")) {
       if (frameOrderToken !== undefined) void renderLinkedFrameCheckout($("#checkout"), frameOrderToken);
-      else renderCheckout();
+      else if (/^\/store\/frame-order\/?$/.test(location.pathname) && !frameOrderLink) {
+        $("#checkout").innerHTML = '<div class="co-empty"><p role="alert">Open the full frame order link from your email to continue.</p></div>';
+      } else renderCheckout();
       reveal();
     }
     else if ($("#confirmation")) { renderConfirmation(); }   // renderConfirmation() calls reveal() itself

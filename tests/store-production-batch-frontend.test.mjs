@@ -139,6 +139,27 @@ test("a verified shared link preserves its seven-frame cart across refreshes wit
   assert.deepEqual(plain(reloaded.frameOrderCheckoutContext()), { frameOrderToken: token });
 });
 
+test("an adjustable link replaces three saved frames with four and preserves the buyer's edits on reload", async () => {
+  const saved = new Map(), token = "e".repeat(64);
+  const storage = { getItem: k => saved.get(k) ?? null, setItem: (k,v) => saved.set(k,v) };
+  const options = { localStorage: storage, sessionStorage: storage, fetch: async url =>
+    reply(url === "/api/frame-order-link" ? { quantity: 4, maxQuantity: 99, expiresAt: Math.floor(Date.now()/1000) + 3600 }
+      : { ...row, remaining: 3 }) };
+  const h = harness(options);
+  const line = { id: product.id, build: variant.id, qty: 3 };
+  const cart = h.mutations([line]);
+  await h.load();
+  await h.openFrameOrderLink(token);
+  assert.equal(h.cart()[0].qty, 4);
+  assert.equal(h.canIncreaseQuantity(product.id, variant.id), true);
+  cart.set(product.id, variant.id, 7);
+  assert.equal(h.reconcile(), false);
+  const reload = harness(options);
+  reload.restoreFrameOrderLink(); reload.loadCart(); await reload.load();
+  assert.equal(reload.cart()[0].qty, 7);
+  assert.equal(reload.variantMaxQuantity(product.id, variant.id), 99);
+});
+
 test("Meta cart events use the catalog identity and only actual successful quantity increases", async () => {
   const events = [], listed = { ...product, metaCatalogId: 'avian-visitors' };
   const h = harness({ fetch: async () => reply({ ...row, remaining: 3 }),
