@@ -29,7 +29,7 @@ function harness({ hostname = "theodore.net", protocol = "http:", search = "", h
   const context = vm.createContext({
     document: { readyState: "loading", referrer: "", addEventListener() {}, querySelector() { return null; }, querySelectorAll() { return []; },
       createElement: () => ({}), head: { appendChild: (el) => scripts.push(el) } },
-    window: { addEventListener() {}, gtag: (...args) => ga.push(args) }, location, localStorage, sessionStorage, URL, URLSearchParams,
+    addEventListener() {}, window: { addEventListener() {}, gtag: (...args) => ga.push(args) }, location, localStorage, sessionStorage, URL, URLSearchParams,
     setTimeout, clearTimeout,
     history: { replaceState(_state, _unused, url) { order.push({ scrub: url }); location.hash = new URL(url, location.origin).hash; } },
     navigator: { sendBeacon: (url, body) => network.push({ url, body: JSON.parse(body) }) },
