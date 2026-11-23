@@ -8,13 +8,14 @@ const source = partial.match(/<script id="store-restore-token">([\s\S]*?)<\/scri
 const token = "a".repeat(64);
 
 function load(pathname, hash, search = "") {
-  const location = { pathname, hash, search }, state = { preserved: true }, replacements = [];
+  const location = { pathname, hash, search }, state = { preserved: true }, replacements = [], listeners = {};
   const context = {
     location, window: {}, URLSearchParams,
+    addEventListener(name, handler) { listeners[name] = handler; },
     history: { state, replaceState(value, title, url) { replacements.push({ value, title, url }); location.hash = new URL(url, "https://theodore.net").hash; } },
   };
   vm.runInNewContext(source, context);
-  return { ...context, replacements, state };
+  return { ...context, replacements, state, listeners };
 }
 
 test("restore token is scrubbed synchronously before analytics while other URL state stays intact", () => {
@@ -45,6 +46,20 @@ test("normal anchors and non-store pages retain their original URL", () => {
     assert.equal(page.window.__theodoreRestoreToken, undefined);
     assert.equal(page.location.hash, hash);
   }
+});
+
+test("reopening a private link in the same checkout tab runs the initial link flow again", () => {
+  const page = load("/store/frame-order/", "");
+  const calls = [];
+  const event = { stopImmediatePropagation() { calls.push("stop"); } };
+  page.location.reload = () => calls.push("reload");
+  page.location.hash = "#details";
+  page.listeners.hashchange(event);
+  assert.deepEqual(calls, []);
+  page.location.hash = "#frame_order=" + token;
+  page.listeners.hashchange(event);
+  assert.deepEqual(calls, ["stop", "reload"]);
+  assert.equal(load(page.location.pathname, page.location.hash).window.__theodoreFrameOrderToken, token);
 });
 
 test("store template places the synchronous scrubber before the parent analytics block", () => {
