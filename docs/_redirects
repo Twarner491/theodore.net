@@ -4,3 +4,6 @@
 /feed_rss_created.xml /feed.xml 301
 /feed /feed.xml 301
 /feed/ /feed.xml 301
+
+# Serve the checkout at its own URL so a missing private link cannot open a public cart.
+/store/frame-order/ /store/checkout/ 200

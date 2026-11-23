@@ -6,6 +6,7 @@ import test from "node:test";
 import { onRequestPost as paymentIntent } from "../functions/api/payment-intent.js";
 import { onRequestPost as stripeWebhook } from "../functions/api/stripe-webhook.js";
 import { onRequestGet as productionBatch } from "../functions/api/production-batch.js";
+import { onRequestPost as frameOrderLink } from "../functions/api/frame-order-link.js";
 import { readProductionBatch } from "../lib/store-production-batches.js";
 import { createCheckoutBinding, verifyCheckoutBinding } from "../lib/shipping-binding.js";
 import { buildOrder, receiptHtml } from "../lib/emails.js";
@@ -35,6 +36,7 @@ class Statement {
   constructor(db, sql, values = []) { Object.assign(this, { db, sql, values }); }
   bind(...values) { return new Statement(this.db, this.sql, values); }
   async all() { return { success: true, results: this.db.sqlite.prepare(this.sql).all(...this.values), meta: { changes: 0 } }; }
+  async first() { return this.db.sqlite.prepare(this.sql).get(...this.values) ?? null; }
   async run() { const result = this.db.sqlite.prepare(this.sql).run(...this.values); return { success: true, results: [], meta: { changes: Number(result.changes) } }; }
 }
 class Database {
@@ -175,6 +177,71 @@ test("pause rejects new intake and ordinary-PI bypasses but lets accepted frame 
   assert.equal((await update(existing, [frame(2), mic])).status, 200);
   assert.equal((await readProductionBatch(h.env)).remaining, 15);
   assert.equal((await (await h.publicState()).json()).paused, true);
+});
+
+test("a private seven-frame link pays for all seven and splits the allocation without changing public capacity", async t => {
+  const h = fixture(t);
+  h.db.sqlite.exec(readFileSync(new URL("../migrations/0010_frame_order_links.sql", import.meta.url), "utf8"));
+  h.db.sqlite.exec(readFileSync(new URL("../migrations/0011_frame_order_link_max_quantity.sql", import.meta.url), "utf8"));
+  const token = "a".repeat(64), expired = "b".repeat(64), now = Math.floor(Date.now() / 1000);
+  const register = h.db.sqlite.prepare("INSERT INTO frame_order_links(token_hash, quantity, expires_at) VALUES (?, ?, ?)");
+  register.run(createHash("sha256").update(token).digest("hex"), 7, now + 3600);
+  register.run(createHash("sha256").update(expired).digest("hex"), 7, now - 1);
+  const resolve = value => frameOrderLink({ env: h.env, request: new Request("https://example.test/api/frame-order-link", {
+    method: "POST", body: JSON.stringify({ token: value }),
+  }) });
+  const prior = await h.finalize(await h.create([frame(10)]), [frame(10)]);
+  await h.authorize(prior, "evt_authorized_prior");
+  assert.equal((await h.event("payment_intent.succeeded", prior, "evt_paid_prior")).status, 200);
+  assert.equal((await readProductionBatch(h.env)).remaining, 5);
+  assert.deepEqual(await (await resolve(token)).json(), { quantity: 7, maxQuantity: 7, expiresAt: now + 3600 });
+  assert.equal((await resolve(expired)).status, 404);
+  assert.equal((await h.post({ cart: [frame(7)] })).status, 409);
+  assert.equal((await h.post({ cart: [frame(7)], frameOrderToken: expired })).status, 409);
+  assert.equal((await h.post({ cart: [frame(7)], frameOrderToken: "c".repeat(64) })).status, 409);
+  assert.equal((await h.post({ cart: [frame(4), frame(4)], frameOrderToken: token })).status, 409);
+  h.env.PRODUCTION_BATCH_PAUSED = "1";
+  assert.equal((await resolve(token)).status, 409);
+  assert.equal((await h.post({ cart: [frame(7)], frameOrderToken: token })).status, 409);
+  delete h.env.PRODUCTION_BATCH_PAUSED;
+  const draft = await h.create([frame(7)], { frameOrderToken: token });
+  assert.equal(draft.subtotal, 489300);
+  const paid = await h.finalize(draft, [frame(7)], { frameOrderToken: token });
+  assert.equal(paid.metadata.items, "avian-visitors|assembled-continuous|7");
+  assert.doesNotMatch(JSON.stringify(paid.metadata), new RegExp(token));
+  assert.equal((await readProductionBatch(h.env)).remaining, 5);
+  await h.authorize(paid, "evt_authorized_link");
+  assert.equal((await h.event("payment_intent.succeeded", paid, "evt_paid_link")).status, 200);
+  assert.deepEqual(productionBatchesForItem(paid.metadata, frame(7)), [
+    { ordinal: 3, label: "Batch 3", quantity: 5 }, { ordinal: 4, label: "Batch 4", quantity: 2 },
+  ]);
+  assert.deepEqual(await (await h.publicState()).json(), { group: GROUP, ordinal: 4, remaining: 13, paused: false });
+});
+
+test("adjustable frame orders open at four and can pay across batches up to the per-order ceiling", async t => {
+  const h = fixture(t), token = "e".repeat(64), hash = createHash("sha256").update(token).digest("hex");
+  for (const migration of ["0010_frame_order_links.sql", "0011_frame_order_link_max_quantity.sql"])
+    h.db.sqlite.exec(readFileSync(new URL("../migrations/" + migration, import.meta.url), "utf8"));
+  h.db.sqlite.prepare("INSERT INTO frame_order_links(token_hash, quantity, expires_at, max_quantity) VALUES (?, 4, ?, 99)")
+    .run(hash, Math.floor(Date.now() / 1000) + 3600);
+  const link = { frameOrderToken: token };
+  const resolved = await frameOrderLink({ env: h.env, request: new Request("https://example.test/api/frame-order-link", {
+    method: "POST", body: JSON.stringify({ token }),
+  }) });
+  const { quantity, maxQuantity } = await resolved.json();
+  assert.deepEqual([quantity, maxQuantity], [4, 99]);
+  assert.equal((await h.create([frame(4)], link)).subtotal, 279600);
+  assert.equal((await h.post({ cart: [frame(21)] })).status, 400);
+  assert.equal((await h.post({ ...link, cart: [{ ...mic, qty: 21 }] })).status, 400);
+  assert.equal((await h.post({ ...link, cart: [frame(100)] })).status, 400);
+  const cart = [frame(99)], draft = await h.create(cart, link);
+  assert.equal(draft.subtotal, 6920100);
+  const paid = await h.finalize(draft, cart, link);
+  await h.authorize(paid, "evt_adjustable_authorized");
+  assert.equal((await h.event("payment_intent.succeeded", paid, "evt_adjustable_paid")).status, 200);
+  assert.equal(productionBatchesForItem(paid.metadata, frame(99)).reduce((n, x) => n + x.quantity, 0), 99);
+  h.db.sqlite.exec("UPDATE frame_order_links SET expires_at=1");
+  assert.equal((await h.post({ ...link, cart: [frame(1)] })).status, 409);
 });
 
 test("new frame checkouts enforce real remaining quantity, including duplicate cart lines, without reserving slots", async t => {

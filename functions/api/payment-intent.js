@@ -37,6 +37,8 @@ import { parseGiftInput } from "../../lib/order-gift.js";
 import { receiptEmail } from "../../lib/receipt-email.js";
 import { resolveRecoveryAssociation, recordRecoveryCheckout } from "../../lib/store-recovery.js";
 import { productionDemand, productionBatchReady, productionIntakePaused } from "../../lib/production-batch-commerce.js";
+import { isContinuousFrame } from "../../lib/order-production-batches.js";
+import { readFrameOrderLink } from "../../lib/frame-order-link.js";
 import { paidAttributionEnabled, applyPaidMetadata, applyMetaTrackingMetadata, advertisingOptOut, resolveMetaTrackingDecision, ledgerMetaVersion } from "../../lib/paid-attribution.js";
 import { metaMeasurementAvailable } from "../../lib/meta-purchase.js";
 
@@ -241,6 +243,12 @@ export async function onRequestPost({ request, env }) {
 
   const auth = { authorization: "Bearer " + env.STRIPE_SECRET_KEY };
   const headers = { ...auth, "content-type": "application/x-www-form-urlencoded" };
+  let frameOrderLink = null;
+  if (body.frameOrderToken) {
+    try { frameOrderLink = await readFrameOrderLink(env, body.frameOrderToken); }
+    catch (_) { return reply({ error: "The frame order link could not be checked. Please try again." }, 503); }
+    if (!frameOrderLink) return reply({ error: "This frame order link is invalid or has expired." }, 409);
+  }
   const normalized = [], requestedByVariant = new Map();
   for (const l of cart) {
     const id = l && typeof l.id === "string" ? l.id : "";
@@ -259,7 +267,8 @@ export async function onRequestPost({ request, env }) {
     if (shippingProfile === null) return reply({ error: "An item in your cart is unavailable.", item: { id, build } }, 400);
     if (launchPending(variant)) return reply({ error: (entry.title || "That item") + " is not open yet." }, 400);
     if (qty == null) return reply({ error: "Enter a valid whole-number quantity." }, 400);
-    const maxQty = catalogQuantityLimit(variant);
+    const privateLimit = frameOrderLink && isContinuousFrame(id, build, variant) ? frameOrderLink.maxQuantity : 0;
+    const maxQty = Math.max(catalogQuantityLimit(variant), privateLimit);
     const key = id + "\u0000" + build;
     const requested = (requestedByVariant.get(key) || 0) + qty;
     if (requested > maxQty) return reply({ error: "You can order at most " + maxQty + " of that item per order." }, 400);
@@ -325,7 +334,7 @@ export async function onRequestPost({ request, env }) {
       try { acceptedQuantity = coveredByAcceptedDemand(await readAcceptedDemand()); }
       catch (_) { return reply({ error: "Your accepted order could not be confirmed. Please try again." }, 503); }
     }
-    if (requestedFrames > currentBatch.remaining && !acceptedQuantity) {
+    if (requestedFrames > currentBatch.remaining && !acceptedQuantity && requestedFrames > (frameOrderLink?.maxQuantity || 0)) {
       const line = continuousDemand[0], remaining = currentBatch.remaining;
       return reply({
         error: "Only " + remaining + (remaining === 1 ? " frame remains" : " frames remain") + " in the current batch. Please update your cart.",

@@ -11,6 +11,65 @@
     /^(localhost|127(?:\.\d{1,3}){3}|\[?::1\]?)$/.test(location.hostname || "");
   const CART_KEY = "store:cart:v3";
   const GIFT_KEY = "store:gift:v1";
+  const FRAME_ORDER_KEY = "store:frame-order:v1";
+  let frameOrderLink = null;
+  function validFrameOrderLink(link) {
+    return link && /^[a-f0-9]{64}$/.test(link.token) &&
+      Number.isSafeInteger(link.quantity) && link.quantity >= 1 && link.quantity <= 99 &&
+      (link.maxQuantity === undefined || (Number.isSafeInteger(link.maxQuantity) &&
+        link.maxQuantity >= link.quantity && link.maxQuantity <= 99)) &&
+      Number.isSafeInteger(link.expiresAt) && Date.now() < link.expiresAt * 1000;
+  }
+  function restoreFrameOrderLink() {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(FRAME_ORDER_KEY));
+      if (validFrameOrderLink(saved)) frameOrderLink = saved;
+    } catch (_) {}
+  }
+  function frameOrderQuantity(id, build) {
+    return id === "avian-visitors" && build === "assembled-continuous" && frameOrderLink
+      ? (frameOrderLink.maxQuantity ?? frameOrderLink.quantity) : 0;
+  }
+  function frameOrderCheckoutContext() {
+    return frameOrderQuantity("avian-visitors", "assembled-continuous")
+      ? { frameOrderToken: frameOrderLink.token } : {};
+  }
+  async function openFrameOrderLink(token) {
+    const response = await fetch("/api/frame-order-link", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ token }), cache: "no-store", signal: AbortSignal.timeout(8000),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "This frame order link is unavailable.");
+    const link = { token, quantity: data.quantity, maxQuantity: data.maxQuantity, expiresAt: data.expiresAt };
+    if (!validFrameOrderLink(link)) throw new Error("This frame order link is unavailable.");
+    const id = "avian-visitors", build = "assembled-continuous", product = getProduct(id);
+    const variant = product && exactVariant(product, build);
+    if (!buyable(variant) || !productionBatchGroupOf(variant)) throw new Error("The assembled frame is unavailable.");
+    const previous = frameOrderLink;
+    frameOrderLink = link;
+    if (variantMaxQuantity(id, build) < link.quantity) {
+      frameOrderLink = previous;
+      throw new Error("The quantity in this frame order link is unavailable.");
+    }
+    try { sessionStorage.setItem(FRAME_ORDER_KEY, JSON.stringify(link)); } catch (_) {}
+    const line = cart.find((item) => item.id === id && item.build === build);
+    if (line) line.qty = link.quantity;
+    else cart.push({ id, build, qty: link.quantity });
+    saveCart();
+  }
+  async function renderLinkedFrameCheckout(host, token) {
+    host.innerHTML = '<div class="co-empty"><p role="status">Loading your cart…</p></div>';
+    try { await openFrameOrderLink(token); }
+    catch (error) {
+      host.innerHTML = '<div class="co-empty"><p role="alert">' +
+        escapeHtml(error.message || "The frame order link could not be opened.") +
+        '</p><a class="cart-shop-link" href="/store/">Go to store</a></div>';
+      return;
+    }
+    renderCart();
+    await renderCheckout();
+  }
   function giftDraft() {
     try { const d = JSON.parse(sessionStorage.getItem(GIFT_KEY)); return d && d.gift === true ? { gift: true, giftFrom: typeof d.giftFrom === "string" ? d.giftFrom.slice(0, 160) : "" } : { gift: false, giftFrom: "" }; }
     catch (_) { return { gift: false, giftFrom: "" }; }
@@ -186,7 +245,7 @@
   const productionBatchOf = (v) => PRODUCTION_BATCH_ROWS[productionBatchGroupOf(v)] || null;
   function cartVariantLabelHTML(v) {
     const group = productionBatchGroupOf(v);
-    if (!group) return escapeHtml(v.label);
+    if (!group || frameOrderQuantity(group, v.id)) return escapeHtml(v.label);
     const row = productionBatchOf(v);
     return '<span data-production-batch-label="' + group + '" data-variant-label="' + escapeHtml(v.label) + '">' +
       escapeHtml(row ? "Batch " + row.ordinal : v.label) + '</span>';
@@ -346,11 +405,13 @@
     let limit = v && Number.isInteger(v.maxQuantity)
       ? Math.max(1, Math.min(MAX_QTY, v.maxQuantity))
       : MAX_QTY;
+    const privateLimit = frameOrderQuantity(id, build);
+    limit = Math.max(limit, privateLimit);
     const sku = inventorySkuOf(v), row = sku && INVENTORY_READY ? INVENTORY_ROWS[sku] : null;
     if (row && Number.isSafeInteger(row.available) && row.available >= 0)
       limit = Math.min(limit, row.available);
     const production = productionBatchOf(v);
-    if (production && !production.paused) return Math.min(limit, production.remaining);
+    if (production && !production.paused) return Math.min(limit, Math.max(production.remaining, privateLimit));
     return Math.max(1, limit);
   }
   function canIncreaseQuantity(id, build) {
@@ -576,7 +637,9 @@
   }
 
   async function reconcileProductionQuantityLimit(data, isCurrent) {
-    if (!data || data.code !== "production_quantity_limit" || !data.item ||
+    // A private checkout must surface a rejected quote without substituting
+    // the ordinary batch quantity for the buyer's selected amount.
+    if (frameOrderLink || !data || data.code !== "production_quantity_limit" || !data.item ||
         data.item.id !== "avian-visitors" || data.item.build !== "assembled-continuous" ||
         !Number.isSafeInteger(data.maxQuantity) || data.maxQuantity < 0 ||
         !Number.isSafeInteger(data.currentOrdinal) || data.currentOrdinal < 1) return false;
@@ -1969,7 +2032,7 @@
     let data;
     const initialCart = JSON.stringify(cart);
     try {
-      const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.assign({ cart: cart }, evAttribution(), await recoveryCheckoutContext())) });
+      const res = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(Object.assign({ cart: cart }, frameOrderCheckoutContext(), evAttribution(), await recoveryCheckoutContext())) });
       data = await res.json().catch(() => ({}));
       if (!current()) return;
       if (paymentFiniteDemand !== checkoutFiniteDemand()) { void renderCheckout(captureCheckout(true)); return; }
@@ -2018,7 +2081,7 @@
       const task = pricingQueue.then(async () => {
         if (!current() || version !== priceVersion) return null;
         try {
-          Object.assign(reqBody, evAttribution(), await recoveryCheckoutContext());
+          Object.assign(reqBody, frameOrderCheckoutContext(), evAttribution(), await recoveryCheckoutContext());
           if (!current() || version !== priceVersion) return null;
           const r = await fetch("/api/payment-intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(reqBody) });
           const d = await r.json().catch(() => ({}));
@@ -2357,6 +2420,8 @@
     const params = new URLSearchParams(location.search);
     const pi = params.get("payment_intent") || "", cs = params.get("payment_intent_client_secret") || "", status = params.get("redirect_status") || "";
     if (!pi || !cs) { renderLookup(host); return; }   // direct visit -> order lookup
+    frameOrderLink = null;
+    try { sessionStorage.removeItem(FRAME_ORDER_KEY); } catch (_) {}
     cart = []; saveCart(); updateBadge();   // arrived from a payment; empty the cart
     let d = {}, ok = false;
     try {
@@ -2494,6 +2559,9 @@
     // ordinary product rendering or interaction. Refresh only affected surfaces
     // after the bounded authority read succeeds.
     const inventoryRefresh = loadInventoryAvailability();
+    const frameOrderToken = window.__theodoreFrameOrderToken;
+    delete window.__theodoreFrameOrderToken;
+    restoreFrameOrderLink();
     evInit(); loadCart(); importCartFromUrl(); injectHeaderCart(); ensureDrawer(); renderCart();
     if ($("#store-grid")) wireStoreFilter();
     else if ($("#product-detail")) {
@@ -2502,7 +2570,13 @@
       if (legacyTarget) { try { location.replace(legacyTarget); } catch (e) { location.href = legacyTarget; } return; }
       if (p) renderDetail(p); reveal();
     }
-    else if ($("#checkout")) { renderCheckout(); reveal(); }
+    else if ($("#checkout")) {
+      if (frameOrderToken !== undefined) void renderLinkedFrameCheckout($("#checkout"), frameOrderToken);
+      else if (/^\/store\/frame-order\/?$/.test(location.pathname) && !frameOrderLink) {
+        $("#checkout").innerHTML = '<div class="co-empty"><p role="alert">Open the full frame order link from your email to continue.</p></div>';
+      } else renderCheckout();
+      reveal();
+    }
     else if ($("#confirmation")) { renderConfirmation(); }   // renderConfirmation() calls reveal() itself
     else reveal();
     setupThemeSwap();
