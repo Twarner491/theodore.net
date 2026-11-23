@@ -2,6 +2,13 @@
 <script id="store-restore-token">
 (function () {
   if (!/^\/store(?:\/|$)/.test(location.pathname)) return;
+  // A second link to the same checkout changes only the fragment. Re-enter
+  // through the same early capture and checkout initialization as a fresh tab.
+  addEventListener("hashchange", function (event) {
+    if (!new URLSearchParams(location.hash.slice(1)).has("frame_order")) return;
+    event.stopImmediatePropagation();
+    location.reload();
+  }, true);
   var fragment = (location.hash || "").slice(1);
   var params = new URLSearchParams(fragment);
   var hasFrameOrder = params.has("frame_order");
